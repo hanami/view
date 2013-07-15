@@ -1,0 +1,5 @@
+require 'rubygems'
+require 'minitest/autorun'
+require 'minitest/spec'
+$:.unshift 'lib'
+require 'lotus/view'
