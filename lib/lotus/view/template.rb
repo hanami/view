@@ -13,27 +13,23 @@ module Lotus
 
       module InstanceMethods
         private
-        def body
-          self.class.body
+        def template
+          self.class.template
         end
       end
 
       def path
-        @path ||= Finder.new(root, name).find
+        @path ||= Finder.new(self).find
       end
 
-      def body
-        @body ||= Tilt.new(path.to_s)
+      def template
+        @template ||= Tilt.new(path.to_s)
       end
 
       private
       def load!
-        body
+        template
         nil
-      end
-
-      def root
-        Lotus::View.root
       end
     end
   end
