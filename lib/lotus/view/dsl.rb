@@ -10,11 +10,29 @@ module Lotus
       end
 
       def format(format)
-        formats.add(format)
+        ancestor.remove_format(@format = format)
       end
 
       def formats
-        @formats ||= Lotus::View.formats
+        @formats ||= begin
+          if @format
+            Set.new([@format])
+          else
+            Lotus::View.formats
+          end
+        end
+      end
+
+      protected
+      def remove_format(format)
+        formats.delete(format)
+      end
+
+      private
+      def load!
+        super
+        formats
+        nil
       end
     end
   end

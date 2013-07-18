@@ -28,6 +28,10 @@ module Lotus
         end
       end
 
+      def template_name
+        ancestor.template_name
+      end
+
       private
       def load!
         super

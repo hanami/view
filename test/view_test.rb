@@ -9,10 +9,6 @@ describe Lotus::View do
     Lotus::View.root.must_equal @root
   end
 
-  it 'has a paths for its templates' do
-    RenderView.paths.must_equal [@root.join('render_view.html.erb')]
-  end
-
   it 'renders an Hash context with a template' do
     result = RenderView.new.render(planet: 'World')
     result.must_equal "<h1>Hello, World!</h1>\n"

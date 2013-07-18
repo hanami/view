@@ -30,7 +30,7 @@ module Lotus
         end
 
         def relative_path
-          underscore(view.name)
+          underscore(view.template_name)
         end
 
         def formats

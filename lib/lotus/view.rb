@@ -1,4 +1,5 @@
 require 'set'
+require 'lotus/view/inheritable'
 require 'lotus/view/dsl'
 require 'lotus/view/template'
 require 'lotus/view/rendering'
@@ -7,6 +8,7 @@ module Lotus
   module View
     def self.included(base)
       base.class_eval do
+        extend Inheritable
         extend Dsl
         extend Template
         extend Rendering
@@ -26,7 +28,7 @@ module Lotus
     end
 
     def self.formats
-      @@formats ||= Set.new [:html]
+      @@formats ||= Set.new [:html, :json, :xml, :rss, :atom, :js]
     end
 
     private

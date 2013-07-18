@@ -34,5 +34,22 @@ describe Lotus::View::Template::Finder do
         finder.find.must_equal([@root.join('json_render_view.json.erb')])
       end
     end
+
+    describe 'inheritance' do
+      it 'finds superclass templates' do
+        finder = Lotus::View::Template::Finder.new(Articles::Index)
+        finder.find.must_equal([@root.join('articles/index.html.erb'), @root.join('articles/index.json.erb')])
+      end
+
+      it 'finds subclass templates' do
+        finder = Lotus::View::Template::Finder.new(Articles::RssIndex)
+        finder.find.must_equal([@root.join('articles/index.rss.erb')])
+      end
+
+      it 'finds grandchild templates' do
+        finder = Lotus::View::Template::Finder.new(Articles::AtomIndex)
+        finder.find.must_equal([@root.join('articles/index.atom.erb')])
+      end
+    end
   end
 end
