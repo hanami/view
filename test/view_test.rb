@@ -9,8 +9,8 @@ describe Lotus::View do
     Lotus::View.root.must_equal @root
   end
 
-  it 'renders an Hash context with a template' do
-    result = RenderView.new.render(planet: 'World')
+  it 'renders template for the given context' do
+    result  = RenderView.new.render({ format: :html }, { planet: 'World' })
     result.must_equal "<h1>Hello, World!</h1>\n"
   end
 end
