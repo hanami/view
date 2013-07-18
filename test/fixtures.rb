@@ -2,18 +2,14 @@ class RenderView
   include Lotus::View
 end
 
-class ConfigRenderView
+class JsonRenderView
   include Lotus::View
-end
-
-class HamlRenderView
-  include Lotus::View
-  self.engine = :haml
+  format :json
 end
 
 class AppView
   include Lotus::View
-  self.root = __dir__ + '/fixtures/templates/app'
+  root __dir__ + '/fixtures/templates/app'
 end
 
 class MissingTemplateView

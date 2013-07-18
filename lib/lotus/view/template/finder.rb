@@ -1,7 +1,7 @@
 module Lotus
   module View
     class MissingTemplateError < ::Exception
-      def initialize(view, path)
+      def initialize(view, path = nil)
         super "Cannot find template for view: #{ view.name } (#{ path })."
       end
     end
@@ -13,18 +13,16 @@ module Lotus
         end
 
         def find
-          begin
+          _map_paths do |path|
             Pathname.new(path).realpath
-          rescue Errno::ENOENT
-            raise MissingTemplateError.new(view, path)
           end
         end
 
         private
         attr_reader :view
 
-        def path
-          root.join relative_path + engine
+        def paths
+          @paths ||= Dir[root.join "#{ relative_path }.{#{ formats }}.*"]
         end
 
         def root
@@ -35,8 +33,8 @@ module Lotus
           underscore(view.name)
         end
 
-        def engine
-          ".#{ view.engine }"
+        def formats
+          view.formats.to_a.join(',')
         end
 
         def underscore(name)
@@ -45,6 +43,18 @@ module Lotus
             gsub(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2').
             gsub(/([a-z\d])([A-Z])/,'\1_\2').
             downcase
+        end
+
+        def _map_paths
+          raise MissingTemplateError.new(view) if paths.empty?
+
+          begin
+            paths.map do |path|
+              yield path
+            end
+          rescue Errno::ENOENT
+            raise MissingTemplateError.new(view, path)
+          end
         end
       end
     end

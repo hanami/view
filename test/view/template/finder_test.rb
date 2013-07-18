@@ -8,17 +8,17 @@ describe Lotus::View::Template::Finder do
   describe 'path' do
     it 'finds the template for the given class name' do
       finder = Lotus::View::Template::Finder.new(RenderView)
-      finder.find.must_equal(@root.join('render_view.erb'))
+      finder.find.must_equal([@root.join('render_view.html.erb')])
     end
 
     it 'finds the template for a namespaced class name' do
       finder = Lotus::View::Template::Finder.new(App::View)
-      finder.find.must_equal(@root.join('app/view.erb'))
+      finder.find.must_equal([@root.join('app/view.html.erb')])
     end
 
     it 'finds the template with a custom root' do
       finder = Lotus::View::Template::Finder.new(AppView)
-      finder.find.must_equal(@root.join('app/app_view.erb'))
+      finder.find.must_equal([@root.join('app/app_view.html.erb')])
     end
 
     it 'raises an error when the template is missing' do
@@ -27,26 +27,11 @@ describe Lotus::View::Template::Finder do
     end
   end
 
-  describe 'engine' do
-    describe 'global configuration' do
-      before do
-        Lotus::View.engine = :lts
-      end
-
-      after do
-        Lotus::View.engine = :erb
-      end
-
-      it 'finds the template for the specified engine' do
-        finder = Lotus::View::Template::Finder.new(ConfigRenderView)
-        finder.find.must_equal(@root.join('config_render_view.lts'))
-      end
-    end
-
+  describe 'format' do
     describe 'per view configuration' do
-      it 'finds the template for the specified engine' do
-        finder = Lotus::View::Template::Finder.new(HamlRenderView)
-        finder.find.must_equal(@root.join('haml_render_view.haml'))
+      it 'finds the template for the specified format' do
+        finder = Lotus::View::Template::Finder.new(JsonRenderView)
+        finder.find.must_equal([@root.join('json_render_view.json.erb')])
       end
     end
   end

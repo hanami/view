@@ -13,23 +13,31 @@ module Lotus
 
       module InstanceMethods
         private
-        def template
-          self.class.template
+        def templates
+          self.class.templates
         end
       end
 
-      def path
-        @path ||= Finder.new(self).find
+      def paths
+        @paths ||= finder.find
       end
 
-      def template
-        @template ||= Tilt.new(path.to_s)
+      def templates
+        @templates ||= paths.map do |path|
+          Tilt.new(path.to_s)
+        end
       end
 
       private
       def load!
-        template
+        super
+        finder
+        templates
         nil
+      end
+
+      def finder
+        @@finder ||= Finder.new(self)
       end
     end
   end

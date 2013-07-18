@@ -1,4 +1,5 @@
-require 'lotus/view/configuration'
+require 'set'
+require 'lotus/view/dsl'
 require 'lotus/view/template'
 require 'lotus/view/rendering'
 
@@ -6,9 +7,9 @@ module Lotus
   module View
     def self.included(base)
       base.class_eval do
-        extend  Configuration
-        extend  Template
-        include Rendering
+        extend Dsl
+        extend Template
+        extend Rendering
       end
     end
 
@@ -20,12 +21,16 @@ module Lotus
       @@root ||= Pathname.new(__dir__)
     end
 
-    def self.engine=(engine)
-      @@engine = engine
+    def self.formats=(formats)
+      @@formats = formats
     end
 
-    def self.engine
-      @@engine ||= :erb
+    def self.formats
+      @@formats ||= Set.new [:html]
+    end
+
+    private
+    def self.load!
     end
   end
 end
