@@ -1,5 +1,5 @@
 require 'lotus/view/rendering/context'
-require 'lotus/view/rendering/resolver'
+require 'lotus/view/rendering/registry'
 
 module Lotus
   module View
@@ -10,30 +10,25 @@ module Lotus
         end
       end
 
-      module InstanceMethods
-        def render(context, locals)
-          _template_for(context).render(nil, locals)
-        end
-
-        private
-        def template_resolver
-          self.class.template_resolver
-        end
-
-        def _template_for(context)
-          template_resolver.resolve Context.new(context)
-        end
+      def render(context, locals)
+        registry.resolve(Context.new(context)).render(locals)
       end
 
-      def template_resolver
-        @@template_resolver ||= Resolver.new(self)
+      module InstanceMethods
+        def render(locals)
+          @template.render(nil, locals)
+        end
       end
 
       private
       def load!
         super
-        template_resolver
+        registry
         nil
+      end
+
+      def registry
+        @registry ||= Registry.new(self)
       end
     end
   end

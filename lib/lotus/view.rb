@@ -23,12 +23,16 @@ module Lotus
       @@root ||= Pathname.new(__dir__)
     end
 
-    def self.formats=(formats)
-      @@formats = formats
-    end
+    # def self.formats=(formats)
+    #   @@formats = formats
+    # end
 
     def self.formats
-      @@formats ||= Set.new [:html, :json, :xml, :rss, :atom, :js]
+      Set.new [:html, :json, :xml, :rss, :atom, :js]
+    end
+
+    def initialize(template)
+      @template = template
     end
 
     private

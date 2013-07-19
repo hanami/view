@@ -3,6 +3,10 @@ require 'lotus/view/inheritable/null_ancestor'
 module Lotus
   module View
     module Inheritable
+      def subclasses
+        (@@subclasses || []).dup
+      end
+
       protected
       def set_ancestor(ancestor, klass)
         @ancestor = ancestor.abstract? ? klass : ancestor
@@ -28,10 +32,6 @@ module Lotus
 
           subclass.set_ancestor(ancestor, self)
         end
-      end
-
-      def subclasses
-        @@subclasses
       end
     end
   end

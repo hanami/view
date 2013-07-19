@@ -7,48 +7,46 @@ describe Lotus::View::Template::Finder do
 
   describe 'path' do
     it 'finds the template for the given class name' do
-      finder = Lotus::View::Template::Finder.new(RenderView)
-      finder.find.must_equal([@root.join('render_view.html.erb')])
+      file = Lotus::View::Template::Finder.new(RenderView, :html).find.file
+      file.must_equal @root.join('render_view.html.erb').to_s
     end
 
     it 'finds the template for a namespaced class name' do
-      finder = Lotus::View::Template::Finder.new(App::View)
-      finder.find.must_equal([@root.join('app/view.html.erb')])
+      file = Lotus::View::Template::Finder.new(App::View, :html).find.file
+      file.must_equal @root.join('app/view.html.erb').to_s
     end
 
     it 'finds the template with a custom root' do
-      finder = Lotus::View::Template::Finder.new(AppView)
-      finder.find.must_equal([@root.join('app/app_view.html.erb')])
-    end
-
-    it 'raises an error when the template is missing' do
-      finder = Lotus::View::Template::Finder.new(MissingTemplateView)
-      -> { finder.find }.must_raise Lotus::View::MissingTemplateError
+      file = Lotus::View::Template::Finder.new(AppView, :html).find.file
+      file.must_equal @root.join('app/app_view.html.erb').to_s
     end
   end
 
   describe 'format' do
     describe 'per view configuration' do
       it 'finds the template for the specified format' do
-        finder = Lotus::View::Template::Finder.new(JsonRenderView)
-        finder.find.must_equal([@root.join('json_render_view.json.erb')])
+        file = Lotus::View::Template::Finder.new(JsonRenderView, :json).find.file
+        file.must_equal @root.join('json_render_view.json.erb').to_s
       end
     end
 
     describe 'inheritance' do
       it 'finds superclass templates' do
-        finder = Lotus::View::Template::Finder.new(Articles::Index)
-        finder.find.must_equal([@root.join('articles/index.html.erb'), @root.join('articles/index.json.erb')])
+        file = Lotus::View::Template::Finder.new(Articles::Index, :html).find.file
+        file.must_equal @root.join('articles/index.html.erb').to_s
+
+        file = Lotus::View::Template::Finder.new(Articles::Index, :json).find.file
+        file.must_equal @root.join('articles/index.json.erb').to_s
       end
 
       it 'finds subclass templates' do
-        finder = Lotus::View::Template::Finder.new(Articles::RssIndex)
-        finder.find.must_equal([@root.join('articles/index.rss.erb')])
+        file = Lotus::View::Template::Finder.new(Articles::RssIndex, :rss).find.file
+        file.must_equal @root.join('articles/index.rss.erb').to_s
       end
 
       it 'finds grandchild templates' do
-        finder = Lotus::View::Template::Finder.new(Articles::AtomIndex)
-        finder.find.must_equal([@root.join('articles/index.atom.erb')])
+        file = Lotus::View::Template::Finder.new(Articles::AtomIndex, :atom).find.file
+        file.must_equal @root.join('articles/index.atom.erb').to_s
       end
     end
   end
