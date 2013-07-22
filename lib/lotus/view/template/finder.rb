@@ -1,3 +1,4 @@
+require 'lotus/utils/string'
 require 'lotus/view/template/null_template'
 
 module Lotus
@@ -37,16 +38,7 @@ module Lotus
         end
 
         def relative_path
-          underscore(view.template_name)
-        end
-
-        # TODO extract into Lotus::Utils::String#underscore
-        def underscore(name)
-          name.
-            gsub('::', '/').
-            gsub(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2').
-            gsub(/([a-z\d])([A-Z])/,'\1_\2').
-            downcase
+          Utils::String.new(view.template_name).underscore
         end
       end
     end
