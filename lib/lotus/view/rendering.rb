@@ -11,12 +11,23 @@ module Lotus
       end
 
       def render(context, locals)
-        registry.resolve(Context.new(context)).render(locals)
+        view, template = registry.resolve(Context.new(context))
+        view.new(template, locals).render
       end
 
       module InstanceMethods
-        def render(locals)
-          @template.render(nil, locals)
+        def render
+          @template.render(self, @locals)
+        end
+
+        protected
+        # TODO find an elegant way to achieve this
+        def method_missing(name, *args, &blk)
+          if @locals.key?(name)
+            @locals[name]
+          else
+            super
+          end
         end
       end
 

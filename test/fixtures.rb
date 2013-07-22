@@ -38,4 +38,22 @@ module Articles
   class AtomIndex < RssIndex
     format :atom
   end
+
+  class Show < View
+    def title
+      @title ||= article.title.upcase
+    end
+  end
+
+  class JsonShow < Show
+    format :json
+
+    def article
+      OpenStruct.new(title: super.title.reverse)
+    end
+
+    def title
+      super.downcase
+    end
+  end
 end

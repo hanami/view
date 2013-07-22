@@ -32,5 +32,28 @@ describe Lotus::View do
 
       rendered.must_be_nil
     end
+
+    it 'renders a template, including the current view as a context' do
+      view     = Articles::Show
+      rendered = view.render({ format: :html }, { article: @articles.first })
+
+      rendered.must_include "<h1>ALIEN INVASION!</h1>"
+    end
+
+    it 'can safely cache local vars' do
+      @articles.each do |article|
+        view     = Articles::Show
+        rendered = view.render({ format: :html }, { article: article })
+
+        rendered.must_include "<h1>#{ article.title.upcase }</h1>"
+      end
+    end
+
+    it 'implicit inheriths variables from locals' do
+      view     = Articles::Show
+      rendered = view.render({ format: :json }, { article: @articles.last })
+
+      rendered.must_include %(title: "ekoj a s'ti ,on")
+    end
   end
 end

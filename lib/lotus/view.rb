@@ -31,8 +31,8 @@ module Lotus
       Set.new [:html, :json, :xml, :rss, :atom, :js]
     end
 
-    def initialize(template)
-      @template = template
+    def initialize(template, locals)
+      @template, @locals = template, locals
     end
 
     private

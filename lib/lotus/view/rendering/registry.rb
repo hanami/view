@@ -8,8 +8,14 @@ module Lotus
       # TODO extract into a separate file
       # TODO eventually make it a singleton
       class NullView
-        def render(locals)
+        def initialize(template, locals)
         end
+
+        def render
+        end
+      end
+
+      class NullTemplate
       end
 
       class Registry
@@ -20,7 +26,7 @@ module Lotus
 
         def resolve(context)
           # TODO instead of using OR, set this a `registry` default
-          registry[context.format] || NullView.new
+          registry[context.format] || [NullView, NullTemplate.new]
         end
 
         private
@@ -33,17 +39,17 @@ module Lotus
         def _prepare
           {}.tap do |result|
             Lotus::View.formats.each do |format|
-              result[format] = _view_for(format)
+              view = _view_for(format)
+
+              if template = _template_for(view, format)
+                result[format] = [ _view_for(format), template ]
+              end
             end
           end
         end
 
         def _view_for(format)
-          v = views.find {|view| view.formats.include?(format) }
-          template = _template_for(v, format)
-
-          # TODO remove this Nil check
-          v.new(template) if template
+          views.find {|view| view.formats.include?(format) }
         end
 
         def _template_for(view, format)
