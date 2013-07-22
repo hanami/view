@@ -1,3 +1,5 @@
+require 'lotus/view/template/null_template'
+
 module Lotus
   module View
     class MissingTemplateError < ::Exception
@@ -17,6 +19,7 @@ module Lotus
           begin
             Tilt.new(absolute_path.to_s)
           rescue
+            NullTemplate.new
           end
         end
 
