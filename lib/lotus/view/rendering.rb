@@ -39,7 +39,7 @@ module Lotus
       end
 
       def registry
-        @registry ||= Registry.new(self)
+        @registry ||= Registry.new(self, Lotus::View.formats)
       end
     end
   end

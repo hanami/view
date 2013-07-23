@@ -1,24 +1,40 @@
 require 'pathname'
 require 'tilt'
-require 'lotus/view/rendering/registry/registration'
+require 'lotus/view/finder'
+require 'lotus/view/template/finder'
 
 module Lotus
   module View
     module Rendering
-      class Registry
-        def initialize(view)
-          @registry = _prepare(view)
+      class Registry < ::Hash
+        def initialize(view, formats)
+          super()
+          _merge_entries!(view, formats)
         end
 
         def resolve(context)
-          registry[context.format]
+          self[context.format]
         end
 
         private
-        attr_reader :registry
+        def _merge_entries!(view, formats)
+          formats.each do |format|
+            store format, _entry_for(view, format)
+          end
+        end
 
-        def _prepare(view)
-          Registration.new(view, Lotus::View.formats)
+        # FIXME Code smell: `view` and `format` data clump
+        def _entry_for(view, format)
+          v = _view_for(view, format)
+          [ v, _template_for(v, format) ]
+        end
+
+        def _view_for(view, format)
+          Lotus::View::Finder.new(view, format).find
+        end
+
+        def _template_for(view, format)
+          Lotus::View::Template::Finder.new(view, format).find
         end
       end
     end
