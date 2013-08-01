@@ -1,37 +1,17 @@
-require 'lotus/view/inheritable/null_ancestor'
-
 module Lotus
   module View
     module Inheritable
+      def inherited(base)
+        subclasses.add base
+      end
+
       def subclasses
-        (@@subclasses || []).dup
+        @@subclasses ||= Set.new
       end
 
       protected
-      def set_ancestor(ancestor, klass)
-        @ancestor = ancestor.abstract? ? klass : ancestor
-      end
-
-      def ancestor
-        @ancestor ||= NullAncestor.new(name)
-      end
-
-      def abstract?
-        !!@abstract
-      end
-
-      private
-      def abstract!
-        @abstract = true
-      end
-
-      def inherited(subclass)
-        unless abstract?
-          @@subclasses ||= Set.new
-          @@subclasses.add(subclass)
-
-          subclass.set_ancestor(ancestor, self)
-        end
+      def load!
+        subclasses.freeze
       end
     end
   end

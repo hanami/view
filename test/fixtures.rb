@@ -1,3 +1,7 @@
+class HelloWorldView
+  include Lotus::View
+end
+
 class RenderView
   include Lotus::View
 end
@@ -23,12 +27,8 @@ module App
 end
 
 module Articles
-  class View
+  class Index
     include Lotus::View
-    abstract!
-  end
-
-  class Index < View
   end
 
   class RssIndex < Index
@@ -39,7 +39,9 @@ module Articles
     format :atom
   end
 
-  class Show < View
+  class Show
+    include Lotus::View
+
     def title
       @title ||= article.title.upcase
     end

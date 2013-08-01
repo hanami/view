@@ -1,7 +1,6 @@
 module Lotus
   module View
-    class NullView
-      # TODO eventually make it a singleton
+    module Rendering
       class NullView
         def initialize(template, locals)
         end

@@ -1,4 +1,3 @@
-require 'lotus/view/rendering/context'
 require 'lotus/view/rendering/registry'
 
 module Lotus
@@ -10,18 +9,16 @@ module Lotus
         end
       end
 
-      def render(context, locals)
-        view, template = registry.resolve(Context.new(context))
-        view.new(template, locals).render
-      end
-
       module InstanceMethods
+        def initialize(template, locals)
+          @template, @locals = template, locals
+        end
+
         def render
-          @template.render(self, @locals)
+          template.render(self, @locals)
         end
 
         protected
-        # TODO find an elegant way to achieve this
         def method_missing(name, *args, &blk)
           if @locals.key?(name)
             @locals[name]
@@ -29,17 +26,24 @@ module Lotus
             super
           end
         end
+
+        private
+        attr_reader :template
+      end
+
+      def render(context, locals)
+        registry.resolve(context, locals).render
+      end
+
+      protected
+      def load!
+        super
+        registry.freeze
       end
 
       private
-      def load!
-        super
-        registry
-        nil
-      end
-
       def registry
-        @registry ||= Registry.new(self, Lotus::View.formats)
+        @@registry ||= Registry.new(self)
       end
     end
   end

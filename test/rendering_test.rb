@@ -3,57 +3,47 @@ require 'ostruct'
 
 describe Lotus::View do
   describe 'rendering' do
-    before do
-      @articles = [
-        OpenStruct.new(title: "Alien Invasion!"),
-        OpenStruct.new(title: "No, it's a joke")
-      ]
+    it 'renders a template' do
+      HelloWorldView.render({format: :html}, {}).must_include %(<h1>Hello, World!</h1>)
     end
 
-    it 'renders a template, according to the requested format' do
-      view     = Articles::Index
-      rendered = view.render({ format: :html }, { articles: @articles })
-
-      rendered.must_include "<h1>Alien Invasion!</h1>"
-      rendered.must_include "<h1>No, it's a joke</h1>"
+    it 'renders a template with context binding' do
+      RenderView.render({format: :html}, {planet: 'Mars'}).must_include %(<h1>Hello, Mars!</h1>)
     end
 
-    it 'delegates to subclasses, when they explicitely handle the format' do
-      view     = Articles::Index
-      rendered = view.render({ format: :atom }, { articles: @articles })
-
-      rendered.must_include "<title>Alien Invasion!</title>"
-      rendered.must_include "<title>No, it's a joke</title>"
+    it 'renders a template according to the declared format' do
+      JsonRenderView.render({format: :json}, {planet: 'Moon'}).must_include %("greet":"Hello, Moon!")
     end
 
-    it "returns nil when the requested format can't be handled because the template is missing" do
-      view     = Articles::Index
-      rendered = view.render({ format: :js }, { articles: @articles })
+    it 'renders a template according to the requested format' do
+      articles = [ OpenStruct.new(title: 'Man on the Moon!') ]
 
+      rendered = Articles::Index.render({format: :json}, {articles: articles})
+      rendered.must_match %("title":"Man on the Moon!")
+
+      rendered = Articles::Index.render({format: :html}, {articles: articles})
+      rendered.must_match %(<h1>Man on the Moon!</h1>)
+    end
+
+    it 'binds given locals to the rendering context' do
+      article = OpenStruct.new(title: 'Hello')
+
+      rendered = Articles::Show.render({format: :html}, {article: article})
+      rendered.must_match %(<h1>HELLO</h1>)
+    end
+
+    it 'renders a template from a subclass, if it is able to handle the requested format' do
+      article = OpenStruct.new(title: 'Hello')
+
+      rendered = Articles::Show.render({format: :json}, {article: article})
+      rendered.must_match %("title":"olleh")
+    end
+
+    it 'returns nil when context conditions cannot be met' do
+      article = OpenStruct.new(title: 'Ciao')
+
+      rendered = Articles::Show.render({format: :png}, {article: article})
       rendered.must_be_nil
-    end
-
-    it 'renders a template, including the current view as a context' do
-      view     = Articles::Show
-      rendered = view.render({ format: :html }, { article: @articles.first })
-
-      rendered.must_include "<h1>ALIEN INVASION!</h1>"
-    end
-
-    it 'can safely cache local vars' do
-      @articles.each do |article|
-        view     = Articles::Show
-        rendered = view.render({ format: :html }, { article: article })
-
-        rendered.must_include "<h1>#{ article.title.upcase }</h1>"
-      end
-    end
-
-    it 'implicit inheriths variables from locals' do
-      view     = Articles::Show
-      rendered = view.render({ format: :json }, { article: @articles.last })
-
-      rendered.must_include %(title: "ekoj a s'ti ,on")
     end
   end
 end

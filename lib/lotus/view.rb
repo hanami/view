@@ -1,18 +1,19 @@
 require 'set'
+require 'pathname'
 require 'lotus/view/inheritable'
-require 'lotus/view/dsl'
-require 'lotus/view/template'
 require 'lotus/view/rendering'
+require 'lotus/view/dsl'
 
 module Lotus
   module View
     def self.included(base)
       base.class_eval do
-        extend Inheritable
-        extend Dsl
-        extend Template
-        extend Rendering
+        extend Inheritable.dup
+        extend Dsl.dup
+        extend Rendering.dup
       end
+
+      views.add(base)
     end
 
     def self.root=(root)
@@ -20,23 +21,23 @@ module Lotus
     end
 
     def self.root
-      @@root ||= Pathname.new(__dir__)
+      @@root ||= begin
+        self.root = '.'
+        @@root
+      end
     end
 
-    # def self.formats=(formats)
-    #   @@formats = formats
-    # end
-
-    def self.formats
-      Set.new [:html, :json, :xml, :rss, :atom, :js]
+    def self.views
+      @@views ||= Set.new
     end
 
-    def initialize(template, locals)
-      @template, @locals = template, locals
-    end
-
-    private
     def self.load!
+      root.freeze
+      views.freeze
+
+      views.each do |view|
+        view.send(:load!)
+      end
     end
   end
 end
