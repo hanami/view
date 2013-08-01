@@ -1,4 +1,4 @@
-require 'lotus/view/rendering/template'
+require 'lotus/view/template'
 require 'lotus/utils/string'
 
 module Lotus
