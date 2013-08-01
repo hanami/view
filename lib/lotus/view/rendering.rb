@@ -1,4 +1,5 @@
 require 'lotus/view/rendering/registry'
+require 'lotus/view/rendering/scope'
 
 module Lotus
   module View
@@ -15,7 +16,7 @@ module Lotus
         end
 
         def render
-          template.render(self, @locals)
+          template.render Scope.new(self)
         end
 
         protected

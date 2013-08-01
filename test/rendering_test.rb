@@ -53,5 +53,14 @@ describe Lotus::View do
       rendered.must_match %(<h1>New Article</h1>)
       rendered.must_match %(<h2>Errors</h2>)
     end
+
+    it 'renders a partial' do
+      article = OpenStruct.new(title: nil)
+
+      rendered = Articles::New.render({format: :html}, {article: article})
+
+      rendered.must_match %(<h1>New Article</h1>)
+      # rendered.must_match %(<form>)
+    end
   end
 end
