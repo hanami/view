@@ -30,8 +30,12 @@ module Lotus
       protected
       def load!
         super
-        root.freeze
-        format.freeze
+
+        views.each do |v|
+          v.root.freeze
+          v.format.freeze
+          v.template.freeze
+        end
       end
     end
   end

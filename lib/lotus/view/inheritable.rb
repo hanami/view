@@ -12,6 +12,11 @@ module Lotus
       protected
       def load!
         subclasses.freeze
+        views.freeze
+      end
+
+      def views
+        @@views ||= [ self ] + subclasses.to_a
       end
     end
   end
