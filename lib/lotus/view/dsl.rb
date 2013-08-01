@@ -1,3 +1,5 @@
+require 'lotus/utils/string'
+
 module Lotus
   module View
     module Dsl
@@ -14,6 +16,14 @@ module Lotus
           @format = value
         else
           @format
+        end
+      end
+
+      def template(value = nil)
+        if value
+          @@template = value
+        else
+          @@template ||= Utils::String.new(name).underscore
         end
       end
 

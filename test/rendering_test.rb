@@ -45,5 +45,13 @@ describe Lotus::View do
       rendered = Articles::Show.render({format: :png}, {article: article})
       rendered.must_be_nil
     end
+
+    it 'renders different template, as specified by DSL' do
+      article = OpenStruct.new(title: 'Bonjour')
+
+      rendered = Articles::Create.render({format: :html}, {article: article})
+      rendered.must_match %(<h1>New Article</h1>)
+      rendered.must_match %(<h2>Errors</h2>)
+    end
   end
 end

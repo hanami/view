@@ -1,5 +1,4 @@
 require 'lotus/view/template'
-require 'lotus/utils/string'
 
 module Lotus
   module View
@@ -17,7 +16,7 @@ module Lotus
 
         protected
         def template_name
-          Utils::String.new(view.name).underscore
+          view.template
         end
 
         def root

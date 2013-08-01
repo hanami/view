@@ -39,6 +39,23 @@ module Articles
     format :atom
   end
 
+  class New
+    include Lotus::View
+
+    def errors
+      {}
+    end
+  end
+
+  class Create
+    include Lotus::View
+    template 'articles/new'
+
+    def errors
+      {title: 'Title is required'}
+    end
+  end
+
   class Show
     include Lotus::View
 
