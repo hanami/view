@@ -1,5 +1,6 @@
 require 'set'
 require 'pathname'
+require 'lotus/view/version'
 require 'lotus/view/inheritable'
 require 'lotus/view/rendering'
 require 'lotus/view/dsl'
