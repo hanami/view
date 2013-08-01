@@ -4,12 +4,14 @@ module Lotus
   module View
     module Rendering
       class TemplateFinder
+        FORMAT = '*'.freeze
+
         def initialize(view)
           @view = view
         end
 
         def find
-          Dir["#{ root }/#{ template_name }.*"].map do |template|
+          Dir.glob( "#{ [root, template_name].join(separator) }.#{ format }" ).map do |template|
             Template.new template
           end
         end
@@ -21,6 +23,14 @@ module Lotus
 
         def root
           view.root
+        end
+
+        def separator
+          ::File::SEPARATOR
+        end
+
+        def format
+          FORMAT
         end
 
         private

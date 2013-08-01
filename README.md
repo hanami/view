@@ -89,6 +89,16 @@ module Articles
 end
 ```
 
+### Partials
+
+Partials can be rendered from the templates:
+
+```erb
+<%= render partial: 'articles/form', locals: { secret: 23 } %>
+```
+
+It will look for a template `articles/\_form.html.erb` and it will make available both the view's and partial's locals (eg. `article` and `secret`).
+
 ### Thread safety
 
 `Lotus::View` is thread safe, but it's loading isn't. For this reason it exposes a mechanism to preload everything, ensure to invoke it as last thing before your application starts.
