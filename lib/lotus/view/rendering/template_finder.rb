@@ -1,40 +1,22 @@
-require 'lotus/view/template'
+require 'lotus/view/rendering/templates_finder'
 
 module Lotus
   module View
     module Rendering
-      class TemplateFinder
-        FORMAT = '*'.freeze
-
-        def initialize(view)
-          @view = view
+      class TemplateFinder < TemplatesFinder
+        def initialize(view, template_name)
+          super(view)
+          @template_name = template_name
         end
 
         def find
-          Dir.glob( "#{ [root, template_name].join(separator) }.#{ format }" ).map do |template|
-            Template.new template
-          end
+          super.first
         end
 
         protected
         def template_name
-          view.template
+          @template_name
         end
-
-        def root
-          view.root
-        end
-
-        def separator
-          ::File::SEPARATOR
-        end
-
-        def format
-          FORMAT
-        end
-
-        private
-        attr_reader :view
       end
     end
   end

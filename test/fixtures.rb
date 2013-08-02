@@ -47,6 +47,10 @@ module Articles
     end
   end
 
+  class AlternativeNew
+    include Lotus::View
+  end
+
   class Create
     include Lotus::View
     template 'articles/new'

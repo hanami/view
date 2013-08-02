@@ -99,6 +99,16 @@ Partials can be rendered from the templates:
 
 It will look for a template `articles/\_form.html.erb` and it will make available both the view's and partial's locals (eg. `article` and `secret`).
 
+### Templates
+
+Templates can be rendered from the templates:
+
+```erb
+<%= render template: 'articles/new', locals: { errors: {} } %>
+```
+
+It will render `articles/new.html.erb` and it will make available both the view's and templates's locals (eg. `article` and `errors`).
+
 ### Thread safety
 
 `Lotus::View` is thread safe, but it's loading isn't. For this reason it exposes a mechanism to preload everything, ensure to invoke it as last thing before your application starts.

@@ -28,7 +28,7 @@ module Lotus
         end
 
         def templates
-          TemplateFinder.new(view).find
+          TemplatesFinder.new(view).find
         end
 
         def _view_for(template)

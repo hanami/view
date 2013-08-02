@@ -7,12 +7,8 @@ module Lotus
         PREFIX = '_'.freeze
 
         def initialize(view, partial_name)
-          super(view)
+          super(view, nil)
           @partial_name = partial_name
-        end
-
-        def find
-          super.first
         end
 
         protected
