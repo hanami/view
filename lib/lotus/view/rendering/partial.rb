@@ -6,7 +6,7 @@ module Lotus
       class Partial < Template
         protected
         def template
-          PartialFinder.new(view.class, options[:partial]).find
+          PartialFinder.new(@view.class, @options).find
         end
       end
     end

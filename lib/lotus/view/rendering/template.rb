@@ -1,4 +1,3 @@
-require 'lotus/view/rendering/locals'
 require 'lotus/view/rendering/template_finder'
 
 module Lotus
@@ -15,19 +14,12 @@ module Lotus
 
         protected
         def template
-          TemplateFinder.new(view.class, options[:template]).find
-        end
-
-        def locals
-          Locals.new(options[:locals])
+          TemplateFinder.new(@view.class, @options).find
         end
 
         def scope
-          Scope.new(view, locals)
+          Scope.new(@view, @options[:locals])
         end
-
-        private
-        attr_reader :view, :options
       end
     end
   end

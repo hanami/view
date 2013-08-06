@@ -1,4 +1,5 @@
 require 'lotus/utils/string'
+require 'lotus/view/rendering/layout_finder'
 
 module Lotus
   module View
@@ -27,6 +28,14 @@ module Lotus
         end
       end
 
+      def layout(value = nil)
+        if value
+          @layout = value
+        else
+          @layout
+        end
+      end
+
       protected
       def load!
         super
@@ -35,6 +44,8 @@ module Lotus
           v.root.freeze
           v.format.freeze
           v.template.freeze
+          v.layout(Rendering::LayoutFinder.new(v).find)
+          v.layout.freeze
         end
       end
     end

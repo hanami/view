@@ -14,6 +14,11 @@ end
 class AppView
   include Lotus::View
   root __dir__ + '/fixtures/templates/app'
+  layout :application
+end
+
+class AppViewLayout < AppView
+  layout nil
 end
 
 class MissingTemplateView
@@ -26,17 +31,35 @@ module App
   end
 end
 
+class ApplicationLayout
+  include Lotus::View::Layout
+
+  def title
+    'Title:'
+  end
+end
+
+class GlobalLayout
+end
+
 module Articles
   class Index
     include Lotus::View
+    layout :application
+
+    def title
+      "#{ layout.title } articles"
+    end
   end
 
   class RssIndex < Index
     format :rss
+    layout nil
   end
 
   class AtomIndex < RssIndex
     format :atom
+    layout nil
   end
 
   class New

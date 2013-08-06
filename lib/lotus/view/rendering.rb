@@ -12,24 +12,26 @@ module Lotus
 
       module InstanceMethods
         def initialize(template, locals)
-          @template, @locals = template, locals
+          @template = template
+          @scope    = Scope.new(self, locals)
         end
 
         def render
-          template.render Scope.new(self)
+          layout.render
         end
 
         protected
-        def method_missing(name, *args, &blk)
-          if @locals.key?(name)
-            @locals[name]
-          else
-            super
-          end
+        def rendered
+          @template.render @scope
         end
 
-        private
-        attr_reader :template
+        def layout
+          @layout ||= self.class.layout.new(@scope, rendered)
+        end
+
+        def method_missing(m, *args)
+          @scope.__send__ m
+        end
       end
 
       def render(context, locals)

@@ -14,6 +14,14 @@ describe Lotus::View do
       AppView.root.frozen?.must_equal true
     end
 
+    it 'freezes .layout for all the views' do
+      AppView.layout.frozen?.must_equal true
+    end
+
+    it 'freezes .layout for subclasses' do
+      AppViewLayout.layout.frozen?.must_equal true
+    end
+
     it 'freezes .views' do
       Lotus::View.views.frozen?.must_equal true
     end
@@ -56,6 +64,16 @@ describe Lotus::View do
 
     it 'freezes .registry for subclasses' do
       Articles::AtomIndex.send(:registry).frozen?.must_equal true
+    end
+
+    describe 'layouts' do
+      it 'freezes .root' do
+        ApplicationLayout.root.frozen?.must_equal true
+      end
+
+      it 'freezes .registry' do
+        ApplicationLayout.send(:registry).frozen?.must_equal true
+      end
     end
   end
 end

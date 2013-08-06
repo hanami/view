@@ -18,11 +18,11 @@ module Lotus
 
         protected
         def template_name
-          view.template
+          @view.template
         end
 
         def root
-          view.root
+          @view.root
         end
 
         def separator
@@ -32,9 +32,6 @@ module Lotus
         def format
           FORMAT
         end
-
-        private
-        attr_reader :view
       end
     end
   end

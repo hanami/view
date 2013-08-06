@@ -6,27 +6,18 @@ module Lotus
       class PartialFinder < TemplateFinder
         PREFIX = '_'.freeze
 
-        def initialize(view, partial_name)
-          super(view, nil)
-          @partial_name = partial_name
-        end
-
         protected
         def template_name
-          "#{ _prefixed_file_name }.#{ format }"
+          *all, last = partial_name.split(separator)
+          all.push( last.prepend(prefix) ).join(separator)
         end
 
-        def format
-          view.format || super
+        def partial_name
+          @options[:partial]
         end
 
         def prefix
           PREFIX
-        end
-
-        def _prefixed_file_name
-          *all, last = @partial_name.split(separator)
-          all.push( last.prepend(prefix) ).join(separator)
         end
       end
     end

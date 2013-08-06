@@ -4,9 +4,9 @@ module Lotus
   module View
     module Rendering
       class TemplateFinder < TemplatesFinder
-        def initialize(view, template_name)
+        def initialize(view, options)
           super(view)
-          @template_name = template_name
+          @options = options
         end
 
         def find
@@ -15,7 +15,11 @@ module Lotus
 
         protected
         def template_name
-          @template_name
+          @options[:template]
+        end
+
+        def format
+          "#{ @options[:format] }.#{ super }"
         end
       end
     end

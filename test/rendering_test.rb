@@ -71,5 +71,16 @@ describe Lotus::View do
       rendered.must_match %(<h1>New Article</h1>)
       rendered.must_match %(<input type="hidden" name="secret" value="23" />)
     end
+
+    describe 'layout' do
+      it 'renders contents from layout' do
+        articles = [ OpenStruct.new(title: 'A Wonderful Day!') ]
+
+        rendered = Articles::Index.render({format: :html}, {articles: articles})
+        rendered.must_match %(<h1>A Wonderful Day!</h1>)
+        rendered.must_match %(<html>)
+        rendered.must_match %(<title>Title: articles</title>)
+      end
+    end
   end
 end

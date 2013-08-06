@@ -4,6 +4,7 @@ require 'lotus/view/version'
 require 'lotus/view/inheritable'
 require 'lotus/view/rendering'
 require 'lotus/view/dsl'
+require 'lotus/view/layout'
 
 module Lotus
   module View
@@ -28,16 +29,33 @@ module Lotus
       end
     end
 
+    def self.layout=(layout)
+      @@layout = Rendering::LayoutFinder.find(layout)
+    end
+
+    def self.layout
+      @@layout ||= Rendering::NullLayout
+    end
+
     def self.views
       @@views ||= Set.new
     end
 
+    def self.layouts
+      @@layouts ||= Set.new
+    end
+
     def self.load!
       root.freeze
+      layout.freeze
       views.freeze
 
       views.each do |view|
         view.send(:load!)
+      end
+
+      layouts.each do |layout|
+        layout.send(:load!)
       end
     end
   end

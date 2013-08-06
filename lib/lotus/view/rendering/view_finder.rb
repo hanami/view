@@ -7,11 +7,8 @@ module Lotus
         end
 
         def find(template)
-          view.subclasses.find {|v| v.format == template.format } || view
+          @view.subclasses.find {|v| v.format == template.format } || @view
         end
-
-        private
-        attr_reader :view
       end
     end
   end

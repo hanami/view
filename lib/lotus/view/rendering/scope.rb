@@ -6,29 +6,40 @@ module Lotus
     module Rendering
       class Scope
         def initialize(view, locals = {})
-          @view = view
-          prepare!(locals)
+          @view, @locals = view, locals
         end
 
         def render(options)
-          if options[:partial]
-            Rendering::Partial.new(view, options).render
-          elsif options[:template]
-            Rendering::Template.new(view, options).render
-          end
+          renderer(options).render
         end
 
         protected
         def method_missing(m, *args)
-          view.send m, *args
+          if @locals.key?(m)
+            @locals[m]
+          elsif @view.respond_to?(m)
+            @view.__send__ m
+          else
+            super
+          end
         end
 
-        def prepare!(locals)
-          view.extend(locals.modulize) if locals.any?
+        def renderer(options)
+          if options[:partial]
+            Rendering::Partial
+          elsif options[:template]
+            Rendering::Template
+          end.new(@view, _options(options))
         end
 
         private
-        attr_reader :view
+        def _options(options)
+          options.dup.tap do |opts|
+            opts.merge!(format: @locals[:format])
+            opts[:locals] ||= {}
+            opts[:locals].merge!(@locals)
+          end
+        end
       end
     end
   end

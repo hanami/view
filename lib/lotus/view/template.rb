@@ -13,8 +13,8 @@ module Lotus
           to_sym
       end
 
-      def render(scope, locals={})
-        @_template.render(scope, locals)
+      def render(scope, &blk)
+        @_template.render(scope, {}, &blk)
       end
     end
   end

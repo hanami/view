@@ -73,8 +73,8 @@ end
 The template file must be located under the relevant `root` and must match the class name:
 
 ```ruby
-puts Lotus::View.root # => #<Pathname:app/views>
-Articles::Index.template # => #<Pathname:app/views/articles/index>
+puts Lotus::View.root     # => #<Pathname:app/templates>
+Articles::Index.templates # => #<Pathname:app/templates/articles/index.*>
 ```
 
 Each view can specify a different template:
@@ -108,6 +108,41 @@ Templates can be rendered from the templates:
 ```
 
 It will render `articles/new.html.erb` and it will make available both the view's and templates's locals (eg. `article` and `errors`).
+
+### Layouts
+
+Layouts are wrappers for views, they can be utilized by applications to reuse markup.
+
+```ruby
+class ApplicationLayout
+  include Lotus::View::Layout
+
+  def page_title
+    'Title:'
+  end
+end
+
+module Articles
+  class IndexView
+    include Lotus::View
+    layout :application
+
+    def page_title
+      "#{ layout.page_title } articles"
+    end
+  end
+
+  class RssIndexView < IndexView
+    format :rss
+    layout nil
+  end
+end
+
+Articles::IndexView.render(format: :html) # => Will use ApplicationLayout
+Articles::IndexView.render(format: :rss)  # => Will use nothing
+```
+
+As per convention, layouts' templates are located under `Lotus::View.root` or `ApplicationLayout.root` and they uses the underscored name (eg. `ApplicationLayout => application.html.erb`).
 
 ### Thread safety
 
