@@ -19,7 +19,7 @@ module Lotus
         end
 
         def format
-          "#{ @options[:format] }.#{ super }"
+          @options[:format]
         end
       end
     end

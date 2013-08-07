@@ -11,7 +11,7 @@ module Lotus
         end
 
         def find
-          Dir.glob( "#{ [root, template_name].join(separator) }.#{ format }" ).map do |template|
+          Dir.glob( "#{ [root, template_name].join(separator) }.#{ format }.#{ engines }" ).map do |template|
             View::Template.new template
           end
         end
@@ -31,6 +31,10 @@ module Lotus
 
         def format
           FORMAT
+        end
+
+        def engines
+          "{#{ Tilt.mappings.keys.join(',') }}"
         end
       end
     end
