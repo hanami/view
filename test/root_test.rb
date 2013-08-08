@@ -19,7 +19,7 @@ describe Lotus::View do
     describe 'when not set' do
       before do
         @root = Lotus::View.root
-        Lotus::View.class_variable_set(:@@root, nil)
+        Lotus::View.root = nil
       end
 
       after do

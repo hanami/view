@@ -19,30 +19,30 @@ module Lotus
     end
 
     def self.root=(root)
-      @@root = Pathname.new(root)
+      @root = Pathname.new(root) rescue nil
     end
 
     def self.root
-      @@root ||= begin
+      @root ||= begin
         self.root = '.'
-        @@root
+        @root
       end
     end
 
     def self.layout=(layout)
-      @@layout = Rendering::LayoutFinder.find(layout)
+      @layout = Rendering::LayoutFinder.find(layout)
     end
 
     def self.layout
-      @@layout ||= Rendering::NullLayout
+      @layout ||= Rendering::NullLayout
     end
 
     def self.views
-      @@views ||= Set.new
+      @views ||= Set.new
     end
 
     def self.layouts
-      @@layouts ||= Set.new
+      @layouts ||= Set.new
     end
 
     def self.load!
