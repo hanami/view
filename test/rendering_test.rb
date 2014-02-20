@@ -54,6 +54,14 @@ describe Lotus::View do
       rendered.must_match %(<h2>Errors</h2>)
     end
 
+    it 'decorates locals' do
+      map = Map.new(['Rome', 'Cambridge'])
+
+      rendered = Dashboard::Index.render({format: :html}, {map: map})
+      rendered.must_match %(<h1>Map</h1>)
+      rendered.must_match %(<h2>2 locations</h2>)
+    end
+
     it 'renders a partial' do
       article = OpenStruct.new(title: nil)
 

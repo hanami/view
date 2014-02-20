@@ -5,6 +5,8 @@ module Lotus
   module View
     module Rendering
       class Scope
+        attr_reader :locals
+
         def initialize(view, locals = {})
           @view, @locals = view, locals
         end
@@ -14,11 +16,11 @@ module Lotus
         end
 
         protected
-        def method_missing(m, *args)
-          if @locals.key?(m)
-            @locals[m]
-          elsif @view.respond_to?(m)
+        def method_missing(m)
+          if @view.respond_to?(m)
             @view.__send__ m
+          elsif @locals.key?(m)
+            @locals[m]
           else
             super
           end

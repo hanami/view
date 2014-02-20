@@ -29,7 +29,11 @@ module Lotus
           @layout ||= self.class.layout.new(@scope, rendered)
         end
 
-        def method_missing(m, *args)
+        def locals
+          @scope.locals
+        end
+
+        def method_missing(m)
           @scope.__send__ m
         end
       end

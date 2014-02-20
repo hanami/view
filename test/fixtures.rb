@@ -1,3 +1,5 @@
+require 'delegate'
+
 class HelloWorldView
   include Lotus::View
 end
@@ -95,11 +97,35 @@ module Articles
     format :json
 
     def article
-      OpenStruct.new(title: super.title.reverse)
+      OpenStruct.new(title: locals[:article].title.reverse)
     end
 
     def title
       super.downcase
+    end
+  end
+end
+
+class Map
+  attr_reader :locations
+
+  def initialize(locations)
+    @locations = locations
+  end
+end
+
+class MapPresenter < SimpleDelegator
+  def count
+    locations.count
+  end
+end
+
+module Dashboard
+  class Index
+    include Lotus::View
+
+    def map
+      MapPresenter.new(locals[:map])
     end
   end
 end
