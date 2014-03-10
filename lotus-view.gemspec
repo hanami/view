@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['me@lucaguidi.com']
   spec.description   = %q{View layer for Lotus}
   spec.summary       = %q{View layer for Lotus}
-  spec.homepage      = 'http://lotusrb.org/lotus-view'
+  spec.homepage      = 'http://lotusrb.org'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
@@ -18,9 +18,10 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'tilt', '~> 1.4'
+  spec.add_dependency 'tilt',        '~> 1.4'
+  spec.add_dependency 'lotus-utils', '~> 0.1'
 
-  spec.add_development_dependency 'bundler',  '~> 1.3'
+  spec.add_development_dependency 'bundler',  '~> 1.5'
   spec.add_development_dependency 'minitest', '~> 5'
-  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rake',     '~> 10'
 end
