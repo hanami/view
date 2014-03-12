@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'tilt',        '~> 1.4'
+  spec.add_dependency 'tilt',        '~> 2.0'
   spec.add_dependency 'lotus-utils', '~> 0.1'
 
   spec.add_development_dependency 'bundler',  '~> 1.5'

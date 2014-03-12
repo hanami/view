@@ -45,6 +45,7 @@ module Lotus
       @layouts ||= Set.new
     end
 
+    #FIXME extract a Loader class
     def self.load!
       root.freeze
       layout.freeze

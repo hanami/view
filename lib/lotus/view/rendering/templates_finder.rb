@@ -4,7 +4,8 @@ module Lotus
   module View
     module Rendering
       class TemplatesFinder
-        FORMAT = '*'.freeze
+        FORMAT  = '*'.freeze
+        ENGINES = '*'.freeze
 
         def initialize(view)
           @view = view
@@ -34,7 +35,7 @@ module Lotus
         end
 
         def engines
-          "{#{ Tilt.mappings.keys.join(',') }}"
+          ENGINES
         end
       end
     end

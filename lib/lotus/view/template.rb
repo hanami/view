@@ -1,4 +1,5 @@
 require 'tilt'
+require 'erubis'
 
 module Lotus
   module View

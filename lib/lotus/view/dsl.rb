@@ -4,6 +4,7 @@ require 'lotus/view/rendering/layout_finder'
 module Lotus
   module View
     module Dsl
+      # TODO extract an elegant solution in Utils
       def root(value = nil)
         if value
           @@root = Pathname.new value
@@ -12,6 +13,7 @@ module Lotus
         end
       end
 
+      # TODO extract an elegant solution in Utils
       def format(value = nil)
         if value
           @format = value
@@ -20,6 +22,7 @@ module Lotus
         end
       end
 
+      # TODO extract an elegant solution in Utils
       def template(value = nil)
         if value
           @@template = value
@@ -28,6 +31,7 @@ module Lotus
         end
       end
 
+      # TODO extract an elegant solution in Utils
       def layout(value = nil)
         if value
           @layout = value
@@ -40,6 +44,7 @@ module Lotus
       def load!
         super
 
+        #FIXME this code has an intimate knowledge of a view
         views.each do |v|
           v.root.freeze
           v.format.freeze
