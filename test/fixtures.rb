@@ -1,5 +1,3 @@
-require 'delegate'
-
 class HelloWorldView
   include Lotus::View
 end
@@ -112,11 +110,25 @@ class Map
   def initialize(locations)
     @locations = locations
   end
+
+  def location_names
+    @locations.join(', ')
+  end
 end
 
-class MapPresenter < SimpleDelegator
+class MapPresenter
+  include Lotus::Presenter
+
   def count
     locations.count
+  end
+
+  def location_names
+    super.upcase
+  end
+
+  def inspect_object
+    object.inspect
   end
 end
 

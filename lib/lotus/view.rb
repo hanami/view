@@ -5,6 +5,7 @@ require 'lotus/view/inheritable'
 require 'lotus/view/rendering'
 require 'lotus/view/dsl'
 require 'lotus/view/layout'
+require 'lotus/presenter'
 
 module Lotus
   module View
