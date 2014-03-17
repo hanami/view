@@ -128,7 +128,7 @@ class MapPresenter
   end
 
   def inspect_object
-    object.inspect
+    @object.inspect
   end
 end
 

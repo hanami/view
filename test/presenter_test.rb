@@ -19,7 +19,7 @@ describe Lotus::Presenter do
     subject.location_names.must_equal map.locations.map {|l| l.upcase }.join(', ')
   end
 
-  it 'exposes a private accessor for the object' do
+  it 'has a direct access to the object' do
     subject.inspect_object.must_match '#<Map'
   end
 end
