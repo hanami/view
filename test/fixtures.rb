@@ -32,7 +32,7 @@ module App
 end
 
 class ApplicationLayout
-  include Lotus::View::Layout
+  include Lotus::Layout
 
   def title
     'Title:'

@@ -115,7 +115,7 @@ Layouts are wrappers for views, they can be utilized by applications to reuse ma
 
 ```ruby
 class ApplicationLayout
-  include Lotus::View::Layout
+  include Lotus::Layout
 
   def page_title
     'Title:'
