@@ -8,7 +8,21 @@ require 'lotus/layout'
 require 'lotus/presenter'
 
 module Lotus
+  # View
+  #
+  # @since 0.1.0
   module View
+    # Register a view
+    #
+    # @api private
+    # @since 0.1.0
+    #
+    # @example
+    #   require 'lotus/view'
+    #
+    #   class IndexView
+    #     include Lotus::View
+    #   end
     def self.included(base)
       base.class_eval do
         extend Inheritable.dup
