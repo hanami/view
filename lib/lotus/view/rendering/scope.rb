@@ -5,11 +5,29 @@ require 'lotus/view/rendering/partial'
 module Lotus
   module View
     module Rendering
+      # Rendering scope
+      #
+      # @since 0.1.0
+      #
+      # @see Lotus::View::Rendering::LayoutScope
       class Scope < LayoutScope
+        # Initialize the scope
+        #
+        # @param view [Class] the view
+        # @param locals [Hash] a set of objects available during the rendering
+        # @option locals [Symbol] :format the requested format
+        #
+        # @api private
+        # @since 0.1.0
         def initialize(view, locals = {})
           @view, @locals = view, locals
         end
 
+        # Returns the requested format.
+        #
+        # @return [Symbol] the requested format (eg. :html, :json, :xml, etc..)
+        #
+        # @since 0.1.0
         def format
           locals[:format]
         end

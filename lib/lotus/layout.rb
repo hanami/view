@@ -42,7 +42,7 @@ module Lotus
       # @see Lotus::Layout::ClassMethods#template
       SUFFIX = '_layout'.freeze
 
-      # A registry that holds all the registered subclasses.
+      # A registry that holds all the registered layouts.
       #
       # @api private
       # @since 0.1.0

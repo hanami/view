@@ -4,10 +4,13 @@ require 'lotus/view/rendering/templates_finder'
 module Lotus
   module View
     module Rendering
-      # Holds the references of all the registered layouts
+      # Holds the references of all the registered layouts.
+      # As now the registry is unique at the level of the framework.
       #
       # @api private
       # @since 0.1.0
+      #
+      # @see Lotus::Layout::ClassMethods#registry
       class LayoutRegistry < ::Hash
         # Initialize the registry
         #
