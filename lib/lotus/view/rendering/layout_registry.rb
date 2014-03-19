@@ -4,7 +4,17 @@ require 'lotus/view/rendering/templates_finder'
 module Lotus
   module View
     module Rendering
+      # Holds the references of all the registered layouts
+      #
+      # @api private
+      # @since 0.1.0
       class LayoutRegistry < ::Hash
+        # Initialize the registry
+        #
+        # @param view [Class] the view
+        #
+        # @api private
+        # @since 0.1.0
         def initialize(view)
           super()
 
@@ -12,6 +22,16 @@ module Lotus
           prepare!
         end
 
+        # Returns the layout for the given context.
+        #
+        # @param context [Hash] the rendering context
+        #
+        # @return [Lotus::Layout, Lotus::View::Rendering::NullTemplate]
+        #   the layout associated with the given context or a `NullTemplate` if
+        #   it can't be found.
+        #
+        # @api private
+        # @since 0.1.0
         def resolve(context)
           fetch(context[:format], NullTemplate.new)
         end

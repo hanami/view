@@ -61,12 +61,11 @@ module Lotus
       # @see Lotus::Layout::ClassMethods#suffix
       #
       # @example
+      #   # Given a template 'templates/application.html.erb'
       #
-      # # Given a template 'templates/application.html.erb'
-      #
-      # class ApplicationLayout
-      #   include Lotus::Layout
-      # end
+      #   class ApplicationLayout
+      #     include Lotus::Layout
+      #   end
       #
       # ApplicationLayout.template # => 'application'
       def template
