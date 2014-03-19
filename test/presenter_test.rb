@@ -22,4 +22,10 @@ describe Lotus::Presenter do
   it 'has a direct access to the object' do
     subject.inspect_object.must_match '#<Map'
   end
+
+  it "raises error when the requested method can't be satisfied" do
+    -> {
+      subject.unknown_method
+    }.must_raise NoMethodError
+  end
 end

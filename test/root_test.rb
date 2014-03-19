@@ -2,6 +2,10 @@ require 'test_helper'
 
 describe Lotus::View do
   describe 'root' do
+    before do
+      Lotus::View.root = Pathname.new __dir__ + '/fixtures/templates'
+    end
+
     it 'exposes the path where to lookup for templates' do
       expected = Pathname.new __dir__ + '/fixtures/templates'
       Lotus::View.root.must_equal expected

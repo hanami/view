@@ -145,5 +145,12 @@ module Lotus
         layout.send(:load!)
       end
     end
+
+    def self.unload!
+      instance_variable_set(:@root, nil)
+      instance_variable_set(:@layout, nil)
+      instance_variable_set(:@views, Set.new)
+      instance_variable_set(:@layouts, Set.new)
+    end
   end
 end
