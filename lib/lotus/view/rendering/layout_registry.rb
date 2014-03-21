@@ -36,7 +36,7 @@ module Lotus
         # @api private
         # @since 0.1.0
         def resolve(context)
-          fetch(context[:format], NullTemplate.new)
+          fetch(context[:format]) { NullTemplate.new }
         end
 
         protected
