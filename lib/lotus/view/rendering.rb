@@ -49,7 +49,9 @@ module Lotus
         # For instance, when a serializer is used and there isn't the need of
         # a template.
         #
-        # @return [String, nil] the output of the rendering process
+        # @return [String] the output of the rendering process
+        #
+        # @raise [Lotus::View::MissingTemplateError] if the template is nil
         #
         # @since 0.1.0
         #
@@ -107,15 +109,17 @@ module Lotus
         #
         # @return [String] the rendering output
         #
+        # @raise [Lotus::View::MissingTemplateError] if the template is nil
+        #
         # @api private
         # @since 0.1.0
         def rendered
-          @template.render @scope
+          template.render @scope
         end
 
         # The layout.
         #
-        # @return [Class, Rendering::NullLayout]
+        # @return [Class, Lotus::View::Rendering::NullLayout]
         #
         # @see Lotus::View::Layout
         # @see Lotus::View.layout
@@ -125,6 +129,18 @@ module Lotus
         # @since 0.1.0
         def layout
           @layout ||= self.class.layout.new(@scope, rendered)
+        end
+
+        # The template.
+        #
+        # @return [Lotus::View::Template] the template
+        #
+        # @raise [Lotus::View::MissingTemplateError] if the template is nil
+        #
+        # @api private
+        # @since 0.1.0
+        def template
+          @template or raise MissingTemplateError.new(self.class.template, @scope.format)
         end
 
         # A set of objects available during the rendering process.
@@ -170,7 +186,10 @@ module Lotus
       # @param locals [Hash] a set of objects available during the rendering
       #   process
       #
-      # @return [String, nil] the output of the rendering process
+      # @return [String] the output of the rendering process
+      #
+      # @raise [Lotus::View::MissingTemplateError] if it can't find a template
+      #   for the given context
       #
       # @since 0.1.0
       #
@@ -179,6 +198,8 @@ module Lotus
       #
       # @example
       #   require 'lotus/view'
+      #
+      #   article = OpenStruct.new(title: 'Hello')
       #
       #   module Articles
       #     class Show
@@ -198,9 +219,17 @@ module Lotus
       #     end
       #   end
       #
-      #   Articles::Index.render { format: :html }, { article: article } # => renders `articles/show.html.erb`
-      #   Articles::Index.render { format: :json }, { article: article } # => renders `articles/show.json.erb`
-      #   Articles::Index.render { format: :xml  }, { article: article } # => returns `nil`
+      #   Lotus::View.root = '/path/to/templates'
+      #   Lotus::View.load!
+      #
+      #   Articles::Show.render({ format: :html }, { article: article })
+      #     # => renders `articles/show.html.erb`
+      #
+      #   Articles::Show.render({ format: :json }, { article: article })
+      #     # => renders `articles/show.json.erb`
+      #
+      #   Articles::Show.render({ format: :xml  }, { article: article })
+      #     # => raises Lotus::View::MissingTemplateError
       def render(context, locals)
         registry.resolve(context, locals).render
       end

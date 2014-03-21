@@ -39,11 +39,12 @@ describe Lotus::View do
       rendered.must_match %("title":"olleh")
     end
 
-    it 'returns nil when context conditions cannot be met' do
+    it 'raises an error when the template is missing' do
       article = OpenStruct.new(title: 'Ciao')
 
-      rendered = Articles::Show.render({format: :png}, {article: article})
-      rendered.must_be_nil
+      -> {
+        Articles::Show.render({format: :png}, {article: article})
+      }.must_raise(Lotus::View::MissingTemplateError)
     end
 
     it 'renders different template, as specified by DSL' do
@@ -78,6 +79,23 @@ describe Lotus::View do
 
       rendered.must_match %(<h1>New Article</h1>)
       rendered.must_match %(<input type="hidden" name="secret" value="23" />)
+    end
+
+    describe 'when without a template' do
+      it 'renders from the custom rendering method' do
+        song = OpenStruct.new(title: 'Song Two', url: '/song2.mp3')
+
+        rendered = Songs::Show.render({format: :html}, {song: song})
+        rendered.must_equal %(<audio src="/song2.mp3">Song Two</audio>)
+      end
+
+      it 'respond to all the formats' do
+        rendered = Metrics::Index.render({format: :html}, {})
+        rendered.must_equal %(metrics)
+
+        rendered = Metrics::Index.render({format: :json}, {})
+        rendered.must_equal %(metrics)
+      end
     end
 
     describe 'layout' do

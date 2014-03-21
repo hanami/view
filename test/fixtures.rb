@@ -146,3 +146,36 @@ class IndexView
   include Lotus::View
   layout :application
 end
+
+class SongWidget
+  attr_reader :song
+
+  def initialize(song)
+    @song = song
+  end
+
+  def render
+    %(<audio src="#{ song.url }">#{ song.title }</audio>)
+  end
+end
+
+module Songs
+  class Show
+    include Lotus::View
+    format :html
+
+    def render
+      SongWidget.new(song).render
+    end
+  end
+end
+
+module Metrics
+  class Index
+    include Lotus::View
+
+    def render
+      %(metrics)
+    end
+  end
+end
