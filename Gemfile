@@ -7,7 +7,6 @@ if !ENV['TRAVIS']
 end
 
 gem 'rake'
-gem 'tilt'
-gem 'erubis'
+gem 'tilt', '~> 2.0.1'
 gem 'simplecov', require: false
 gem 'coveralls', require: false
