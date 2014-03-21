@@ -81,6 +81,13 @@ describe Lotus::View do
       rendered.must_match %(<input type="hidden" name="secret" value="23" />)
     end
 
+    it 'uses HAML engine' do
+      person = OpenStruct.new(name: 'Luca')
+
+      rendered = Contacts::Show.render({format: :html}, {person: person})
+      rendered.must_match %(<h1>Luca</h1>)
+    end
+
     describe 'when without a template' do
       it 'renders from the custom rendering method' do
         song = OpenStruct.new(title: 'Song Two', url: '/song2.mp3')

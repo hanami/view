@@ -179,3 +179,9 @@ module Metrics
     end
   end
 end
+
+module Contacts
+  class Show
+    include Lotus::View
+  end
+end
