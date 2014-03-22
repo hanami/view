@@ -183,8 +183,7 @@ module Lotus
       #   to the requested format.
       #
       # @param context [Hash] the context for the rendering process
-      # @param locals [Hash] a set of objects available during the rendering
-      #   process
+      # @option context [Symbol] :format the requested format
       #
       # @return [String] the output of the rendering process
       #
@@ -222,16 +221,16 @@ module Lotus
       #   Lotus::View.root = '/path/to/templates'
       #   Lotus::View.load!
       #
-      #   Articles::Show.render({ format: :html }, { article: article })
+      #   Articles::Show.render(format: :html,  article: article)
       #     # => renders `articles/show.html.erb`
       #
-      #   Articles::Show.render({ format: :json }, { article: article })
+      #   Articles::Show.render(format: :json, article: article)
       #     # => renders `articles/show.json.erb`
       #
-      #   Articles::Show.render({ format: :xml  }, { article: article })
+      #   Articles::Show.render(format: :xml, article: article)
       #     # => raises Lotus::View::MissingTemplateError
-      def render(context, locals)
-        registry.resolve(context, locals).render
+      def render(context)
+        registry.resolve(context).render
       end
 
       protected

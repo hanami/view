@@ -86,9 +86,9 @@ module Lotus
         # @since 0.1.0
         #
         # @see Lotus::View::Rendering#render
-        def resolve(context, locals)
+        def resolve(context)
           view, template = fetch(context[:format]) { self[DEFAULT_FORMAT] }
-          view.new(template, locals.merge(context))
+          view.new(template, context)
         end
 
         private
