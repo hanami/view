@@ -9,7 +9,7 @@ else
 end
 
 gem 'rake'
-gem 'tilt', '~> 2.0.1'
+gem 'tilt', '~> 2.0.1', '>= 2.0.1'
 gem 'haml',      require: false
 gem 'simplecov', require: false
 gem 'coveralls', require: false
