@@ -30,6 +30,17 @@ module Lotus
       end
     end
 
+    # Missing format error
+    #
+    # This is raised at the runtime when rendering context lacks of the :format
+    # key.
+    #
+    # @since 0.1.0
+    #
+    # @see Lotus::View::Rendering#render
+    class MissingFormatError < ::StandardError
+    end
+
     # Register a view
     #
     # @api private

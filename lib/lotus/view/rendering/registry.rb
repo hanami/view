@@ -82,12 +82,15 @@ module Lotus
         #
         # @return [Lotus::View] the view associated with the given context
         #
+        # @raise [Lotus::View::MissingFormatError] if the given context doesn't
+        #   have the :format key
+        #
         # @api private
         # @since 0.1.0
         #
         # @see Lotus::View::Rendering#render
         def resolve(context)
-          view, template = fetch(context[:format]) { self[DEFAULT_FORMAT] }
+          view, template = fetch(format(context)) { self[DEFAULT_FORMAT] }
           view.new(template, context)
         end
 

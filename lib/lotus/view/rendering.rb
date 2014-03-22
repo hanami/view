@@ -190,6 +190,9 @@ module Lotus
       # @raise [Lotus::View::MissingTemplateError] if it can't find a template
       #   for the given context
       #
+      # @raise [Lotus::View::MissingFormatError] if the given context doesn't
+      #   have the :format key
+      #
       # @since 0.1.0
       #
       # @see Lotus::View#initialize

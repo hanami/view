@@ -47,6 +47,12 @@ describe Lotus::View do
       }.must_raise(Lotus::View::MissingTemplateError)
     end
 
+    it 'raises an error when the format is missing' do
+      -> {
+        HelloWorldView.render({})
+      }.must_raise(Lotus::View::MissingFormatError)
+    end
+
     it 'renders different template, as specified by DSL' do
       article = OpenStruct.new(title: 'Bonjour')
 

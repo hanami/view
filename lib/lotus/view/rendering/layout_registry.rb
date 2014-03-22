@@ -28,15 +28,19 @@ module Lotus
         # Returns the layout for the given context.
         #
         # @param context [Hash] the rendering context
+        # @option context [Symbol] :format the requested format
         #
         # @return [Lotus::Layout, Lotus::View::Rendering::NullTemplate]
         #   the layout associated with the given context or a `NullTemplate` if
         #   it can't be found.
         #
+        # @raise [Lotus::View::MissingFormatError] if the given context doesn't
+        #   have the :format key
+        #
         # @api private
         # @since 0.1.0
         def resolve(context)
-          fetch(context[:format]) { NullTemplate.new }
+          fetch(format(context)) { NullTemplate.new }
         end
 
         protected
@@ -48,6 +52,10 @@ module Lotus
 
         def templates
           TemplatesFinder.new(@view).find
+        end
+
+        def format(context)
+          context.fetch(:format) { raise MissingFormatError }
         end
       end
     end
