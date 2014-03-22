@@ -523,6 +523,10 @@ After this operation, all the class variables are frozen, in order to prevent ac
 
 **This is not necessary, when Lotus::View is used within a Lotus application.**
 
+## Versioning
+
+__Lotus::View__ uses [Semantic Versioning 2.0.0](http://semver.org)
+
 ## Contributing
 
 1. Fork it
