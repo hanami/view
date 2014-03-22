@@ -259,111 +259,111 @@ For instance, if [ERubis](http://www.kuwata-lab.com/erubis/) is loaded, it will 
   </tr>
   <tr>
     <td>Erubis</td>
-    <td>`erb, rhtml, erubis`</td>
+    <td>erb, rhtml, erubis</td>
   </tr>
   <tr>
     <td>ERb</td>
-    <td>`erb, rhtml`</td>
+    <td>erb, rhtml</td>
   </tr>
   <tr>
     <td>Redcarpet</td>
-    <td>`markdown, mkd, md`</td>
+    <td>markdown, mkd, md</td>
   </tr>
   <tr>
     <td>RDiscount</td>
-    <td>`markdown, mkd, md`</td>
+    <td>markdown, mkd, md</td>
   </tr>
   <tr>
     <td>Kramdown</td>
-    <td>`markdown, mkd, md`</td>
+    <td>markdown, mkd, md</td>
   </tr>
   <tr>
     <td>Maruku</td>
-    <td>`markdown, mkd, md`</td>
+    <td>markdown, mkd, md</td>
   </tr>
   <tr>
     <td>BlueCloth</td>
-    <td>`markdown, mkd, md`</td>
+    <td>markdown, mkd, md</td>
   </tr>
   <tr>
-    <td>AsciidoctorTemplate</td>
-    <td>`ad, adoc, asciidoc`</td>
+    <td>Asciidoctor</td>
+    <td>ad, adoc, asciidoc</td>
   </tr>
   <tr>
-    <td>BuilderTemplate</td>
-    <td>`builder`</td>
+    <td>Builder</td>
+    <td>builder</td>
   </tr>
   <tr>
-    <td>CSVTemplate</td>
-    <td>`rcsv`</td>
+    <td>CSV</td>
+    <td>rcsv</td>
   </tr>
   <tr>
-    <td>CoffeeScriptTemplate</td>
-    <td>`coffee`</td>
+    <td>CoffeeScript</td>
+    <td>coffee</td>
   </tr>
   <tr>
-    <td>WikiClothTemplate</td>
-    <td>`wiki, mediawiki, mw`</td>
+    <td>WikiCloth</td>
+    <td>wiki, mediawiki, mw</td>
   </tr>
   <tr>
-    <td>CreoleTemplate</td>
-    <td>`wiki, creole`</td>
+    <td>Creole</td>
+    <td>wiki, creole</td>
   </tr>
   <tr>
-    <td>EtanniTemplate</td>
-    <td>`etn, etanni`</td>
+    <td>Etanni</td>
+    <td>etn, etanni</td>
   </tr>
   <tr>
-    <td>HamlTemplate</td>
-    <td>`haml`</td>
+    <td>Haml</td>
+    <td>haml</td>
   </tr>
   <tr>
-    <td>LessTemplate</td>
-    <td>`less`</td>
+    <td>Less</td>
+    <td>less</td>
   </tr>
   <tr>
-    <td>LiquidTemplate</td>
-    <td>`liquid`</td>
+    <td>Liquid</td>
+    <td>liquid</td>
   </tr>
   <tr>
-    <td>MarkabyTemplate</td>
-    <td>`mab`</td>
+    <td>Markaby</td>
+    <td>mab</td>
   </tr>
   <tr>
-    <td>NokogiriTemplate</td>
-    <td>`nokogiri`</td>
+    <td>Nokogiri</td>
+    <td>nokogiri</td>
   </tr>
   <tr>
-    <td>PlainTemplate</td>
-    <td>`html`</td>
+    <td>Plain</td>
+    <td>html</td>
   </tr>
   <tr>
-    <td>RDocTemplate</td>
-    <td>`rdoc`</td>
+    <td>RDoc</td>
+    <td>rdoc</td>
   </tr>
   <tr>
-    <td>RadiusTemplate</td>
-    <td>`radius`</td>
+    <td>Radius</td>
+    <td>radius</td>
   </tr>
   <tr>
-    <td>RedClothTemplate</td>
-    <td>`textile`</td>
+    <td>RedCloth</td>
+    <td>textile</td>
   </tr>
   <tr>
-    <td>SassTemplate</td>
-    <td>`sass`</td>
+    <td>Sass</td>
+    <td>sass</td>
   </tr>
   <tr>
-    <td>ScssTemplate</td>
-    <td>`scss`</td>
+    <td>Scss</td>
+    <td>scss</td>
   </tr>
   <tr>
-    <td>StringTemplate</td>
-    <td>`str`</td>
+    <td>String</td>
+    <td>str</td>
   </tr>
   <tr>
-    <td>YajlTemplate</td>
-    <td>`yajl`</td>
+    <td>Yajl</td>
+    <td>yajl</td>
   </tr>
 </table>
 
