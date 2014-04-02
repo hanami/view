@@ -8,11 +8,11 @@ A _view_ is an object that encapsulates the presentation logic of a page.
 A _template_ is a file that defines the semantic and visual elements of a page.
 In order to show a result to an user, a template must be _rendered_ by a view.
 
-Keeping things separated, helps to declutter templates and models from presentation logic.
-Also, since views are objects they are easily testable.
+Keeping things separated helps to declutter templates and models from presentation logic.
+Also, since views are objects, they are easily testable.
 If you ever used [Mustache](http://mustache.github.io/), you are already aware of the advantages.
 
-Like all the other Lotus compontents it can be used as a standalone framework, or within a full Lotus application.
+Like all the other Lotus compontents, it can be used as a standalone framework or within a full Lotus application.
 
 ## Status
 
@@ -151,13 +151,13 @@ end
 </article>
 ```
 
-All the methods defined in the view are accessible in the template:
+All the methods defined in the view are accessible from the template:
 
 ```erb
 <h2><%= authors %></h2>
 ```
 
-For convenience, they are also available as an Hash `locals` in the view.
+For convenience, they are also available to the view as a Hash, accessed through the `locals` method.
 
 ```ruby
 require 'lotus/view'
@@ -166,11 +166,11 @@ module Articles
   class Show
     include Lotus::View
 
-    # This view, already responds to `#article` because there is an element in
+    # This view already responds to `#article` because there is an element in
     # the locals with the same key.
     #
     # In order to allow developers to override those methods, and decorate a
-    # single locals object, a view has an Hash with the same values.
+    # single locals object, a view has a Hash with the same values.
     #
     # If we had implemented this method like this:
     #
@@ -232,7 +232,7 @@ Articles::Show.render({format: :custom, article: article})
 
 The builtin rendering engine is [ERb](http://en.wikipedia.org/wiki/ERuby).
 However, Lotus::View supports countless rendering engines out of the box.
-Require your library of choice **before** of requiring `'lotus/view'`, and it will just work.
+Require your library of choice **before** requiring `'lotus/view'`, and it will just work.
 
 ```ruby
 require 'haml'
@@ -369,7 +369,7 @@ For instance, if [ERubis](http://www.kuwata-lab.com/erubis/) is loaded, it will 
 
 ### Root
 
-Templates lookup is performed under the `Lotus::View.root` directory. Single views can specify a different path:
+Templates lookup is performed under the `Lotus::View.root` directory. You can specify a different path in a per view basis:
 
 ```ruby
 class ViewWithDifferentRoot
@@ -424,7 +424,7 @@ It will render `articles/new.html.erb` and it will make available both the view'
 
 ### Layouts
 
-Layouts are wrappers for views, they can be a way to reuse common markup.
+Layouts are wrappers for views, that may serve to reuse common markup.
 
 ```ruby
 class ApplicationLayout
@@ -459,7 +459,7 @@ As per convention, layouts' templates are located under `Lotus::View.root` or `A
 
 ### Presenters
 
-They are a way to wrap and reuse presentational logic for an object.
+The goal of a presenter is to wrap and reuse presentational logic for an object.
 
 ```ruby
 class Map
