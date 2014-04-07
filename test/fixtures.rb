@@ -70,10 +70,6 @@ module Articles
     end
   end
 
-  class AlternativeNew
-    include Lotus::View
-  end
-
   class Create
     include Lotus::View
     template 'articles/new'
@@ -182,6 +178,12 @@ end
 
 module Contacts
   class Show
+    include Lotus::View
+  end
+end
+
+module Nodes
+  class Parent
     include Lotus::View
   end
 end

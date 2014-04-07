@@ -78,13 +78,20 @@ describe Lotus::View do
       rendered.must_match %(<input type="hidden" name="secret" value="23" />)
     end
 
+    # @issue https://github.com/lotus/view/issues/3
     it 'renders a template within another template' do
-      article = OpenStruct.new(title: nil)
+      parent = OpenStruct.new(children: [], name: 'parent')
+      child1 = OpenStruct.new(children: [], name: 'child1')
+      child2 = OpenStruct.new(children: [], name: 'child2')
 
-      rendered = Articles::AlternativeNew.render(format: :html, article: article)
+      parent.children.push(child1)
+      parent.children.push(child2)
 
-      rendered.must_match %(<h1>New Article</h1>)
-      rendered.must_match %(<input type="hidden" name="secret" value="23" />)
+      rendered = Nodes::Parent.render(format: :html, node: parent)
+
+      rendered.must_match %(<h1>parent</h1>)
+      rendered.must_match %(<li>child1</li>)
+      rendered.must_match %(<li>child2</li>)
     end
 
     it 'uses HAML engine' do

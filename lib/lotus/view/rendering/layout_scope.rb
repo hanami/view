@@ -128,8 +128,8 @@ module Lotus
         def _options(options)
           options.dup.tap do |opts|
             opts.merge!(format: format)
-            opts[:locals] ||= {}
-            opts[:locals].merge!(locals)
+            opts[:locals] = locals
+            opts[:locals].merge!(options.fetch(:locals){ Hash[] })
           end
         end
       end
