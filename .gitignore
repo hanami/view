@@ -6,3 +6,4 @@ coverage/
 doc/
 *.gem
 .bundle
+bin/
