@@ -16,12 +16,12 @@ Like all the other Lotus compontents, it can be used as a standalone framework o
 
 ## Status
 
-[![Gem Version](https://badge.fury.io/rb/lotus-view.png)](http://badge.fury.io/rb/lotus-view)
-[![Build Status](https://secure.travis-ci.org/lotus/view.png?branch=master)](http://travis-ci.org/lotus/view?branch=master)
-[![Coverage](https://coveralls.io/repos/lotus/view/badge.png?branch=master)](https://coveralls.io/r/lotus/view)
-[![Code Climate](https://codeclimate.com/github/lotus/view.png)](https://codeclimate.com/github/lotus/view)
-[![Dependencies](https://gemnasium.com/lotus/view.png)](https://gemnasium.com/lotus/view)
-[![Inline docs](http://inch-pages.github.io/github/lotus/view.png)](http://inch-pages.github.io/github/lotus/view)
+[![Gem Version](http://img.shields.io/gem/v/lotus-view.svg)](https://badge.fury.io/rb/lotus-view)
+[![Build Status](http://img.shields.io/travis/lotus/view/master.svg)](https://travis-ci.org/lotus/view?branch=master)
+[![Coverage](http://img.shields.io/coveralls/lotus/view/master.svg)](https://coveralls.io/r/lotus/view)
+[![Code Climate](http://img.shields.io/codeclimate/github/lotus/view.svg)](https://codeclimate.com/github/lotus/view)
+[![Dependencies](http://img.shields.io/gemnasium/lotus/view.svg)](https://gemnasium.com/lotus/view)
+[![Inline Docs](http://inch-pages.github.io/github/lotus/view.svg)](http://inch-pages.github.io/github/lotus/view)
 
 ## Contact
 
