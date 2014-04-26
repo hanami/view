@@ -252,120 +252,35 @@ This is the list of the supported engines.
 They are listed in order of **higher precedence**, for a given extension.
 For instance, if [ERubis](http://www.kuwata-lab.com/erubis/) is loaded, it will be preferred over ERb to render `.erb` templates.
 
-<table>
-  <tr>
-    <th>Engine</th>
-    <th>Extensions</th>
-  </tr>
-  <tr>
-    <td>Erubis</td>
-    <td>erb, rhtml, erubis</td>
-  </tr>
-  <tr>
-    <td>ERb</td>
-    <td>erb, rhtml</td>
-  </tr>
-  <tr>
-    <td>Redcarpet</td>
-    <td>markdown, mkd, md</td>
-  </tr>
-  <tr>
-    <td>RDiscount</td>
-    <td>markdown, mkd, md</td>
-  </tr>
-  <tr>
-    <td>Kramdown</td>
-    <td>markdown, mkd, md</td>
-  </tr>
-  <tr>
-    <td>Maruku</td>
-    <td>markdown, mkd, md</td>
-  </tr>
-  <tr>
-    <td>BlueCloth</td>
-    <td>markdown, mkd, md</td>
-  </tr>
-  <tr>
-    <td>Asciidoctor</td>
-    <td>ad, adoc, asciidoc</td>
-  </tr>
-  <tr>
-    <td>Builder</td>
-    <td>builder</td>
-  </tr>
-  <tr>
-    <td>CSV</td>
-    <td>rcsv</td>
-  </tr>
-  <tr>
-    <td>CoffeeScript</td>
-    <td>coffee</td>
-  </tr>
-  <tr>
-    <td>WikiCloth</td>
-    <td>wiki, mediawiki, mw</td>
-  </tr>
-  <tr>
-    <td>Creole</td>
-    <td>wiki, creole</td>
-  </tr>
-  <tr>
-    <td>Etanni</td>
-    <td>etn, etanni</td>
-  </tr>
-  <tr>
-    <td>Haml</td>
-    <td>haml</td>
-  </tr>
-  <tr>
-    <td>Less</td>
-    <td>less</td>
-  </tr>
-  <tr>
-    <td>Liquid</td>
-    <td>liquid</td>
-  </tr>
-  <tr>
-    <td>Markaby</td>
-    <td>mab</td>
-  </tr>
-  <tr>
-    <td>Nokogiri</td>
-    <td>nokogiri</td>
-  </tr>
-  <tr>
-    <td>Plain</td>
-    <td>html</td>
-  </tr>
-  <tr>
-    <td>RDoc</td>
-    <td>rdoc</td>
-  </tr>
-  <tr>
-    <td>Radius</td>
-    <td>radius</td>
-  </tr>
-  <tr>
-    <td>RedCloth</td>
-    <td>textile</td>
-  </tr>
-  <tr>
-    <td>Sass</td>
-    <td>sass</td>
-  </tr>
-  <tr>
-    <td>Scss</td>
-    <td>scss</td>
-  </tr>
-  <tr>
-    <td>String</td>
-    <td>str</td>
-  </tr>
-  <tr>
-    <td>Yajl</td>
-    <td>yajl</td>
-  </tr>
-</table>
+| Engine         | Extensions
+|----------------|-----------
+| Erubis         | erb, rhtml, erubis
+| ERb            | erb, rhtml
+| Redcarpet      | markdown, mkd, md
+| RDiscount      | markdown, mkd, md
+| Kramdown       | markdown, mkd, md
+| Maruku         | markdown, mkd, md
+| BlueCloth      | markdown, mkd, md
+| Asciidoctor    | ad, adoc, asciidoc
+| Builder        | builder
+| CSV            | rcsv
+| CoffeeScript   | coffee
+| WikiCloth      | wiki, mediawiki, mw
+| Creole         | wiki, creole
+| Etanni         | etn, etanni
+| Haml           | haml
+| Less           | less
+| Liquid         | liquid
+| Markaby        | mab
+| Nokogiri       | nokogiri
+| Plain          | html
+| RDoc           | rdoc
+| Radius         | radius
+| RedCloth       | textile
+| Sass           | sass
+| Scss           | scss
+| String         | str
+| Yajl           | yajl
 
 ### Root
 
