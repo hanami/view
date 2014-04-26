@@ -56,7 +56,7 @@ Or install it yourself as:
   * Templates are searched under `Lotus::View.root`, set this value according to your app structure (eg. `"app/templates"`).
   * A view will look for a template with a file name that is composed by its full class name (eg. `"articles/index"`).
   * A template must have two concatenated extensions: one for the format one for the engine (eg. `".html.erb"`).
-  * The framework must be loaded before to render for the first time: `Lotus::View.load!`.
+  * The framework must be loaded before rendering the first time: `Lotus::View.load!`.
 
 ### Views
 
@@ -369,7 +369,7 @@ For instance, if [ERubis](http://www.kuwata-lab.com/erubis/) is loaded, it will 
 
 ### Root
 
-Templates lookup is performed under the `Lotus::View.root` directory. You can specify a different path in a per view basis:
+Template lookup is performed under the `Lotus::View.root` directory. You can specify a different path on a per view basis:
 
 ```ruby
 class ViewWithDifferentRoot
@@ -410,7 +410,7 @@ Partials can be rendered within a template:
 <%= render partial: 'articles/form', locals: { secret: 23 } %>
 ```
 
-It will look for a template `articles/_form.html.erb` and it will make available both the view's and partial's locals (eg. `article` and `secret`).
+It will look for a template `articles/_form.html.erb` and make available both the view's and partial's locals (eg. `article` and `secret`).
 
 ### Templates
 
@@ -420,11 +420,11 @@ Templates can be rendered within another template:
 <%= render template: 'articles/new', locals: { errors: {} } %>
 ```
 
-It will render `articles/new.html.erb` and it will make available both the view's and templates's locals (eg. `article` and `errors`).
+It will render `articles/new.html.erb` and make available both the view's and templates's locals (eg. `article` and `errors`).
 
 ### Layouts
 
-Layouts are wrappers for views, that may serve to reuse common markup.
+Layouts are wrappers for views. Layouts may serve to reuse common markup.
 
 ```ruby
 class ApplicationLayout
@@ -455,7 +455,7 @@ Articles::Index.render(format: :html) # => Will use ApplicationLayout
 Articles::Index.render(format: :rss)  # => Will use nothing
 ```
 
-As per convention, layouts' templates are located under `Lotus::View.root` or `ApplicationLayout.root` and they uses the underscored name (eg. `ApplicationLayout => application.html.erb`).
+As per convention, layout templates are located under `Lotus::View.root` or `ApplicationLayout.root` and use the underscored name (eg. `ApplicationLayout => application.html.erb`).
 
 ### Presenters
 
