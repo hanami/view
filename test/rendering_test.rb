@@ -25,6 +25,12 @@ describe Lotus::View do
       rendered.must_match %(<h1>Man on the Moon!</h1>)
     end
 
+    describe 'calling an action method from the template' do
+      it 'can call with multiple arguments' do
+        RenderViewMethodWithArgs.render({format: :html}).must_include %(<h1>Hello, earth!</h1>)
+      end
+    end
+
     it 'binds given locals to the rendering context' do
       article = OpenStruct.new(title: 'Hello')
 

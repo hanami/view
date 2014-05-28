@@ -6,6 +6,14 @@ class RenderView
   include Lotus::View
 end
 
+class RenderViewMethodWithArgs
+  include Lotus::View
+
+  def planet(name)
+    name.to_s
+  end
+end
+
 class JsonRenderView
   include Lotus::View
   format :json
