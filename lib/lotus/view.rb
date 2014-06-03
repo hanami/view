@@ -1,6 +1,8 @@
 require 'set'
 require 'pathname'
+require 'lotus/utils/class_attribute'
 require 'lotus/view/version'
+require 'lotus/view/configuration'
 require 'lotus/view/inheritable'
 require 'lotus/view/rendering'
 require 'lotus/view/dsl'
@@ -53,13 +55,29 @@ module Lotus
     #     include Lotus::View
     #   end
     def self.included(base)
+      conf = self.configuration
+
       base.class_eval do
         extend Inheritable.dup
         extend Dsl.dup
         extend Rendering.dup
+
+        include Utils::ClassAttribute
+        class_attribute :configuration
+
+        self.configuration = conf
       end
 
       views.add(base)
+    end
+
+    include Utils::ClassAttribute
+
+    class_attribute :configuration
+    self.configuration = Configuration.new
+
+    def self.configure(&blk)
+      configuration.instance_eval(&blk)
     end
 
     # Set the directory root where templates are located

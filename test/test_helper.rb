@@ -22,3 +22,10 @@ require 'lotus/view'
 Lotus::View.root = Pathname.new __dir__ + '/fixtures/templates'
 require 'fixtures'
 Lotus::View.load!
+
+Lotus::View::Configuration.class_eval do
+  def ==(other)
+    other.kind_of?(Lotus::View::Configuration) &&
+      self.root == other.root
+  end
+end
