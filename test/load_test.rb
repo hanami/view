@@ -3,7 +3,7 @@ require 'test_helper'
 describe Lotus::View do
   describe '.load!' do
     before do
-      # Lotus::View.load! is invoked as last statement of `test/test_helper.rb`.
+      Lotus::View.load!
     end
 
     it 'freezes .root' do
