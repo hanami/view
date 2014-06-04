@@ -219,7 +219,7 @@ module Lotus
         if value
           @layout = value
         else
-          @layout
+          @layout ||= configuration.layout
         end
       end
 

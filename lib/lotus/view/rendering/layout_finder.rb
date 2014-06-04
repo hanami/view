@@ -44,8 +44,6 @@ module Lotus
           when Symbol, String
             class_name = "#{ Utils::String.new(layout).classify }#{ SUFFIX }"
             Object.const_get(class_name)
-          when nil
-            Lotus::View.layout
           end
         end
 

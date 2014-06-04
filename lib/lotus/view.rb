@@ -122,42 +122,6 @@ module Lotus
       end
     end
 
-    # Sets the default layout for all the registered views.
-    #
-    # @param layout [Symbol] the layout name
-    #
-    # @since 0.1.0
-    #
-    # @see Lotus::View::Dsl#layout
-    # @see Lotus::View.load!
-    #
-    # @example
-    #   require 'lotus/view'
-    #
-    #   Lotus::View.layout = :application
-    #
-    #   class IndexView
-    #     include Lotus::View
-    #   end
-    #
-    #   Lotus::View.load!
-    #   IndexView.layout # => ApplicationLayout
-    def self.layout=(layout)
-      @layout = Rendering::LayoutFinder.find(layout)
-    end
-
-    # Returns the default layout to assign to the registered views.
-    # If not already set, it returns a <tt>Rendering::NullLayout</tt>.
-    #
-    # @return [Class,Rendering::NullLayout] depends if already set or not.
-    #
-    # @since 0.1.0
-    #
-    # @see Lotus::View.layout=
-    def self.layout
-      @layout ||= Rendering::NullLayout
-    end
-
     # A set of registered views.
     #
     # @return [Set] all the registered views.
@@ -181,7 +145,6 @@ module Lotus
     #FIXME extract a Loader class
     def self.load!
       root.freeze
-      layout.freeze
       views.freeze
 
       views.each do |view|
@@ -195,7 +158,6 @@ module Lotus
 
     def self.unload!
       instance_variable_set(:@root, nil)
-      instance_variable_set(:@layout, nil)
       instance_variable_set(:@views, Set.new)
       instance_variable_set(:@layouts, Set.new)
     end

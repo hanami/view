@@ -63,23 +63,21 @@ describe Lotus::View do
     end
   end
 
-  describe '.layout=' do
+  describe 'global layout' do
     before do
-      Lotus::View.unload!
+      Lotus::View.class_eval do
+        configure do
+          layout :application
+        end
+      end
 
       class ViewWithInheritedLayout
         include Lotus::View
       end
-
-      Lotus::View.layout = :application
-      Lotus::View.load!
     end
 
     after do
-      Lotus::View.unload!
       Object.send(:remove_const, :ViewWithInheritedLayout)
-      Lotus::View.layout = nil
-      Lotus::View.load!
     end
 
     it 'sets global layout' do
