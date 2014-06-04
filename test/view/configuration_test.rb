@@ -56,14 +56,35 @@ describe Lotus::View::Configuration do
     end
   end
 
+  describe '#load_paths' do
+    before do
+      @configuration.root '.'
+    end
+
+    describe 'by default' do
+      it "it's equal to root" do
+        @configuration.load_paths.must_equal [@configuration.root]
+      end
+    end
+
+    it 'allows to add other paths' do
+      @configuration.load_paths << '..'
+      @configuration.load_paths.must_include '..'
+    end
+  end
+
   describe '#reset!' do
     before do
       @configuration.root 'test'
+      @configuration.load_paths << '..'
       @configuration.reset!
     end
 
     it 'resets root' do
-      @configuration.root.must_equal Pathname.new('.').realpath
+      root = Pathname.new('.').realpath
+
+      @configuration.root.must_equal root
+      @configuration.load_paths.must_equal [root]
     end
   end
 end
