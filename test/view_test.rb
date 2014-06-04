@@ -46,26 +46,21 @@ describe Lotus::View do
       Lotus::View.configuration.root.must_equal(path)
     end
 
-    it 'allows to override one value'
-    # it 'allows to override one value' do
-    #   Lotus::View.class_eval do
-    #     configure do
-    #       loading_paths += %w[
-    #         test/fixtures
-    #       ]
-    #     end
+    it 'allows to override one value' do
+      Lotus::View.class_eval do
+        configure do
+          load_paths << 'test/fixtures'
+        end
 
-    #     configure do
-    #       loading_paths += %w[
-    #         test/fixtures/templates
-    #       ]
-    #     end
-    #   end
+        configure do
+          load_paths << 'test/fixtures/templates'
+        end
+      end
 
-    #   configuration = Lotus::View.configuration
-    #   configuration.loading_paths.must_include('test/fixtures')
-    #   configuration.loading_paths.must_include('test/fixtures/templates')
-    # end
+      configuration = Lotus::View.configuration
+      configuration.load_paths.must_include('test/fixtures')
+      configuration.load_paths.must_include('test/fixtures/templates')
+    end
   end
 
   describe '.layout=' do

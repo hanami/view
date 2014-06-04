@@ -73,18 +73,35 @@ describe Lotus::View::Configuration do
     end
   end
 
+  describe '#layout' do
+    describe "when a value is given" do
+      it 'loads the corresponding class' do
+        @configuration.layout :application
+        @configuration.layout.must_equal ApplicationLayout
+      end
+    end
+
+    describe "when a value isn't given" do
+      it 'defaults to the null layout' do
+        @configuration.layout.must_equal(Lotus::View::Rendering::NullLayout)
+      end
+    end
+  end
+
   describe '#reset!' do
     before do
       @configuration.root 'test'
       @configuration.load_paths << '..'
+      @configuration.layout :application
       @configuration.reset!
     end
 
     it 'resets root' do
       root = Pathname.new('.').realpath
 
-      @configuration.root.must_equal root
+      @configuration.root.must_equal        root
       @configuration.load_paths.must_equal [root]
+      @configuration.layout.must_equal Lotus::View::Rendering::NullLayout
     end
   end
 end
