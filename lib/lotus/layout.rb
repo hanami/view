@@ -1,3 +1,4 @@
+require 'lotus/utils/class_attribute'
 require 'lotus/view/rendering/layout_registry'
 require 'lotus/view/rendering/layout_scope'
 require 'lotus/view/rendering/null_layout'
@@ -21,9 +22,16 @@ module Lotus
     #     include Lotus::Layout
     #   end
     def self.included(base)
+      conf = View.configuration
+
       base.class_eval do
         extend Lotus::View::Dsl.dup
         extend ClassMethods
+
+        include Utils::ClassAttribute
+        class_attribute :configuration
+
+        self.configuration = conf
       end
 
       Lotus::View.layouts.add(base)

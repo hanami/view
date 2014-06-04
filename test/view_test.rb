@@ -11,10 +11,15 @@ describe Lotus::View do
       class ConfigurationView
         include Lotus::View
       end
+
+      class ConfigurationLayout
+        include Lotus::Layout
+      end
     end
 
     after do
       Object.send(:remove_const, :ConfigurationView)
+      Object.send(:remove_const, :ConfigurationLayout)
     end
 
     it 'exposes class configuration' do
@@ -25,9 +30,16 @@ describe Lotus::View do
       Lotus::View.configuration.root.must_equal(Pathname.new('.').realpath)
     end
 
-    it 'inheriths the configuration from the framework' do
+    it 'a view inheriths the configuration from the framework' do
       expected = Lotus::View.configuration
       actual   = ConfigurationView.configuration
+
+      actual.must_equal(expected)
+    end
+
+    it 'a layout inheriths the configuration from the framework' do
+      expected = Lotus::View.configuration
+      actual   = ConfigurationLayout.configuration
 
       actual.must_equal(expected)
     end

@@ -46,7 +46,7 @@ module Lotus
         if value
           @@root = Pathname.new value
         else
-          @@root ||= Lotus::View.root
+          @@root ||= configuration.root
         end
       end
 

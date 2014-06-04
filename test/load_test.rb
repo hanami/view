@@ -6,10 +6,6 @@ describe Lotus::View do
       Lotus::View.load!
     end
 
-    it 'freezes .root' do
-      Lotus::View.root.frozen?.must_equal true
-    end
-
     it 'freezes .root for all the views' do
       AppView.root.frozen?.must_equal true
     end

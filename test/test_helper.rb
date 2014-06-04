@@ -19,7 +19,11 @@ end
 require 'minitest/autorun'
 $:.unshift 'lib'
 require 'lotus/view'
-Lotus::View.root = Pathname.new __dir__ + '/fixtures/templates'
+
+Lotus::View.configure do
+  root Pathname.new __dir__ + '/fixtures/templates'
+end
+
 require 'fixtures'
 Lotus::View.load!
 

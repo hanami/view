@@ -80,48 +80,6 @@ module Lotus
       configuration.instance_eval(&blk)
     end
 
-    # Set the directory root where templates are located
-    #
-    # @param root [String] the root path
-    #
-    # @see Lotus::View.root
-    #
-    # @since 0.1.0
-    #
-    # @example
-    #   require 'lotus/view'
-    #
-    #   Lotus::View.root = '/path/to/templates'
-    def self.root=(root)
-      @root = Pathname.new(root) rescue nil
-    end
-
-    # Returns the directory root where templates are located.
-    # If not already set, it returns the current directory.
-    #
-    # @return [Pathname] the root path for templates
-    #
-    # @see Lotus::View.root=
-    #
-    # @since 0.1.0
-    #
-    # @example with already set value
-    #   require 'lotus/view'
-    #
-    #   Lotus::View.root = '/path/to/templates'
-    #   Lotus::View.root # => #<Pathname:/path/to/templates>
-    #
-    # @example with missing set value
-    #   require 'lotus/view'
-    #
-    #   Lotus::View.root # => #<Pathname:.>
-    def self.root
-      @root ||= begin
-        self.root = '.'
-        @root
-      end
-    end
-
     # A set of registered views.
     #
     # @return [Set] all the registered views.
@@ -144,7 +102,6 @@ module Lotus
 
     #FIXME extract a Loader class
     def self.load!
-      root.freeze
       views.freeze
 
       views.each do |view|
@@ -157,7 +114,6 @@ module Lotus
     end
 
     def self.unload!
-      instance_variable_set(:@root, nil)
       instance_variable_set(:@views, Set.new)
       instance_variable_set(:@layouts, Set.new)
     end
