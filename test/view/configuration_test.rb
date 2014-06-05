@@ -88,11 +88,49 @@ describe Lotus::View::Configuration do
     end
   end
 
+  describe '#views' do
+    it 'defaults to an empty set' do
+      @configuration.views.must_be_empty
+    end
+
+    it 'allows to add views' do
+      @configuration.add_view(HelloWorldView)
+      @configuration.views.must_include(HelloWorldView)
+    end
+
+    it 'eliminates duplications' do
+      @configuration.add_view(RenderView)
+      @configuration.add_view(RenderView)
+
+      @configuration.views.size.must_equal(1)
+    end
+  end
+
+  describe '#layouts' do
+    it 'defaults to an empty set' do
+      @configuration.layouts.must_be_empty
+    end
+
+    it 'allows to add layouts' do
+      @configuration.add_layout(ApplicationLayout)
+      @configuration.layouts.must_include(ApplicationLayout)
+    end
+
+    it 'eliminates duplications' do
+      @configuration.add_layout(GlobalLayout)
+      @configuration.add_layout(GlobalLayout)
+
+      @configuration.layouts.size.must_equal(1)
+    end
+  end
+
   describe '#reset!' do
     before do
       @configuration.root 'test'
       @configuration.load_paths << '..'
       @configuration.layout :application
+      @configuration.add_view(HelloWorldView)
+      @configuration.add_layout(ApplicationLayout)
       @configuration.reset!
     end
 
@@ -102,6 +140,8 @@ describe Lotus::View::Configuration do
       @configuration.root.must_equal        root
       @configuration.load_paths.must_equal [root]
       @configuration.layout.must_equal Lotus::View::Rendering::NullLayout
+      @configuration.views.must_be_empty
+      @configuration.layouts.must_be_empty
     end
   end
 end

@@ -87,7 +87,7 @@ module Lotus
     # @api private
     # @since 0.1.0
     def self.views
-      @views ||= Set.new
+      configuration.views
     end
 
     # A set of registered layouts.
@@ -97,7 +97,7 @@ module Lotus
     # @api private
     # @since 0.1.0
     def self.layouts
-      @layouts ||= Set.new
+      configuration.layouts
     end
 
     #FIXME extract a Loader class

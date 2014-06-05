@@ -1,3 +1,4 @@
+require 'set'
 require 'lotus/utils/kernel'
 require 'lotus/utils/load_paths'
 require 'lotus/view/rendering/layout_finder'
@@ -9,6 +10,8 @@ module Lotus
       DEFAULT_ROOT = '.'.freeze
 
       attr_reader :load_paths
+      attr_reader :views
+      attr_reader :layouts
 
       def initialize
         reset!
@@ -30,9 +33,19 @@ module Lotus
         end
       end
 
+      def add_view(view)
+        @views.add(view)
+      end
+
+      def add_layout(layout)
+        @layouts.add(layout)
+      end
+
       def reset!
         root(DEFAULT_ROOT)
 
+        @views      = Set.new
+        @layouts    = Set.new
         @load_paths = Utils::LoadPaths.new(root)
         @layout     = Rendering::NullLayout
       end
