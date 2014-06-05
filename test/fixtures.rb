@@ -195,3 +195,33 @@ module Nodes
     include Lotus::View
   end
 end
+
+module CardDeck
+  View = Lotus::View.duplicate
+
+  class ApplicationLayout
+    include Lotus::Layout
+  end
+
+  View.module_eval do
+    configuration.reset!
+    configure do
+      namespace CardDeck
+      root __dir__ + '/fixtures/templates/card_deck'
+      layout :application
+    end
+  end
+
+  module Views
+    module Dashboard
+      class Index
+        include CardDeck::View
+      end
+
+      class JsonIndex < Index
+        format :json
+        layout nil
+      end
+    end
+  end
+end

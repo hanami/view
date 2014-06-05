@@ -23,6 +23,7 @@ module Lotus
     #   end
     def self.included(base)
       conf = View.configuration
+      conf.add_layout(base)
 
       base.class_eval do
         extend Lotus::View::Dsl.dup
@@ -31,10 +32,8 @@ module Lotus
         include Utils::ClassAttribute
         class_attribute :configuration
 
-        self.configuration = conf
+        self.configuration = conf.duplicate
       end
-
-      Lotus::View.layouts.add(base)
     end
 
     # Class level API

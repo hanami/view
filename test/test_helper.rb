@@ -30,6 +30,9 @@ Lotus::View.load!
 Lotus::View::Configuration.class_eval do
   def ==(other)
     other.kind_of?(Lotus::View::Configuration) &&
-      self.root == other.root
+      self.namespace  == other.namespace  &&
+      self.root       == other.root       &&
+      self.layout     == other.layout     &&
+      self.load_paths == other.load_paths
   end
 end

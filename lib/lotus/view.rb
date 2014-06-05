@@ -56,6 +56,7 @@ module Lotus
     #   end
     def self.included(base)
       conf = self.configuration
+      conf.add_view(base)
 
       base.class_eval do
         extend Inheritable.dup
@@ -65,10 +66,8 @@ module Lotus
         include Utils::ClassAttribute
         class_attribute :configuration
 
-        self.configuration = conf
+        self.configuration = conf.duplicate
       end
-
-      views.add(base)
     end
 
     include Utils::ClassAttribute
@@ -80,42 +79,18 @@ module Lotus
       configuration.instance_eval(&blk)
     end
 
-    # A set of registered views.
-    #
-    # @return [Set] all the registered views.
-    #
-    # @api private
-    # @since 0.1.0
-    def self.views
-      configuration.views
+    def self.duplicate
+      dup.tap do |duplicated|
+        duplicated.configuration = configuration.duplicate
+      end
     end
 
-    # A set of registered layouts.
-    #
-    # @return [Set] all the registered layout.
-    #
-    # @api private
-    # @since 0.1.0
-    def self.layouts
-      configuration.layouts
-    end
-
-    #FIXME extract a Loader class
     def self.load!
-      views.freeze
-
-      views.each do |view|
-        view.send(:load!)
-      end
-
-      layouts.each do |layout|
-        layout.send(:load!)
-      end
+      configuration.load!
     end
 
     def self.unload!
-      instance_variable_set(:@views, Set.new)
-      instance_variable_set(:@layouts, Set.new)
+      configuration.unload!
     end
   end
 end

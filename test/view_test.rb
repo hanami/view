@@ -37,11 +37,21 @@ describe Lotus::View do
       actual.must_equal(expected)
     end
 
+    it 'a view must be included in the framework configuration registry' do
+      Lotus::View.configuration.views.must_include(ConfigurationView)
+      ConfigurationView.configuration.views.wont_include(ConfigurationView)
+    end
+
     it 'a layout inheriths the configuration from the framework' do
       expected = Lotus::View.configuration
       actual   = ConfigurationLayout.configuration
 
       actual.must_equal(expected)
+    end
+
+    it 'a layout must be included in the framework configuration registry' do
+      Lotus::View.configuration.layouts.must_include(ConfigurationLayout)
+      ConfigurationLayout.configuration.layouts.wont_include(ConfigurationView)
     end
   end
 
@@ -72,6 +82,36 @@ describe Lotus::View do
       configuration = Lotus::View.configuration
       configuration.load_paths.must_include('test/fixtures')
       configuration.load_paths.must_include('test/fixtures/templates')
+    end
+  end
+
+  describe '.duplicate' do
+    before do
+      Lotus::View.class_eval do
+        configure do
+          root '..'
+        end
+      end
+
+      DuplicatedView = Lotus::View.duplicate
+
+      @framework_config  = Lotus::View.configuration
+      @duplicated_config = DuplicatedView.configuration
+    end
+
+    after do
+      Object.send(:remove_const, :DuplicatedView)
+    end
+
+    it 'creates a copy of self' do
+      @duplicated_config.root.must_equal(@framework_config.root)
+    end
+
+    it 'creates a copy of self' do
+      @duplicated_config.root('.')
+
+      @duplicated_config.root.must_equal Pathname.new('.').realpath
+      @framework_config.root.must_equal  Pathname.new('..').realpath
     end
   end
 

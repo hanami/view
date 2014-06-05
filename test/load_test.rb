@@ -6,20 +6,12 @@ describe Lotus::View do
       Lotus::View.load!
     end
 
-    it 'freezes .root for all the views' do
-      AppView.root.frozen?.must_equal true
-    end
-
     it 'freezes .layout for all the views' do
       AppView.layout.frozen?.must_equal true
     end
 
     it 'freezes .layout for subclasses' do
       AppViewLayout.layout.frozen?.must_equal true
-    end
-
-    it 'freezes .views' do
-      Lotus::View.views.frozen?.must_equal true
     end
 
     it 'freezes .format for all the views with that declaration' do

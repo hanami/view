@@ -124,6 +124,93 @@ describe Lotus::View::Configuration do
     end
   end
 
+  describe 'duplicate' do
+    before do
+      @configuration.root 'test'
+      @configuration.load_paths << '..'
+      @configuration.layout :application
+      @configuration.add_view(HelloWorldView)
+      @configuration.add_layout(ApplicationLayout)
+
+      @config = @configuration.duplicate
+    end
+
+    it 'returns a copy of the configuration' do
+      @config.root.must_equal       @configuration.root
+      @config.load_paths.must_equal @configuration.load_paths
+      @config.layout.must_equal     @configuration.layout
+      @config.views.must_be_empty
+      @config.layouts.must_be_empty
+    end
+
+    it "doesn't affect the original configuration" do
+      @config.root '.'
+      @config.load_paths << '../..'
+      @config.layout :global
+      @config.add_view(RenderView)
+      @config.add_layout(GlobalLayout)
+
+      @config.root.must_equal       Pathname.new('.').realpath
+      @config.load_paths.must_equal [@config.root, '..', '../..']
+      @config.layout.must_equal     GlobalLayout
+      @config.views.must_include    RenderView
+      @config.layouts.must_include  GlobalLayout
+
+      @configuration.root.must_equal       Pathname.new('test').realpath
+      @configuration.load_paths.must_equal [@config.root, '..']
+      @configuration.layout.must_equal     ApplicationLayout
+
+      @configuration.views.must_include    HelloWorldView
+      @configuration.views.wont_include    RenderView
+
+      @configuration.layouts.must_include  ApplicationLayout
+      @configuration.layouts.wont_include  GlobalLayout
+    end
+
+    it 'duplicates namespace' do
+      @configuration.namespace(CardDeck)
+      conf = @configuration.duplicate
+
+      conf.namespace.must_equal(CardDeck)
+    end
+  end
+
+  describe '#load!' do
+    before do
+      class MockLayout
+        def self.loaded?
+          @loaded
+        end
+
+        protected
+        def self.load!
+          @loaded = true
+        end
+      end
+
+      class MockView < MockLayout
+      end
+
+      @configuration.add_view(MockView)
+      @configuration.add_layout(MockLayout)
+
+      @configuration.load!
+    end
+
+    after do
+      Object.send(:remove_const, :MockLayout)
+      Object.send(:remove_const, :MockView)
+    end
+
+    it 'loads the views' do
+      MockView.must_be :loaded?
+    end
+
+    it 'loads the layouts' do
+      MockLayout.must_be :loaded?
+    end
+  end
+
   describe '#reset!' do
     before do
       @configuration.root 'test'
@@ -131,6 +218,7 @@ describe Lotus::View::Configuration do
       @configuration.layout :application
       @configuration.add_view(HelloWorldView)
       @configuration.add_layout(ApplicationLayout)
+
       @configuration.reset!
     end
 
@@ -142,6 +230,13 @@ describe Lotus::View::Configuration do
       @configuration.layout.must_equal Lotus::View::Rendering::NullLayout
       @configuration.views.must_be_empty
       @configuration.layouts.must_be_empty
+    end
+
+    it "doesn't reset namespace" do
+      @configuration.namespace(CardDeck)
+      @configuration.reset!
+
+      @configuration.namespace.must_equal(CardDeck)
     end
   end
 end

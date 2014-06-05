@@ -21,6 +21,8 @@ module Lotus
         # @param layout [Symbol,String,NilClass] layout name or nil if you want
         #   to fallback to the framework defaults (see `Lotus::View.layout`).
         #
+        # @param namespace [Class,Module] a Ruby namespace where to lookup
+        #
         # @return [Lotus::Layout] the layout for the given name or
         #   `Lotus::View.layout`
         #
@@ -38,12 +40,18 @@ module Lotus
         #
         #   Lotus::View.layout # => :application
         #   Lotus::View::Rendering::LayoutFinder.find(nil) # =>
-        #     ApplicationLayout
-        def self.find(layout)
+        #     nil
+        #
+        # @example With namespace
+        #   require 'lotus/view'
+        #
+        #   Lotus::View::Rendering::LayoutFinder.find(:application, CardDeck) # =>
+        #     CardDeck::ApplicationLayout
+        def self.find(layout, namespace = Object)
           case layout
           when Symbol, String
             class_name = "#{ Utils::String.new(layout).classify }#{ SUFFIX }"
-            Object.const_get(class_name)
+            namespace.const_get(class_name)
           end
         end
 
