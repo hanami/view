@@ -28,7 +28,6 @@ describe 'Framework configuration' do
   #
   #   * format
   #   * layout
-  #   * root
   #   * template
   #
   # TODO move all the inherith logic into configuration:

@@ -27,8 +27,8 @@ module Lotus
       #     end
       #   end
       #
-      #   Lotus::View.root    # => 'app/templates'
-      #   Articles::Show.root # => 'app/templates'
+      #   Lotus::View.configuration.root # => 'app/templates'
+      #   Articles::Show.root            # => 'app/templates'
       #
       # @example Custom root
       #   require 'lotus/view'
@@ -40,13 +40,13 @@ module Lotus
       #     end
       #   end
       #
-      #   Lotus::View.root    # => 'app/templates'
-      #   Articles::Show.root # => 'path/to/articles/templates'
+      #   Lotus::View.configuration.root # => 'app/templates'
+      #   Articles::Show.root            # => 'path/to/articles/templates'
       def root(value = nil)
         if value
-          @@root = Pathname.new value
+          configuration.root(value)
         else
-          @@root ||= configuration.root
+          configuration.root
         end
       end
 

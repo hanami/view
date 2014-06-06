@@ -12,12 +12,16 @@ describe Lotus::View do
         include Lotus::View
       end
 
+      class ConfigurationChildView < ConfigurationView
+      end
+
       class ConfigurationLayout
         include Lotus::Layout
       end
     end
 
     after do
+      Object.send(:remove_const, :ConfigurationChildView)
       Object.send(:remove_const, :ConfigurationView)
       Object.send(:remove_const, :ConfigurationLayout)
     end
@@ -35,6 +39,24 @@ describe Lotus::View do
       actual   = ConfigurationView.configuration
 
       actual.must_equal(expected)
+    end
+
+    it 'a view inheriths the parent' do
+      parent = ConfigurationView.configuration
+      child  = ConfigurationChildView.configuration
+
+      child.must_equal(parent)
+      child.wont_be_same_as(parent)
+    end
+
+    it "doesn't interfer with parent configuration" do
+      parent = AppView.configuration
+      child  = AppViewRoot.configuration
+
+      child.root.wont_equal(parent.root)
+
+      child.wont_equal(parent)
+      child.wont_be_same_as(parent)
     end
 
     it 'a view must be included in the framework configuration registry' do

@@ -29,6 +29,10 @@ class AppViewLayout < AppView
   layout nil
 end
 
+class AppViewRoot < AppView
+  root '.'
+end
+
 class MissingTemplateView
   include Lotus::View
 end
