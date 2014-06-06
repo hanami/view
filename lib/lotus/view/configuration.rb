@@ -2,7 +2,6 @@ require 'set'
 require 'lotus/utils/kernel'
 require 'lotus/utils/load_paths'
 require 'lotus/view/rendering/layout_finder'
-require 'lotus/view/rendering/null_layout'
 
 module Lotus
   module View
@@ -34,14 +33,11 @@ module Lotus
         end
       end
 
-      # FIXME the layout shouldn't be loaded when the value is passed,
-      # but at the loading time. This because a framework can be configured
-      # *before* the actual class gets loaded.
       def layout(value = nil)
         if value
-          @layout = Rendering::LayoutFinder.find(value, @namespace)
+          @layout = value
         else
-          @layout
+          Rendering::LayoutFinder.find(@layout, @namespace)
         end
       end
 
@@ -73,7 +69,7 @@ module Lotus
         @views      = Set.new
         @layouts    = Set.new
         @load_paths = Utils::LoadPaths.new(root)
-        @layout     = Rendering::NullLayout
+        @layout     = nil
       end
 
       alias_method :unload!, :reset!

@@ -86,6 +86,24 @@ describe Lotus::View::Configuration do
         @configuration.layout.must_equal(Lotus::View::Rendering::NullLayout)
       end
     end
+
+    describe "when the class wasn't loaded yet" do
+      before do
+        @configuration.layout :lazy
+
+        class LazyLayout
+          include Lotus::Layout
+        end
+      end
+
+      after do
+        Object.send(:remove_const, :LazyLayout)
+      end
+
+      it 'lazily loads the layout' do
+        @configuration.layout.must_equal(LazyLayout)
+      end
+    end
   end
 
   describe '#views' do

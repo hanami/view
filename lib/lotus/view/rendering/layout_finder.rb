@@ -1,4 +1,5 @@
 require 'lotus/utils/string'
+require 'lotus/view/rendering/null_layout'
 
 module Lotus
   module View
@@ -35,24 +36,38 @@ module Lotus
         #   Lotus::View::Rendering::LayoutFinder.find(:article) # =>
         #     ArticleLayout
         #
-        # @example With nil
+        # @example With a class
         #   require 'lotus/view'
         #
-        #   Lotus::View.layout # => :application
-        #   Lotus::View::Rendering::LayoutFinder.find(nil) # =>
-        #     nil
+        #   Lotus::View::Rendering::LayoutFinder.find(ArticleLayout) # =>
+        #     ArticleLayout
         #
         # @example With namespace
         #   require 'lotus/view'
         #
         #   Lotus::View::Rendering::LayoutFinder.find(:application, CardDeck) # =>
         #     CardDeck::ApplicationLayout
+        #
+        # @example With nil
+        #   require 'lotus/view'
+        #
+        #   Lotus::View::Rendering::LayoutFinder.find(nil) # =>
+        #     Lotus::View::Rendering::NullLayout
+        #
+        # @example With unknown layout
+        #   require 'lotus/view'
+        #
+        #   Lotus::View::Rendering::LayoutFinder.find(:unknown) # =>
+        #     Lotus::View::Rendering::NullLayout
+        #
         def self.find(layout, namespace = Object)
           case layout
           when Symbol, String
             class_name = "#{ Utils::String.new(layout).classify }#{ SUFFIX }"
             namespace.const_get(class_name)
-          end
+          when Class
+            layout
+          end || NullLayout
         end
 
         # Initialize the finder

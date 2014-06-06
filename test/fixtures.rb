@@ -199,10 +199,6 @@ end
 module CardDeck
   View = Lotus::View.duplicate
 
-  class ApplicationLayout
-    include Lotus::Layout
-  end
-
   View.module_eval do
     configuration.reset!
     configure do
@@ -210,6 +206,10 @@ module CardDeck
       root __dir__ + '/fixtures/templates/card_deck'
       layout :application
     end
+  end
+
+  class ApplicationLayout
+    include Lotus::Layout
   end
 
   module Views
