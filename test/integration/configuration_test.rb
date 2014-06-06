@@ -10,7 +10,7 @@ describe 'Framework configuration' do
 
   it 'sets a root path' do
     card_configuration = CardDeck::View.configuration
-    card_configuration.root.must_equal(Pathname.new('test/fixtures/templates/card_deck').realpath)
+    card_configuration.root.must_equal(Pathname.new('test/fixtures/templates/card_deck/app/templates').realpath)
   end
 
   it 'sets a layout' do

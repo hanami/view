@@ -1,4 +1,4 @@
-require 'lotus/utils/string'
+require 'lotus/view/rendering/template_name'
 require 'lotus/view/rendering/layout_finder'
 
 module Lotus
@@ -124,11 +124,106 @@ module Lotus
       #
       #   Articles::Show.template     # => 'articles/single_article'
       #   Articles::JsonShow.template # => 'articles/single_article'
+      #
+      # @example With namespace
+      #   require 'lotus/view'
+      #
+      #   module Furnitures
+      #     View = Lotus::View.duplicate
+      #
+      #     View.configure do
+      #       namespace 'Furnitures'
+      #     end
+      #
+      #     class Standalone
+      #       include Furnitures::View
+      #     end
+      #
+      #     module Catalog
+      #       class Index
+      #         Furnitures::View
+      #       end
+      #     end
+      #   end
+      #
+      #   Furnitures::Standalone.template     # => 'standalone'
+      #   Furnitures::Catalog::Index.template # => 'catalog/index'
+      #
+      # @example With nested namespace
+      #   require 'lotus/view'
+      #
+      #   module Frontend
+      #     View = Lotus::View.duplicate
+      #
+      #     View.configure do
+      #       namespace 'Frontend::Views'
+      #     end
+      #
+      #     class StandaloneView
+      #       include Frontend::View
+      #     end
+      #
+      #     module Views
+      #       class Standalone
+      #         include Frontend::View
+      #       end
+      #
+      #       module Sessions
+      #         class New
+      #           include Frontend::View
+      #         end
+      #       end
+      #     end
+      #   end
+      #
+      #   Frontend::StandaloneView.template       # => 'standalone_view'
+      #   Frontend::Views::Standalone.template    # => 'standalone'
+      #   Frontend::Views::Sessions::New.template # => 'sessions/new'
+      #
+      # @example With deeply nested namespace
+      #   require 'lotus/view'
+      #
+      #   module Bookshelf
+      #     module Web
+      #       View = Lotus::View.duplicate
+      #
+      #       View.configure do
+      #         namespace 'Bookshelf::Web::Views'
+      #       end
+      #
+      #       module Views
+      #         module Books
+      #           class Show
+      #             include Bookshelf::Web::View
+      #           end
+      #         end
+      #       end
+      #     end
+      #
+      #     module Api
+      #       View = Lotus::View.duplicate
+      #
+      #       View.configure do
+      #         namespace 'Bookshelf::Api::Views'
+      #       end
+      #
+      #       module Views
+      #         module Books
+      #           class Show
+      #             include Bookshelf::Api::View
+      #           end
+      #         end
+      #       end
+      #     end
+      #   end
+      #
+      #   Bookshelf::Web::Views::Books::Index.template # => 'books/index'
+      #   Bookshelf::Api::Views::Books::Index.template # => 'books/index'
       def template(value = nil)
         if value
           @@template = value
         else
-          @@template ||= Utils::String.new(name).underscore
+          @@template ||= Rendering::TemplateName.new(name, configuration.namespace).to_s
         end
       end
 

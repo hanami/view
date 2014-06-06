@@ -207,7 +207,7 @@ module CardDeck
     configuration.reset!
     configure do
       namespace CardDeck
-      root __dir__ + '/fixtures/templates/card_deck'
+      root __dir__ + '/fixtures/templates/card_deck/app/templates'
       layout :application
     end
   end
@@ -216,7 +216,15 @@ module CardDeck
     include Lotus::Layout
   end
 
+  class StandaloneView
+    include CardDeck::View
+  end
+
   module Views
+    class Standalone
+      include CardDeck::View
+    end
+
     module Dashboard
       class Index
         include CardDeck::View
