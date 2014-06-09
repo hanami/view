@@ -27,6 +27,20 @@ end
 require 'fixtures'
 Lotus::View.load!
 
+Lotus::Utils::LoadPaths.class_eval do
+  def include?(object)
+    @paths.include?(object)
+  end
+
+  def ==(other)
+    other.kind_of?(Lotus::Utils::LoadPaths) &&
+      other.paths == self.paths
+  end
+
+  protected
+  attr_reader :paths
+end
+
 Lotus::View::Configuration.class_eval do
   def ==(other)
     other.kind_of?(Lotus::View::Configuration) &&

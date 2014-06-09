@@ -63,7 +63,7 @@ describe Lotus::View::Configuration do
 
     describe 'by default' do
       it "it's equal to root" do
-        @configuration.load_paths.must_equal [@configuration.root]
+        @configuration.load_paths.must_include @configuration.root
       end
     end
 
@@ -168,14 +168,22 @@ describe Lotus::View::Configuration do
       @config.add_view(RenderView)
       @config.add_layout(GlobalLayout)
 
-      @config.root.must_equal       Pathname.new('.').realpath
-      @config.load_paths.must_equal [@config.root, '..', '../..']
-      @config.layout.must_equal     GlobalLayout
-      @config.views.must_include    RenderView
-      @config.layouts.must_include  GlobalLayout
+      @config.root.must_equal         Pathname.new('.').realpath
+
+      @config.load_paths.must_include @config.root
+      @config.load_paths.must_include '..'
+      @config.load_paths.must_include '../..'
+
+      @config.layout.must_equal       GlobalLayout
+      @config.views.must_include      RenderView
+      @config.layouts.must_include    GlobalLayout
 
       @configuration.root.must_equal       Pathname.new('test').realpath
-      @configuration.load_paths.must_equal [@config.root, '..']
+
+      @configuration.load_paths.must_include @config.root
+      @configuration.load_paths.must_include '..'
+      @configuration.load_paths.wont_include '../..'
+
       @configuration.layout.must_equal     ApplicationLayout
 
       @configuration.views.must_include    HelloWorldView
@@ -243,8 +251,8 @@ describe Lotus::View::Configuration do
     it 'resets root' do
       root = Pathname.new('.').realpath
 
-      @configuration.root.must_equal        root
-      @configuration.load_paths.must_equal [root]
+      @configuration.root.must_equal         root
+      @configuration.load_paths.must_include root
       @configuration.layout.must_equal Lotus::View::Rendering::NullLayout
       @configuration.views.must_be_empty
       @configuration.layouts.must_be_empty
