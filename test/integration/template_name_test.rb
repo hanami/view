@@ -4,6 +4,13 @@ describe 'Template name' do
   before do
     # # #
     #
+    # Standalone usage:
+    #
+    #
+    Display = Class.new { include Lotus::View }
+
+    # # #
+    #
     # Top level application:
     #
     #
@@ -18,9 +25,9 @@ describe 'Template name' do
     #       display.html.erb
     #   views/
     #     hardware/
-    #       display.rb          Hardware::Display
+    #       display.rb          HardwareView::Display
     #     software/
-    #       display.rb          Software::Display
+    #       display.rb          SoftwareView::Display
     # application.rb
     #
     #     module InformationTech
@@ -49,9 +56,7 @@ describe 'Template name' do
     #         end
     #       end
     #     end
-    Display = Class.new { include Lotus::View }
-
-    module Hardware
+    module HardwareView
       Display = Class.new { include Lotus::View }
     end
 
@@ -232,7 +237,7 @@ describe 'Template name' do
 
   after do
     Object.send(:remove_const, :Display)
-    Object.send(:remove_const, :Hardware)
+    Object.send(:remove_const, :HardwareView)
     Object.send(:remove_const, :Furnitures)
     Object.send(:remove_const, :Frontend)
     Object.send(:remove_const, :Bookshelf)
@@ -246,7 +251,7 @@ describe 'Template name' do
   end
 
   it 'include modules' do
-    Hardware::Display.template.must_equal 'hardware/display'
+    HardwareView::Display.template.must_equal 'hardware_view/display'
   end
 
   #
