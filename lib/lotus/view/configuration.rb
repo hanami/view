@@ -1,5 +1,7 @@
 require 'set'
+require 'lotus/utils/class'
 require 'lotus/utils/kernel'
+require 'lotus/utils/string'
 require 'lotus/utils/load_paths'
 require 'lotus/view/rendering/layout_finder'
 
@@ -11,6 +13,13 @@ module Lotus
       attr_reader :load_paths
       attr_reader :views
       attr_reader :layouts
+
+      def self.for(base)
+        # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
+        namespace = Utils::String.new(base).namespace
+        framework = Utils::Class.load!("(#{namespace}|Lotus)::View")
+        framework.configuration
+      end
 
       def initialize
         @namespace = Object

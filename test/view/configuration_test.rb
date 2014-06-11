@@ -207,10 +207,7 @@ describe Lotus::View::Configuration do
         end
 
         module LazyApp
-          View = Lotus::View.duplicate
-          View.configure do
-            namespace 'LazyApp::Views'
-          end
+          View = Lotus::View.generate(self)
 
           module Views
             module Dashboard
@@ -220,6 +217,7 @@ describe Lotus::View::Configuration do
             end
 
             class ApplicationLayout
+              include LazyApp::Layout
             end
           end
         end
@@ -232,6 +230,7 @@ describe Lotus::View::Configuration do
 
       it 'lazily loads the layout' do
         expected = LazyApp::Views::ApplicationLayout
+        expected.template.must_equal 'application'
 
         LazyApp::Views::Dashboard::Index.layout.must_equal               expected
         LazyApp::Views::Dashboard::Index.configuration.layout.must_equal expected

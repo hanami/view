@@ -22,7 +22,7 @@ module Lotus
     #     include Lotus::Layout
     #   end
     def self.included(base)
-      conf = View.configuration
+      conf = Lotus::View::Configuration.for(base)
       conf.add_layout(base)
 
       base.class_eval do

@@ -129,11 +129,7 @@ module Lotus
       #   require 'lotus/view'
       #
       #   module Furnitures
-      #     View = Lotus::View.duplicate
-      #
-      #     View.configure do
-      #       namespace 'Furnitures'
-      #     end
+      #     View = Lotus::View.generate(self)
       #
       #     class Standalone
       #       include Furnitures::View
@@ -153,11 +149,7 @@ module Lotus
       #   require 'lotus/view'
       #
       #   module Frontend
-      #     View = Lotus::View.duplicate
-      #
-      #     View.configure do
-      #       namespace 'Frontend::Views'
-      #     end
+      #     View = Lotus::View.generate(self)
       #
       #     class StandaloneView
       #       include Frontend::View
@@ -185,11 +177,7 @@ module Lotus
       #
       #   module Bookshelf
       #     module Web
-      #       View = Lotus::View.duplicate
-      #
-      #       View.configure do
-      #         namespace 'Bookshelf::Web::Views'
-      #       end
+      #       View = Lotus::View.generate(self)
       #
       #       module Views
       #         module Books
@@ -201,11 +189,7 @@ module Lotus
       #     end
       #
       #     module Api
-      #       View = Lotus::View.duplicate
-      #
-      #       View.configure do
-      #         namespace 'Bookshelf::Api::Views'
-      #       end
+      #       View = Lotus::View.generate(self)
       #
       #       module Views
       #         module Books

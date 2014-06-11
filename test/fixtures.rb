@@ -201,15 +201,10 @@ module Nodes
 end
 
 module CardDeck
-  View = Lotus::View.duplicate
-
-  View.module_eval do
-    configuration.reset!
-    configure do
-      namespace CardDeck
-      root __dir__ + '/fixtures/templates/card_deck/app/templates'
-      layout :application
-    end
+  View = Lotus::View.generate(self) do
+    namespace CardDeck
+    root __dir__ + '/fixtures/templates/card_deck/app/templates'
+    layout :application
   end
 
   class ApplicationLayout

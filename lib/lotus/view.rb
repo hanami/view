@@ -72,16 +72,35 @@ module Lotus
 
     include Utils::ClassAttribute
 
+    # @since 0.2.0
     class_attribute :configuration
     self.configuration = Configuration.new
 
+    # @since 0.2.0
     def self.configure(&blk)
       configuration.instance_eval(&blk)
     end
 
+    # @since 0.2.0
     def self.duplicate
       dup.tap do |duplicated|
         duplicated.configuration = configuration.duplicate
+      end
+    end
+
+    # @since 0.2.0
+    def self.generate(mod, views = 'Views', &blk)
+      duplicate.tap do |duplicated|
+        mod.module_eval %{
+          module #{ views }; end
+          Layout = Lotus::Layout.dup
+        }
+
+        duplicated.configure do
+          namespace "#{ mod }::#{ views }"
+        end
+
+        duplicated.configure(&blk) if block_given?
       end
     end
 
