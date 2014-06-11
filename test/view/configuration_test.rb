@@ -199,6 +199,44 @@ describe Lotus::View::Configuration do
 
       conf.namespace.must_equal(CardDeck)
     end
+
+    describe 'layout lazy loading' do
+      before do
+        Lotus::View.configure do
+          layout :application
+        end
+
+        module LazyApp
+          View = Lotus::View.duplicate
+          View.configure do
+            namespace 'LazyApp::Views'
+          end
+
+          module Views
+            module Dashboard
+              class Index
+                include LazyApp::View
+              end
+            end
+
+            class ApplicationLayout
+            end
+          end
+        end
+      end
+
+      after do
+        Lotus::View.configuration.reset!
+        Object.send(:remove_const, :LazyApp)
+      end
+
+      it 'lazily loads the layout' do
+        expected = LazyApp::Views::ApplicationLayout
+
+        LazyApp::Views::Dashboard::Index.layout.must_equal               expected
+        LazyApp::Views::Dashboard::Index.configuration.layout.must_equal expected
+      end
+    end
   end
 
   describe '#load!' do

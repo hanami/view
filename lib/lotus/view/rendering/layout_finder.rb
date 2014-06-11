@@ -1,4 +1,5 @@
 require 'lotus/utils/string'
+require 'lotus/utils/class'
 require 'lotus/view/rendering/null_layout'
 
 module Lotus
@@ -63,7 +64,9 @@ module Lotus
         def self.find(layout, namespace = Object)
           case layout
           when Symbol, String
+            # TODO Move this low level logic into a Lotus::Utils solution
             class_name = "#{ Utils::String.new(layout).classify }#{ SUFFIX }"
+            namespace  = Utils::Class.load!(namespace)
             namespace.const_get(class_name)
           when Class
             layout

@@ -53,7 +53,7 @@ module Lotus
         Configuration.new.tap do |c|
           c.namespace  = namespace
           c.root       = root
-          c.layout     = layout
+          c.layout     = @layout # lazy loading of the class
           c.load_paths = load_paths.dup
         end
       end
