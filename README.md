@@ -412,7 +412,7 @@ presenter = MapPresenter.new(map)
 puts presenter.locations # => ['Rome', 'Boston']
 
 # access presenter concrete methods
-puts presenter.count # => 1
+puts presenter.count # => 2
 
 # uses super to access original object implementation
 puts presenter.location_names # => 'ROME, BOSTON'
