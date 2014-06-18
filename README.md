@@ -21,7 +21,7 @@ Like all the other Lotus compontents, it can be used as a standalone framework o
 [![Coverage](http://img.shields.io/coveralls/lotus/view/master.svg)](https://coveralls.io/r/lotus/view)
 [![Code Climate](http://img.shields.io/codeclimate/github/lotus/view.svg)](https://codeclimate.com/github/lotus/view)
 [![Dependencies](http://img.shields.io/gemnasium/lotus/view.svg)](https://gemnasium.com/lotus/view)
-[![Inline Docs](http://inch-pages.github.io/github/lotus/view.svg)](http://inch-pages.github.io/github/lotus/view)
+[![Inline docs](http://inch-ci.org/github/lotus/view.svg?branch=master)](http://inch-ci.org/github/lotus/view)
 
 ## Contact
 
@@ -30,6 +30,7 @@ Like all the other Lotus compontents, it can be used as a standalone framework o
 * API Doc: http://rdoc.info/gems/lotus-view
 * Bugs/Issues: https://github.com/lotus/view/issues
 * Support: http://stackoverflow.com/questions/tagged/lotus-ruby
+* Chat: https://gitter.im/lotus/chat
 
 ## Rubies
 
@@ -53,7 +54,7 @@ Or install it yourself as:
 
 ### Conventions
 
-  * Templates are searched under `Lotus::View.root`, set this value according to your app structure (eg. `"app/templates"`).
+  * Templates are searched under `Lotus::View.configuration.root`, set this value according to your app structure (eg. `"app/templates"`).
   * A view will look for a template with a file name that is composed by its full class name (eg. `"articles/index"`).
   * A template must have two concatenated extensions: one for the format one for the engine (eg. `".html.erb"`).
   * The framework must be loaded before rendering the first time: `Lotus::View.load!`.
@@ -83,10 +84,13 @@ module Articles
   end
 end
 
-Lotus::View.root = 'app/templates'
+Lotus::View.configure do
+  root 'app/templates'
+end
+
 Lotus::View.load!
 
-path     = Lotus::View.root.join('articles/index.html.erb')
+path     = Lotus::View.configuration.root.join('articles/index.html.erb')
 template = Lotus::View::Template.new(path)
 articles = ArticleRepository.all
 
@@ -109,7 +113,10 @@ module Articles
   end
 end
 
-Lotus::View.root = 'app/templates'
+Lotus::View.configure do
+  root 'app/templates'
+end
+
 Lotus::View.load!
 
 articles = ArticleRepository.all
@@ -369,7 +376,7 @@ For instance, if [ERubis](http://www.kuwata-lab.com/erubis/) is loaded, it will 
 
 ### Root
 
-Template lookup is performed under the `Lotus::View.root` directory. You can specify a different path on a per view basis:
+Template lookup is performed under the `Lotus::View.configuration.root` directory. You can specify a different path on a per view basis:
 
 ```ruby
 class ViewWithDifferentRoot
@@ -384,8 +391,8 @@ end
 The template file must be located under the relevant `root` and must match the class name:
 
 ```ruby
-puts Lotus::View.root     # => #<Pathname:app/templates>
-Articles::Index.template  # => "articles/index"
+puts Lotus::View.configuration.root # => #<Pathname:app/templates>
+Articles::Index.template            # => "articles/index"
 ```
 
 Each view can specify a different template:
@@ -505,6 +512,87 @@ puts presenter.location_names # => 'ROME, BOSTON'
 # it has private access to the original object
 puts presenter.inspect_object # => #<Map:0x007fdeada0b2f0 @locations=["Rome", "Boston"]>
 ```
+
+### Configuration
+
+Lotus::View can be configured with a DSL that determines its behavior.
+It supports a few options:
+
+```ruby
+require 'lotus/view'
+
+Lotus::View.configure do
+  # Set the root path where to search for templates
+  # Argument: String, Pathname, #to_pathname, defaults to the current directory
+  #
+  root '/path/to/root'
+
+  # Set the Ruby namespace where to lookup for views
+  # Argument: Class, Module, String, defaults to Object
+  #
+  namespace 'MyApp::Views'
+
+  # Set the global layout
+  # Argument: Symbol, defautls to nil
+  #
+  layout :application
+end
+
+All those global configurations can be overwritten at a finer grained level:
+views. Each view and layout has its own copy of the global configuration, so
+that changes are inherited from the top to the bottom, but not bubbled up in the
+opposite direction.
+
+```ruby
+require 'lotus/view'
+
+Lotus::View.configure do
+  root '/path/to/root'
+end
+
+class Show
+  include Lotus::View
+  root '/another/root'
+end
+
+Lotus::View.configuration.root # => #<Pathname:/path/to/root>
+Show.root                      # => #<Pathname:/another/root>
+```
+
+### Reusability
+
+Lotus::View can be used as a singleton framework as seen in this README.
+The application code includes `Lotus::View` or `Lotus::Layout` directly
+and the configuration is unique per Ruby process.
+
+While this is convenient for tiny applications, it doesn't fit well for more
+complex scenarios, where we want micro applications to coexist together.
+
+```ruby
+require 'lotus/view'
+
+Lotus::View.configure do
+  root '/path/to/root'
+end
+
+module WebApp
+  View = Lotus::View.duplicate(self)
+end
+
+module ApiApp
+  View = Lotus::View.duplicate(self) do
+    root '/another/root'
+  end
+end
+
+Lotus::View.configuration.root  # => #<Pathname:/path/to/root>
+WebApp::View.configuration.root # => #<Pathname:/path/to/root>, inherited from Lotus::View
+ApiApp::View.configuration.root # => #<Pathname:/another/root>
+```
+
+The code above defines `WebApp::View` and `WebApp::Layout`, to be used for
+the `WebApp` views, while `ApiApp::View` and `ApiApp::Layout` have a different
+configuration.
 
 ### Thread safety
 
