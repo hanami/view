@@ -149,6 +149,10 @@ describe Lotus::View do
         View = Lotus::View.duplicate(self, 'Viewz')
       end
 
+      module DuplicatedWithoutNamespace
+        View = Lotus::View.duplicate(self, nil)
+      end
+
       module DuplicatedConfigure
         View = Lotus::View.duplicate(self) do
           layout :app
@@ -167,6 +171,7 @@ describe Lotus::View do
 
       Object.send(:remove_const, :Duplicated)
       Object.send(:remove_const, :DuplicatedCustom)
+      Object.send(:remove_const, :DuplicatedWithoutNamespace)
       Object.send(:remove_const, :DuplicatedConfigure)
     end
 
@@ -183,6 +188,14 @@ describe Lotus::View do
 
     it 'generates a custom namespace for views' do
       assert defined?(DuplicatedCustom::Viewz), 'DuplicatedCustom::Viewz expected'
+    end
+
+    it 'does not create a custom namespace for views' do
+      assert !defined?(DuplicatedWithoutNamespace::Views), "DuplicatedWithoutNamespace::Views wasn't expected"
+    end
+
+    it 'assigns correct namespace to the configuration when the namespace argument is nil' do
+      DuplicatedWithoutNamespace::View.configuration.namespace.must_equal 'DuplicatedWithoutNamespace'
     end
 
     it 'duplicates Layout' do

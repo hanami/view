@@ -226,13 +226,11 @@ module Lotus
     #   MyApp::View.configuration.root # => #<Pathname:/path/to/root>
     def self.duplicate(mod, views = 'Views', &blk)
       dupe.tap do |duplicated|
-        mod.module_eval %{
-          module #{ views }; end
-          Layout = Lotus::Layout.dup
-        }
+        mod.module_eval %{ module #{ views }; end } if views
+        mod.module_eval %{ Layout = Lotus::Layout.dup }
 
         duplicated.configure do
-          namespace "#{ mod }::#{ views }"
+          namespace [mod, views].compact.join '::'
         end
 
         duplicated.configure(&blk) if block_given?
