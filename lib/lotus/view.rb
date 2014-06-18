@@ -43,10 +43,216 @@ module Lotus
     class MissingFormatError < ::StandardError
     end
 
-    # Register a view
+    include Utils::ClassAttribute
+
+    # Framework configuration
     #
+    # @since 0.2.0
     # @api private
+    class_attribute :configuration
+    self.configuration = Configuration.new
+
+    # Configure the framework.
+    # It yields the given block in the context of the configuration
+    #
+    # @param blk [Proc] the configuration block
+    #
+    # @since 0.2.0
+    #
+    # @see Lotus::View::Configuration
+    #
+    # @example
+    #   require 'lotus/view'
+    #
+    #   Lotus::View.configure do
+    #     root '/path/to/root'
+    #   end
+    def self.configure(&blk)
+      configuration.instance_eval(&blk)
+    end
+
+    # Duplicate Lotus::View in order to create a new separated instance
+    # of the framework.
+    #
+    # The new instance of the framework will be completely decoupled from the
+    # original. It will inherit the configuration, but all the changes that
+    # happen after the duplication, won't be reflected on the other copies.
+    #
+    # @return [Module] a copy of Lotus::View
+    #
+    # @since 0.2.0
+    # @api private
+    #
+    # @example Basic usage
+    #   require 'lotus/view'
+    #
+    #   module MyApp
+    #     View = Lotus::View.dupe
+    #   end
+    #
+    #   MyApp::View == Lotus::View # => false
+    #
+    #   MyApp::View.configuration ==
+    #     Lotus::View.configuration # => false
+    #
+    # @example Inheriting configuration
+    #   require 'lotus/view'
+    #
+    #   Lotus::View.configure do
+    #     root '/path/to/root'
+    #   end
+    #
+    #   module MyApp
+    #     View = Lotus::View.dupe
+    #   end
+    #
+    #   module MyApi
+    #     View = Lotus::View.dupe
+    #     View.configure do
+    #       root '/another/root'
+    #     end
+    #   end
+    #
+    #   Lotus::View.configuration.root # => #<Pathname:/path/to/root>
+    #   MyApp::View.configuration.root # => #<Pathname:/path/to/root>
+    #   MyApi::View.configuration.root # => #<Pathname:/another/root>
+    def self.dupe
+      dup.tap do |duplicated|
+        duplicated.configuration = configuration.duplicate
+      end
+    end
+
+    # Duplicate the framework and generate modules for the target application
+    #
+    # @param mod [Module] the Ruby namespace of the application
+    # @param views [String] the optional namespace where the application's
+    #   views will live
+    # @param blk [Proc] an optional block to configure the framework
+    #
+    # @return [Module] a copy of Lotus::View
+    #
+    # @since 0.2.0
+    #
+    # @see Lotus::View#dupe
+    # @see Lotus::View::Configuration
+    # @see Lotus::View::Configuration#namespace
+    #
+    # @example Basic usage
+    #   require 'lotus/view'
+    #
+    #   module MyApp
+    #     View = Lotus::View.duplicate(self)
+    #   end
+    #
+    #   # It will:
+    #   #
+    #   # 1. Generate MyApp::View
+    #   # 2. Generate MyApp::Layout
+    #   # 3. Generate MyApp::Views
+    #   # 4. Configure MyApp::Views as the default namespace for views
+    #
+    #  module MyApp::Views::Dashboard
+    #    class Index
+    #      include MyApp::View
+    #    end
+    #  end
+    #
+    # @example Compare code
+    #   require 'lotus/view'
+    #
+    #   module MyApp
+    #     View = Lotus::View.duplicate(self) do
+    #       # ...
+    #     end
+    #   end
+    #
+    #   # it's equivalent to:
+    #
+    #   module MyApp
+    #     View   = Lotus::View.dupe
+    #     Layout = Lotus::Layout.dup
+    #
+    #     module Views
+    #     end
+    #
+    #     View.configure do
+    #       namespace 'MyApp::Views'
+    #     end
+    #
+    #     View.configure do
+    #       # ...
+    #     end
+    #   end
+    #
+    # @example Custom views module
+    #   require 'lotus/view
+    #
+    #   module MyApp
+    #     View = Lotus::View.duplicate(self, 'Vs')
+    #   end
+    #
+    #   defined?(MyApp::Views) # => nil
+    #   defined?(MyApp::Vs)    # => "constant"
+    #
+    #   # Developers can namespace views under Vs
+    #   module MyApp::Vs::Dashboard
+    #     # ...
+    #   end
+    #
+    # @example Nil views module
+    #   require 'lotus/view'
+    #
+    #   module MyApp
+    #     View = Lotus::View.duplicate(self, nil)
+    #   end
+    #
+    #   defined?(MyApp::Views) # => nil
+    #
+    #   # Developers can namespace views under MyApp
+    #   module MyApp
+    #     # ...
+    #   end
+    #
+    # @example Block usage
+    #   require 'lotus/view'
+    #
+    #   module MyApp
+    #     View = Lotus::View.duplicate(self) do
+    #       root '/path/to/root'
+    #     end
+    #   end
+    #
+    #   Lotus::View.configuration.root # => #<Pathname:.>
+    #   MyApp::View.configuration.root # => #<Pathname:/path/to/root>
+    def self.duplicate(mod, views = 'Views', &blk)
+      dupe.tap do |duplicated|
+        mod.module_eval %{
+          module #{ views }; end
+          Layout = Lotus::Layout.dup
+        }
+
+        duplicated.configure do
+          namespace "#{ mod }::#{ views }"
+        end
+
+        duplicated.configure(&blk) if block_given?
+      end
+    end
+
+    # Override Ruby's hook for modules.
+    # It includes basic Lotus::View modules to the given Class.
+    # It sets a copy of the framework configuration
+    #
+    # @param base [Class] the target view
+    #
     # @since 0.1.0
+    # @api private
+    #
+    # @see http://www.ruby-doc.org/core-2.1.2/Module.html#method-i-included
+    #
+    # @see Lotus::View::Dsl
+    # @see Lotus::View::Inheritable
+    # @see Lotus::View::Rendering
     #
     # @example
     #   require 'lotus/view'
@@ -70,44 +276,18 @@ module Lotus
       end
     end
 
-    include Utils::ClassAttribute
-
-    # @since 0.2.0
-    class_attribute :configuration
-    self.configuration = Configuration.new
-
-    # @since 0.2.0
-    def self.configure(&blk)
-      configuration.instance_eval(&blk)
-    end
-
-    # @since 0.2.0
-    def self.dupe
-      dup.tap do |duplicated|
-        duplicated.configuration = configuration.duplicate
-      end
-    end
-
-    # @since 0.2.0
-    def self.duplicate(mod, views = 'Views', &blk)
-      dupe.tap do |duplicated|
-        mod.module_eval %{
-          module #{ views }; end
-          Layout = Lotus::Layout.dup
-        }
-
-        duplicated.configure do
-          namespace "#{ mod }::#{ views }"
-        end
-
-        duplicated.configure(&blk) if block_given?
-      end
-    end
-
+    # Load the framework
+    #
+    # @since 0.1.0
+    # @api private
     def self.load!
       configuration.load!
     end
 
+    # Unload the framework
+    #
+    # @since 0.1.0
+    # @api private
     def self.unload!
       configuration.unload!
     end
