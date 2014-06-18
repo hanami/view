@@ -78,7 +78,6 @@ module Lotus
         #
         # @param context [Hash] the rendering context
         # @option context [Symbol] :format the requested format
-        # @param locals [Hash] the set of available objects
         #
         # @return [Lotus::View] the view associated with the given context
         #
