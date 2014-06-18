@@ -42,6 +42,10 @@ module Lotus
         views.freeze
       end
 
+      # Registered views
+      #
+      # @api private
+      # @since 0.1.0
       def views
         @@views ||= [ self ] + subclasses.to_a
       end
