@@ -86,7 +86,7 @@ describe 'Template name' do
     #         index.rb                   Furnitures::Furnitures::Index
     # application.rb                     Furnitures::Application
     module Furnitures
-      View = Lotus::View.generate(self) do
+      View = Lotus::View.duplicate(self) do
         # This line is here only for ducumentation purposes, but it's commented
         # because the path doesn't exist.
         #
@@ -133,7 +133,7 @@ describe 'Template name' do
     #   backend/
     #     application.rb                 Backend::Application
     module Frontend
-      View = Lotus::View.generate(self) do
+      View = Lotus::View.duplicate(self) do
         # This line is here only for ducumentation purposes, but it's commented
         # because the path doesn't exist.
         #
@@ -185,7 +185,7 @@ describe 'Template name' do
     #     application.rb          Bookshelf::Api
     module Bookshelf
       module Web
-        View = Lotus::View.generate(self) do
+        View = Lotus::View.duplicate(self) do
           # This line is here only for ducumentation purposes, but it's
           # commented because the path doesn't exist.
           #
@@ -202,7 +202,7 @@ describe 'Template name' do
       end
 
       module Api
-        View = Lotus::View.generate(self) do
+        View = Lotus::View.duplicate(self) do
           # This line is here only for ducumentation purposes, but it's
           # commented because the path doesn't exist.
           #

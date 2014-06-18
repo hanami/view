@@ -207,7 +207,7 @@ describe Lotus::View::Configuration do
         end
 
         module LazyApp
-          View = Lotus::View.generate(self)
+          View = Lotus::View.duplicate(self)
 
           module Views
             module Dashboard

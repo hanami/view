@@ -82,15 +82,15 @@ module Lotus
     end
 
     # @since 0.2.0
-    def self.duplicate
+    def self.dupe
       dup.tap do |duplicated|
         duplicated.configuration = configuration.duplicate
       end
     end
 
     # @since 0.2.0
-    def self.generate(mod, views = 'Views', &blk)
-      duplicate.tap do |duplicated|
+    def self.duplicate(mod, views = 'Views', &blk)
+      dupe.tap do |duplicated|
         mod.module_eval %{
           module #{ views }; end
           Layout = Lotus::Layout.dup

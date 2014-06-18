@@ -107,7 +107,7 @@ describe Lotus::View do
     end
   end
 
-  describe '.duplicate' do
+  describe '.dupe' do
     before do
       Lotus::View.class_eval do
         configure do
@@ -115,7 +115,7 @@ describe Lotus::View do
         end
       end
 
-      DuplicatedView = Lotus::View.duplicate
+      DuplicatedView = Lotus::View.dupe
 
       @framework_config  = Lotus::View.configuration
       @duplicated_config = DuplicatedView.configuration
@@ -137,26 +137,26 @@ describe Lotus::View do
     end
   end
 
-  describe '.generate' do
+  describe '.duplicate' do
     before do
       Lotus::View.configure { layout :application }
 
-      module Generated
-        View = Lotus::View.generate(self)
+      module Duplicated
+        View = Lotus::View.duplicate(self)
       end
 
-      module GeneratedCustom
-        View = Lotus::View.generate(self, 'Viewz')
+      module DuplicatedCustom
+        View = Lotus::View.duplicate(self, 'Viewz')
       end
 
-      module GeneratedConfigure
-        View = Lotus::View.generate(self) do
+      module DuplicatedConfigure
+        View = Lotus::View.duplicate(self) do
           layout :app
         end
 
         module Views
           class AppLayout
-            include GeneratedConfigure::Layout
+            include DuplicatedConfigure::Layout
           end
         end
       end
@@ -165,33 +165,33 @@ describe Lotus::View do
     after do
       Lotus::View.configuration.reset!
 
-      Object.send(:remove_const, :Generated)
-      Object.send(:remove_const, :GeneratedCustom)
-      Object.send(:remove_const, :GeneratedConfigure)
+      Object.send(:remove_const, :Duplicated)
+      Object.send(:remove_const, :DuplicatedCustom)
+      Object.send(:remove_const, :DuplicatedConfigure)
     end
 
     it 'duplicates the configuration of the framework' do
-      actual   = Generated::View.configuration
+      actual   = Duplicated::View.configuration
       expected = Lotus::View.configuration
 
       actual.layout.must_equal(expected.layout)
     end
 
     it 'generates a namespace for views' do
-      assert defined?(Generated::Views), 'Generated::Views expected'
+      assert defined?(Duplicated::Views), 'Duplicated::Views expected'
     end
 
     it 'generates a custom namespace for views' do
-      assert defined?(GeneratedCustom::Viewz), 'GeneratedCustom::Viewz expected'
+      assert defined?(DuplicatedCustom::Viewz), 'DuplicatedCustom::Viewz expected'
     end
 
     it 'duplicates Layout' do
-      assert defined?(Generated::Layout), 'Generated::Layout expected'
+      assert defined?(Duplicated::Layout), 'Duplicated::Layout expected'
     end
 
     it 'optionally accepts a block to configure the generated module' do
-      expected = GeneratedConfigure::Views::AppLayout
-      GeneratedConfigure::View.configuration.layout.must_equal expected
+      expected = DuplicatedConfigure::Views::AppLayout
+      DuplicatedConfigure::View.configuration.layout.must_equal expected
     end
   end
 
