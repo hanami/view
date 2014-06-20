@@ -67,6 +67,11 @@ describe Lotus::View do
       rendered.must_match %(<h2>Errors</h2>)
     end
 
+    it 'finds and renders template in nested directories' do
+      rendered = NestedView.render(format: :html)
+      rendered.must_match %(<h1>Nested</h1>)
+    end
+
     it 'decorates locals' do
       map = Map.new(['Rome', 'Cambridge'])
 

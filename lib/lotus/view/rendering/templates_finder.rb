@@ -10,8 +10,23 @@ module Lotus
       #
       # @see View::Template
       class TemplatesFinder
-        FORMAT  = '*'.freeze
-        ENGINES = '*'.freeze
+        # Default format
+        #
+        # @api private
+        # @since 0.1.0
+        FORMAT    = '*'.freeze
+
+        # Default template engines
+        #
+        # @api private
+        # @since 0.1.0
+        ENGINES   = '*'.freeze
+
+        # Recursive pattern
+        #
+        # @api private
+        # @since 0.2.0
+        RECURSIVE = '**'.freeze
 
         # Initialize a finder
         #
@@ -24,8 +39,8 @@ module Lotus
         end
 
         # Find all the associated templates to the view.
-        # It looks for templates under the root path of the view, that are
-        # matching the template name
+        # It recursively looks for templates under the root path of the view,
+        # that are matching the template name
         #
         # @return [Array<Lotus::View::Template>] the templates
         #
@@ -54,28 +69,44 @@ module Lotus
         #   Lotus::View::Rendering::TemplatesFinder.new(Articles::Show).find
         #     # => [#<Lotus::View::Template:0x007f8a0a86a970 ... @file="/path/to/templates/articles/show.html.erb">]
         def find
-          Dir.glob( "#{ [root, template_name].join(separator) }.#{ format }.#{ engines }" ).map do |template|
+          Dir.glob( "#{ [root, recursive, template_name].join(separator) }.#{ format }.#{ engines }" ).map do |template|
             View::Template.new template
           end
         end
 
         protected
+        # @api private
+        # @since 0.1.0
         def template_name
           @view.template
         end
 
+        # @api private
+        # @since 0.1.0
         def root
           @view.root
         end
 
+        # @api private
+        # @since 0.2.0
+        def recursive
+          RECURSIVE
+        end
+
+        # @api private
+        # @since 0.1.0
         def separator
           ::File::SEPARATOR
         end
 
+        # @api private
+        # @since 0.1.0
         def format
           FORMAT
         end
 
+        # @api private
+        # @since 0.1.0
         def engines
           ENGINES
         end

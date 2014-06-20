@@ -33,6 +33,11 @@ class AppViewRoot < AppView
   root '.'
 end
 
+class NestedView
+  include Lotus::View
+  root __dir__ + '/fixtures/templates'
+end
+
 class MissingTemplateView
   include Lotus::View
 end
