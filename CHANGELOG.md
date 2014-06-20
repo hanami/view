@@ -1,6 +1,8 @@
 ## v0.2.0
 ### Jun 23, 2014
 
+f053805 2014-06-20 **Luca Guidi** [breaking] Make Rendering::TemplatesFinder to look recursively for templates, starting from the root
+
 5a5ed1b 2014-06-18 **Luca Guidi** Depend on lotus-utils ~> 0.2
 
 d7858df 2014-06-18 **Luca Guidi** Ensure to handle correctly the namespace for views, when it's configured as nil
