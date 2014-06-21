@@ -56,7 +56,7 @@ module Lotus
       #
       # @see Lotus::View::Rendering::LayoutRegistry
       def registry
-        @@registry ||= View::Rendering::LayoutRegistry.new(self)
+        @registry ||= View::Rendering::LayoutRegistry.new(self)
       end
 
       # Template name
@@ -98,7 +98,7 @@ module Lotus
       #
       # @see Lotus::View.load!
       def load!
-        registry.freeze
+        # registry.freeze
       end
     end
 
