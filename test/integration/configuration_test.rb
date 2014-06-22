@@ -19,7 +19,7 @@ describe 'Framework configuration' do
   end
 
   it 'allow views to inherith the layout' do
-    view_configuration = CardDeck::Views::Dashboard::Index.configuration
+    view_configuration = CardDeck::Views::Home::Index.configuration
     view_configuration.layout.must_equal(CardDeck::ApplicationLayout)
   end
 
@@ -38,7 +38,7 @@ describe 'Framework configuration' do
   # Lotus::View::Inheritable#load!
   #
   # it 'allow views to specify a layout' do
-  #   view_configuration = CardDeck::Views::Dashboard::JsonIndex.configuration
+  #   view_configuration = CardDeck::Views::Home::JsonIndex.configuration
   #   view_configuration.layout.must_be_nil
   # end
 end

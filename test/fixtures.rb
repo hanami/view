@@ -225,7 +225,7 @@ module CardDeck
       include CardDeck::View
     end
 
-    module Dashboard
+    module Home
       class Index
         include CardDeck::View
       end
