@@ -537,6 +537,7 @@ Lotus::View.configure do
   #
   layout :application
 end
+```
 
 All those global configurations can be overwritten at a finer grained level:
 views. Each view and layout has its own copy of the global configuration, so
