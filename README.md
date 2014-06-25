@@ -145,7 +145,7 @@ module Articles
     include Lotus::View
 
     def authors
-      article.map(&:author).join ', '
+      articles.map(&:author).join ', '
     end
   end
 end
