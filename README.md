@@ -40,7 +40,9 @@ __Lotus::View__ supports Ruby (MRI) 2+
 
 Add this line to your application's Gemfile:
 
-    gem 'lotus-view'
+```ruby
+gem 'lotus-view'
+```
 
 And then execute:
 
