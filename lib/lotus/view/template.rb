@@ -12,7 +12,7 @@ module Lotus
 
       # Returns the format that the template handles.
       #
-      # @return [String] the format name
+      # @return [Symbol] the format name
       #
       # @since 0.1.0
       #
@@ -20,11 +20,9 @@ module Lotus
       #   require 'lotus/view'
       #
       #   template = Lotus::View::Template.new('index.html.erb')
-      #   template.format # => 'html'
+      #   template.format # => :html
       def format
-        @_template.basename.match(/(\.[^.]+)/).to_s.
-          gsub('.', ''). # TODO shame on me, this should be part of the regex above
-          to_sym
+        @_template.basename.match(/\.([^.]+)/).captures.first.to_sym
       end
 
       # Render the template within the context of the given scope.
