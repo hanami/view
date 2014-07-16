@@ -58,7 +58,7 @@ Or install it yourself as:
 
   * Templates are searched under `Lotus::View.configuration.root`, set this value according to your app structure (eg. `"app/templates"`).
   * A view will look for a template with a file name that is composed by its full class name (eg. `"articles/index"`).
-  * A template must have two concatenated extensions: one for the format one for the engine (eg. `".html.erb"`).
+  * A template must have two concatenated extensions: one for the format and one for the engine (eg. `".html.erb"`).
   * The framework must be loaded before rendering the first time: `Lotus::View.load!`.
 
 ### Views
