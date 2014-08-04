@@ -3,7 +3,6 @@ require 'test_helper'
 describe Lotus::View do
   before do
     Lotus::View.unload!
-    Lotus::View.configuration.reset!
   end
 
   describe '.configuration' do
