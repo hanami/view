@@ -6,13 +6,13 @@ It's based on a **separation between views and templates**.
 
 A _view_ is an object that encapsulates the presentation logic of a page.
 A _template_ is a file that defines the semantic and visual elements of a page.
-In order to show a result to an user, a template must be _rendered_ by a view.
+In order to show a result to a user, a template must be _rendered_ by a view.
 
 Keeping things separated helps to declutter templates and models from presentation logic.
 Also, since views are objects, they are easily testable.
 If you ever used [Mustache](http://mustache.github.io/), you are already aware of the advantages.
 
-Like all the other Lotus compontents, it can be used as a standalone framework or within a full Lotus application.
+Like all the other Lotus components, it can be used as a standalone framework or within a full Lotus application.
 
 ## Status
 
