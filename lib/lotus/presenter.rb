@@ -66,5 +66,13 @@ module Lotus
         super
       end
     end
+
+    # Override Ruby's respond_to_missing? in order to support proper delegation
+    #
+    # @api private
+    # @since x.x.x
+    def respond_to_missing?(m, include_private = false)
+      @object.respond_to?(m, include_private)
+    end
   end
 end

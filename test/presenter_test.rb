@@ -23,6 +23,11 @@ describe Lotus::Presenter do
     subject.inspect_object.must_match '#<Map'
   end
 
+  it 'responds to whatever the object responds to' do
+    subject.must_respond_to :locations
+    subject.wont_respond_to :unknown_method
+  end
+
   it "raises error when the requested method can't be satisfied" do
     -> {
       subject.unknown_method
