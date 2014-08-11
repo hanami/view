@@ -29,6 +29,10 @@ describe Lotus::View do
       it 'can call with multiple arguments' do
         RenderViewMethodWithArgs.render({format: :html}).must_include %(<h1>Hello, earth!</h1>)
       end
+
+      it 'can call with block' do
+        RenderViewMethodWithBlock.render({format: :html}).must_include %(<ul><li>thing 1</li><li>thing 2</li><li>thing 3</li></ul>)
+      end
     end
 
     it 'binds given locals to the rendering context' do
