@@ -6,13 +6,13 @@ It's based on a **separation between views and templates**.
 
 A _view_ is an object that encapsulates the presentation logic of a page.
 A _template_ is a file that defines the semantic and visual elements of a page.
-In order to show a result to an user, a template must be _rendered_ by a view.
+In order to show a result to a user, a template must be _rendered_ by a view.
 
 Keeping things separated helps to declutter templates and models from presentation logic.
 Also, since views are objects, they are easily testable.
 If you ever used [Mustache](http://mustache.github.io/), you are already aware of the advantages.
 
-Like all the other Lotus compontents, it can be used as a standalone framework or within a full Lotus application.
+Like all the other Lotus components, it can be used as a standalone framework or within a full Lotus application.
 
 ## Status
 
@@ -58,7 +58,7 @@ Or install it yourself as:
 
   * Templates are searched under `Lotus::View.configuration.root`, set this value according to your app structure (eg. `"app/templates"`).
   * A view will look for a template with a file name that is composed by its full class name (eg. `"articles/index"`).
-  * A template must have two concatenated extensions: one for the format one for the engine (eg. `".html.erb"`).
+  * A template must have two concatenated extensions: one for the format and one for the engine (eg. `".html.erb"`).
   * The framework must be loaded before rendering the first time: `Lotus::View.load!`.
 
 ### Views
