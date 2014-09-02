@@ -6,6 +6,14 @@ class RenderView
   include Lotus::View
 end
 
+class RenderViewMethodOverride
+  include Lotus::View
+
+  def select
+    'foo'
+  end
+end
+
 class RenderViewMethodWithArgs
   include Lotus::View
 

@@ -4,7 +4,7 @@ module Lotus
       # Scope for layout rendering
       #
       # @since 0.1.0
-      class LayoutScope
+      class LayoutScope < BasicObject
         # Initialize the scope
         #
         # @param layout [Lotus::Layout] the layout to render
@@ -129,7 +129,7 @@ module Lotus
           options.dup.tap do |opts|
             opts.merge!(format: format)
             opts[:locals] = locals
-            opts[:locals].merge!(options.fetch(:locals){ Hash[] })
+            opts[:locals].merge!(options.fetch(:locals){ ::Hash.new })
           end
         end
       end

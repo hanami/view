@@ -29,6 +29,10 @@ describe Lotus::View do
       it 'can call with multiple arguments' do
         RenderViewMethodWithArgs.render({format: :html}).must_include %(<h1>Hello, earth!</h1>)
       end
+
+      it 'will override Kernel methods' do
+        RenderViewMethodOverride.render({format: :html}).must_include %(<h1>Hello, foo!</h1>)
+      end
     end
 
     it 'binds given locals to the rendering context' do
