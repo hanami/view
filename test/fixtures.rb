@@ -245,3 +245,15 @@ module CardDeck
     end
   end
 end
+
+class LayoutForScopeTest
+  def foo
+    'x'
+  end
+end
+
+class ViewForScopeTest
+  def bar
+    'y'
+  end
+end

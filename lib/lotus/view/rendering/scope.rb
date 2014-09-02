@@ -32,6 +32,19 @@ module Lotus
           locals[:format]
         end
 
+        # Implements "respond to" logic
+        #
+        # @return [TrueClass,FalseClass]
+        #
+        # @since x.x.x
+        # @api private
+        #
+        # @see http://ruby-doc.org/core/Object.html#method-i-respond_to_missing-3F
+        def respond_to_missing?(m, include_all)
+          @view.respond_to?(m) ||
+            @locals.key?(m)
+        end
+
         protected
         def method_missing(m, *args)
           if @view.respond_to?(m)
