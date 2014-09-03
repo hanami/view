@@ -46,9 +46,9 @@ module Lotus
         end
 
         protected
-        def method_missing(m, *args)
+        def method_missing(m, *args, &block)
           if @view.respond_to?(m)
-            @view.__send__ m, *args
+            @view.__send__ m, *args, &block
           elsif @locals.key?(m)
             @locals[m]
           else
