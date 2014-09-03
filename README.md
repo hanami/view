@@ -517,7 +517,7 @@ puts presenter.inspect_object # => #<Map:0x007fdeada0b2f0 @locations=["Rome", "B
 
 ### Configuration
 
-Lotus::View can be configured with a DSL that determines its behavior.
+__Lotus::View__ can be configured with a DSL that determines its behavior.
 It supports a few options:
 
 ```ruby
@@ -535,7 +535,7 @@ Lotus::View.configure do
   namespace 'MyApp::Views'
 
   # Set the global layout
-  # Argument: Symbol, defautls to nil
+  # Argument: Symbol, defaults to nil
   #
   layout :application
 end
@@ -564,7 +564,7 @@ Show.root                      # => #<Pathname:/another/root>
 
 ### Reusability
 
-Lotus::View can be used as a singleton framework as seen in this README.
+__Lotus::View__ can be used as a singleton framework as seen in this README.
 The application code includes `Lotus::View` or `Lotus::Layout` directly
 and the configuration is unique per Ruby process.
 
@@ -599,7 +599,7 @@ configuration.
 
 ### Thread safety
 
-**Lotus::View**'s is thread safe during the runtime, but it isn't during the loading process.
+__Lotus::View__ is thread safe during the runtime, but it isn't during the loading process.
 Please load the framework as the last thing before your application starts.
 Also, be sure that your app provides a thread safe context while it's loaded.
 
