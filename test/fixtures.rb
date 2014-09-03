@@ -22,6 +22,16 @@ class RenderViewMethodWithArgs
   end
 end
 
+class RenderViewMethodWithBlock
+  include Lotus::View
+
+  def each_thing
+    yield 'thing 1'
+    yield 'thing 2'
+    yield 'thing 3'
+  end
+end
+
 class JsonRenderView
   include Lotus::View
   format :json
