@@ -231,7 +231,7 @@ module CardDeck
   end
 
   class ApplicationLayout
-    include Lotus::Layout
+    include CardDeck::Layout
   end
 
   class StandaloneView
@@ -267,3 +267,36 @@ class ViewForScopeTest
     'y'
   end
 end
+
+module Store
+  View = Lotus::View.duplicate(self)
+
+  module Helpers
+    module AssetTagHelpers
+      def stylesheet_include_tag(source)
+        'stylesheet'
+      end
+
+      def javascript_include_tag(source)
+        'javascript'
+      end
+    end
+  end
+
+  module Views
+    class StoreLayout
+      include Store::Layout
+      include Store::Helpers::AssetTagHelpers
+    end
+
+    module Home
+      class Index
+        include Store::View
+        template 'store/templates/home/index'
+        layout :store
+      end
+    end
+  end
+end
+
+Store::View.load!

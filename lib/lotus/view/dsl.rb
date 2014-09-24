@@ -317,7 +317,7 @@ module Lotus
           v.root.freeze
           v.format.freeze
           v.template.freeze
-          v.layout(Rendering::LayoutFinder.new(v).find)
+          v.layout(Rendering::LayoutFinder.find(v.layout, v.configuration.namespace))
           v.layout#.freeze
         end
       end
