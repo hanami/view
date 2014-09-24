@@ -10,6 +10,7 @@ describe Lotus::Layout do
 
   it 'concrete methods are available in layout template' do
     rendered = Store::Views::Home::Index.render(format: :html)
+    rendered.must_match %(script)
     rendered.must_match %(yeah)
   end
 end

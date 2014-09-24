@@ -273,12 +273,8 @@ module Store
 
   module Helpers
     module AssetTagHelpers
-      def stylesheet_include_tag(source)
-        'stylesheet'
-      end
-
-      def javascript_include_tag(source)
-        'javascript'
+      def javascript_tag(source)
+        %(<script type="text/javascript" src="/javascripts/#{ source }.js" />)
       end
     end
   end
