@@ -63,6 +63,10 @@ module Lotus
       class NullTemplate
         # Render the layout template
         #
+        # @param scope [Lotus::View::Scope] the rendering scope
+        # @param locals [Hash] a set of objects available during the rendering
+        # @yield [Proc] yields the given block
+        #
         # @return [String] the output of the rendering process
         #
         # @api private
