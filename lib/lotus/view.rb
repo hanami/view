@@ -87,7 +87,7 @@ module Lotus
     #   require 'lotus/view'
     #
     #   module MyApp
-    #     View = Lotus::View.dupe
+    #     View = Lotus::View.dup
     #   end
     #
     #   MyApp::View == Lotus::View # => false
@@ -103,11 +103,11 @@ module Lotus
     #   end
     #
     #   module MyApp
-    #     View = Lotus::View.dupe
+    #     View = Lotus::View.dup
     #   end
     #
     #   module MyApi
-    #     View = Lotus::View.dupe
+    #     View = Lotus::View.dup
     #     View.configure do
     #       root '/another/root'
     #     end
@@ -116,9 +116,10 @@ module Lotus
     #   Lotus::View.configuration.root # => #<Pathname:/path/to/root>
     #   MyApp::View.configuration.root # => #<Pathname:/path/to/root>
     #   MyApi::View.configuration.root # => #<Pathname:/another/root>
-    def self.dupe
-      dup.tap do |duplicated|
+    def self.dup
+      super.tap do |duplicated|
         duplicated.configuration = configuration.duplicate
+        yield(duplicated) if block_given?
       end
     end
 
@@ -169,7 +170,7 @@ module Lotus
     #   # it's equivalent to:
     #
     #   module MyApp
-    #     View   = Lotus::View.dupe
+    #     View   = Lotus::View.dup
     #     Layout = Lotus::Layout.dup
     #
     #     module Views
@@ -225,7 +226,7 @@ module Lotus
     #   Lotus::View.configuration.root # => #<Pathname:.>
     #   MyApp::View.configuration.root # => #<Pathname:/path/to/root>
     def self.duplicate(mod, views = 'Views', &blk)
-      dupe.tap do |duplicated|
+      dup do |duplicated|
         mod.module_eval %{ module #{ views }; end } if views
         mod.module_eval %{ Layout = Lotus::Layout.dup }
 

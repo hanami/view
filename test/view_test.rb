@@ -106,7 +106,7 @@ describe Lotus::View do
     end
   end
 
-  describe '.dupe' do
+  describe '.dup' do
     before do
       Lotus::View.class_eval do
         configure do
@@ -114,7 +114,7 @@ describe Lotus::View do
         end
       end
 
-      DuplicatedView = Lotus::View.dupe
+      DuplicatedView = Lotus::View.dup
 
       @framework_config  = Lotus::View.configuration
       @duplicated_config = DuplicatedView.configuration
