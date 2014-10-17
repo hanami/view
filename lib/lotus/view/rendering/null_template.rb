@@ -69,6 +69,8 @@ module Lotus
         #
         # @return [String] the output of the rendering process
         #
+        # @yield Yields control, without parameters, to the caller
+        #
         # @api private
         # @since 0.1.0
         #
