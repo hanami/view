@@ -408,7 +408,7 @@ module Articles
   end
 end
 
-Articles::Index.template  # => "articles/new"
+Articles::Create.template  # => "articles/new"
 ```
 
 ### Partials
