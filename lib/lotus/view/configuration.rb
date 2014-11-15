@@ -83,7 +83,7 @@ module Lotus
       def self.for(base)
         # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
         namespace = Utils::String.new(base).namespace
-        framework = Utils::Class.load!("(#{namespace}|Lotus)::View")
+        framework = Utils::Class.load_from_pattern!("(#{namespace}|Lotus)::View")
         framework.configuration
       end
 
@@ -272,8 +272,8 @@ module Lotus
       # @since 0.2.0
       # @api private
       def load!
-        views.each   {|v| v.__send__(:load!) }
-        layouts.each {|l| l.__send__(:load!) }
+        views.each   { |v| v.__send__(:load!) }
+        layouts.each { |l| l.__send__(:load!) }
       end
 
       # Reset all the values to the defaults
