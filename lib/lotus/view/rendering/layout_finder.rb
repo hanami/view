@@ -66,7 +66,7 @@ module Lotus
           when Symbol, String
             # TODO Move this low level logic into a Lotus::Utils solution
             class_name = "#{ Utils::String.new(layout).classify }#{ SUFFIX }"
-            namespace  = Utils::Class.load!(namespace)
+            namespace  = Utils::Class.load_from_pattern!(namespace)
             namespace.const_get(class_name)
           when Class
             layout
