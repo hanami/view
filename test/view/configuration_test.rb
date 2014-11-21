@@ -2,6 +2,7 @@ require 'test_helper'
 
 describe Lotus::View::Configuration do
   before do
+    Lotus::View.unload!
     @configuration = Lotus::View::Configuration.new
   end
 
@@ -224,7 +225,6 @@ describe Lotus::View::Configuration do
       end
 
       after do
-        Lotus::View.configuration.reset!
         Object.send(:remove_const, :LazyApp)
       end
 

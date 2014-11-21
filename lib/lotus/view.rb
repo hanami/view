@@ -281,13 +281,5 @@ module Lotus
     def self.load!
       configuration.load!
     end
-
-    # Unload the framework
-    #
-    # @since 0.1.0
-    # @api private
-    def self.unload!
-      configuration.unload!
-    end
   end
 end
