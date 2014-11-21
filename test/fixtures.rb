@@ -291,6 +291,10 @@ module Store
         template 'store/templates/home/index'
         layout :store
       end
+
+      class JsonIndex < Index
+        format :json
+      end
     end
   end
 end

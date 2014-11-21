@@ -318,6 +318,7 @@ module Lotus
           v.format.freeze
           v.template.freeze
           v.layout#.freeze
+          v.configuration.freeze
         end
       end
     end

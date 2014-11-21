@@ -274,6 +274,7 @@ module Lotus
       def load!
         views.each   { |v| v.__send__(:load!) }
         layouts.each { |l| l.__send__(:load!) }
+        freeze
       end
 
       # Reset all the values to the defaults

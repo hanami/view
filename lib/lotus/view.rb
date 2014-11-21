@@ -287,6 +287,7 @@ module Lotus
     # @since 0.1.0
     # @api private
     def self.unload!
+      self.configuration = configuration.duplicate
       configuration.unload!
     end
   end
