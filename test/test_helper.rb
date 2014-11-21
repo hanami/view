@@ -27,6 +27,13 @@ end
 require 'fixtures'
 Lotus::View.load!
 
+Lotus::View.class_eval do
+  def self.unload!
+    self.configuration = configuration.duplicate
+    configuration.unload!
+  end
+end
+
 Lotus::Utils::LoadPaths.class_eval do
   def include?(object)
     @paths.include?(object)
