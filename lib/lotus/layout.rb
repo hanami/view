@@ -98,7 +98,7 @@ module Lotus
       #
       # @see Lotus::View.load!
       def load!
-        # registry.freeze
+        registry.freeze
       end
     end
 

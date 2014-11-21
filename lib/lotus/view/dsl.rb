@@ -43,10 +43,10 @@ module Lotus
       #   Lotus::View.configuration.root # => 'app/templates'
       #   Articles::Show.root            # => 'path/to/articles/templates'
       def root(value = nil)
-        if value
-          configuration.root(value)
-        else
+        if value.nil?
           configuration.root
+        else
+          configuration.root(value)
         end
       end
 
@@ -75,10 +75,10 @@ module Lotus
       #   Articles::Show.format     # => nil
       #   Articles::JsonShow.format # => :json
       def format(value = nil)
-        if value
-          @format = value
-        else
+        if value.nil?
           @format
+        else
+          @format = value
         end
       end
 
@@ -204,10 +204,10 @@ module Lotus
       #   Bookshelf::Web::Views::Books::Index.template # => 'books/index'
       #   Bookshelf::Api::Views::Books::Index.template # => 'books/index'
       def template(value = nil)
-        if value
-          @@template = value
-        else
+        if value.nil?
           @@template ||= Rendering::TemplateName.new(name, configuration.namespace).to_s
+        else
+          @@template = value
         end
       end
 
@@ -295,10 +295,10 @@ module Lotus
       #   Lotus::View.load!
       #   Articles::Show.layout # => :articles
       def layout(value = nil)
-        if value
-          @layout = value
+        if value.nil?
+          @_layout ||= Rendering::LayoutFinder.find(@layout || configuration.layout, configuration.namespace)
         else
-          @layout ||= configuration.layout
+          @layout = value
         end
       end
 
@@ -317,7 +317,6 @@ module Lotus
           v.root.freeze
           v.format.freeze
           v.template.freeze
-          v.layout(Rendering::LayoutFinder.find(v.layout, v.configuration.namespace))
           v.layout#.freeze
         end
       end

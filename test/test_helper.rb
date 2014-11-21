@@ -25,7 +25,6 @@ Lotus::View.configure do
 end
 
 require 'fixtures'
-Lotus::View.load!
 
 Lotus::Utils::LoadPaths.class_eval do
   def include?(object)

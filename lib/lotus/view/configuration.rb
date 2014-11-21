@@ -229,10 +229,10 @@ module Lotus
       #
       #   MyApp::View.configuration.layout # => MyApp::ApplicationLayout
       def layout(value = nil)
-        if value
-          @layout = value
-        else
+        if value.nil?
           Rendering::LayoutFinder.find(@layout, @namespace)
+        else
+          @layout = value
         end
       end
 
