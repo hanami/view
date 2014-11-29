@@ -223,11 +223,21 @@ module Nodes
   end
 end
 
+module MyCustomModule
+end
+
+module MyOtherCustomModule
+end
+
 module CardDeck
   View = Lotus::View.duplicate(self) do
     namespace CardDeck
     root __dir__ + '/fixtures/templates/card_deck/app/templates'
     layout :application
+    modules do
+      include MyCustomModule
+      include MyOtherCustomModule
+    end
   end
 
   class ApplicationLayout

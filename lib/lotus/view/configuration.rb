@@ -236,6 +236,57 @@ module Lotus
         end
       end
 
+      # Specify the default modules to be included when `Lotus::View`
+      #  is included.
+      #
+      # If not set, this option will be ignored.
+      #
+      # This is part of a DSL, for this reason when this method is called with
+      # an argument, it will set the corresponding instance variable. When
+      # called without, it will return the already set value, or the default.
+      #
+      # @overload modules(blk)
+      #   Adds the given block
+      #   @param value [Proc] specify the modules to be included
+      #
+      # @overload modules
+      #   Gets the value
+      #   @return [Array] the list of the specified procs
+      #
+      # @since 0.3.0
+      #
+      # @see Lotus::View#duplicate
+      #
+      # @example Getting the value
+      #   require 'lotus/view'
+      #
+      #   Lotus::View.configuration.modules # => []
+      #
+      # @example Setting the value
+      #   require 'lotus/view'
+      #
+      #   Lotus::View.configure do
+      #     modules do
+      #       include MyCustomModule
+      #     end
+      #   end
+      #
+      #   class Articles
+      #     class Index
+      #       include Lotus::View
+      #
+      #     # It includes:
+      #     #   * MyCustomModule
+      #     end
+      #   end
+      def modules(&blk)
+        if block_given?
+          @modules.push(blk)
+        else
+          @modules
+        end
+      end
+
       # Add a view to the registry
       #
       # @since 0.2.0
@@ -264,6 +315,7 @@ module Lotus
           c.root       = root
           c.layout     = @layout # lazy loading of the class
           c.load_paths = load_paths.dup
+          c.modules    = modules.dup
         end
       end
 
@@ -288,12 +340,31 @@ module Lotus
         @layouts    = Set.new
         @load_paths = Utils::LoadPaths.new(root)
         @layout     = nil
+        @modules    = []
+      end
+
+      # Copy the configuration for the given action
+      #
+      # @param base [Class] the target action
+      #
+      # @return void
+      #
+      # @since 0.3.0
+      # @api private
+      def copy!(base)
+        modules.each do |mod|
+          base.class_eval(&mod)
+        end
       end
 
       alias_method :unload!, :reset!
 
       protected
-      attr_writer :namespace, :root, :load_paths, :layout
+      attr_writer :namespace
+      attr_writer :root
+      attr_writer :load_paths
+      attr_writer :layout
+      attr_writer :modules
     end
   end
 end
