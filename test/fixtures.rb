@@ -270,6 +270,7 @@ end
 
 module Store
   View = Lotus::View.duplicate(self)
+  View.extend Unloadable
 
   module Helpers
     module AssetTagHelpers
