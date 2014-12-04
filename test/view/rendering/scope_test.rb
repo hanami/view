@@ -23,4 +23,20 @@ describe Lotus::View::Rendering::Scope do
       end
     end
   end
+
+  describe '#class' do
+    it 'returns proper class name' do
+      scope = Lotus::View::Rendering::Scope.new(ViewForScopeTest.new)
+      scope.class.must_equal Lotus::View::Rendering::Scope
+    end
+  end
+
+  describe '#inspect' do
+    it 'returns proper inspect String' do
+      scope = Lotus::View::Rendering::Scope.new(ViewForScopeTest.new, {x: 23})
+      scope.inspect.must_include '@view'
+      scope.inspect.must_include '@locals'
+      scope.inspect.must_include '%x' % (scope.object_id << 1)
+    end
+  end
 end

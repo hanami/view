@@ -23,6 +23,18 @@ module Lotus
           @view, @locals = view, locals
         end
 
+        # Returns an inspect String
+        #
+        # @return [String] inspect String (contains classname, objectid in hex, available ivars)
+        #
+        # @since x.x.x
+        def inspect
+          base = "#<#{ self.class }: #{'%x' % (self.object_id << 1)}"
+          base << " @view=\"#{@view}\"" if @view
+          base << " @locals=\"#{@locals}\"" if @locals
+          base << ">"
+        end
+
         # Returns the requested format.
         #
         # @return [Symbol] the requested format (eg. :html, :json, :xml, etc..)
