@@ -24,14 +24,18 @@ Lotus::View.configure do
   root Pathname.new __dir__ + '/fixtures/templates'
 end
 
+module Unloadable
+  def unload!
+    self.configuration = configuration.duplicate
+    configuration.unload!
+  end
+end
+
 require 'fixtures'
 Lotus::View.load!
 
 Lotus::View.class_eval do
-  def self.unload!
-    self.configuration = configuration.duplicate
-    configuration.unload!
-  end
+  extend Unloadable
 end
 
 Lotus::Utils::LoadPaths.class_eval do

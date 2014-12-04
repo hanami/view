@@ -17,6 +17,27 @@ module Lotus
           @layout, @scope = layout, scope
         end
 
+        # Returns the classname as string
+        #
+        # @return classname
+        #
+        # @since x.x.x
+        def class
+          (class << self; self end).superclass
+        end
+
+        # Returns an inspect String
+        #
+        # @return [String] inspect String (contains classname, objectid in hex, available ivars)
+        #
+        # @since x.x.x
+        def inspect
+          base = "#<#{ self.class }:#{'%x' % (self.object_id << 1)}"
+          base << " @layout=\"#{@layout}\"" if @layout
+          base << " @scope=\"#{@scope}\"" if @scope
+          base << ">"
+        end
+
         # Render a partial or a template within a layout template.
         #
         # @param options [Hash]

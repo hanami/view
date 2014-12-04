@@ -3,6 +3,7 @@ require 'test_helper'
 describe 'Framework freeze' do
   describe 'Lotus::View' do
     before do
+      Lotus::View.unload!
       Lotus::View.load!
     end
 
@@ -25,6 +26,7 @@ describe 'Framework freeze' do
 
   describe 'duplicated framework' do
     before do
+      Store::View.unload!
       Store::View.load!
     end
 

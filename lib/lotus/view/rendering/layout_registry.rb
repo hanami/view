@@ -4,6 +4,16 @@ require 'lotus/view/rendering/templates_finder'
 module Lotus
   module View
     module Rendering
+      # Missing template layout error
+      #
+      # This is raised at the runtime when Lotus::Layout cannot find it's template.
+      #
+      # @since x.x.x
+      class MissingTemplateLayoutError < ::StandardError
+        def initialize(template)
+          super("Can't find layout template '#{ template }'")
+        end
+      end
       # Holds the references of all the registered layouts.
       # As now the registry is unique at the level of the framework.
       #
@@ -48,6 +58,7 @@ module Lotus
           templates.each do |template|
             merge! template.format => template
           end
+          self.any? or raise MissingTemplateLayoutError.new(@view)
         end
 
         def templates

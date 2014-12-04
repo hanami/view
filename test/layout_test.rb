@@ -8,6 +8,19 @@ describe Lotus::Layout do
     end
   end
 
+  it "raise error if template isn't found" do
+    Lotus::View.unload!
+
+    class MissingLayout
+      include Lotus::Layout
+    end
+
+    error = -> {
+      Lotus::View.load!
+    }.must_raise(Lotus::View::Rendering::MissingTemplateLayoutError)
+    error.message.must_include "Can't find layout template 'MissingLayout'"
+  end
+
   it 'concrete methods are available in layout template' do
     rendered = Store::Views::Home::Index.render(format: :html)
     rendered.must_match %(script)
