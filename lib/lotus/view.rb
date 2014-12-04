@@ -272,6 +272,8 @@ module Lotus
 
         self.configuration = conf.duplicate
       end
+      
+      conf.copy!(base)
     end
 
     # Load the framework
