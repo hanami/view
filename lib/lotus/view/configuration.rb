@@ -245,11 +245,11 @@ module Lotus
       # an argument, it will set the corresponding instance variable. When
       # called without, it will return the already set value, or the default.
       #
-      # @overload modules(blk)
+      # @overload prepare(blk)
       #   Adds the given block
       #   @param value [Proc] specify the modules to be included
       #
-      # @overload modules
+      # @overload prepare
       #   Gets the value
       #   @return [Array] the list of the specified procs
       #
@@ -260,13 +260,13 @@ module Lotus
       # @example Getting the value
       #   require 'lotus/view'
       #
-      #   Lotus::View.configuration.modules # => []
+      #   Lotus::View.configuration.prepare # => []
       #
       # @example Setting the value
       #   require 'lotus/view'
       #
       #   Lotus::View.configure do
-      #     modules do
+      #     prepare do
       #       include MyCustomModule
       #     end
       #   end
@@ -279,7 +279,7 @@ module Lotus
       #     #   * MyCustomModule
       #     end
       #   end
-      def modules(&blk)
+      def prepare(&blk)
         if block_given?
           @modules.push(blk)
         else
@@ -315,7 +315,7 @@ module Lotus
           c.root       = root
           c.layout     = @layout # lazy loading of the class
           c.load_paths = load_paths.dup
-          c.modules    = modules.dup
+          c.prepare    = prepare.dup
         end
       end
 
@@ -352,7 +352,7 @@ module Lotus
       # @since 0.3.0
       # @api private
       def copy!(base)
-        modules.each do |mod|
+        prepare.each do |mod|
           base.class_eval(&mod)
         end
       end
@@ -364,7 +364,7 @@ module Lotus
       attr_writer :root
       attr_writer :load_paths
       attr_writer :layout
-      attr_writer :modules
+      attr_writer :prepare
     end
   end
 end
