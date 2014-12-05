@@ -234,7 +234,7 @@ module CardDeck
     namespace CardDeck
     root __dir__ + '/fixtures/templates/card_deck/app/templates'
     layout :application
-    modules do
+    prepare do
       include MyCustomModule
       include MyOtherCustomModule
     end

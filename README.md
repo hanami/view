@@ -538,6 +538,14 @@ Lotus::View.configure do
   # Argument: Symbol, defaults to nil
   #
   layout :application
+
+  # Enable modules in all views
+  # Argument: Block, includes your modules
+  #
+  prepare do
+    include MyCustomModule
+    include MyOtherCustomModule
+  end
 end
 ```
 
