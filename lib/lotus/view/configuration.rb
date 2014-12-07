@@ -32,6 +32,7 @@ module Lotus
       attr_reader :load_paths
       attr_reader :views
       attr_reader :layouts
+      attr_reader :modules
 
       # Return the original configuration of the framework instance associated
       # with the given class.
@@ -242,16 +243,11 @@ module Lotus
       # If not set, this option will be ignored.
       #
       # This is part of a DSL, for this reason when this method is called with
-      # an argument, it will set the corresponding instance variable. When
-      # called without, it will return the already set value, or the default.
+      # an argument, it will set the corresponding instance variable.
       #
-      # @overload modules(blk)
+      # @overload prepare(blk)
       #   Adds the given block
       #   @param value [Proc] specify the modules to be included
-      #
-      # @overload modules
-      #   Gets the value
-      #   @return [Array] the list of the specified procs
       #
       # @since 0.3.0
       #
@@ -266,7 +262,7 @@ module Lotus
       #   require 'lotus/view'
       #
       #   Lotus::View.configure do
-      #     modules do
+      #     prepare do
       #       include MyCustomModule
       #     end
       #   end
@@ -279,11 +275,11 @@ module Lotus
       #     #   * MyCustomModule
       #     end
       #   end
-      def modules(&blk)
+      def prepare(&blk)
         if block_given?
           @modules.push(blk)
         else
-          @modules
+          raise ArgumentError.new('Please provide a proc or a bock')
         end
       end
 
