@@ -319,7 +319,7 @@ module Lotus
         if block_given?
           @modules.push(blk)
         else
-          raise ArgumentError.new('Must provide a block')
+          raise ArgumentError.new('Please provide a block')
         end
       end
 

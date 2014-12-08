@@ -173,7 +173,7 @@ describe Lotus::View::Configuration do
 
     it 'raises error in case of missing block' do
       exception = -> { @configuration.prepare }.must_raise(ArgumentError)
-      exception.message.must_equal('Must provide a block')
+      exception.message.must_equal('Please provide a block')
     end
   end
 
