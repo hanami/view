@@ -201,6 +201,10 @@ describe Lotus::View do
       assert defined?(Duplicated::Layout), 'Duplicated::Layout expected'
     end
 
+    it 'duplicates Presenter' do
+      assert defined?(Duplicated::Presenter), 'Duplicated::Presenter expected'
+    end
+
     it 'optionally accepts a block to configure the generated module' do
       expected = DuplicatedConfigure::Views::AppLayout
       DuplicatedConfigure::View.configuration.layout.must_equal expected

@@ -32,6 +32,7 @@ module Lotus
       attr_reader :load_paths
       attr_reader :views
       attr_reader :layouts
+      attr_reader :modules
 
       # Return the original configuration of the framework instance associated
       # with the given class.
@@ -236,54 +237,89 @@ module Lotus
         end
       end
 
-      # Specify the default modules to be included when `Lotus::View`
-      #  is included.
+      # Prepare the views.
       #
-      # If not set, this option will be ignored.
+      # The given block will be yielded when `Lotus::View` will be included by
+      # a view.
       #
-      # This is part of a DSL, for this reason when this method is called with
-      # an argument, it will set the corresponding instance variable. When
-      # called without, it will return the already set value, or the default.
+      # This method can be called multiple times.
       #
-      # @overload modules(blk)
-      #   Adds the given block
-      #   @param value [Proc] specify the modules to be included
+      # @param blk [Proc] the code block
       #
-      # @overload modules
-      #   Gets the value
-      #   @return [Array] the list of the specified procs
+      # @return [void]
+      #
+      # @raise [ArgumentError] if called without passing a block
       #
       # @since 0.3.0
       #
-      # @see Lotus::View#duplicate
+      # @see Lotus::View.configure
+      # @see Lotus::View.duplicate
       #
-      # @example Getting the value
+      # @example Including shared utilities
       #   require 'lotus/view'
       #
-      #   Lotus::View.configuration.modules # => []
+      #   module UrlHelpers
+      #     def comments_path
+      #       '/'
+      #     end
+      #   end
       #
-      # @example Setting the value
+      #   Lotus::View.configure do
+      #     prepare do
+      #       include UrlHelpers
+      #     end
+      #   end
+      #
+      #   Lotus::View.load!
+      #
+      #   module Comments
+      #     class New
+      #       # The following include will cause UrlHelpers to be included too.
+      #       # This makes `comments_path` available in the view context
+      #       include Lotus::View
+      #
+      #       def form
+      #         %(<form action="#{ comments_path }" method="POST"></form>)
+      #       end
+      #     end
+      #   end
+      #
+      # @example Preparing multiple times
       #   require 'lotus/view'
       #
       #   Lotus::View.configure do
-      #     modules do
-      #       include MyCustomModule
+      #     prepare do
+      #       include UrlHelpers
+      #     end
+      #
+      #     prepare do
+      #       format :json
       #     end
       #   end
       #
-      #   class Articles
+      #   Lotus::View.configure do
+      #     prepare do
+      #       include FormattingHelpers
+      #     end
+      #   end
+      #
+      #   Lotus::View.load!
+      #
+      #   module Articles
       #     class Index
+      #       # The following include will cause the inclusion of:
+      #       #   * UrlHelpers
+      #       #   * FormattingHelpers
+      #       #
+      #       # It also sets the view to render only JSON
       #       include Lotus::View
-      #
-      #     # It includes:
-      #     #   * MyCustomModule
       #     end
       #   end
-      def modules(&blk)
+      def prepare(&blk)
         if block_given?
           @modules.push(blk)
         else
-          @modules
+          raise ArgumentError.new('Please provide a block')
         end
       end
 

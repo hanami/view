@@ -2,6 +2,11 @@ require 'test_helper'
 
 describe 'Template name' do
   before do
+    ##
+    # Reset the configuration
+    #
+    Lotus::View.unload!
+
     # # #
     #
     # Standalone usage:

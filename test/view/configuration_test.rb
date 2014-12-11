@@ -143,13 +143,48 @@ describe Lotus::View::Configuration do
     end
   end
 
-  describe 'duplicate' do
+  describe '#prepare' do
+    before do
+      module FooRendering
+        def render
+          'foo'
+        end
+      end
+
+      class PrepareView
+      end
+    end
+
+    after do
+      Object.__send__(:remove_const, :FooRendering)
+      Object.__send__(:remove_const, :PrepareView)
+    end
+
+    it 'allows to set a code block to be yielded when Lotus::View is included' do
+      Lotus::View.configure do
+        prepare do
+          include FooRendering
+        end
+      end
+
+      PrepareView.__send__(:include, Lotus::View)
+      PrepareView.render({format: :html}).must_equal 'foo'
+    end
+
+    it 'raises error in case of missing block' do
+      exception = -> { @configuration.prepare }.must_raise(ArgumentError)
+      exception.message.must_equal('Please provide a block')
+    end
+  end
+
+  describe '#duplicate' do
     before do
       @configuration.root 'test'
       @configuration.load_paths << '..'
       @configuration.layout :application
       @configuration.add_view(HelloWorldView)
       @configuration.add_layout(ApplicationLayout)
+      @configuration.prepare { include Kernel }
 
       @config = @configuration.duplicate
     end
@@ -158,6 +193,7 @@ describe Lotus::View::Configuration do
       @config.root.must_equal       @configuration.root
       @config.load_paths.must_equal @configuration.load_paths
       @config.layout.must_equal     @configuration.layout
+      @config.modules.must_equal    @configuration.modules
       @config.views.must_be_empty
       @config.layouts.must_be_empty
     end
@@ -168,6 +204,7 @@ describe Lotus::View::Configuration do
       @config.layout :global
       @config.add_view(RenderView)
       @config.add_layout(GlobalLayout)
+      @config.prepare { include Comparable }
 
       @config.root.must_equal         Pathname.new('.').realpath
 
@@ -178,6 +215,7 @@ describe Lotus::View::Configuration do
       @config.layout.must_equal       GlobalLayout
       @config.views.must_include      RenderView
       @config.layouts.must_include    GlobalLayout
+      @config.modules.size.must_equal 2
 
       @configuration.root.must_equal       Pathname.new('test').realpath
 

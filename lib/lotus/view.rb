@@ -148,8 +148,9 @@ module Lotus
     #   #
     #   # 1. Generate MyApp::View
     #   # 2. Generate MyApp::Layout
-    #   # 3. Generate MyApp::Views
-    #   # 4. Configure MyApp::Views as the default namespace for views
+    #   # 3. Generate MyApp::Presenter
+    #   # 4. Generate MyApp::Views
+    #   # 5. Configure MyApp::Views as the default namespace for views
     #
     #  module MyApp::Views::Dashboard
     #    class Index
@@ -227,7 +228,10 @@ module Lotus
     def self.duplicate(mod, views = 'Views', &blk)
       dupe.tap do |duplicated|
         mod.module_eval %{ module #{ views }; end } if views
-        mod.module_eval %{ Layout = Lotus::Layout.dup }
+        mod.module_eval %{
+          Layout = Lotus::Layout.dup
+          Presenter = Lotus::Presenter.dup
+        }
 
         duplicated.configure do
           namespace [mod, views].compact.join '::'
@@ -272,7 +276,7 @@ module Lotus
 
         self.configuration = conf.duplicate
       end
-      
+
       conf.copy!(base)
     end
 
