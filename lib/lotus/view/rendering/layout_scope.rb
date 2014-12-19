@@ -21,7 +21,7 @@ module Lotus
         #
         # @return classname
         #
-        # @since x.x.x
+        # @since 0.3.0
         def class
           (class << self; self end).superclass
         end
@@ -30,7 +30,7 @@ module Lotus
         #
         # @return [String] inspect String (contains classname, objectid in hex, available ivars)
         #
-        # @since x.x.x
+        # @since 0.3.0
         def inspect
           base = "#<#{ self.class }:#{'%x' % (self.object_id << 1)}"
           base << " @layout=\"#{@layout}\"" if @layout
@@ -115,7 +115,7 @@ module Lotus
         #
         # @return [TrueClass,FalseClass]
         #
-        # @since x.x.x
+        # @since 0.3.0
         #
         # @see http://ruby-doc.org/core/Object.html#method-i-respond_to-3F
         def respond_to?(m, include_all = false)
@@ -126,7 +126,7 @@ module Lotus
         #
         # @return [TrueClass,FalseClass]
         #
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         #
         # @see http://ruby-doc.org/core/Object.html#method-i-respond_to_missing-3F
