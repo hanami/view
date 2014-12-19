@@ -59,6 +59,10 @@ module Lotus
     end
 
     protected
+    # Override Ruby's method_missing
+    #
+    # @api private
+    # @since 0.1.0
     def method_missing(m, *args, &blk)
       if @object.respond_to?(m)
         @object.__send__ m, *args, &blk
@@ -70,7 +74,7 @@ module Lotus
     # Override Ruby's respond_to_missing? in order to support proper delegation
     #
     # @api private
-    # @since x.x.x
+    # @since 0.3.0
     def respond_to_missing?(m, include_private = false)
       @object.respond_to?(m, include_private)
     end

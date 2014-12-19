@@ -27,7 +27,7 @@ module Lotus
         #
         # @return [String] inspect String (contains classname, objectid in hex, available ivars)
         #
-        # @since x.x.x
+        # @since 0.3.0
         def inspect
           base = "#<#{ self.class }: #{'%x' % (self.object_id << 1)}"
           base << " @view=\"#{@view}\"" if @view
@@ -48,7 +48,7 @@ module Lotus
         #
         # @return [TrueClass,FalseClass]
         #
-        # @since x.x.x
+        # @since 0.3.0
         # @api private
         #
         # @see http://ruby-doc.org/core/Object.html#method-i-respond_to_missing-3F
