@@ -10,6 +10,7 @@ View layer for Lotus
 - [Luca Guidi] Implemented "respond to" logic for `Lotus::Layout` (`respond_to?` and `respond_to_missing?`)
 - [Jeremy Stephens] Allow view concrete methods that accept a block to be invoked from templates
 - [Peter Suschlik] Implemented "respond to" logic for `Lotus::Presenter` (`respond_to?` and `respond_to_missing?`)
+- [Luca Guidi] Official support for Ruby 2.2
 
 ### Changed
 - [Alfonso Uceda Pompa] Raise an exception when a layout doesn't have an associated template
