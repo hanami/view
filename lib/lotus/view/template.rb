@@ -7,6 +7,7 @@ module Lotus
     # @since 0.1.0
     class Template
       def initialize(template)
+        require "tilt/#{extension_of(template)}" rescue nil
         @_template = Tilt.new(template)
       end
 
@@ -37,6 +38,11 @@ module Lotus
       # @see Lotus::View::Scope
       def render(scope, &blk)
         @_template.render(scope, {}, &blk)
+      end
+
+      private
+      def extension_of(template_file)
+        File.extname(File.basename(template_file))[1..-1].to_sym
       end
     end
   end
