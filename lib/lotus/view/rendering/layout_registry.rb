@@ -21,7 +21,7 @@ module Lotus
       # @since 0.1.0
       #
       # @see Lotus::Layout::ClassMethods#registry
-      class LayoutRegistry < ::Hash
+      class LayoutRegistry
         # Initialize the registry
         #
         # @param view [Class] the view
@@ -29,8 +29,7 @@ module Lotus
         # @api private
         # @since 0.1.0
         def initialize(view)
-          super()
-
+          @registry = {}
           @view = view
           prepare!
         end
@@ -50,15 +49,15 @@ module Lotus
         # @api private
         # @since 0.1.0
         def resolve(context)
-          fetch(format(context)) { NullTemplate.new }
+          @registry.fetch(format(context)) { NullTemplate.new }
         end
 
         protected
         def prepare!
           templates.each do |template|
-            merge! template.format => template
+            @registry.merge! template.format => template
           end
-          self.any? or raise MissingTemplateLayoutError.new(@view)
+          @registry.any? or raise MissingTemplateLayoutError.new(@view)
         end
 
         def templates
