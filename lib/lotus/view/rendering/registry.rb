@@ -89,7 +89,7 @@ module Lotus
         #
         # @see Lotus::View::Rendering#render
         def resolve(context)
-          view, template = fetch(format(context)) { self[DEFAULT_FORMAT] }
+          view, template = @registry.fetch(format(context)) { @registry[DEFAULT_FORMAT] }
           view.new(template, context)
         end
 
@@ -101,13 +101,13 @@ module Lotus
 
         def prepare_views!
           views.each do |view|
-            merge! view.format || DEFAULT_FORMAT => [ view, template_for(view) ]
+            @registry.merge! view.format || DEFAULT_FORMAT => [ view, template_for(view) ]
           end
         end
 
         def prepare_templates!
           templates.each do |template|
-            merge! template.format => [ view_for(template), template ]
+            @registry.merge! template.format => [ view_for(template), template ]
           end
         end
 
