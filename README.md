@@ -367,6 +367,10 @@ For instance, if [ERubis](http://www.kuwata-lab.com/erubis/) is loaded, it will 
     <td>scss</td>
   </tr>
   <tr>
+    <td>Slim</td>
+    <td>slim</td>
+  </tr>
+  <tr>
     <td>String</td>
     <td>str</td>
   </tr>
