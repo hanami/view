@@ -1,0 +1,15 @@
+<!doctype HTML>
+<html>
+  <head>
+    <title><%= page_title username %></title>
+  </head>
+  <body>
+    <div id="content">
+      <%= yield %>
+    </div>
+
+    <aside id="sidebar">
+      <span class="username"><%= username %></span>
+    </aside>
+  </body>
+</html>

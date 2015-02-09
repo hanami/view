@@ -1,3 +1,4 @@
+require 'lotus/utils/escape'
 require 'lotus/view/rendering/layout_scope'
 require 'lotus/view/rendering/template'
 require 'lotus/view/rendering/partial'
@@ -59,13 +60,15 @@ module Lotus
 
         protected
         def method_missing(m, *args, &block)
-          if @view.respond_to?(m)
-            @view.__send__ m, *args, &block
-          elsif @locals.key?(m)
-            @locals[m]
-          else
-            super
-          end
+          ::Lotus::View::Escape.html(
+            if @view.respond_to?(m)
+              @view.__send__ m, *args, &block
+            elsif @locals.key?(m)
+              @locals[m]
+            else
+              super
+            end
+          )
         end
       end
     end

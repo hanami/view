@@ -196,7 +196,7 @@ module Songs
     format :html
 
     def render
-      SongWidget.new(song).render
+      raw SongWidget.new(song).render
     end
   end
 end
@@ -311,3 +311,40 @@ module Store
 end
 
 Store::View.load!
+
+User = Struct.new(:username)
+
+class UserLayout
+  include Lotus::Layout
+
+  def page_title(username)
+    "User: #{ username }"
+  end
+end
+
+module Users
+  class Show
+    include Lotus::View
+    layout :user
+
+    def custom
+      %(<script>alert('custom')</script>)
+    end
+
+    def username
+      user.username
+    end
+
+    def raw_username
+      raw user.username
+    end
+  end
+
+  class Extra
+    include Lotus::View
+
+    def username
+      user.username
+    end
+  end
+end
