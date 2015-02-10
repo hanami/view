@@ -1,3 +1,5 @@
+require 'lotus/view/escape'
+
 module Lotus
   # Presenter pattern implementation
   #
@@ -49,6 +51,10 @@ module Lotus
   #   # it has private access to the original object
   #   puts presenter.inspect_object # => #<Map:0x007fdeada0b2f0 @locations=["Rome", "Boston"]>
   module Presenter
+    def self.included(base)
+      base.extend ::Lotus::View::Escape
+    end
+
     # Initialize the presenter
     #
     # @param object [Object] the object to present
@@ -65,7 +71,7 @@ module Lotus
     # @since 0.1.0
     def method_missing(m, *args, &blk)
       if @object.respond_to?(m)
-        @object.__send__ m, *args, &blk
+        ::Lotus::View::Escape.html(@object.__send__(m, *args, &blk))
       else
         super
       end

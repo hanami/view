@@ -1,8 +1,23 @@
 require 'lotus/utils/escape'
+require 'lotus/presenter'
 
 module Lotus
   module View
     module Escape
+      module InstanceMethods
+        def _raw(input)
+          ::Lotus::Utils::Escape::SafeString.new(input)
+        end
+
+        def _escape(object)
+          ::Lotus::View::Escape::Presenter.new(object)
+        end
+      end
+
+      class Presenter
+        include ::Lotus::Presenter
+      end
+
       def self.html(input)
         case input
         when String
@@ -14,8 +29,8 @@ module Lotus
 
       def self.extended(base)
         base.class_eval do
-          include Lotus::Utils::ClassAttribute
-          include InstanceMethods
+          include ::Lotus::Utils::ClassAttribute
+          include ::Lotus::View::Escape::InstanceMethods
 
           class_attribute :autoescape_methods
           self.autoescape_methods = {}
@@ -31,12 +46,6 @@ module Lotus
           }
 
           autoescape_methods[method_name] = true
-        end
-      end
-
-      module InstanceMethods
-        def raw(input)
-          Lotus::Utils::Escape::SafeString.new(input)
         end
       end
     end

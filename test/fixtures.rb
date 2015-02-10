@@ -145,6 +145,10 @@ class Map
   def location_names
     @locations.join(', ')
   end
+
+  def names
+    location_names
+  end
 end
 
 class MapPresenter
@@ -158,8 +162,16 @@ class MapPresenter
     super.upcase
   end
 
+  def escaped_location_names
+    @object.location_names
+  end
+
+  def raw_location_names
+    _raw @object.location_names
+  end
+
   def inspect_object
-    @object.inspect
+    _raw @object.inspect
   end
 end
 
@@ -196,7 +208,7 @@ module Songs
     format :html
 
     def render
-      raw SongWidget.new(song).render
+      _raw SongWidget.new(song).render
     end
   end
 end
@@ -313,6 +325,7 @@ end
 Store::View.load!
 
 User = Struct.new(:username)
+Book = Struct.new(:title)
 
 class UserLayout
   include Lotus::Layout
@@ -336,7 +349,11 @@ module Users
     end
 
     def raw_username
-      raw user.username
+      _raw user.username
+    end
+
+    def book
+      _escape(locals[:book])
     end
   end
 

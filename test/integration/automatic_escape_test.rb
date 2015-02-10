@@ -3,7 +3,8 @@ require 'test_helper'
 describe 'Automatic escape' do
   before do
     @user     = User.new(%(<script>alert('username')</script>))
-    @rendered = Users::Show.render(format: :html, user: @user, code: %(<script>alert('code')</script>))
+    @book     = Book.new(%(<script>alert('title')</script>))
+    @rendered = Users::Show.render(format: :html, user: @user, book: @book, code: %(<script>alert('code')</script>))
   end
 
   it 'escapes concrete methods' do
@@ -19,7 +20,7 @@ describe 'Automatic escape' do
   end
 
   it "doesn't escape concrete raw methods" do
-    @rendered.must_match %(<script>alert('username')</script>)
+    @rendered.must_match %(<div id="raw_username"><script>alert('username')</script></div>)
   end
 
   it 'escapes concrete methods in layout' do
@@ -28,5 +29,9 @@ describe 'Automatic escape' do
 
   it 'escapes concrete helpers in layout' do
     @rendered.must_match %(<title>User: &lt;script&gt;alert(&apos;username&apos;)&lt;&#x2F;script&gt;</title>)
+  end
+
+  it 'escapes objects' do
+    @rendered.must_match %(<div id="book">&lt;script&gt;alert(&apos;title&apos;)&lt;&#x2F;script&gt;</div>)
   end
 end

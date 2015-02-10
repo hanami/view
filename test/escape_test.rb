@@ -6,7 +6,8 @@ describe 'Escape' do
     template = Lotus::View::Template.new(path)
 
     @user = User.new(%(<script>alert('username')</script>))
-    @view = Users::Show.new(template, user: @user, code: %(<script>alert('code')</script>))
+    @book = Book.new(%(<script>alert('title')</script>))
+    @view = Users::Show.new(template, user: @user, book: @book, code: %(<script>alert('code')</script>))
   end
 
   it 'escapes concrete method' do
@@ -25,8 +26,12 @@ describe 'Escape' do
     @view.raw_username.must_equal %(<script>alert('username')</script>)
   end
 
+  it 'escapes objects' do
+    @view.book.title.must_equal %(&lt;script&gt;alert(&apos;title&apos;)&lt;&#x2F;script&gt;)
+  end
+
   it "doesn't interfer with other views" do
-    Users::Show.autoescape_methods.must_equal({custom: true, username: true, raw_username: true})
+    Users::Show.autoescape_methods.must_equal({custom: true, username: true, raw_username: true, book: true})
     Users::Extra.autoescape_methods.must_equal({username: true})
   end
 end
