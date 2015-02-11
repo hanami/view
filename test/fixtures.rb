@@ -1,3 +1,5 @@
+require 'json'
+
 class HelloWorldView
   include Lotus::View
 end
@@ -327,6 +329,18 @@ Store::View.load!
 User = Struct.new(:username)
 Book = Struct.new(:title)
 
+class UserXmlSerializer
+  def initialize(user)
+    @user = user
+  end
+
+  def serialize
+    @user.to_h.map do |attr, value|
+      %(<#{ attr }>#{ value }</#{ attr }>)
+    end.join("\n")
+  end
+end
+
 class UserLayout
   include Lotus::Layout
 
@@ -354,6 +368,22 @@ module Users
 
     def book
       _escape(locals[:book])
+    end
+  end
+
+  class XmlShow < Show
+    format :xml
+
+    def render
+      UserXmlSerializer.new(user).serialize
+    end
+  end
+
+  class JsonShow < Show
+    format :json
+
+    def render
+      _raw JSON.generate(user.to_h)
     end
   end
 

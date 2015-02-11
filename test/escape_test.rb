@@ -34,4 +34,18 @@ describe 'Escape' do
     Users::Show.autoescape_methods.must_equal({custom: true, username: true, raw_username: true, book: true})
     Users::Extra.autoescape_methods.must_equal({username: true})
   end
+
+  it "escapes custom rendering" do
+    user = User.new('L')
+    xml  = Users::Show.render(format: :xml, user: user)
+
+    xml.must_match %(&lt;username&gt;L&lt;&#x2F;username&gt;)
+  end
+
+  it "works with raw contents in custom rendering" do
+    user = User.new('L')
+    json = Users::Show.render(format: :json, user: user)
+
+    json.must_match %({"username":"L"})
+  end
 end
