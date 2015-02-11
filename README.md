@@ -659,11 +659,28 @@ user = User.new("<script>alert('xss')</script>")
 # THIS IS USEFUL FOR UNIT TESTING:
 template = Lotus::View::Template.new('users/show.html.erb')
 view     = Users::Show.new(template, user: user)
-view.user_name # => &lt;script&gt;alert(&apos;xss&apos;)&lt;&#x2F;script&gt;
+view.user_name # => "&lt;script&gt;alert(&apos;xss&apos;)&lt;&#x2F;script&gt;"
 
-# THIS IS RENDERING OUTPUT:
+# THIS IS THE RENDERING OUTPUT:
 Users::Show.render(format: :html, user: user)
 # => <div id="user_name">&lt;script&gt;alert(&apos;xss&apos;)&lt;&#x2F;script&gt;</div>
+```
+
+#### Presenter autoescape
+
+```ruby
+require 'lotus/view'
+
+User = Struct.new(:name)
+
+class UserPresenter
+  include Lotus::Presenter
+end
+
+user      = User.new("<script>alert('xss')</script>")
+presenter = UserPresenter.new(user)
+
+presenter.name # => "&lt;script&gt;alert(&apos;xss&apos;)&lt;&#x2F;script&gt;"
 ```
 
 #### Escape entire objects
