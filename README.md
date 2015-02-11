@@ -632,7 +632,7 @@ The output of views and presenters is always **autoescaped**.
 
 **ATTENTION:** In order to prevent XSS attacks, please read the instructions below.
 Because Lotus::View supports a lot of template engines, the escape happens at the level of the view.
-Most of the times everything happens automatically, but there are still some corner cases that need your manual intervention.
+Most of the time everything happens automatically, but there are still some corner cases that need your manual intervention.
 
 #### View autoescape
 
@@ -685,10 +685,10 @@ presenter.name # => "&lt;script&gt;alert(&apos;xss&apos;)&lt;&#x2F;script&gt;"
 
 #### Escape entire objects
 
-We have seen that concrete methods are in views are automatically escaped.
-This is great, but tedious if you need to print a lot of informations from a given object.
+We have seen that concrete methods in views are automatically escaped.
+This is great, but tedious if you need to print a lot of information from a given object.
 
-Imagine to have `user` as part of the view locals.
+Imagine you have `user` as part of the view locals.
 If you want to use `<%= user.name %>` directly, **you're still vulnerable to XSS attacks**.
 
 You have two alternatives:
