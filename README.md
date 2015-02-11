@@ -626,6 +626,154 @@ After this operation, all the class variables are frozen, in order to prevent ac
 
 **This is not necessary, when Lotus::View is used within a Lotus application.**
 
+### Security
+
+The output of views and presenters is always **autoescaped**.
+
+**ATTENTION:** In order to prevent XSS attacks, please read the instructions below.
+Because Lotus::View supports a lot of template engines, the escape happens at the level of the view.
+Most of the times everything happens automatically, but there are still some corner cases that need your manual intervention.
+
+#### View autoescape
+
+```ruby
+require 'lotus/view'
+
+User = Struct.new(:name)
+
+module Users
+  class Show
+    include Lotus::View
+
+    def user_name
+      user.name
+    end
+  end
+end
+
+# ERB template
+# <div id="user_name"><%= user_name %></div>
+
+user = User.new("<script>alert('xss')</script>")
+
+# THIS IS USEFUL FOR UNIT TESTING:
+template = Lotus::View::Template.new('users/show.html.erb')
+view     = Users::Show.new(template, user: user)
+view.user_name # => &lt;script&gt;alert(&apos;xss&apos;)&lt;&#x2F;script&gt;
+
+# THIS IS RENDERING OUTPUT:
+Users::Show.render(format: :html, user: user)
+# => <div id="user_name">&lt;script&gt;alert(&apos;xss&apos;)&lt;&#x2F;script&gt;</div>
+```
+
+#### Escape entire objects
+
+We have seen that concrete methods are in views are automatically escaped.
+This is great, but tedious if you need to print a lot of informations from a given object.
+
+Imagine to have `user` as part of the view locals.
+If you want to use `<%= user.name %>` directly, **you're still vulnerable to XSS attacks**.
+
+You have two alternatives:
+
+  * To use a concrete presenter (eg. `UserPresenter`)
+  * Escape the entire object (see the example below)
+
+Both those solutions allow you to keep the template syntax unchanged, but to have a safer output.
+
+```ruby
+require 'lotus/view'
+
+User = Struct.new(:first_name, :last_name)
+
+module Users
+  class Show
+    include Lotus::View
+
+    def user
+      _escape locals[:user]
+    end
+  end
+end
+
+# ERB template:
+#
+# <div id="first_name">
+#   <%= user.first_name %>
+# </div>
+# <div id="last_name">
+#   <%= user.last_name %>
+# </div>
+
+first_name = "<script>alert('first_name')</script>"
+last_name  = "<script>alert('last_name')</script>"
+
+user = User.new(first_name, last_name)
+html = Users::Show.render(format: :html, user: user)
+
+html
+  # =>
+  # <div id="first_name">
+  #   &lt;script&gt;alert(&apos;first_name&apos;)&lt;&#x2F;script&gt;
+  # </div>
+  # <div id="last_name">
+  #   &lt;script&gt;alert(&apos;last_name&apos;)&lt;&#x2F;script&gt;
+  # </div>
+```
+
+#### Raw contents
+
+You can use `_raw` to mark an output as safe.
+Please note that **this may open your application to XSS attacks.**
+
+#### Raw contents in views
+
+```ruby
+require 'lotus/view'
+
+User = Struct.new(:name)
+
+module Users
+  class Show
+    include Lotus::View
+
+    def user_name
+      _raw user.name
+    end
+  end
+end
+
+# ERB template
+# <div id="user_name"><%= user_name %></div>
+
+user = User.new("<script>alert('xss')</script>")
+html = Users::Show.render(format: :html, user: user)
+
+html
+# => <div id="user_name"><script>alert('xss')</script></div>
+```
+
+#### Raw contents in presenters
+
+```ruby
+require 'lotus/view'
+
+User = Struct.new(:name)
+
+class UserPresenter
+  include Lotus::Presenter
+
+  def first_name
+    _raw @object.first_name
+  end
+end
+
+user      = User.new("<script>alert('xss')</script>")
+presenter = UserPresenter.new(user)
+
+presenter.name # => "<script>alert('xss')</script>"
+```
+
 ## Versioning
 
 __Lotus::View__ uses [Semantic Versioning 2.0.0](http://semver.org)
@@ -640,4 +788,4 @@ __Lotus::View__ uses [Semantic Versioning 2.0.0](http://semver.org)
 
 ## Copyright
 
-Copyright 2014 Luca Guidi – Released under MIT License
+Copyright 2014-2015 Luca Guidi – Released under MIT License
