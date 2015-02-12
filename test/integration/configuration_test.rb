@@ -23,8 +23,14 @@ describe 'Framework configuration' do
     view_configuration.layout.must_equal(CardDeck::ApplicationLayout)
   end
 
-  it 'includes modules from configuration' do
+  it 'includes modules from configuration in views' do
     modules = CardDeck::Views::Home::Index.included_modules
+    modules.must_include(::MyCustomModule)
+    modules.must_include(::MyOtherCustomModule)
+  end
+
+  it 'includes modules from configuration in layouts' do
+    modules = CardDeck::ApplicationLayout.included_modules
     modules.must_include(::MyCustomModule)
     modules.must_include(::MyOtherCustomModule)
   end

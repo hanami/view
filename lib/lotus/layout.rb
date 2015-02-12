@@ -34,6 +34,8 @@ module Lotus
 
         self.configuration = conf.duplicate
       end
+
+      conf.copy!(base)
     end
 
     # Class level API
