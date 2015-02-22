@@ -5,6 +5,7 @@ require 'lotus/view/version'
 require 'lotus/view/configuration'
 require 'lotus/view/inheritable'
 require 'lotus/view/rendering'
+require 'lotus/view/escape'
 require 'lotus/view/dsl'
 require 'lotus/layout'
 require 'lotus/presenter'
@@ -270,6 +271,7 @@ module Lotus
         extend Inheritable.dup
         extend Dsl.dup
         extend Rendering.dup
+        extend Escape.dup
 
         include Utils::ClassAttribute
         class_attribute :configuration

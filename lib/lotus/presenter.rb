@@ -1,9 +1,15 @@
+require 'lotus/view/escape'
+
 module Lotus
   # Presenter pattern implementation
   #
+  # It delegates to the wrapped object the missing method invocations.
+  #
+  # The output of concrete and delegated methods is escaped as XSS prevention.
+  #
   # @since 0.1.0
   #
-  # @example
+  # @example Basic usage
   #   require 'lotus/view'
   #
   #   class Map
@@ -48,7 +54,45 @@ module Lotus
   #
   #   # it has private access to the original object
   #   puts presenter.inspect_object # => #<Map:0x007fdeada0b2f0 @locations=["Rome", "Boston"]>
+  #
+  # @example Escape
+  #   require 'lotus/view'
+  #
+  #   User = Struct.new(:first_name, :last_name)
+  #
+  #   class UserPresenter
+  #     include Lotus::Presenter
+  #
+  #     def full_name
+  #       [first_name, last_name].join(' ')
+  #     end
+  #
+  #     def raw_first_name
+  #       _raw first_name
+  #     end
+  #   end
+  #
+  #   first_name = '<script>alert('xss')</script>'
+  #
+  #   user = User.new(first_name, nil)
+  #   presenter = UserPresenter.new(user)
+  #
+  #   presenter.full_name
+  #     # => "&lt;script&gt;alert(&apos;xss&apos;)&lt;&#x2F;script&gt;"
+  #
+  #   presenter.raw_full_name
+  #      # => "<script>alert('xss')</script>"
   module Presenter
+    # Inject escape logic into the given class.
+    #
+    # @since x.x.x
+    # @api private
+    #
+    # @see Lotus::View::Escape
+    def self.included(base)
+      base.extend ::Lotus::View::Escape
+    end
+
     # Initialize the presenter
     #
     # @param object [Object] the object to present
@@ -65,7 +109,7 @@ module Lotus
     # @since 0.1.0
     def method_missing(m, *args, &blk)
       if @object.respond_to?(m)
-        @object.__send__ m, *args, &blk
+        ::Lotus::View::Escape.html(@object.__send__(m, *args, &blk))
       else
         super
       end

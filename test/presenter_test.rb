@@ -28,6 +28,26 @@ describe Lotus::Presenter do
     subject.wont_respond_to :unknown_method
   end
 
+  describe 'escape' do
+    let(:map) { Map.new(["<script>alert('rome')</script>"]) }
+
+    it 'auto escapes contents' do
+      subject.location_names.must_equal %(&LT;SCRIPT&GT;ALERT(&APOS;ROME&APOS;)&LT;&#X2F;SCRIPT&GT;)
+    end
+
+    it 'auto escapes inherited methods' do
+      subject.names.must_equal %(&lt;script&gt;alert(&apos;rome&apos;)&lt;&#x2F;script&gt;)
+    end
+
+    it 'auto escapes concrete methods' do
+      subject.escaped_location_names.must_equal %(&lt;script&gt;alert(&apos;rome&apos;)&lt;&#x2F;script&gt;)
+    end
+
+    it 'allows raw contents' do
+      subject.raw_location_names.must_equal map.location_names
+    end
+  end
+
   it "raises error when the requested method can't be satisfied" do
     -> {
       subject.unknown_method

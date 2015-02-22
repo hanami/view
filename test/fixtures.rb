@@ -1,3 +1,5 @@
+require 'json'
+
 class HelloWorldView
   include Lotus::View
 end
@@ -145,6 +147,10 @@ class Map
   def location_names
     @locations.join(', ')
   end
+
+  def names
+    location_names
+  end
 end
 
 class MapPresenter
@@ -158,8 +164,16 @@ class MapPresenter
     super.upcase
   end
 
+  def escaped_location_names
+    @object.location_names
+  end
+
+  def raw_location_names
+    _raw @object.location_names
+  end
+
   def inspect_object
-    @object.inspect
+    _raw @object.inspect
   end
 end
 
@@ -196,7 +210,7 @@ module Songs
     format :html
 
     def render
-      SongWidget.new(song).render
+      _raw SongWidget.new(song).render
     end
   end
 end
@@ -311,3 +325,73 @@ module Store
 end
 
 Store::View.load!
+
+User = Struct.new(:username)
+Book = Struct.new(:title)
+
+class UserXmlSerializer
+  def initialize(user)
+    @user = user
+  end
+
+  def serialize
+    @user.to_h.map do |attr, value|
+      %(<#{ attr }>#{ value }</#{ attr }>)
+    end.join("\n")
+  end
+end
+
+class UserLayout
+  include Lotus::Layout
+
+  def page_title(username)
+    "User: #{ username }"
+  end
+end
+
+module Users
+  class Show
+    include Lotus::View
+    layout :user
+
+    def custom
+      %(<script>alert('custom')</script>)
+    end
+
+    def username
+      user.username
+    end
+
+    def raw_username
+      _raw user.username
+    end
+
+    def book
+      _escape(locals[:book])
+    end
+  end
+
+  class XmlShow < Show
+    format :xml
+
+    def render
+      UserXmlSerializer.new(user).serialize
+    end
+  end
+
+  class JsonShow < Show
+    format :json
+
+    def render
+      _raw JSON.generate(user.to_h)
+    end
+  end
+
+  class Extra
+    include Lotus::View
+
+    def username
+      user.username
+    end
+  end
+end
