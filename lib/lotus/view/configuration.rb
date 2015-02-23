@@ -83,7 +83,7 @@ module Lotus
       def self.for(base)
         # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
         namespace = Utils::String.new(base).namespace
-        framework = Utils::Class.load!("(#{namespace}|Lotus)::View")
+        framework = Utils::Class.load_from_pattern!("(#{namespace}|Lotus)::View")
         framework.configuration
       end
 
