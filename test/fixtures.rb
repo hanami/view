@@ -290,6 +290,10 @@ class ViewForScopeTest
   def bar
     'y'
   end
+
+  def error_inside
+    unknown_method
+  end
 end
 
 module Store
