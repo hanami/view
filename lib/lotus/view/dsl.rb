@@ -212,12 +212,13 @@ module Lotus
       end
 
       # When a value is given, it specifies the layout.
+      # When false is given, Lotus::View::Rendering::NullLayout is returned.
       # Otherwise, it returns the previously specified layout.
       #
       # When the global configuration is set (`Lotus::View.layout=`), after the
       # loading process, it will return that layout if not otherwise specified.
       #
-      # @param value [Symbol,nil] the layout name
+      # @param value [Symbol, FalseClass, nil] the layout name
       #
       # @return [Symbol, nil] the specified layout for this view, if set
       #
@@ -294,9 +295,28 @@ module Lotus
       #
       #   Lotus::View.load!
       #   Articles::Show.layout # => :articles
+      #
+      # @example Disable layout for the view
+      #   require 'lotus/view'
+      #
+      #   class ApplicationLayout
+      #     include Lotus::Layout
+      #   end
+      #
+      #   module Articles
+      #     class Show
+      #       include Lotus::View
+      #       layout false
+      #     end
+      #   end
+      #
+      #   Lotus::View.load!
+      #   Articles::Show.layout # => Lotus::View::Rendering::NullLayout
       def layout(value = nil)
         if value.nil?
           @_layout ||= Rendering::LayoutFinder.find(@layout || configuration.layout, configuration.namespace)
+        elsif !value
+          @layout = Lotus::View::Rendering::NullLayout
         else
           @layout = value
         end

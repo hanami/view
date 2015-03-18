@@ -35,6 +35,10 @@ describe 'Framework configuration' do
     modules.must_include(::MyOtherCustomModule)
   end
 
+  it 'in a view disable a layout' do
+    CardDeck::Views::Home::RssIndex.layout.must_equal Lotus::View::Rendering::NullLayout
+  end
+
   it 'allow views to specify a layout'
   # TODO move all the values into the configuration:
   #
