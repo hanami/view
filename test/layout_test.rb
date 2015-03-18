@@ -26,4 +26,10 @@ describe Lotus::Layout do
     rendered.must_match %(script)
     rendered.must_match %(yeah)
   end
+
+  describe 'disable layout in view' do
+    it 'return NullLayout' do
+      DisabledLayoutView.layout.must_equal Lotus::View::Rendering::NullLayout
+    end
+  end
 end

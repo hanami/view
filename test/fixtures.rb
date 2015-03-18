@@ -4,6 +4,11 @@ class HelloWorldView
   include Lotus::View
 end
 
+class DisabledLayoutView
+  include Lotus::View
+  layout false
+end
+
 class RenderView
   include Lotus::View
 end
@@ -275,6 +280,11 @@ module CardDeck
       class JsonIndex < Index
         format :json
         layout nil
+      end
+
+      class RssIndex < Index
+        format :rss
+        layout false
       end
     end
   end
