@@ -33,8 +33,8 @@ module Lotus
         # @since 0.3.0
         def inspect
           base = "#<#{ self.class }:#{'%x' % (self.object_id << 1)}"
-          base << " @layout=\"#{@layout}\"" if @layout
-          base << " @scope=\"#{@scope}\"" if @scope
+          base << " @layout=\"#{@layout.inspect}\"" if @layout
+          base << " @scope=\"#{@scope.inspect}\"" if @scope
           base << ">"
         end
 
@@ -161,6 +161,8 @@ module Lotus
           else
             super
           end
+        rescue ::NameError
+          ::Kernel.raise ::NoMethodError.new("undefined method `#{ m }' for #{ self.inspect }", m)
         end
 
         def renderer(options)
