@@ -85,7 +85,7 @@ module Lotus
   module Presenter
     # Inject escape logic into the given class.
     #
-    # @since x.x.x
+    # @since 0.4.0
     # @api private
     #
     # @see Lotus::View::Escape

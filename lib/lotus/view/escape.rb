@@ -5,7 +5,7 @@ module Lotus
   module View
     # Auto escape logic for views and presenters.
     #
-    # @since x.x.x
+    # @since 0.4.0
     module Escape
       module InstanceMethods
         private
@@ -17,7 +17,7 @@ module Lotus
         #
         # @return [Lotus::Utils::Escape::SafeString] the string marked as safe
         #
-        # @since x.x.x
+        # @since 0.4.0
         # @api public
         #
         # @example View usage
@@ -71,7 +71,7 @@ module Lotus
         # @return [Lotus::View::Escape::Presenter] a presenter with output
         #   autoescape
         #
-        # @since x.x.x
+        # @since 0.4.0
         # @api public
         #
         # @see Lotus::View::Escape::Presenter
@@ -121,7 +121,7 @@ module Lotus
 
       # Auto escape presenter
       #
-      # @since x.x.x
+      # @since 0.4.0
       # @api private
       #
       # @see Lotus::View::Escape::InstanceMethods#_escape
@@ -135,7 +135,7 @@ module Lotus
       #
       # @return [Object,String] the escaped string or the given object
       #
-      # @since x.x.x
+      # @since 0.4.0
       # @api private
       def self.html(input)
         case input
@@ -148,7 +148,7 @@ module Lotus
 
       # Module extended override
       #
-      # @since x.x.x
+      # @since 0.4.0
       # @api private
       def self.extended(base)
         base.class_eval do
@@ -162,7 +162,7 @@ module Lotus
 
       # Wraps concrete view methods with escape logic.
       #
-      # @since x.x.x
+      # @since 0.4.0
       # @api private
       def method_added(method_name)
         unless autoescape_methods[method_name]

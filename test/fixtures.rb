@@ -4,6 +4,11 @@ class HelloWorldView
   include Lotus::View
 end
 
+class DisabledLayoutView
+  include Lotus::View
+  layout false
+end
+
 class RenderView
   include Lotus::View
 end
@@ -276,6 +281,11 @@ module CardDeck
         format :json
         layout nil
       end
+
+      class RssIndex < Index
+        format :rss
+        layout false
+      end
     end
   end
 end
@@ -289,6 +299,10 @@ end
 class ViewForScopeTest
   def bar
     'y'
+  end
+
+  def error_inside
+    unknown_method
   end
 end
 

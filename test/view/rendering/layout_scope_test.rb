@@ -40,4 +40,26 @@ describe Lotus::View::Rendering::LayoutScope do
       @scope.inspect.must_include '%x' % (@scope.object_id << 1)
     end
   end
+
+  describe '#method_missing' do
+    describe 'method is defined on scope' do
+      it 'returns result of foo method' do
+        @scope.foo.must_equal 'x'
+      end
+    end
+
+    describe 'undefined method on scope' do
+      it 'raises NoMethodError for unknown' do
+        exception = -> { @scope.unknown }.must_raise NoMethodError
+        exception.message.must_include 'undefined method `unknown'
+      end
+    end
+
+    describe 'undefined method inside method on scope' do
+      it 'raises NoMethodError for unknown' do
+        exception = -> { @scope.error_inside }.must_raise NoMethodError
+        exception.message.must_include 'undefined method `error_inside'
+      end
+    end
+  end
 end

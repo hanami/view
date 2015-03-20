@@ -33,8 +33,8 @@ module Lotus
         # @since 0.3.0
         def inspect
           base = "#<#{ self.class }:#{'%x' % (self.object_id << 1)}"
-          base << " @layout=\"#{@layout}\"" if @layout
-          base << " @scope=\"#{@scope}\"" if @scope
+          base << " @layout=\"#{@layout.inspect}\"" if @layout
+          base << " @scope=\"#{@scope.inspect}\"" if @scope
           base << ">"
         end
 
@@ -154,11 +154,15 @@ module Lotus
         #   # `article` will be looked up in the view scope first.
         #   # If not found, it will be searched within the layout.
         def method_missing(m, *args, &blk)
-          begin
+          if @scope.respond_to?(m)
             @scope.__send__(m, *args, &blk)
-          rescue
+          elsif @layout.respond_to?(m)
             @layout.__send__(m, *args, &blk)
+          else
+            super
           end
+        rescue ::NameError
+          ::Kernel.raise ::NoMethodError.new("undefined method `#{ m }' for #{ self.inspect }", m)
         end
 
         def renderer(options)
