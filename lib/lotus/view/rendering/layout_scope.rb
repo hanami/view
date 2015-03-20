@@ -154,10 +154,12 @@ module Lotus
         #   # `article` will be looked up in the view scope first.
         #   # If not found, it will be searched within the layout.
         def method_missing(m, *args, &blk)
-          begin
+          if @scope.respond_to?(m)
             @scope.__send__(m, *args, &blk)
-          rescue
+          elsif @layout.respond_to?(m)
             @layout.__send__(m, *args, &blk)
+          else
+            super
           end
         end
 
