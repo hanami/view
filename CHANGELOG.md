@@ -1,6 +1,15 @@
 # Lotus::View
 View layer for Lotus
 
+## v0.4.0 - 2015-03-23
+### Changed
+- [Luca Guidi] Autoescape concrete and virtual methods from presenters
+- [Luca Guidi] Autoescape concrete and virtual methods from views
+
+### Fixed
+- [Tom Kadwill] Improve error message for undefined method in view
+- [Luca Guidi] Ensure that layouts will include modules from `Configuration#prepare`
+
 ## v0.3.0 - 2014-12-23
 ### Added
 - [Trung Lê] When duplicate the framework, also duplicate `Presenter`
