@@ -1,6 +1,10 @@
 # Lotus::View
 View layer for Lotus
 
+## v0.4.1 - 2015-05-22
+### Added
+- [Luca Guidi] Introduced `#content` to render optional contents in a different context (eg. a view sets a page specific javascript in the application template footer).
+
 ## v0.4.0 - 2015-03-23
 ### Changed
 - [Luca Guidi] Autoescape concrete and virtual methods from presenters
