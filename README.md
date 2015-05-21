@@ -470,6 +470,46 @@ Articles::Index.render(format: :rss)  # => Will use nothing
 
 As per convention, layout templates are located under `Lotus::View.root` or `ApplicationLayout.root` and use the underscored name (eg. `ApplicationLayout => application.html.erb`).
 
+### Content For
+
+If we want to render optional contents such as sidebar links or page specific javascripts, we can use `content_for`
+It accepts a key that represents a method that should be available within the rendering context.
+That context is made of the locals, and the methods that view and layout respond to.
+If the context can't dispatch that method, it returns `nil`.
+
+Given the following layout template.
+
+```erb
+<!doctype HTML>
+<html>
+  <!-- ... -->
+  <body>
+    <!-- ... -->
+    <%= content_for :footer %>
+  </body>
+</html>
+```
+
+We have two views, one responds to `#footer` (`Products::Show`) and the other doesn't (`Products::Index`).
+When the first is rendered, `content_for` gives back the returning value of `#footer`.
+In the other case, `content_for` returns `nil`.
+
+```ruby
+module Products
+  class Index
+    include Lotus::View
+  end
+
+  class Show
+    include Lotus::View
+
+    def footer
+      "contents for footer"
+    end
+  end
+end
+```
+
 ### Presenters
 
 The goal of a presenter is to wrap and reuse presentational logic for an object.

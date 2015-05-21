@@ -322,6 +322,10 @@ module Store
     class StoreLayout
       include Store::Layout
       include Store::Helpers::AssetTagHelpers
+
+      def head
+        %(<meta name="lotusrb-version" content="0.3.1">)
+      end
     end
 
     module Home
@@ -333,6 +337,17 @@ module Store
 
       class JsonIndex < Index
         format :json
+      end
+    end
+
+    module Products
+      class Show
+        include Store::View
+        layout :store
+
+        def footer
+          _raw %(<script src="/javascripts/product-tracking.js"></script>)
+        end
       end
     end
   end
