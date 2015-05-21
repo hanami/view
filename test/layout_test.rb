@@ -27,6 +27,18 @@ describe Lotus::Layout do
     rendered.must_match %(yeah)
   end
 
+  it 'renders content_for to return value from view' do
+    rendered = Store::Views::Products::Show.render(format: :html)
+    rendered.must_match %(Product)
+    rendered.must_match %(<script src="/javascripts/product-tracking.js"></script>)
+  end
+
+  it 'renders content_for to return value from layout' do
+    rendered = Store::Views::Products::Show.render(format: :html)
+    rendered.must_match %(Product)
+    rendered.must_match %(<meta name="lotusrb-version" content="0.3.1">)
+  end
+
   describe 'disable layout in view' do
     it 'return NullLayout' do
       DisabledLayoutView.layout.must_equal Lotus::View::Rendering::NullLayout

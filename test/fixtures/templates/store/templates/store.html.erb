@@ -3,9 +3,11 @@
   <head>
     <title>Store</title>
     <%= javascript_tag 'application' %>
+    <%= content_for :head %>
   </head>
 
   <body>
     <%= yield %>
+    <%= content_for :footer %>
   </body>
 </html>
