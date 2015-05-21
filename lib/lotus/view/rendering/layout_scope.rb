@@ -111,6 +111,53 @@ module Lotus
           @locals || @scope.locals
         end
 
+        # Returns a content for the given key, by trying to invoke on the current
+        # scope, a method with the same name.
+        #
+        # The scope is made of locals and concrete methods from view and layout.
+        #
+        # @param key [Symbol] a method to invoke within current scope
+        # @return [String,NilClass] returning content if scope respond to the
+        #   requested method
+        #
+        # @since x.x.x
+        #
+        # @example
+        #   # Given the following layout template
+        #
+        #   <!doctype HTML>
+        #   <html>
+        #     <!-- ... -->
+        #     <body>
+        #       <!-- ... -->
+        #       <%= content :footer %>
+        #     </body>
+        #   </html>
+        #
+        #   # Case 1:
+        #   #   Products::Index doesn't respond to #footer, content will return nil
+        #   #
+        #   # Case 2:
+        #   #   Products::Show responds to #footer, content will send back
+        #   #     #footer returning value
+        #
+        #   module Products
+        #     class Index
+        #       include Lotus::View
+        #     end
+        #
+        #     class Show
+        #       include Lotus::View
+        #
+        #       def footer
+        #         "contents for footer"
+        #       end
+        #     end
+        #   end
+        def content(key)
+          __send__(key) if respond_to?(key)
+        end
+
         # Implements "respond to" logic
         #
         # @return [TrueClass,FalseClass]
