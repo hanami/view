@@ -120,7 +120,7 @@ module Lotus
         # @return [String,NilClass] returning content if scope respond to the
         #   requested method
         #
-        # @since x.x.x
+        # @since 0.4.1
         #
         # @example
         #   # Given the following layout template
