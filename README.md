@@ -470,9 +470,9 @@ Articles::Index.render(format: :rss)  # => Will use nothing
 
 As per convention, layout templates are located under `Lotus::View.root` or `ApplicationLayout.root` and use the underscored name (eg. `ApplicationLayout => application.html.erb`).
 
-### Content For
+### Optional Content
 
-If we want to render optional contents such as sidebar links or page specific javascripts, we can use `content`
+If we want to render optional contents such as sidebar links or page specific javascripts, we can use `#content`
 It accepts a key that represents a method that should be available within the rendering context.
 That context is made of the locals, and the methods that view and layout respond to.
 If the context can't dispatch that method, it returns `nil`.
