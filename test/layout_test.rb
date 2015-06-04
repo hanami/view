@@ -27,6 +27,11 @@ describe Lotus::Layout do
     rendered.must_match %(yeah)
   end
 
+  it 'methods defined in layout are available from the view' do
+    rendered = Store::Views::Home::Index.render(format: :html)
+    rendered.must_match %(Joe Blogs)
+  end
+
   it 'renders content to return value from view' do
     rendered = Store::Views::Products::Show.render(format: :html)
     rendered.must_match %(Product)

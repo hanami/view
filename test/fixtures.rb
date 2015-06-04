@@ -326,6 +326,10 @@ module Store
       def head
         %(<meta name="lotusrb-version" content="0.3.1">)
       end
+
+      def user_name
+        "Joe Blogs"
+      end
     end
 
     module Home
