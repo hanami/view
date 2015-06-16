@@ -203,8 +203,8 @@ module Lotus
         def method_missing(m, *args, &blk)
           if @scope.respond_to?(m)
             @scope.__send__(m, *args, &blk)
-          elsif @layout.respond_to?(m)
-            @layout.__send__(m, *args, &blk)
+          elsif layout.respond_to?(m)
+            layout.__send__(m, *args, &blk)
           else
             super
           end
@@ -227,6 +227,12 @@ module Lotus
             opts[:locals] = locals
             opts[:locals].merge!(options.fetch(:locals){ ::Hash.new })
           end
+        end
+
+        # @since 0.4.2
+        # @api private
+        def layout
+          @layout || @layout.class.layout.new(@scope, "")
         end
       end
     end

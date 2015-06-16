@@ -21,7 +21,7 @@ module Lotus
         # @api private
         # @since 0.1.0
         def initialize(view, locals = {})
-          @view, @locals = view, locals
+          @view, @locals, @layout = view, locals, layout
         end
 
         # Returns an inspect String
@@ -69,6 +69,18 @@ module Lotus
               super
             end
           )
+        end
+
+        private
+
+        # @since 0.4.2
+        # @api private
+        def layout
+          if @view.class.respond_to?(:layout)
+            @view.class.layout.new(self, "")
+          else
+            nil
+          end
         end
       end
     end

@@ -1,6 +1,10 @@
 # Lotus::View
 View layer for Lotus
 
+## v0.4.2 - 2015-06-23
+### Fixed
+- [Tom Kadwill] Ensure views to use methods defined by the associated layout.
+
 ## v0.4.1 - 2015-05-22
 ### Added
 - [Luca Guidi] Introduced `#content` to render optional contents in a different context (eg. a view sets a page specific javascript in the application template footer).
