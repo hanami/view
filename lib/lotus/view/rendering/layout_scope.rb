@@ -229,6 +229,8 @@ module Lotus
           end
         end
 
+        # @since 0.4.2
+        # @api private
         def layout
           @layout || @layout.class.layout.new(@scope, "")
         end
