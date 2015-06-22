@@ -63,6 +63,16 @@ class NestedView
   root __dir__ + '/fixtures/templates'
 end
 
+
+module Organisations
+  module OrderTemplates
+    class Action
+      include Lotus::View
+      root __dir__ + '/fixtures/templates'
+    end
+  end
+end
+
 class MissingTemplateView
   include Lotus::View
 end

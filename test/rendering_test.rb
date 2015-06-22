@@ -80,6 +80,11 @@ describe Lotus::View do
       rendered.must_match %(<h1>Nested</h1>)
     end
 
+    it 'finds and renders partials in nested directories when the class name of the view contains template' do
+      rendered = Organisations::OrderTemplates::Action.render(format: :html)
+      rendered.must_match %(Order Template Partial)
+    end
+
     it 'decorates locals' do
       map = Map.new(['Rome', 'Cambridge'])
 
