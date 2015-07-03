@@ -31,7 +31,7 @@ module Lotus
         #
         # @see Lotus::View::Rendering::TemplateFinder#find
         def find  
-          if partial_template_exists_under_view? 
+          if partial_template_under_view_path 
             View::Template.new partial_template_under_view_path
           else
             super
@@ -39,12 +39,8 @@ module Lotus
         end
 
         protected
-        def partial_template_exists_under_view?
-          File.exists?(partial_template_under_view_path)
-        end
-
         def partial_template_under_view_path
-          Dir.glob("#{[root,view_template_dir, template_name].join(separator)}.#{format}.#{engines}").first.to_s 
+          Dir.glob("#{[root,view_template_dir, template_name].join(separator)}.#{format}.#{engines}").first 
         end
 
         def view_template_dir
