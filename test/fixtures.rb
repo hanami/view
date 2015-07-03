@@ -65,6 +65,11 @@ end
 
 
 module Organisations
+  class Action
+    include Lotus::View
+    root __dir__ + '/fixtures/templates'
+  end
+
   module OrderTemplates
     class Action
       include Lotus::View
