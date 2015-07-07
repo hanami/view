@@ -30,21 +30,28 @@ module Lotus
         # @return [Lotus::View::Template] the requested template
         #
         # @see Lotus::View::Rendering::TemplateFinder#find
-        def find  
-          if partial_template_under_view_path 
-            View::Template.new partial_template_under_view_path
+        #
+        # @since x.x.x
+        # @api private
+        def find
+          if path = partial_template_under_view_path
+            View::Template.new path
           else
             super
           end
         end
 
         protected
+        # @since x.x.x
+        # @api private
         def partial_template_under_view_path
-          Dir.glob("#{[root,view_template_dir, template_name].join(separator)}.#{format}.#{engines}").first 
+          _find(view_template_dir).first
         end
 
+        # @since x.x.x
+        # @api private
         def view_template_dir
-          *all, last = @view.template.split(separator)
+          *all, _ = @view.template.split(separator)
           all.join(separator)
         end
 
