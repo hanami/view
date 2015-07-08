@@ -51,7 +51,7 @@ class AppView
 end
 
 class AppViewLayout < AppView
-  layout nil
+  layout false
 end
 
 class AppViewRoot < AppView
@@ -111,12 +111,12 @@ module Articles
 
   class RssIndex < Index
     format :rss
-    layout nil
+    layout false
   end
 
   class AtomIndex < RssIndex
     format :atom
-    layout nil
+    layout false
   end
 
   class New
@@ -294,7 +294,7 @@ module CardDeck
 
       class JsonIndex < Index
         format :json
-        layout nil
+        layout false
       end
 
       class RssIndex < Index

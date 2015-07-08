@@ -460,7 +460,7 @@ module Articles
 
   class RssIndex < Index
     format :rss
-    layout nil
+    layout false
   end
 end
 
