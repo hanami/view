@@ -13,7 +13,7 @@ module Lotus
       #   module Articles
       #     class Show
       #       include Lotus::View
-      #       layout nil
+      #       layout false
       #     end
       #   end
       #
