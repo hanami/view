@@ -1,6 +1,10 @@
 # Lotus::View
 View layer for Lotus
 
+## v0.4.3 - 2015-07-10
+### Fixed
+- [Farrel Lifson] Force partial finder to be explicit when to templates have the same name.
+
 ## v0.4.2 - 2015-06-23
 ### Fixed
 - [Tom Kadwill] Ensure views to use methods defined by the associated layout.

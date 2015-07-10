@@ -31,7 +31,7 @@ module Lotus
         #
         # @see Lotus::View::Rendering::TemplateFinder#find
         #
-        # @since x.x.x
+        # @since 0.4.3
         # @api private
         def find
           if path = partial_template_under_view_path
@@ -42,13 +42,13 @@ module Lotus
         end
 
         protected
-        # @since x.x.x
+        # @since 0.4.3
         # @api private
         def partial_template_under_view_path
           _find(view_template_dir).first
         end
 
-        # @since x.x.x
+        # @since 0.4.3
         # @api private
         def view_template_dir
           *all, _ = @view.template.split(separator)

@@ -6,8 +6,8 @@ require 'lotus/view/version'
 Gem::Specification.new do |spec|
   spec.name          = 'lotus-view'
   spec.version       = Lotus::View::VERSION
-  spec.authors       = ['Luca Guidi']
-  spec.email         = ['me@lucaguidi.com']
+  spec.authors       = ['Luca Guidi', 'Trung Lê', 'Alfonso Uceda Pompa']
+  spec.email         = ['me@lucaguidi.com', 'trung.le@ruby-journal.com', 'uceda73@gmail.com']
   spec.description   = %q{View layer for Lotus}
   spec.summary       = %q{View layer for Lotus, with a separation between views and templates}
   spec.homepage      = 'http://lotusrb.org'

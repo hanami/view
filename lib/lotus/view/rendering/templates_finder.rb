@@ -77,7 +77,7 @@ module Lotus
         protected
 
         # @api private
-        # @since x.x.x
+        # @since 0.4.3
         def _find(lookup = search_path)
           Dir.glob( "#{ [root, lookup, template_name].join(separator) }.#{ format }.#{ engines }" )
         end
@@ -95,7 +95,7 @@ module Lotus
         end
 
         # @api private
-        # @since x.x.x
+        # @since 0.4.3
         def search_path
           recursive
         end
