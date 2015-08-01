@@ -19,6 +19,8 @@ rvm:
 matrix:
   include:
     - rvm: jruby-head
+    - rvm: jruby-9000
   allow_failures:
     - rvm: rbx-2
     - rvm: jruby-head
+    - rvm: jruby-9000
