@@ -1,3 +1,5 @@
+require 'lotus/utils/escape'
+
 module Lotus
   module View
     module Rendering
@@ -206,7 +208,7 @@ module Lotus
           elsif layout.respond_to?(m)
             layout.__send__(m, *args, &blk)
           else
-            super
+            ::Lotus::View::Escape.html(super)
           end
         rescue ::NameError
           ::Kernel.raise ::NoMethodError.new("undefined method `#{ m }' for #{ self.inspect }", m)
