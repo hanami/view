@@ -29,6 +29,12 @@ module Lotus
       # @api private
       DEFAULT_ROOT = '.'.freeze
 
+      # Default encoding
+      #
+      # @since x.x.x
+      # @api private
+      DEFAULT_ENCODING = 'utf-8'.freeze
+
       attr_reader :load_paths
       attr_reader :views
       attr_reader :layouts
@@ -237,6 +243,14 @@ module Lotus
         end
       end
 
+      def default_encoding(value = nil)
+        if value.nil?
+          @default_encoding
+        else
+          @default_encoding = value.to_s
+        end
+      end
+
       # Prepare the views.
       #
       # The given block will be yielded when `Lotus::View` will be included by
@@ -347,11 +361,12 @@ module Lotus
       # @api private
       def duplicate
         Configuration.new.tap do |c|
-          c.namespace  = namespace
-          c.root       = root
-          c.layout     = @layout # lazy loading of the class
-          c.load_paths = load_paths.dup
-          c.modules    = modules.dup
+          c.namespace        = namespace
+          c.root             = root
+          c.layout           = @layout # lazy loading of the class
+          c.default_encoding = default_encoding
+          c.load_paths       = load_paths.dup
+          c.modules          = modules.dup
         end
       end
 
@@ -370,7 +385,8 @@ module Lotus
       # @since 0.2.0
       # @api private
       def reset!
-        root(DEFAULT_ROOT)
+        root             DEFAULT_ROOT
+        default_encoding DEFAULT_ENCODING
 
         @views      = Set.new
         @layouts    = Set.new
@@ -400,6 +416,7 @@ module Lotus
       attr_writer :root
       attr_writer :load_paths
       attr_writer :layout
+      attr_writer :default_encoding
       attr_writer :modules
     end
   end

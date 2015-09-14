@@ -143,6 +143,17 @@ describe Lotus::View::Configuration do
     end
   end
 
+  describe "#default_encoding" do
+    it 'defaults to "utf-8"' do
+      @configuration.default_encoding.must_equal "utf-8"
+    end
+
+    it 'allows to set different value' do
+      @configuration.default_encoding "koi-8"
+      @configuration.default_encoding.must_equal "koi-8"
+    end
+  end
+
   describe '#prepare' do
     before do
       module FooRendering
@@ -182,6 +193,7 @@ describe Lotus::View::Configuration do
       @configuration.root 'test'
       @configuration.load_paths << '..'
       @configuration.layout :application
+      @configuration.default_encoding 'latin-1'
       @configuration.add_view(HelloWorldView)
       @configuration.add_layout(ApplicationLayout)
       @configuration.prepare { include Kernel }
@@ -190,10 +202,11 @@ describe Lotus::View::Configuration do
     end
 
     it 'returns a copy of the configuration' do
-      @config.root.must_equal       @configuration.root
-      @config.load_paths.must_equal @configuration.load_paths
-      @config.layout.must_equal     @configuration.layout
-      @config.modules.must_equal    @configuration.modules
+      @config.root.must_equal             @configuration.root
+      @config.load_paths.must_equal       @configuration.load_paths
+      @config.layout.must_equal           @configuration.layout
+      @config.default_encoding.must_equal @configuration.default_encoding
+      @config.modules.must_equal          @configuration.modules
       @config.views.must_be_empty
       @config.layouts.must_be_empty
     end
@@ -202,6 +215,7 @@ describe Lotus::View::Configuration do
       @config.root '.'
       @config.load_paths << '../..'
       @config.layout :global
+      @config.default_encoding 'iso-8859'
       @config.add_view(RenderView)
       @config.add_layout(GlobalLayout)
       @config.prepare { include Comparable }
@@ -222,6 +236,8 @@ describe Lotus::View::Configuration do
       @configuration.load_paths.must_include @config.root
       @configuration.load_paths.must_include '..'
       @configuration.load_paths.wont_include '../..'
+
+      @configuration.default_encoding.must_equal 'latin-1'
 
       @configuration.layout.must_equal     ApplicationLayout
 
@@ -317,6 +333,7 @@ describe Lotus::View::Configuration do
       @configuration.root 'test'
       @configuration.load_paths << '..'
       @configuration.layout :application
+      @configuration.default_encoding 'Windows-1253'
       @configuration.add_view(HelloWorldView)
       @configuration.add_layout(ApplicationLayout)
 
@@ -329,6 +346,7 @@ describe Lotus::View::Configuration do
       @configuration.root.must_equal         root
       @configuration.load_paths.must_include root
       @configuration.layout.must_equal Lotus::View::Rendering::NullLayout
+      @configuration.default_encoding        'utf-8'
       @configuration.views.must_be_empty
       @configuration.layouts.must_be_empty
     end
