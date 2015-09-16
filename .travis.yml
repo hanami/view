@@ -5,7 +5,7 @@ cache: bundler
 before_script:
   - locale
   - env
-  - find -I test/fixtures/templates/encoding_view.html.erb
+  - file --mime test/fixtures/templates/encoding_view.html.erb
 rvm:
   - 2.0.0
   - 2.1.0
