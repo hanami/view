@@ -328,7 +328,7 @@ module Store
   module Helpers
     module AssetTagHelpers
       def javascript_tag(source)
-        %(<script type="text/javascript" src="/javascripts/#{ source }.js" />)
+        Lotus::Utils::Escape::SafeString.new %(<script type="text/javascript" src="/javascripts/#{ source }.js" />)
       end
     end
   end
@@ -339,7 +339,7 @@ module Store
       include Store::Helpers::AssetTagHelpers
 
       def head
-        %(<meta name="lotusrb-version" content="0.3.1">)
+        Lotus::Utils::Escape::SafeString.new %(<meta name="lotusrb-version" content="0.3.1">)
       end
 
       def user_name
