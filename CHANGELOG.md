@@ -1,7 +1,7 @@
 # Lotus::View
 View layer for Lotus
 
-## v0.4.4 - 2015-09-23
+## v0.4.4 - 2015-09-30
 ### Added
 - [Luca Guidi] Autoescape for layout helpers.
 
