@@ -209,6 +209,7 @@ end
 
 class IndexView
   include Lotus::View
+
   layout :application
 end
 

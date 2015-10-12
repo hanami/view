@@ -205,9 +205,9 @@ module Lotus
       #   Bookshelf::Api::Views::Books::Index.template # => 'books/index'
       def template(value = nil)
         if value.nil?
-          @@template ||= Rendering::TemplateName.new(name, configuration.namespace).to_s
+          @template ||= Rendering::TemplateName.new(name, configuration.namespace).to_s
         else
-          @@template = value
+          @template = value
         end
       end
 
