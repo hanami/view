@@ -107,6 +107,13 @@ describe Lotus::View do
       rendered.must_match %(<input type="hidden" name="secret" value="23" />)
     end
 
+    it 'raises an error when the partial template is missing' do
+      -> {
+        RenderViewWithMissingPartialTemplate.render(format: :html)
+      }.must_raise(Lotus::View::MissingTemplateError)
+       .message.must_match("Can't find template 'shared/missing_template' for 'html' format.")
+    end
+
     # @issue https://github.com/lotus/view/issues/3
     it 'renders a template within another template' do
       parent = OpenStruct.new(children: [], name: 'parent')
