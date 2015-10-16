@@ -268,10 +268,10 @@ module Lotus
       conf.add_view(base)
 
       base.class_eval do
-        extend Inheritable.dup
-        extend Dsl.dup
-        extend Rendering.dup
-        extend Escape.dup
+        extend Inheritable
+        extend Dsl
+        extend Rendering
+        extend Escape
 
         include Utils::ClassAttribute
         class_attribute :configuration

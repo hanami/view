@@ -39,6 +39,14 @@ class RenderViewMethodWithBlock
   end
 end
 
+class RenderViewWithMissingPartialTemplate
+  include Lotus::View
+end
+
+class EncodingView
+  include Lotus::View
+end
+
 class JsonRenderView
   include Lotus::View
   format :json
@@ -209,6 +217,7 @@ end
 
 class IndexView
   include Lotus::View
+
   layout :application
 end
 

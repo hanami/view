@@ -11,6 +11,11 @@ describe Lotus::View do
       RenderView.render(format: :html, planet: 'Mars').must_include %(<h1>Hello, Mars!</h1>)
     end
 
+    # See https://github.com/lotus/view/issues/76
+    it 'renders a template with different encoding' do
+      EncodingView.render(format: :html).must_include %(Configuração)
+    end
+
     it 'renders a template according to the declared format' do
       JsonRenderView.render(format: :json, planet: 'Moon').must_include %("greet":"Hello, Moon!")
     end
@@ -105,6 +110,13 @@ describe Lotus::View do
 
       rendered.must_match %(<h1>New Article</h1>)
       rendered.must_match %(<input type="hidden" name="secret" value="23" />)
+    end
+
+    it 'raises an error when the partial template is missing' do
+      -> {
+        RenderViewWithMissingPartialTemplate.render(format: :html)
+      }.must_raise(Lotus::View::MissingTemplateError)
+       .message.must_match("Can't find template 'shared/missing_template' for 'html' format.")
     end
 
     # @issue https://github.com/lotus/view/issues/3

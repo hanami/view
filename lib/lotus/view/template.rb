@@ -6,8 +6,8 @@ module Lotus
     #
     # @since 0.1.0
     class Template
-      def initialize(template)
-        @_template = Tilt.new(template)
+      def initialize(template, encoding)
+        @_template = Tilt.new(template, encoding)
       end
 
       # Returns the format that the template handles.
