@@ -573,6 +573,11 @@ Lotus::View.configure do
   #
   root '/path/to/root'
 
+  # Default encoding for templates
+  # Argument: String, defaults to utf-8
+  #
+  default_encoding 'koi-8'
+
   # Set the Ruby namespace where to lookup for views
   # Argument: Class, Module, String, defaults to Object
   #

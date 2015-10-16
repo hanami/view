@@ -35,7 +35,7 @@ module Lotus
         # @api private
         def find
           if path = partial_template_under_view_path
-            View::Template.new path
+            View::Template.new(path, @view.configuration.default_encoding)
           else
             super
           end

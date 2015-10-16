@@ -70,7 +70,7 @@ module Lotus
         #     # => [#<Lotus::View::Template:0x007f8a0a86a970 ... @file="/path/to/templates/articles/show.html.erb">]
         def find
           _find.map do |template|
-            View::Template.new(template)
+            View::Template.new(template, @view.configuration.default_encoding)
           end
         end
 
