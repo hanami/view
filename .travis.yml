@@ -2,6 +2,10 @@ language: ruby
 script: 'bundle exec rake test:coverage'
 sudo: false
 cache: bundler
+before_script:
+  - locale
+  - env
+  - file --mime test/fixtures/templates/encoding_view.html.erb
 rvm:
   - 2.0.0
   - 2.1.0

@@ -11,6 +11,11 @@ describe Lotus::View do
       RenderView.render(format: :html, planet: 'Mars').must_include %(<h1>Hello, Mars!</h1>)
     end
 
+    # See https://github.com/lotus/view/issues/76
+    it 'renders a template with different encoding' do
+      EncodingView.render(format: :html).must_include %(Configuração)
+    end
+
     it 'renders a template according to the declared format' do
       JsonRenderView.render(format: :json, planet: 'Moon').must_include %("greet":"Hello, Moon!")
     end
