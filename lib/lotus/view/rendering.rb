@@ -258,7 +258,7 @@ module Lotus
       #
       # @see Lotus::View::Rendering::Registry
       def registry
-        @@registry ||= Registry.new(self)
+        @registry ||= Registry.new(self)
       end
     end
   end

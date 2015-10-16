@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'tilt/erb'
 
 if ENV['COVERAGE'] == 'true'
   require 'simplecov'
