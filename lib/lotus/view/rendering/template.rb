@@ -36,10 +36,12 @@ module Lotus
         #
         # @return [String] the output of the rendering process.
         #
+        # @raise [Lotus::View::MissingTemplateError] if template can't be found
+        #
         # @api private
         # @since 0.1.0
         def render
-          template.render(scope)
+          (template or raise_missing_template_error).render(scope)
         end
 
         protected
@@ -49,6 +51,15 @@ module Lotus
 
         def scope
           Scope.new(@view, @options[:locals])
+        end
+
+        # @since x.x.x
+        # @api private
+        def raise_missing_template_error
+          raise MissingTemplateError.new(
+            @options.fetch(:template) { @options.fetch(:partial, nil) },
+            @options[:format]
+          )
         end
       end
     end

@@ -39,6 +39,10 @@ class RenderViewMethodWithBlock
   end
 end
 
+class RenderViewWithMissingPartialTemplate
+  include Lotus::View
+end
+
 class EncodingView
   include Lotus::View
 end
