@@ -16,6 +16,20 @@ describe Lotus::View do
       EncodingView.render(format: :html).must_include %(Configuração)
     end
 
+    # See https://github.com/lotus/view/issues/76
+    it 'raises error when given encoding is not correct' do
+      exception = -> {
+        Class.new do
+          include Lotus::View
+          configuration.default_encoding 'wrong'
+
+          def self.name; 'EncodingView'; end
+        end.render(format: :html)
+      }.must_raise ArgumentError
+
+      exception.message.must_include "unknown encoding name - wrong"
+    end
+
     it 'renders a template according to the declared format' do
       JsonRenderView.render(format: :json, planet: 'Moon').must_include %("greet":"Hello, Moon!")
     end
