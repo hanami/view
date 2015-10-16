@@ -271,7 +271,7 @@ module Lotus
         extend Inheritable
         extend Dsl
         extend Rendering
-        extend Escape.dup
+        extend Escape
 
         include Utils::ClassAttribute
         class_attribute :configuration
