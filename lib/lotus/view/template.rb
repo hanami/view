@@ -6,7 +6,7 @@ module Lotus
     #
     # @since 0.1.0
     class Template
-      def initialize(template, encoding)
+      def initialize(template, encoding = Encoding::UTF_8)
         @_template = Tilt.new(template, nil, default_encoding: encoding)
       end
 
