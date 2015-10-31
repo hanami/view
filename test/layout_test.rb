@@ -8,7 +8,7 @@ describe Lotus::Layout do
     end
   end
 
-  it "raise error if template isn't found" do
+  it "raise subclassed error if template isn't found" do
     Lotus::View.unload!
 
     class MissingLayout
@@ -19,6 +19,7 @@ describe Lotus::Layout do
       Lotus::View.load!
     }.must_raise(Lotus::View::Rendering::MissingTemplateLayoutError)
     error.message.must_include "Can't find layout template 'MissingLayout'"
+    error.class.ancestors.must_include Lotus::View::ViewError
   end
 
   it 'concrete methods are available in layout template' do
