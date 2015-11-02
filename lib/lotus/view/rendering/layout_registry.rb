@@ -1,6 +1,6 @@
 require 'lotus/view/rendering/null_template'
 require 'lotus/view/rendering/templates_finder'
-require 'lotus/view/view_error'
+require 'lotus/view/error'
 
 module Lotus
   module View
