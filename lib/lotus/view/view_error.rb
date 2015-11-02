@@ -7,10 +7,7 @@
 # @since 0.4.4
 module Lotus
   module View
-    class ViewError < ::StandardError
-      def intialize(message)
-        super(message)
-      end
+    class Error < ::StandardError
     end
   end
 end
