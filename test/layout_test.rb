@@ -19,7 +19,7 @@ describe Lotus::Layout do
       Lotus::View.load!
     }.must_raise(Lotus::View::Rendering::MissingTemplateLayoutError)
     error.message.must_include "Can't find layout template 'MissingLayout'"
-    error.class.ancestors.must_include Lotus::View::ViewError
+    error.class.ancestors.must_include Lotus::View::Error
   end
 
   it 'concrete methods are available in layout template' do
