@@ -10,7 +10,7 @@ module Lotus
       # This is raised at the runtime when Lotus::Layout cannot find it's template.
       #
       # @since 0.3.0
-      class MissingTemplateLayoutError < Lotus::View::ViewError
+      class MissingTemplateLayoutError < Lotus::View::Error
         def initialize(template)
           super("Can't find layout template '#{ template }'")
         end
