@@ -1,5 +1,6 @@
 require 'lotus/view/rendering/null_template'
 require 'lotus/view/rendering/templates_finder'
+require 'lotus/view/error'
 
 module Lotus
   module View
@@ -9,7 +10,7 @@ module Lotus
       # This is raised at the runtime when Lotus::Layout cannot find it's template.
       #
       # @since 0.3.0
-      class MissingTemplateLayoutError < ::StandardError
+      class MissingTemplateLayoutError < Lotus::View::Error
         def initialize(template)
           super("Can't find layout template '#{ template }'")
         end
