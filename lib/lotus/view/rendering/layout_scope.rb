@@ -210,8 +210,6 @@ module Lotus
           else
             ::Lotus::View::Escape.html(super)
           end
-        rescue ::NameError
-          ::Kernel.raise ::NoMethodError.new("undefined method `#{ m }' for #{ self.inspect }", m)
         end
 
         def renderer(options)
