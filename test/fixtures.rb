@@ -314,6 +314,12 @@ module CardDeck
   end
 end
 
+class BrokenLogic
+  def run
+    raise ArgumentError.new('nope')
+  end
+end
+
 class LayoutForScopeTest
   def foo
     'x'
@@ -325,8 +331,16 @@ class ViewForScopeTest
     'y'
   end
 
-  def error_inside
+  def wrong_reference
     unknown_method
+  end
+
+  def wrong_method
+    "string".unknown
+  end
+
+  def raise_error
+    BrokenLogic.new.run
   end
 end
 

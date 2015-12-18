@@ -7,6 +7,7 @@ require 'lotus/view/inheritable'
 require 'lotus/view/rendering'
 require 'lotus/view/escape'
 require 'lotus/view/dsl'
+require 'lotus/view/errors'
 require 'lotus/layout'
 require 'lotus/presenter'
 
@@ -15,37 +16,7 @@ module Lotus
   #
   # @since 0.1.0
   module View
-    # Missing template error
-    #
-    # This is raised at the runtime when Lotus::View cannot find a template for
-    # the requested format.
-    #
-    # We can't raise this error during the loading phase, because at that time
-    # we don't know if a view implements its own rendering policy.
-    # A view is allowed to override `#render`, and this scenario can make the
-    # presence of a template useless. One typical example is the usage of a
-    # serializer that returns the output string, without rendering a template.
-    #
-    # @since 0.1.0
-    class MissingTemplateError < ::StandardError
-      def initialize(template, format)
-        super("Can't find template '#{ template }' for '#{ format }' format.")
-      end
-    end
-
-    # Missing format error
-    #
-    # This is raised at the runtime when rendering context lacks of the :format
-    # key.
-    #
-    # @since 0.1.0
-    #
-    # @see Lotus::View::Rendering#render
-    class MissingFormatError < ::StandardError
-    end
-
     include Utils::ClassAttribute
-
     # Framework configuration
     #
     # @since 0.2.0

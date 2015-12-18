@@ -49,16 +49,30 @@ describe Lotus::View::Rendering::LayoutScope do
     end
 
     describe 'undefined method on scope' do
-      it 'raises NoMethodError for unknown' do
+      it 'raises NoMethodError' do
         exception = -> { @scope.unknown }.must_raise NoMethodError
         exception.message.must_include 'undefined method `unknown'
       end
     end
 
-    describe 'undefined method inside method on scope' do
-      it 'raises NoMethodError for unknown' do
-        exception = -> { @scope.error_inside }.must_raise NoMethodError
-        exception.message.must_include 'undefined method `error_inside'
+    describe 'reference wrong method/variable' do
+      it 'raises NameError' do
+        exception = -> { @scope.wrong_reference }.must_raise NameError
+        exception.message.must_include "undefined local variable or method `unknown_method'"
+      end
+    end
+
+    describe 'undefined method for local variable' do
+      it 'raises NoMethodError' do
+        exception = -> { @scope.wrong_method }.must_raise NoMethodError
+        exception.message.must_include 'undefined method `unknown'
+      end
+    end
+
+    describe 'internal method invokation raises error' do
+      it 'raises that error' do
+        exception = -> { @scope.raise_error }.must_raise ArgumentError
+        exception.message.must_include 'nope'
       end
     end
   end
