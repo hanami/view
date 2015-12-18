@@ -1,6 +1,18 @@
 # Lotus::View
 View layer for Lotus
 
+## v0.5.0 - (unreleased)
+### Added
+- [Luca Guidi] Added `Lotus::View::Configuration#default_encoding` to set the encoding for templates
+
+### Fixed
+- [Luca Guidi] Let exceptions to be raised as they occur in rendering context. This fixes misleading backtraces for exceptions.
+- [Martin Rubi] Raise a `Lotus::View::MissingTemplateError` when rendering a missing partial from a template
+- [Luca Guidi] Fix for `template.erb is not valid US-ASCII (Encoding::InvalidByteSequenceError)` when system encoding is not set
+
+### Changed
+- [Liam Dawson] Introduced `Lotus::View::Error` and let all the framework exceptions to inherit from it.
+
 ## v0.4.4 - 2015-09-30
 ### Added
 - [Luca Guidi] Autoescape for layout helpers.
