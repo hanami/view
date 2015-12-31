@@ -39,6 +39,7 @@ module Lotus
       attr_reader :views
       attr_reader :layouts
       attr_reader :modules
+      attr_reader :partials
 
       # Return the original configuration of the framework instance associated
       # with the given class.
@@ -388,6 +389,7 @@ module Lotus
         root             DEFAULT_ROOT
         default_encoding DEFAULT_ENCODING
 
+        @partials   = Hash.new
         @views      = Set.new
         @layouts    = Set.new
         @load_paths = Utils::LoadPaths.new(root)
