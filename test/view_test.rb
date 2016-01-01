@@ -63,11 +63,6 @@ describe Lotus::View do
       ConfigurationView.configuration.views.wont_include(ConfigurationView)
     end
 
-    it 'a partial must be included in the framework configuration registry' do
-      Lotus::View.configuration.partials.keys.must_include('shared/_sidebar')
-      ConfigurationView.configuration.partials.keys.wont_include('shared/_sidebar')
-    end
-
     it 'a layout inheriths the configuration from the framework' do
       expected = Lotus::View.configuration
       actual   = ConfigurationLayout.configuration

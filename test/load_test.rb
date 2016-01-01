@@ -2,9 +2,15 @@ require 'test_helper'
 
 describe Lotus::View do
   describe '.load!' do
-    # before do
-    #   Lotus::View.load!
-    # end
+    before do
+      Lotus::View.load!
+    end
+
+    it 'partials must be included in the framework configuration registry' do
+      puts "TEST #{Lotus::View.configuration.object_id}"
+      Lotus::View.configuration.partials.keys.must_include('shared/_sidebar')
+      ConfigurationView.configuration.partials.keys.wont_include('shared/_sidebar')
+    end
 
     # it 'freezes .layout for all the views' do
     #   AppView.layout.frozen?.must_equal true
