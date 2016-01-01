@@ -23,9 +23,10 @@ module Lotus
         PREFIX = '_'.freeze
 
         # Find a template for a partial. Initially it will look for the
-        # partial template under the directory of the parent directory 
-        # view template, if not found it will search recursivly from 
-        # the view root.
+        # partial template in the framework configuration where it may
+        # already be cached. Failing that it will look under the
+        # directory of the parent directory view template, if not found
+        # it will search recursively from the view root.
         #
         # @return [Lotus::View::Template] the requested template
         #
@@ -34,7 +35,9 @@ module Lotus
         # @since 0.4.3
         # @api private
         def find
-          if path = partial_template_under_view_path
+          if cached_template = find_cached_template
+            cached_template
+          elsif path = partial_template_under_view_path
             View::Template.new(path, @view.configuration.default_encoding)
           else
             super
@@ -42,6 +45,14 @@ module Lotus
         end
 
         protected
+        # @since 0.6.0
+        # @api private
+        def find_cached_template
+          # TODO: We'll need a smarter lookup here at some stage to
+          # take into account different formats
+          Lotus::View.configuration.partials[[view_template_dir, template_name].join(separator)] || Lotus::View.configuration.partials[template_name]
+        end
+
         # @since 0.4.3
         # @api private
         def partial_template_under_view_path

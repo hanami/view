@@ -388,9 +388,7 @@ module Lotus
       # @since 0.6.0
       # @api private
       def load_partials!
-        load_paths.each do |path|
-          find_partials(path).each { |p| add_partial(p[0], p[1]) }
-        end
+        find_partials(root).each { |p| add_partial(p[0], p[1]) }
       end
 
       # Add a partial to the registry
