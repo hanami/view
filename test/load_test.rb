@@ -6,10 +6,9 @@ describe Lotus::View do
       Lotus::View.load!
     end
 
-    it 'partials must be included in the framework configuration registry' do
-      puts "TEST #{Lotus::View.configuration.object_id}"
-      Lotus::View.configuration.partials.keys.must_include('shared/_sidebar')
-      ConfigurationView.configuration.partials.keys.wont_include('shared/_sidebar')
+    it 'partials must be included in the framework configuration registry but not copied to individual view configurations' do
+      Lotus::View.configuration.partials.keys.must_include('test/fixtures/templates/shared/_sidebar')
+      Articles::Show.configuration.partials.keys.wont_include('test/fixtures/templates/shared/_sidebar')
     end
 
     # it 'freezes .layout for all the views' do

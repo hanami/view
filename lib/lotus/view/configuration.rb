@@ -378,7 +378,42 @@ module Lotus
       def load!
         views.each   { |v| v.__send__(:load!) }
         layouts.each { |l| l.__send__(:load!) }
+        load_partials!
         freeze
+      end
+
+      # Load partials for each partial template file found under the
+      # given load paths
+      #
+      # @since 0.6.0
+      # @api private
+      def load_partials!
+        load_paths.each do |path|
+          find_partials(path).each { |p| add_partial(p[0], p[1]) }
+        end
+      end
+
+      # Add a partial to the registry
+      #
+      # @since 0.6.0
+      # @api private
+      def add_partial(key, partial)
+        # TODO: This data structure needs to take into account
+        # different formats (do we need a hash of hashes?)
+        @partials[key] = partial
+      end
+
+      # TODO: Factor this method out into a separate finder class?
+      def find_partials(path)
+        _find_partials(path).map do |template|
+          partial_template_name = Pathname(template).relative_path_from(path).to_s.split('.').first
+          [partial_template_name, View::Template.new(template)]
+        end
+      end
+
+      def _find_partials(path)
+        # TODO: Freeze the string constants
+        Dir.glob("#{ [path, '**', '_*'].join(::File::SEPARATOR) }.#{ '*' }.#{ '*' }")
       end
 
       # Reset all the values to the defaults
