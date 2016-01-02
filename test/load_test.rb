@@ -3,12 +3,19 @@ require 'test_helper'
 describe Lotus::View do
   describe '.load!' do
     before do
+      Lotus::View.unload!
+      Lotus::View.class_eval do
+        configure do
+          root Pathname.new __dir__ + '/fixtures/templates'
+        end
+      end
+
       Lotus::View.load!
     end
 
     it 'partials must be included in the framework configuration registry but not copied to individual view configurations' do
-      Lotus::View.configuration.partials.keys.must_include('test/fixtures/templates/shared/_sidebar')
-      Articles::Show.configuration.partials.keys.wont_include('test/fixtures/templates/shared/_sidebar')
+      Lotus::View.configuration.partials.keys.must_include('shared/_sidebar')
+      Articles::Show.configuration.partials.keys.wont_include('shared/_sidebar')
     end
 
     # it 'freezes .layout for all the views' do
