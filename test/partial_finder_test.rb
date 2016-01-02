@@ -13,4 +13,9 @@ describe Lotus::View::Rendering::PartialFinder do
     partial_finder = Lotus::View::Rendering::PartialFinder.new(Organisations::OrderTemplates::Action, partial: 'shared/sidebar', format: 'html')
     partial_finder.find.render(format: 'html').must_match '<div id="sidebar"></div>'
   end
+
+  it 'finds the correct partial with a different format' do
+    partial_finder = Lotus::View::Rendering::PartialFinder.new(Organisations::OrderTemplates::Action, partial: 'shared/sidebar', format: 'json')
+    partial_finder.find.render(format: 'json').must_match '{ "sidebar": [] }'
+  end
 end

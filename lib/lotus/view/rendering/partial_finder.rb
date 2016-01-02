@@ -48,9 +48,9 @@ module Lotus
         # @since 0.6.0
         # @api private
         def find_cached_template
-          # TODO: We'll need a smarter lookup here at some stage to
-          # take into account different formats
-          Lotus::View.configuration.partials[[view_template_dir, template_name].join(separator)] || Lotus::View.configuration.partials[template_name]
+          partials = Lotus::View.configuration.partials[[view_template_dir, template_name].join(separator)] ||
+            Lotus::View.configuration.partials[template_name]
+          partials ? partials[format] : nil
         end
 
         # @since 0.4.3

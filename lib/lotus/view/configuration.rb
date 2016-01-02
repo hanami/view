@@ -388,24 +388,27 @@ module Lotus
       # @since 0.6.0
       # @api private
       def load_partials!
-        find_partials(root).each { |p| add_partial(p[0], p[1]) }
+        find_partials(root).each { |key, format, template| add_partial(key, format, template) }
       end
 
       # Add a partial to the registry
       #
       # @since 0.6.0
       # @api private
-      def add_partial(key, partial)
-        # TODO: This data structure needs to take into account
-        # different formats (do we need a hash of hashes?)
-        @partials[key] = partial
+      def add_partial(key, format, partial)
+        @partials[key] ||= Hash.new
+        @partials[key][format] = partial
       end
 
       # TODO: Factor this method out into a separate finder class?
       def find_partials(path)
         _find_partials(path).map do |template|
-          partial_template_name = Pathname(template).relative_path_from(path).to_s.split('.').first
-          [partial_template_name, View::Template.new(template)]
+          path_name = Pathname(template)
+          partial_path, partial_base_name = Pathname(template).relative_path_from(path).split
+          partial_base_parts = partial_base_name.to_s.split('.')
+          partial_template_name = "#{partial_path}#{::File::SEPARATOR}#{partial_base_parts[0]}"
+          partial_format = partial_base_parts[1]
+          [partial_template_name, partial_format, View::Template.new(template)]
         end
       end
 
