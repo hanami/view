@@ -4,6 +4,7 @@ require 'lotus/utils/kernel'
 require 'lotus/utils/string'
 require 'lotus/utils/load_paths'
 require 'lotus/view/rendering/layout_finder'
+require 'lotus/view/rendering/partial_templates_finder'
 
 module Lotus
   module View
@@ -388,7 +389,7 @@ module Lotus
       # @since 0.6.0
       # @api private
       def load_partials!
-        find_partials(root).each { |key, format, template| add_partial(key, format, template) }
+        Lotus::View::Rendering::PartialTemplatesFinder.new.find_partials(root).each { |key, format, template| add_partial(key, format, template) }
       end
 
       # Add a partial to the registry
@@ -398,23 +399,6 @@ module Lotus
       def add_partial(key, format, partial)
         @partials[key] ||= Hash.new
         @partials[key][format] = partial
-      end
-
-      # TODO: Factor this method out into a separate finder class?
-      def find_partials(path)
-        _find_partials(path).map do |template|
-          path_name = Pathname(template)
-          partial_path, partial_base_name = Pathname(template).relative_path_from(path).split
-          partial_base_parts = partial_base_name.to_s.split('.')
-          partial_template_name = "#{partial_path}#{::File::SEPARATOR}#{partial_base_parts[0]}"
-          partial_format = partial_base_parts[1]
-          [partial_template_name, partial_format, View::Template.new(template)]
-        end
-      end
-
-      def _find_partials(path)
-        # TODO: Freeze the string constants
-        Dir.glob("#{ [path, '**', '_*'].join(::File::SEPARATOR) }.#{ '*' }.#{ '*' }")
       end
 
       # Reset all the values to the defaults
