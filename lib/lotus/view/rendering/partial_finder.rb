@@ -45,12 +45,20 @@ module Lotus
         end
 
         protected
+
         # @since x.x.x
         # @api private
         def find_cached_template
-          partials = Lotus::View.configuration.partials[[view_template_dir, template_name].join(separator)] ||
+          partials = Lotus::View.configuration.partials.has_key?(relative_partial_path) ?
+            Lotus::View.configuration.partials[relative_partial_path] :
             Lotus::View.configuration.partials[template_name]
           partials ? partials[format] : nil
+        end
+
+        # @since x.x.x
+        # @api private
+        def relative_partial_path
+          [view_template_dir, template_name].join(separator)
         end
 
         # @since 0.4.3
