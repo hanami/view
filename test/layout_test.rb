@@ -1,6 +1,9 @@
 require 'test_helper'
+require 'reload_configuration_helper'
 
 describe Lotus::Layout do
+  reload_configuration!
+
   describe 'rendering from layout' do
     it 'renders partial' do
       rendered = IndexView.render(format: :html)

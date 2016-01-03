@@ -1,16 +1,8 @@
 require 'test_helper'
+require 'reload_configuration_helper'
 
 describe Lotus::View::Rendering::PartialFinder do
-  before do
-    Lotus::View.unload!
-    Lotus::View.class_eval do
-      configure do
-        root Pathname.new __dir__ + '/fixtures/templates'
-      end
-    end
-
-    Lotus::View.load!
-  end
+  reload_configuration!
 
   it 'finds the correct partial in the same directory as the parent view' do
     partial_finder = Lotus::View::Rendering::PartialFinder.new(Organisations::OrderTemplates::Action, partial: 'partial', format: 'html')

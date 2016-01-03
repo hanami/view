@@ -1,7 +1,10 @@
 require 'test_helper'
+require 'reload_configuration_helper'
 require 'ostruct'
 
 describe Lotus::View do
+  reload_configuration!
+
   describe 'rendering' do
     it 'renders a template' do
       HelloWorldView.render(format: :html).must_include %(<h1>Hello, World!</h1>)

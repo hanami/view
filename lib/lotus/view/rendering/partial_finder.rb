@@ -35,13 +35,7 @@ module Lotus
         # @since 0.4.3
         # @api private
         def find
-          if cached_template = find_cached_template
-            cached_template
-          elsif path = partial_template_under_view_path
-            View::Template.new(path, @view.configuration.default_encoding)
-          else
-            super
-          end
+          find_cached_template
         end
 
         protected
