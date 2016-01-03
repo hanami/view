@@ -389,7 +389,7 @@ module Lotus
       # @since x.x.x
       # @api private
       def load_partials!
-        Lotus::View::Rendering::PartialTemplatesFinder.new.find_partials(root).each do |key, format, template|
+        Lotus::View::Rendering::PartialTemplatesFinder.find_partials(root).each do |key, format, template|
           add_partial(key, format, template)
         end
       end
@@ -410,7 +410,7 @@ module Lotus
         root             DEFAULT_ROOT
         default_encoding DEFAULT_ENCODING
 
-        @partials   = ::Hash.new { |h, k| h[k] = Hash.new }
+        @partials   = Hash.new { |h, k| h[k] = Hash.new }
         @views      = Set.new
         @layouts    = Set.new
         @load_paths = Utils::LoadPaths.new(root)

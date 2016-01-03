@@ -22,7 +22,7 @@ module Lotus
         # format and a newly created View::Template
         #
         # @since x.x.x
-        def find_partials(path)
+        def self.find_partials(path)
           _find_partials(path).map do |template|
             path_name = Pathname(template)
             partial_path, partial_base_name = Pathname(template).relative_path_from(path).split
@@ -30,8 +30,6 @@ module Lotus
             ["#{partial_path}#{::File::SEPARATOR}#{partial_base_parts[0]}", partial_base_parts[1], View::Template.new(template)]
           end
         end
-
-        private
 
         # Copy the configuration for the given action
         #
@@ -41,7 +39,7 @@ module Lotus
         #
         # @since x.x.x
         # @api private
-        def _find_partials(path)
+        def self._find_partials(path)
           Dir.glob("#{ [path, TemplatesFinder::RECURSIVE, PARTIAL_PATTERN].join(::File::SEPARATOR) }.#{TemplatesFinder::FORMAT}.#{TemplatesFinder::ENGINES}")
         end
       end
