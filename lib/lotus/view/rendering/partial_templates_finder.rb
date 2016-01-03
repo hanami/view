@@ -6,14 +6,14 @@ module Lotus
       # Find partial templates in the file system
       #
       # @api private
-      # @since 0.6.0
+      # @since x.x.x
       #
       # @see View::Template
       class PartialTemplatesFinder
         # Search pattern for partial file names
         #
         # @api private
-        # @since 0.6.0
+        # @since x.x.x
         PARTIAL_PATTERN    = '_*'.freeze
 
         # Initialize a configuration instance
@@ -21,7 +21,7 @@ module Lotus
         # @return [Array] array of arrays containing partial template name,
         # format and a newly created View::Template
         #
-        # @since 0.6.0
+        # @since x.x.x
         def find_partials(path)
           _find_partials(path).map do |template|
             path_name = Pathname(template)
@@ -39,7 +39,7 @@ module Lotus
         #
         # @return [Array] an array of strings for each matching partial found
         #
-        # @since 0.6.0
+        # @since x.x.x
         # @api private
         def _find_partials(path)
           Dir.glob("#{ [path, TemplatesFinder::RECURSIVE, PARTIAL_PATTERN].join(::File::SEPARATOR) }.#{TemplatesFinder::FORMAT}.#{TemplatesFinder::ENGINES}")

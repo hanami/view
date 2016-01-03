@@ -45,7 +45,7 @@ module Lotus
         end
 
         protected
-        # @since 0.6.0
+        # @since x.x.x
         # @api private
         def find_cached_template
           partials = Lotus::View.configuration.partials[[view_template_dir, template_name].join(separator)] ||

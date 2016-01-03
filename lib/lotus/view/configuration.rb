@@ -386,7 +386,7 @@ module Lotus
       # Load partials for each partial template file found under the
       # given load paths
       #
-      # @since 0.6.0
+      # @since x.x.x
       # @api private
       def load_partials!
         Lotus::View::Rendering::PartialTemplatesFinder.new.find_partials(root).each { |key, format, template| add_partial(key, format, template) }
@@ -394,7 +394,7 @@ module Lotus
 
       # Add a partial to the registry
       #
-      # @since 0.6.0
+      # @since x.x.x
       # @api private
       def add_partial(key, format, partial)
         @partials[key] ||= Hash.new
