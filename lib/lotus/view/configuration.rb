@@ -389,7 +389,9 @@ module Lotus
       # @since x.x.x
       # @api private
       def load_partials!
-        Lotus::View::Rendering::PartialTemplatesFinder.new.find_partials(root).each { |key, format, template| add_partial(key, format, template) }
+        Lotus::View::Rendering::PartialTemplatesFinder.new.find_partials(root).each do |key, format, template|
+          add_partial(key, format, template)
+        end
       end
 
       # Add a partial to the registry
