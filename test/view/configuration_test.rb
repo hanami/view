@@ -155,7 +155,7 @@ describe Lotus::View::Configuration do
     it 'allows to add partials' do
       @configuration.add_partial('shared/_foo', 'json', @template_stub)
       @configuration.partials.keys.must_include('shared/_foo')
-      @configuration.partials['shared/_foo'].must_equal({ 'json' => @template_stub })
+      @configuration.partials['shared/_foo'].must_equal({ json: @template_stub })
     end
 
     it 'eliminates duplications' do

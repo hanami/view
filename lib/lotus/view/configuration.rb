@@ -397,7 +397,7 @@ module Lotus
       # @since x.x.x
       # @api private
       def add_partial(key, format, partial)
-        @partials[key][format] = partial
+        @partials[key][format.to_sym] = partial
       end
 
       # Reset all the values to the defaults
