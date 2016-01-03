@@ -143,6 +143,29 @@ describe Lotus::View::Configuration do
     end
   end
 
+  describe '#partials' do
+    before do
+      @template_stub = OpenStruct.new()
+    end
+
+    it 'defaults to an empty set' do
+      @configuration.partials.must_be_empty
+    end
+
+    it 'allows to add partials' do
+      @configuration.add_partial('shared/_foo', 'json', @template_stub)
+      @configuration.partials.keys.must_include('shared/_foo')
+      @configuration.partials['shared/_foo'].must_equal({ 'json' => @template_stub })
+    end
+
+    it 'eliminates duplications' do
+      @configuration.add_partial('shared/_foo', 'json', @template_stub)
+      @configuration.add_partial('shared/_foo', 'json', @template_stub)
+
+      @configuration.partials.size.must_equal(1)
+    end
+  end
+
   describe "#default_encoding" do
     it 'defaults to "utf-8"' do
       @configuration.default_encoding.must_equal "utf-8"
@@ -196,6 +219,7 @@ describe Lotus::View::Configuration do
       @configuration.default_encoding 'latin-1'
       @configuration.add_view(HelloWorldView)
       @configuration.add_layout(ApplicationLayout)
+      @configuration.add_partial('shared/_foo', 'json', Object.new)
       @configuration.prepare { include Kernel }
 
       @config = @configuration.duplicate
@@ -209,6 +233,7 @@ describe Lotus::View::Configuration do
       @config.modules.must_equal          @configuration.modules
       @config.views.must_be_empty
       @config.layouts.must_be_empty
+      @config.partials.must_be_empty
     end
 
     it "doesn't affect the original configuration" do
@@ -218,6 +243,7 @@ describe Lotus::View::Configuration do
       @config.default_encoding 'iso-8859'
       @config.add_view(RenderView)
       @config.add_layout(GlobalLayout)
+      @config.add_partial('shared/_bar', 'html', Object.new)
       @config.prepare { include Comparable }
 
       @config.root.must_equal         Pathname.new('.').realpath
@@ -226,10 +252,11 @@ describe Lotus::View::Configuration do
       @config.load_paths.must_include '..'
       @config.load_paths.must_include '../..'
 
-      @config.layout.must_equal       GlobalLayout
-      @config.views.must_include      RenderView
-      @config.layouts.must_include    GlobalLayout
-      @config.modules.size.must_equal 2
+      @config.layout.must_equal          GlobalLayout
+      @config.views.must_include         RenderView
+      @config.layouts.must_include       GlobalLayout
+      @config.partials.keys.must_include 'shared/_bar'
+      @config.modules.size.must_equal    2
 
       @configuration.root.must_equal       Pathname.new('test').realpath
 
@@ -246,6 +273,9 @@ describe Lotus::View::Configuration do
 
       @configuration.layouts.must_include  ApplicationLayout
       @configuration.layouts.wont_include  GlobalLayout
+
+      @configuration.partials.keys.must_include  'shared/_foo'
+      @configuration.partials.keys.wont_include  'shared/_bar'
     end
 
     it 'duplicates namespace' do
@@ -326,6 +356,10 @@ describe Lotus::View::Configuration do
     it 'loads the layouts' do
       MockLayout.must_be :loaded?
     end
+
+    it 'loads the partials' do
+      @configuration.partials.wont_be_empty
+    end
   end
 
   describe '#reset!' do
@@ -336,6 +370,7 @@ describe Lotus::View::Configuration do
       @configuration.default_encoding 'Windows-1253'
       @configuration.add_view(HelloWorldView)
       @configuration.add_layout(ApplicationLayout)
+      @configuration.add_partial('shared/_foo', 'html', Object.new)
 
       @configuration.reset!
     end
@@ -349,6 +384,7 @@ describe Lotus::View::Configuration do
       @configuration.default_encoding        'utf-8'
       @configuration.views.must_be_empty
       @configuration.layouts.must_be_empty
+      @configuration.partials.must_be_empty
     end
 
     it "doesn't reset namespace" do
