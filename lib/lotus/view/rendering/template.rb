@@ -53,7 +53,7 @@ module Lotus
           Scope.new(@view, @options[:locals])
         end
 
-        # @since x.x.x
+        # @since 0.5.0
         # @api private
         def raise_missing_template_error
           raise MissingTemplateError.new(

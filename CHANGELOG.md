@@ -1,7 +1,7 @@
 # Lotus::View
 View layer for Lotus
 
-## v0.5.0 - (unreleased)
+## v0.5.0 - 2016-01-12
 ### Added
 - [Luca Guidi] Added `Lotus::View::Configuration#default_encoding` to set the encoding for templates
 

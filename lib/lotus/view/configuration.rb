@@ -31,7 +31,7 @@ module Lotus
 
       # Default encoding
       #
-      # @since x.x.x
+      # @since 0.5.0
       # @api private
       DEFAULT_ENCODING = 'utf-8'.freeze
 
