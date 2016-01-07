@@ -1,6 +1,6 @@
 module Lotus
   module View
-    # @since x.x.x
+    # @since 0.5.0
     class Error < ::StandardError
     end
 
@@ -37,7 +37,7 @@ module Lotus
     #
     # This is raised at the runtime when Lotus::Layout cannot find it's template.
     #
-    # @since x.x.x
+    # @since 0.5.0
     class MissingTemplateLayoutError < Error
       def initialize(template)
         super("Can't find layout template '#{ template }'")
