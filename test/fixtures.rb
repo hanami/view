@@ -4,6 +4,17 @@ class HelloWorldView
   include Lotus::View
 end
 
+class SuperclassView
+  include Lotus::View
+end
+
+class SubclassView < SuperclassView
+end
+
+class SubclassViewXml < SuperclassView
+  format :xml
+end
+
 class DisabledLayoutView
   include Lotus::View
   layout false
