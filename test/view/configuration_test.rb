@@ -144,13 +144,19 @@ describe Lotus::View::Configuration do
   end
 
   describe "#default_encoding" do
-    it 'defaults to "utf-8"' do
-      @configuration.default_encoding.must_equal "utf-8"
+    it 'defaults to Encoding::UTF_8' do
+      @configuration.default_encoding.must_equal Encoding::UTF_8
     end
 
     it 'allows to set different value' do
-      @configuration.default_encoding "koi-8"
-      @configuration.default_encoding.must_equal "koi-8"
+      encoding = Encoding.list.sample
+      @configuration.default_encoding encoding.to_s
+      @configuration.default_encoding.must_equal encoding
+    end
+
+    it 'raises error in case of unknown encoding' do
+      exception = -> { @configuration.default_encoding 'abc' }.must_raise ArgumentError
+      exception.message.must_equal 'unknown encoding name - abc'
     end
   end
 
@@ -193,7 +199,7 @@ describe Lotus::View::Configuration do
       @configuration.root 'test'
       @configuration.load_paths << '..'
       @configuration.layout :application
-      @configuration.default_encoding 'latin-1'
+      @configuration.default_encoding 'UTF-7'
       @configuration.add_view(HelloWorldView)
       @configuration.add_layout(ApplicationLayout)
       @configuration.prepare { include Kernel }
@@ -215,7 +221,7 @@ describe Lotus::View::Configuration do
       @config.root '.'
       @config.load_paths << '../..'
       @config.layout :global
-      @config.default_encoding 'iso-8859'
+      @config.default_encoding 'iso-8859-1'
       @config.add_view(RenderView)
       @config.add_layout(GlobalLayout)
       @config.prepare { include Comparable }
@@ -237,7 +243,7 @@ describe Lotus::View::Configuration do
       @configuration.load_paths.must_include '..'
       @configuration.load_paths.wont_include '../..'
 
-      @configuration.default_encoding.must_equal 'latin-1'
+      @configuration.default_encoding.must_equal Encoding::UTF_7
 
       @configuration.layout.must_equal     ApplicationLayout
 
