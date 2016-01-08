@@ -2,6 +2,20 @@ require 'test_helper'
 require 'ostruct'
 
 describe Lotus::View do
+  describe 'one registry per superclass view' do
+    it 'subclass view with different format has the same registry as its superclass' do
+      superclass_registry = SuperclassView.send(:registry)
+      subclass_registry = SubclassViewXml.send(:registry)
+      superclass_registry.must_equal(subclass_registry)
+    end
+
+    it 'subclass view has the same registry as its superclass' do
+      superclass_registry = SuperclassView.send(:registry)
+      subclass_registry = SubclassView.send(:registry)
+      superclass_registry.must_equal(subclass_registry)
+    end
+  end
+
   describe 'rendering' do
     it 'renders a template' do
       HelloWorldView.render(format: :html).must_include %(<h1>Hello, World!</h1>)
