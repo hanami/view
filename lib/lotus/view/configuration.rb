@@ -33,7 +33,7 @@ module Lotus
       #
       # @since 0.5.0
       # @api private
-      DEFAULT_ENCODING = 'utf-8'.freeze
+      DEFAULT_ENCODING = Encoding::UTF_8
 
       attr_reader :load_paths
       attr_reader :views
@@ -243,11 +243,52 @@ module Lotus
         end
       end
 
+      # Default encoding for templates
+      #
+      # This is part of a DSL, for this reason when this method is called with
+      # an argument, it will set the corresponding instance variable. When
+      # called without, it will return the already set value, or the default.
+      #
+      # @overload default_encoding(value)
+      #   Sets the given value
+      #   @param value [String,Encoding] a string representation of the encoding,
+      #     or an Encoding constant
+      #
+      #   @raise [ArgumentError] if the given value isn't a supported encoding
+      #
+      # @overload default_encoding
+      #   Gets the value
+      #   @return [Encoding]
+      #
+      # @since 0.5.0
+      #
+      # @example Set UTF-8 As A String
+      #   require 'lotus/view'
+      #
+      #   Lotus::View.configure do
+      #     default_encoding 'utf-8'
+      #   end
+      #
+      # @example Set UTF-8 As An Encoding Constant
+      #   require 'lotus/view'
+      #
+      #   Lotus::View.configure do
+      #     default_encoding Encoding::UTF_8
+      #   end
+      #
+      # @example Raise An Error For Unknown Encoding
+      #   require 'lotus/view'
+      #
+      #   Lotus::View.configure do
+      #     default_encoding 'foo'
+      #   end
+      #
+      #     # => ArgumentError
       def default_encoding(value = nil)
         if value.nil?
           @default_encoding
         else
-          @default_encoding = value.to_s
+          @default_encoding = Encoding.find(value)
         end
       end
 

@@ -78,7 +78,7 @@ module Lotus
       #
       # ApplicationLayout.template # => 'application'
       def template
-        super.gsub(suffix, '')
+        super.sub(suffix, '')
       end
 
       # Template name suffix
