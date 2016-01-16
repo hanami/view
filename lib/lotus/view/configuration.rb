@@ -394,6 +394,16 @@ module Lotus
         end
       end
 
+      # Load partials for each partial template file found under the
+      # given load paths
+      #
+      # @since x.x.x
+      # @api private
+      def find_partial(relative_partial_path, template_name, format)
+        partials_for_view = partials.has_key?(relative_partial_path) ?  partials[relative_partial_path] : partials[template_name]
+        partials_for_view ? partials_for_view[format.to_sym] : nil
+      end
+
       # Add a partial to the registry
       #
       # @since x.x.x
