@@ -344,6 +344,42 @@ class ViewForScopeTest
   end
 end
 
+module App1
+  View = Lotus::View.duplicate(self) do
+    root __dir__ + '/fixtures/templates/app1/templates'
+  end
+
+  module Views
+    module Home
+      class Index
+        include App1::View
+      end
+    end
+  end
+end
+
+App1::View.load!
+
+module App2
+  View = Lotus::View.duplicate(self) do
+    root __dir__ + '/fixtures/templates/app2/templates'
+  end
+
+  module Views
+    module Home
+      class Index
+        include App2::View
+      end
+
+      class Show
+        include App2::View
+      end
+    end
+  end
+end
+
+App2::View.load!
+
 module Store
   View = Lotus::View.duplicate(self)
   View.extend Unloadable
