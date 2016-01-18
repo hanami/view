@@ -35,17 +35,11 @@ module Lotus
         # @since 0.4.3
         # @api private
         def find
-          find_cached_template
-        end
-
-        protected
-
-        # @since x.x.x
-        # @api private
-        def find_cached_template
           conf = Lotus::View::Configuration.for(@view)
           conf.find_partial(relative_partial_path, template_name, format)
         end
+
+        protected
 
         # @since x.x.x
         # @api private

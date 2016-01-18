@@ -1,4 +1,5 @@
 require 'lotus/view/template'
+require 'lotus/view/rendering/partial_file'
 
 module Lotus
   module View
@@ -16,30 +17,45 @@ module Lotus
         # @since x.x.x
         PARTIAL_PATTERN    = '_*'.freeze
 
-        # Initialize a configuration instance
+        attr_reader :configuration
+
+        # Initializes a new PartialTemplatesFinder
         #
-        # @return [Array] array of arrays containing partial template name,
-        # format and a newly created View::Template
+        # @param configuration [Configuration] the configuration object
         #
         # @since x.x.x
-        def self.find_partials(path)
-          _find_partials(path).map do |template|
+        def initialize(configuration)
+          @configuration = configuration
+        end
+
+        # Find partials under the given path
+        #
+        # @return [Array] array of PartialFinder objects
+        #
+        # @since x.x.x
+        def find
+          _find_partials(configuration.root).map do |template|
             path_name = Pathname(template)
-            partial_path, partial_base_name = Pathname(template).relative_path_from(path).split
+            partial_path, partial_base_name = Pathname(template).relative_path_from(configuration.root).split
             partial_base_parts = partial_base_name.to_s.split('.')
-            ["#{partial_path}#{::File::SEPARATOR}#{partial_base_parts[0]}", partial_base_parts[1], View::Template.new(template)]
+            PartialFile.new(
+              "#{partial_path}#{::File::SEPARATOR}#{partial_base_parts[0]}",
+              partial_base_parts[1],
+              View::Template.new(template, configuration.default_encoding))
           end
         end
 
-        # Copy the configuration for the given action
+        private
+
+        # Find partial template file paths
         #
         # @param path [String] the path under which we should search for partials
         #
-        # @return [Array] an array of strings for each matching partial found
+        # @return [Array] an array of strings for each matching partial template file found
         #
         # @since x.x.x
         # @api private
-        def self._find_partials(path)
+        def _find_partials(path)
           Dir.glob("#{ [path, TemplatesFinder::RECURSIVE, PARTIAL_PATTERN].join(::File::SEPARATOR) }.#{TemplatesFinder::FORMAT}.#{TemplatesFinder::ENGINES}")
         end
       end

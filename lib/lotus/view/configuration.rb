@@ -389,8 +389,8 @@ module Lotus
       # @since x.x.x
       # @api private
       def load_partials!
-        Lotus::View::Rendering::PartialTemplatesFinder.find_partials(root).each do |key, format, template|
-          add_partial(key, format, template)
+        Lotus::View::Rendering::PartialTemplatesFinder.new(self).find.each do |partial|
+          add_partial(partial)
         end
       end
 
@@ -408,8 +408,8 @@ module Lotus
       #
       # @since x.x.x
       # @api private
-      def add_partial(key, format, partial)
-        @partials[key][format.to_sym] = partial
+      def add_partial(partial)
+        @partials[partial.key][partial.format.to_sym] = partial.template
       end
 
       # Reset all the values to the defaults

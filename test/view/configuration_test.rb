@@ -153,14 +153,14 @@ describe Lotus::View::Configuration do
     end
 
     it 'allows to add partials' do
-      @configuration.add_partial('shared/_foo', 'json', @template_stub)
+      @configuration.add_partial(Lotus::View::Rendering::PartialFile.new('shared/_foo', 'json', @template_stub))
       @configuration.partials.keys.must_include('shared/_foo')
       @configuration.partials['shared/_foo'].must_equal({ json: @template_stub })
     end
 
     it 'eliminates duplications' do
-      @configuration.add_partial('shared/_foo', 'json', @template_stub)
-      @configuration.add_partial('shared/_foo', 'json', @template_stub)
+      @configuration.add_partial(Lotus::View::Rendering::PartialFile.new('shared/_foo', 'json', @template_stub))
+      @configuration.add_partial(Lotus::View::Rendering::PartialFile.new('shared/_foo', 'json', @template_stub))
 
       @configuration.partials.size.must_equal(1)
     end
@@ -219,7 +219,7 @@ describe Lotus::View::Configuration do
       @configuration.default_encoding 'latin-1'
       @configuration.add_view(HelloWorldView)
       @configuration.add_layout(ApplicationLayout)
-      @configuration.add_partial('shared/_foo', 'json', Object.new)
+      @configuration.add_partial(Lotus::View::Rendering::PartialFile.new('shared/_foo', 'json', Object.new))
       @configuration.prepare { include Kernel }
 
       @config = @configuration.duplicate
@@ -243,7 +243,7 @@ describe Lotus::View::Configuration do
       @config.default_encoding 'iso-8859'
       @config.add_view(RenderView)
       @config.add_layout(GlobalLayout)
-      @config.add_partial('shared/_bar', 'html', Object.new)
+      @config.add_partial(Lotus::View::Rendering::PartialFile.new('shared/_bar', 'html', Object.new))
       @config.prepare { include Comparable }
 
       @config.root.must_equal         Pathname.new('.').realpath
@@ -370,7 +370,7 @@ describe Lotus::View::Configuration do
       @configuration.default_encoding 'Windows-1253'
       @configuration.add_view(HelloWorldView)
       @configuration.add_layout(ApplicationLayout)
-      @configuration.add_partial('shared/_foo', 'html', Object.new)
+      @configuration.add_partial(Lotus::View::Rendering::PartialFile.new('shared/_foo', 'html', Object.new))
 
       @configuration.reset!
     end
