@@ -1,6 +1,6 @@
-require 'lotus/view/rendering/partial_finder'
+require 'hanami/view/rendering/partial_finder'
 
-module Lotus
+module Hanami
   module View
     module Rendering
       # Rendering partial
@@ -10,8 +10,8 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::View::Rendering::Template
-      # @see Lotus::View::Rendering::LayoutScope#render
+      # @see Hanami::View::Rendering::Template
+      # @see Hanami::View::Rendering::LayoutScope#render
       #
       # @example
       #   # We have an application template (templates/application.html.erb)

@@ -1,6 +1,6 @@
-require 'lotus/view/rendering/template_finder'
+require 'hanami/view/rendering/template_finder'
 
-module Lotus
+module Hanami
   module View
     module Rendering
       # Rendering template
@@ -10,7 +10,7 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::View::Rendering::LayoutScope#render
+      # @see Hanami::View::Rendering::LayoutScope#render
       #
       # @example
       #   # We have an application template (templates/application.html.erb)
@@ -20,7 +20,7 @@ module Lotus
       class Template
         # Initialize a template
         #
-        # @param view [Lotus::View] the current view
+        # @param view [Hanami::View] the current view
         # @param options [Hash] the rendering informations
         # @option options [Symbol] :format the current format
         # @option options [Hash] :locals the set of objects available within
@@ -36,7 +36,7 @@ module Lotus
         #
         # @return [String] the output of the rendering process.
         #
-        # @raise [Lotus::View::MissingTemplateError] if template can't be found
+        # @raise [Hanami::View::MissingTemplateError] if template can't be found
         #
         # @api private
         # @since 0.1.0

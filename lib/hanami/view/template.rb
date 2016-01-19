@@ -1,6 +1,6 @@
 require 'tilt'
 
-module Lotus
+module Hanami
   module View
     # A logic-less template.
     #
@@ -17,9 +17,9 @@ module Lotus
       # @since 0.1.0
       #
       # @example
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
-      #   template = Lotus::View::Template.new('index.html.erb')
+      #   template = Hanami::View::Template.new('index.html.erb')
       #   template.format # => :html
       def format
         @_template.basename.match(/\.([^.]+)/).captures.first.to_sym
@@ -27,14 +27,14 @@ module Lotus
 
       # Render the template within the context of the given scope.
       #
-      # @param scope [Lotus::View::Scope] the rendering scope
+      # @param scope [Hanami::View::Scope] the rendering scope
       #
       # @return [String] the output of the rendering process
       #
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::View::Scope
+      # @see Hanami::View::Scope
       def render(scope, &blk)
         @_template.render(scope, {}, &blk)
       end

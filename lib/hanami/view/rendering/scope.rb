@@ -1,16 +1,16 @@
-require 'lotus/utils/escape'
-require 'lotus/view/rendering/layout_scope'
-require 'lotus/view/rendering/template'
-require 'lotus/view/rendering/partial'
+require 'hanami/utils/escape'
+require 'hanami/view/rendering/layout_scope'
+require 'hanami/view/rendering/template'
+require 'hanami/view/rendering/partial'
 
-module Lotus
+module Hanami
   module View
     module Rendering
       # Rendering scope
       #
       # @since 0.1.0
       #
-      # @see Lotus::View::Rendering::LayoutScope
+      # @see Hanami::View::Rendering::LayoutScope
       class Scope < LayoutScope
         # Initialize the scope
         #
@@ -60,7 +60,7 @@ module Lotus
 
         protected
         def method_missing(m, *args, &block)
-          ::Lotus::View::Escape.html(
+          ::Hanami::View::Escape.html(
             if @view.respond_to?(m)
               @view.__send__ m, *args, &block
             elsif @locals.key?(m)

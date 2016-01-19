@@ -1,4 +1,4 @@
-module Lotus
+module Hanami
   module View
     module Rendering
       # Null Object pattern for layout template
@@ -15,18 +15,18 @@ module Lotus
       # @since 0.1.0
       #
       # @example
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   # We have an ApplicationLayout (views/application_layout.rb):
       #   class ApplicationLayout
-      #     include Lotus::Layout
+      #     include Hanami::Layout
       #   end
       #
       #   # Our layout has a template for HTML requests, located at:
       #   # templates/application.html.erb
       #
       #   # We set it as global layout
-      #   Lotus::View.layout = :application
+      #   Hanami::View.layout = :application
       #
       #   # We have two views for HTML and JSON articles.
       #   # They have a template each:
@@ -35,7 +35,7 @@ module Lotus
       #   #   * templates/articles/show.json.erb
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #       format :html
       #     end
       #
@@ -45,7 +45,7 @@ module Lotus
       #   end
       #
       #   # We initialize the framework
-      #   Lotus::View.load!
+      #   Hanami::View.load!
       #
       #
       #
@@ -63,7 +63,7 @@ module Lotus
       class NullTemplate
         # Render the layout template
         #
-        # @param scope [Lotus::View::Scope] the rendering scope
+        # @param scope [Hanami::View::Scope] the rendering scope
         # @param locals [Hash] a set of objects available during the rendering
         # @yield [Proc] yields the given block
         #
@@ -72,8 +72,8 @@ module Lotus
         # @api private
         # @since 0.1.0
         #
-        # @see Lotus::Layout#render
-        # @see Lotus::View::Rendering#render
+        # @see Hanami::Layout#render
+        # @see Hanami::View::Rendering#render
         def render(scope, locals = {})
           yield
         end

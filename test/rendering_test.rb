@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'ostruct'
 
-describe Lotus::View do
+describe Hanami::View do
   describe 'rendering' do
     it 'renders a template' do
       HelloWorldView.render(format: :html).must_include %(<h1>Hello, World!</h1>)
@@ -11,16 +11,16 @@ describe Lotus::View do
       RenderView.render(format: :html, planet: 'Mars').must_include %(<h1>Hello, Mars!</h1>)
     end
 
-    # See https://github.com/lotus/view/issues/76
+    # See https://github.com/hanami/view/issues/76
     it 'renders a template with different encoding' do
       EncodingView.render(format: :html).must_include %(Configuração)
     end
 
-    # See https://github.com/lotus/view/issues/76
+    # See https://github.com/hanami/view/issues/76
     it 'raises error when given encoding is not correct' do
       exception = -> {
         Class.new do
-          include Lotus::View
+          include Hanami::View
           configuration.default_encoding 'wrong'
 
           def self.name; 'EncodingView'; end
@@ -77,13 +77,13 @@ describe Lotus::View do
 
       -> {
         Articles::Show.render(format: :png, article: article)
-      }.must_raise(Lotus::View::MissingTemplateError)
+      }.must_raise(Hanami::View::MissingTemplateError)
     end
 
     it 'raises an error when the format is missing' do
       -> {
         HelloWorldView.render({})
-      }.must_raise(Lotus::View::MissingFormatError)
+      }.must_raise(Hanami::View::MissingFormatError)
     end
 
     it 'renders different template, as specified by DSL' do
@@ -129,11 +129,11 @@ describe Lotus::View do
     it 'raises an error when the partial template is missing' do
       -> {
         RenderViewWithMissingPartialTemplate.render(format: :html)
-      }.must_raise(Lotus::View::MissingTemplateError)
+      }.must_raise(Hanami::View::MissingTemplateError)
        .message.must_match("Can't find template 'shared/missing_template' for 'html' format.")
     end
 
-    # @issue https://github.com/lotus/view/issues/3
+    # @issue https://github.com/hanami/view/issues/3
     it 'renders a template within another template' do
       parent = OpenStruct.new(children: [], name: 'parent')
       child1 = OpenStruct.new(children: [], name: 'child1')

@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe 'Framework configuration' do
   it 'keeps separated copies of the configuration' do
-    framework_configuration = Lotus::View.configuration
+    framework_configuration = Hanami::View.configuration
     card_configuration      = CardDeck::View.configuration
 
     framework_configuration.wont_equal(card_configuration)
@@ -36,7 +36,7 @@ describe 'Framework configuration' do
   end
 
   it 'in a view disable a layout' do
-    CardDeck::Views::Home::RssIndex.layout.must_equal Lotus::View::Rendering::NullLayout
+    CardDeck::Views::Home::RssIndex.layout.must_equal Hanami::View::Rendering::NullLayout
   end
 
   it 'allow views to specify a layout'
@@ -51,7 +51,7 @@ describe 'Framework configuration' do
   #   Instead of HelloWorldView.subclasses, use HelloWorldView.configuration.views
   #
   # This also helps to have an unified API to load the framework Configuration#load! vs
-  # Lotus::View::Inheritable#load!
+  # Hanami::View::Inheritable#load!
   #
   # it 'allow views to specify a layout' do
   #   view_configuration = CardDeck::Views::Home::JsonIndex.configuration

@@ -1,20 +1,20 @@
 require 'json'
 
 class HelloWorldView
-  include Lotus::View
+  include Hanami::View
 end
 
 class DisabledLayoutView
-  include Lotus::View
+  include Hanami::View
   layout false
 end
 
 class RenderView
-  include Lotus::View
+  include Hanami::View
 end
 
 class RenderViewMethodOverride
-  include Lotus::View
+  include Hanami::View
 
   def select
     'foo'
@@ -22,7 +22,7 @@ class RenderViewMethodOverride
 end
 
 class RenderViewMethodWithArgs
-  include Lotus::View
+  include Hanami::View
 
   def planet(name)
     name.to_s
@@ -30,7 +30,7 @@ class RenderViewMethodWithArgs
 end
 
 class RenderViewMethodWithBlock
-  include Lotus::View
+  include Hanami::View
 
   def each_thing
     yield 'thing 1'
@@ -40,20 +40,20 @@ class RenderViewMethodWithBlock
 end
 
 class RenderViewWithMissingPartialTemplate
-  include Lotus::View
+  include Hanami::View
 end
 
 class EncodingView
-  include Lotus::View
+  include Hanami::View
 end
 
 class JsonRenderView
-  include Lotus::View
+  include Hanami::View
   format :json
 end
 
 class AppView
-  include Lotus::View
+  include Hanami::View
   root __dir__ + '/fixtures/templates/app'
   layout :application
 end
@@ -67,37 +67,37 @@ class AppViewRoot < AppView
 end
 
 class NestedView
-  include Lotus::View
+  include Hanami::View
   root __dir__ + '/fixtures/templates'
 end
 
 
 module Organisations
   class Action
-    include Lotus::View
+    include Hanami::View
     root __dir__ + '/fixtures/templates'
   end
 
   module OrderTemplates
     class Action
-      include Lotus::View
+      include Hanami::View
       root __dir__ + '/fixtures/templates'
     end
   end
 end
 
 class MissingTemplateView
-  include Lotus::View
+  include Hanami::View
 end
 
 module App
   class View
-    include Lotus::View
+    include Hanami::View
   end
 end
 
 class ApplicationLayout
-  include Lotus::Layout
+  include Hanami::Layout
 
   def title
     'Title:'
@@ -109,7 +109,7 @@ end
 
 module Articles
   class Index
-    include Lotus::View
+    include Hanami::View
     layout :application
 
     def title
@@ -128,7 +128,7 @@ module Articles
   end
 
   class New
-    include Lotus::View
+    include Hanami::View
 
     def errors
       {}
@@ -136,7 +136,7 @@ module Articles
   end
 
   class Create
-    include Lotus::View
+    include Hanami::View
     template 'articles/new'
 
     def errors
@@ -145,7 +145,7 @@ module Articles
   end
 
   class Show
-    include Lotus::View
+    include Hanami::View
 
     def title
       @title ||= article.title.upcase
@@ -182,7 +182,7 @@ class Map
 end
 
 class MapPresenter
-  include Lotus::Presenter
+  include Hanami::Presenter
 
   def count
     locations.count
@@ -207,7 +207,7 @@ end
 
 module Dashboard
   class Index
-    include Lotus::View
+    include Hanami::View
 
     def map
       MapPresenter.new(locals[:map])
@@ -216,7 +216,7 @@ module Dashboard
 end
 
 class IndexView
-  include Lotus::View
+  include Hanami::View
 
   layout :application
 end
@@ -235,7 +235,7 @@ end
 
 module Songs
   class Show
-    include Lotus::View
+    include Hanami::View
     format :html
 
     def render
@@ -246,7 +246,7 @@ end
 
 module Metrics
   class Index
-    include Lotus::View
+    include Hanami::View
 
     def render
       %(metrics)
@@ -256,13 +256,13 @@ end
 
 module Contacts
   class Show
-    include Lotus::View
+    include Hanami::View
   end
 end
 
 module Nodes
   class Parent
-    include Lotus::View
+    include Hanami::View
   end
 end
 
@@ -273,7 +273,7 @@ module MyOtherCustomModule
 end
 
 module CardDeck
-  View = Lotus::View.duplicate(self) do
+  View = Hanami::View.duplicate(self) do
     namespace CardDeck
     root __dir__ + '/fixtures/templates/card_deck/app/templates'
     layout :application
@@ -345,13 +345,13 @@ class ViewForScopeTest
 end
 
 module Store
-  View = Lotus::View.duplicate(self)
+  View = Hanami::View.duplicate(self)
   View.extend Unloadable
 
   module Helpers
     module AssetTagHelpers
       def javascript_tag(source)
-        Lotus::Utils::Escape::SafeString.new %(<script type="text/javascript" src="/javascripts/#{ source }.js" />)
+        Hanami::Utils::Escape::SafeString.new %(<script type="text/javascript" src="/javascripts/#{ source }.js" />)
       end
     end
   end
@@ -362,7 +362,7 @@ module Store
       include Store::Helpers::AssetTagHelpers
 
       def head
-        Lotus::Utils::Escape::SafeString.new %(<meta name="lotusrb-version" content="0.3.1">)
+        Hanami::Utils::Escape::SafeString.new %(<meta name="hanamirb-version" content="0.3.1">)
       end
 
       def user_name
@@ -413,7 +413,7 @@ class UserXmlSerializer
 end
 
 class UserLayout
-  include Lotus::Layout
+  include Hanami::Layout
 
   def page_title(username)
     "User: #{ username }"
@@ -422,7 +422,7 @@ end
 
 module Users
   class Show
-    include Lotus::View
+    include Hanami::View
     layout :user
 
     def custom
@@ -459,7 +459,7 @@ module Users
   end
 
   class Extra
-    include Lotus::View
+    include Hanami::View
 
     def username
       user.username

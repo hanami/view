@@ -1,13 +1,13 @@
-require 'lotus/view/rendering/templates_finder'
+require 'hanami/view/rendering/templates_finder'
 
-module Lotus
+module Hanami
   module View
     module Rendering
       # Find a template for the current view context.
       # It's used when a template wants to render another template.
       #
-      # @see Lotus::View::Rendering::Template
-      # @see Lotus::View::Rendering::TemplatesFinder
+      # @see Hanami::View::Rendering::Template
+      # @see Hanami::View::Rendering::TemplatesFinder
       #
       # @api private
       # @since 0.1.0
@@ -28,13 +28,13 @@ module Lotus
 
         # Find a template for the current view context
         #
-        # @return [Lotus::View::Template] the requested template
+        # @return [Hanami::View::Template] the requested template
         #
         # @api private
         # @since 0.1.0
         #
-        # @see Lotus::View::Rendering::TemplatesFinder#find
-        # @see Lotus::View::Rendering::Template#render
+        # @see Hanami::View::Rendering::TemplatesFinder#find
+        # @see Hanami::View::Rendering::Template#render
         def find
           super.first
         end

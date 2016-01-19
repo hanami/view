@@ -1,6 +1,6 @@
-require 'lotus/utils/escape'
+require 'hanami/utils/escape'
 
-module Lotus
+module Hanami
   module View
     module Rendering
       # Scope for layout rendering
@@ -9,8 +9,8 @@ module Lotus
       class LayoutScope < BasicObject
         # Initialize the scope
         #
-        # @param layout [Lotus::Layout] the layout to render
-        # @param scope [Lotus::View::Rendering::Scope] the scope of the current
+        # @param layout [Hanami::Layout] the layout to render
+        # @param scope [Hanami::View::Rendering::Scope] the scope of the current
         #   view
         #
         # @api private
@@ -97,7 +97,7 @@ module Lotus
 
         # The current view.
         #
-        # @return [Lotus::View] the current view
+        # @return [Hanami::View] the current view
         #
         # @since 0.1.0
         def view
@@ -145,11 +145,11 @@ module Lotus
         #
         #   module Products
         #     class Index
-        #       include Lotus::View
+        #       include Hanami::View
         #     end
         #
         #     class Show
-        #       include Lotus::View
+        #       include Hanami::View
         #
         #       def footer
         #         "contents for footer"
@@ -190,8 +190,8 @@ module Lotus
         # @api private
         # @since 0.1.0
         #
-        # @see Lotus::View::Rendering::Scope
-        # @see Lotus::Layout
+        # @see Hanami::View::Rendering::Scope
+        # @see Hanami::Layout
         #
         # @example
         #   # In the layout template:
@@ -208,7 +208,7 @@ module Lotus
           elsif layout.respond_to?(m)
             layout.__send__(m, *args, &blk)
           else
-            ::Lotus::View::Escape.html(super)
+            ::Hanami::View::Escape.html(super)
           end
         end
 

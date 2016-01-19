@@ -1,17 +1,17 @@
-# Lotus::View
-View layer for Lotus
+# Hanami::View
+View layer for Hanami
 
 ## v0.5.0 - 2016-01-12
 ### Added
-- [Luca Guidi] Added `Lotus::View::Configuration#default_encoding` to set the encoding for templates
+- [Luca Guidi] Added `Hanami::View::Configuration#default_encoding` to set the encoding for templates
 
 ### Fixed
 - [Luca Guidi] Let exceptions to be raised as they occur in rendering context. This fixes misleading backtraces for exceptions.
-- [Martin Rubi] Raise a `Lotus::View::MissingTemplateError` when rendering a missing partial from a template
+- [Martin Rubi] Raise a `Hanami::View::MissingTemplateError` when rendering a missing partial from a template
 - [Luca Guidi] Fix for `template.erb is not valid US-ASCII (Encoding::InvalidByteSequenceError)` when system encoding is not set
 
 ### Changed
-- [Liam Dawson] Introduced `Lotus::View::Error` and let all the framework exceptions to inherit from it.
+- [Liam Dawson] Introduced `Hanami::View::Error` and let all the framework exceptions to inherit from it.
 
 ## v0.4.4 - 2015-09-30
 ### Added
@@ -43,10 +43,10 @@ View layer for Lotus
 - [Trung Lê] When duplicate the framework, also duplicate `Presenter`
 - [Benny Klotz] Introduced `Scope#class`, `#inspect`, `LayoutScope#class` and `#inspect`
 - [Alfonso Uceda Pompa & Trung Lê] Introduced `Configuration#prepare`
-- [Luca Guidi] Implemented "respond to" logic for `Lotus::View::Scope` (`respond_to?` and `respond_to_missing?`)
-- [Luca Guidi] Implemented "respond to" logic for `Lotus::Layout` (`respond_to?` and `respond_to_missing?`)
+- [Luca Guidi] Implemented "respond to" logic for `Hanami::View::Scope` (`respond_to?` and `respond_to_missing?`)
+- [Luca Guidi] Implemented "respond to" logic for `Hanami::Layout` (`respond_to?` and `respond_to_missing?`)
 - [Jeremy Stephens] Allow view concrete methods that accept a block to be invoked from templates
-- [Peter Suschlik] Implemented "respond to" logic for `Lotus::Presenter` (`respond_to?` and `respond_to_missing?`)
+- [Peter Suschlik] Implemented "respond to" logic for `Hanami::Presenter` (`respond_to?` and `respond_to_missing?`)
 - [Luca Guidi] Official support for Ruby 2.2
 
 ### Changed
@@ -63,7 +63,7 @@ View layer for Lotus
 - [Luca Guidi] Introduced `Configuration#layout` to define the layout that all the views will use
 - [Luca Guidi] Introduced `Configuration#load_paths` to define several sources where to lookup for templates
 - [Luca Guidi] Introduced `Configuration#root` to define the root path where to find templates
-- [Luca Guidi] Introduced `Lotus::View::Configuration`
+- [Luca Guidi] Introduced `Hanami::View::Configuration`
 - [Grant Ammons] Allow view concrete methods with arity > 0 to be invoked from templates
 - [Luca Guidi] Official support for Ruby 2.1
 
@@ -78,11 +78,11 @@ View layer for Lotus
 ## v0.1.0 - 2014-03-23
 ### Added
 - [Luca Guidi] Allow custom rendering policy via `Action#render` override. This bypasses the template lookup and rendering.
-- [Luca Guidi] Introduced `Lotus::Presenter`
+- [Luca Guidi] Introduced `Hanami::Presenter`
 - [Luca Guidi] Introduced templates rendering from templates and layouts
 - [Luca Guidi] Introduced partials rendering from templates and layouts
 - [Luca Guidi] Introduced layouts support
-- [Luca Guidi] Introduced `Lotus::View.load!` as entry point to load views and templates
+- [Luca Guidi] Introduced `Hanami::View.load!` as entry point to load views and templates
 - [Luca Guidi] Allow to setup template name via `View.template`
 - [Luca Guidi] Rendering context also considers locals passed to the constructor
 - [Luca Guidi] Introduced `View.format` as DSL to declare which format to handle

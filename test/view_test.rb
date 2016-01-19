@@ -1,21 +1,21 @@
 require 'test_helper'
 
-describe Lotus::View do
+describe Hanami::View do
   before do
-    Lotus::View.unload!
+    Hanami::View.unload!
   end
 
   describe '.configuration' do
     before do
       class ConfigurationView
-        include Lotus::View
+        include Hanami::View
       end
 
       class ConfigurationChildView < ConfigurationView
       end
 
       class ConfigurationLayout
-        include Lotus::Layout
+        include Hanami::Layout
       end
     end
 
@@ -26,15 +26,15 @@ describe Lotus::View do
     end
 
     it 'exposes class configuration' do
-      Lotus::View.configuration.must_be_kind_of(Lotus::View::Configuration)
+      Hanami::View.configuration.must_be_kind_of(Hanami::View::Configuration)
     end
 
     it 'defaults root to the current dir' do
-      Lotus::View.configuration.root.must_equal(Pathname.new('.').realpath)
+      Hanami::View.configuration.root.must_equal(Pathname.new('.').realpath)
     end
 
     it 'a view inheriths the configuration from the framework' do
-      expected = Lotus::View.configuration
+      expected = Hanami::View.configuration
       actual   = ConfigurationView.configuration
 
       actual.must_equal(expected)
@@ -59,19 +59,19 @@ describe Lotus::View do
     end
 
     it 'a view must be included in the framework configuration registry' do
-      Lotus::View.configuration.views.must_include(ConfigurationView)
+      Hanami::View.configuration.views.must_include(ConfigurationView)
       ConfigurationView.configuration.views.wont_include(ConfigurationView)
     end
 
     it 'a layout inheriths the configuration from the framework' do
-      expected = Lotus::View.configuration
+      expected = Hanami::View.configuration
       actual   = ConfigurationLayout.configuration
 
       actual.must_equal(expected)
     end
 
     it 'a layout must be included in the framework configuration registry' do
-      Lotus::View.configuration.layouts.must_include(ConfigurationLayout)
+      Hanami::View.configuration.layouts.must_include(ConfigurationLayout)
       ConfigurationLayout.configuration.layouts.wont_include(ConfigurationView)
     end
   end
@@ -80,17 +80,17 @@ describe Lotus::View do
     it 'allows to configure the framework' do
       path = Pathname.new('.').join('test/fixtures').realpath
 
-      Lotus::View.class_eval do
+      Hanami::View.class_eval do
         configure do
           root path
         end
       end
 
-      Lotus::View.configuration.root.must_equal(path)
+      Hanami::View.configuration.root.must_equal(path)
     end
 
     it 'allows to override one value' do
-      Lotus::View.class_eval do
+      Hanami::View.class_eval do
         configure do
           load_paths << 'test/fixtures'
         end
@@ -100,7 +100,7 @@ describe Lotus::View do
         end
       end
 
-      configuration = Lotus::View.configuration
+      configuration = Hanami::View.configuration
       configuration.load_paths.must_include('test/fixtures')
       configuration.load_paths.must_include('test/fixtures/templates')
     end
@@ -108,15 +108,15 @@ describe Lotus::View do
 
   describe '.dupe' do
     before do
-      Lotus::View.class_eval do
+      Hanami::View.class_eval do
         configure do
           root '..'
         end
       end
 
-      DuplicatedView = Lotus::View.dupe
+      DuplicatedView = Hanami::View.dupe
 
-      @framework_config  = Lotus::View.configuration
+      @framework_config  = Hanami::View.configuration
       @duplicated_config = DuplicatedView.configuration
     end
 
@@ -138,22 +138,22 @@ describe Lotus::View do
 
   describe '.duplicate' do
     before do
-      Lotus::View.configure { layout :application }
+      Hanami::View.configure { layout :application }
 
       module Duplicated
-        View = Lotus::View.duplicate(self)
+        View = Hanami::View.duplicate(self)
       end
 
       module DuplicatedCustom
-        View = Lotus::View.duplicate(self, 'Viewz')
+        View = Hanami::View.duplicate(self, 'Viewz')
       end
 
       module DuplicatedWithoutNamespace
-        View = Lotus::View.duplicate(self, nil)
+        View = Hanami::View.duplicate(self, nil)
       end
 
       module DuplicatedConfigure
-        View = Lotus::View.duplicate(self) do
+        View = Hanami::View.duplicate(self) do
           layout :app
         end
 
@@ -166,7 +166,7 @@ describe Lotus::View do
     end
 
     after do
-      Lotus::View.configuration.reset!
+      Hanami::View.configuration.reset!
 
       Object.send(:remove_const, :Duplicated)
       Object.send(:remove_const, :DuplicatedCustom)
@@ -176,7 +176,7 @@ describe Lotus::View do
 
     it 'duplicates the configuration of the framework' do
       actual   = Duplicated::View.configuration
-      expected = Lotus::View.configuration
+      expected = Hanami::View.configuration
 
       actual.layout.must_equal(expected.layout)
     end
@@ -213,14 +213,14 @@ describe Lotus::View do
 
   describe 'global layout' do
     before do
-      Lotus::View.class_eval do
+      Hanami::View.class_eval do
         configure do
           layout :application
         end
       end
 
       class ViewWithInheritedLayout
-        include Lotus::View
+        include Hanami::View
       end
     end
 

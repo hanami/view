@@ -1,9 +1,9 @@
 require 'test_helper'
 
-describe Lotus::View::Configuration do
+describe Hanami::View::Configuration do
   before do
-    Lotus::View.unload!
-    @configuration = Lotus::View::Configuration.new
+    Hanami::View.unload!
+    @configuration = Hanami::View::Configuration.new
   end
 
   describe '#root' do
@@ -84,7 +84,7 @@ describe Lotus::View::Configuration do
 
     describe "when a value isn't given" do
       it 'defaults to the null layout' do
-        @configuration.layout.must_equal(Lotus::View::Rendering::NullLayout)
+        @configuration.layout.must_equal(Hanami::View::Rendering::NullLayout)
       end
     end
 
@@ -93,7 +93,7 @@ describe Lotus::View::Configuration do
         @configuration.layout :lazy
 
         class LazyLayout
-          include Lotus::Layout
+          include Hanami::Layout
         end
       end
 
@@ -177,14 +177,14 @@ describe Lotus::View::Configuration do
       Object.__send__(:remove_const, :PrepareView)
     end
 
-    it 'allows to set a code block to be yielded when Lotus::View is included' do
-      Lotus::View.configure do
+    it 'allows to set a code block to be yielded when Hanami::View is included' do
+      Hanami::View.configure do
         prepare do
           include FooRendering
         end
       end
 
-      PrepareView.__send__(:include, Lotus::View)
+      PrepareView.__send__(:include, Hanami::View)
       PrepareView.render({format: :html}).must_equal 'foo'
     end
 
@@ -263,12 +263,12 @@ describe Lotus::View::Configuration do
 
     describe 'layout lazy loading' do
       before do
-        Lotus::View.configure do
+        Hanami::View.configure do
           layout :application
         end
 
         module LazyApp
-          View = Lotus::View.duplicate(self)
+          View = Hanami::View.duplicate(self)
 
           module Views
             module Dashboard
@@ -351,7 +351,7 @@ describe Lotus::View::Configuration do
 
       @configuration.root.must_equal         root
       @configuration.load_paths.must_include root
-      @configuration.layout.must_equal Lotus::View::Rendering::NullLayout
+      @configuration.layout.must_equal Hanami::View::Rendering::NullLayout
       @configuration.default_encoding        'utf-8'
       @configuration.views.must_be_empty
       @configuration.layouts.must_be_empty

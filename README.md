@@ -1,6 +1,6 @@
-# Lotus::View
+# Hanami::View
 
-A View layer for [Lotus](http://lotusrb.org).
+A View layer for [Hanami](http://hanamirb.org).
 
 It's based on a **separation between views and templates**.
 
@@ -12,36 +12,36 @@ Keeping things separated helps to declutter templates and models from presentati
 Also, since views are objects, they are easily testable.
 If you ever used [Mustache](http://mustache.github.io/), you are already aware of the advantages.
 
-Like all the other Lotus components, it can be used as a standalone framework or within a full Lotus application.
+Like all the other Hanami components, it can be used as a standalone framework or within a full Hanami application.
 
 ## Status
 
-[![Gem Version](http://img.shields.io/gem/v/lotus-view.svg)](https://badge.fury.io/rb/lotus-view)
-[![Build Status](http://img.shields.io/travis/lotus/view/master.svg)](https://travis-ci.org/lotus/view?branch=master)
-[![Coverage](http://img.shields.io/coveralls/lotus/view/master.svg)](https://coveralls.io/r/lotus/view)
-[![Code Climate](http://img.shields.io/codeclimate/github/lotus/view.svg)](https://codeclimate.com/github/lotus/view)
-[![Dependencies](http://img.shields.io/gemnasium/lotus/view.svg)](https://gemnasium.com/lotus/view)
-[![Inline docs](http://inch-ci.org/github/lotus/view.svg?branch=master)](http://inch-ci.org/github/lotus/view)
+[![Gem Version](http://img.shields.io/gem/v/hanami-view.svg)](https://badge.fury.io/rb/hanami-view)
+[![Build Status](http://img.shields.io/travis/hanami/view/master.svg)](https://travis-ci.org/hanami/view?branch=master)
+[![Coverage](http://img.shields.io/coveralls/hanami/view/master.svg)](https://coveralls.io/r/hanami/view)
+[![Code Climate](http://img.shields.io/codeclimate/github/hanami/view.svg)](https://codeclimate.com/github/hanami/view)
+[![Dependencies](http://img.shields.io/gemnasium/hanami/view.svg)](https://gemnasium.com/hanami/view)
+[![Inline docs](http://inch-ci.org/github/hanami/view.svg?branch=master)](http://inch-ci.org/github/hanami/view)
 
 ## Contact
 
-* Home page: http://lotusrb.org
-* Mailing List: http://lotusrb.org/mailing-list
-* API Doc: http://rdoc.info/gems/lotus-view
-* Bugs/Issues: https://github.com/lotus/view/issues
-* Support: http://stackoverflow.com/questions/tagged/lotus-ruby
-* Chat: https://gitter.im/lotus/chat
+* Home page: http://hanamirb.org
+* Mailing List: http://hanamirb.org/mailing-list
+* API Doc: http://rdoc.info/gems/hanami-view
+* Bugs/Issues: https://github.com/hanami/view/issues
+* Support: http://stackoverflow.com/questions/tagged/hanami
+* Chat: http://chat.hanamirb.org
 
 ## Rubies
 
-__Lotus::View__ supports Ruby (MRI) 2+
+__Hanami::View__ supports Ruby (MRI) 2+
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'lotus-view'
+gem 'hanami-view'
 ```
 
 And then execute:
@@ -50,27 +50,27 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install lotus-view
+    $ gem install hanami-view
 
 ## Usage
 
 ### Conventions
 
-  * Templates are searched under `Lotus::View.configuration.root`, set this value according to your app structure (eg. `"app/templates"`).
+  * Templates are searched under `Hanami::View.configuration.root`, set this value according to your app structure (eg. `"app/templates"`).
   * A view will look for a template with a file name that is composed by its full class name (eg. `"articles/index"`).
   * A template must have two concatenated extensions: one for the format and one for the engine (eg. `".html.erb"`).
-  * The framework must be loaded before rendering the first time: `Lotus::View.load!`.
+  * The framework must be loaded before rendering the first time: `Hanami::View.load!`.
 
 ### Views
 
 A simple view looks like this:
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 module Articles
   class Index
-    include Lotus::View
+    include Hanami::View
   end
 end
 ```
@@ -78,22 +78,22 @@ end
 Suppose that we want to render a list of `articles`:
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 module Articles
   class Index
-    include Lotus::View
+    include Hanami::View
   end
 end
 
-Lotus::View.configure do
+Hanami::View.configure do
   root 'app/templates'
 end
 
-Lotus::View.load!
+Hanami::View.load!
 
-path     = Lotus::View.configuration.root.join('articles/index.html.erb')
-template = Lotus::View::Template.new(path)
+path     = Hanami::View.configuration.root.join('articles/index.html.erb')
+template = Hanami::View::Template.new(path)
 articles = ArticleRepository.all
 
 Articles::Index.new(template, articles: articles).render
@@ -103,11 +103,11 @@ While this code is working fine, it's inefficient and verbose, because we are lo
 Also, this is strictly related to the HTML format, what if we want to manage other formats?
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 module Articles
   class Index
-    include Lotus::View
+    include Hanami::View
   end
 
   class AtomIndex < Index
@@ -115,11 +115,11 @@ module Articles
   end
 end
 
-Lotus::View.configure do
+Hanami::View.configure do
   root 'app/templates'
 end
 
-Lotus::View.load!
+Hanami::View.load!
 
 articles = ArticleRepository.all
 
@@ -132,7 +132,7 @@ Articles::Index.render(format: :atom, articles: articles)
   #    and "articles/index.atom.erb"
 
 Articles::Index.render(format: :xml, articles: articles)
-  # => This will raise a Lotus::View::MissingTemplateError
+  # => This will raise a Hanami::View::MissingTemplateError
 ```
 
 ### Locals
@@ -140,11 +140,11 @@ Articles::Index.render(format: :xml, articles: articles)
 All the objects passed in the context are called _locals_, they are available both in the view and in the template:
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 module Articles
   class Show
-    include Lotus::View
+    include Hanami::View
 
     def authors
       article.authors.map(&:full_name).join ', '
@@ -169,11 +169,11 @@ All the methods defined in the view are accessible from the template:
 For convenience, they are also available to the view as a Hash, accessed through the `locals` method.
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 module Articles
   class Show
-    include Lotus::View
+    include Hanami::View
 
     # This view already responds to `#article` because there is an element in
     # the locals with the same key.
@@ -200,11 +200,11 @@ end
 Since a view is an object, you can override `#render` and provide your own rendering policy:
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 module Articles
   class Show
-    include Lotus::View
+    include Hanami::View
     format :json
 
     def render
@@ -224,11 +224,11 @@ The `.format` DSL is used to declare one or more mime types that a view is able 
 These values are **arbitrary**, just **be sure to create a corresponding template**.
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 module Articles
   class Show
-    include Lotus::View
+    include Hanami::View
     format :custom
   end
 end
@@ -240,16 +240,16 @@ Articles::Show.render({format: :custom, article: article})
 ### Engines
 
 The builtin rendering engine is [ERb](http://en.wikipedia.org/wiki/ERuby).
-However, Lotus::View supports countless rendering engines out of the box.
-Require your library of choice **before** requiring `'lotus/view'`, and it will just work.
+However, Hanami::View supports countless rendering engines out of the box.
+Require your library of choice **before** requiring `'hanami/view'`, and it will just work.
 
 ```ruby
 require 'haml'
-require 'lotus/view'
+require 'hanami/view'
 
 module Articles
   class Show
-    include Lotus::View
+    include Hanami::View
   end
 end
 
@@ -382,11 +382,11 @@ For instance, if [ERubis](http://www.kuwata-lab.com/erubis/) is loaded, it will 
 
 ### Root
 
-Template lookup is performed under the `Lotus::View.configuration.root` directory. You can specify a different path on a per view basis:
+Template lookup is performed under the `Hanami::View.configuration.root` directory. You can specify a different path on a per view basis:
 
 ```ruby
 class ViewWithDifferentRoot
-  include Lotus::View
+  include Hanami::View
 
   root 'path/to/root'
 end
@@ -397,7 +397,7 @@ end
 The template file must be located under the relevant `root` and must match the class name:
 
 ```ruby
-puts Lotus::View.configuration.root # => #<Pathname:app/templates>
+puts Hanami::View.configuration.root # => #<Pathname:app/templates>
 Articles::Index.template            # => "articles/index"
 ```
 
@@ -406,7 +406,7 @@ Each view can specify a different template:
 ```ruby
 module Articles
   class Create
-    include Lotus::View
+    include Hanami::View
 
     template 'articles/new'
   end
@@ -441,7 +441,7 @@ Layouts are wrappers for views. Layouts may serve to reuse common markup.
 
 ```ruby
 class ApplicationLayout
-  include Lotus::Layout
+  include Hanami::Layout
 
   def page_title
     'Title:'
@@ -450,7 +450,7 @@ end
 
 module Articles
   class Index
-    include Lotus::View
+    include Hanami::View
     layout :application
 
     def page_title
@@ -468,7 +468,7 @@ Articles::Index.render(format: :html) # => Will use ApplicationLayout
 Articles::Index.render(format: :rss)  # => Will use nothing
 ```
 
-As per convention, layout templates are located under `Lotus::View.root` or `ApplicationLayout.root` and use the underscored name (eg. `ApplicationLayout => application.html.erb`).
+As per convention, layout templates are located under `Hanami::View.root` or `ApplicationLayout.root` and use the underscored name (eg. `ApplicationLayout => application.html.erb`).
 
 ### Optional Content
 
@@ -497,11 +497,11 @@ In the other case, `content` returns `nil`.
 ```ruby
 module Products
   class Index
-    include Lotus::View
+    include Hanami::View
   end
 
   class Show
-    include Lotus::View
+    include Hanami::View
 
     def footer
       "contents for footer"
@@ -528,7 +528,7 @@ class Map
 end
 
 class MapPresenter
-  include Lotus::Presenter
+  include Hanami::Presenter
 
   def count
     locations.count
@@ -561,13 +561,13 @@ puts presenter.inspect_object # => #<Map:0x007fdeada0b2f0 @locations=["Rome", "B
 
 ### Configuration
 
-__Lotus::View__ can be configured with a DSL that determines its behavior.
+__Hanami::View__ can be configured with a DSL that determines its behavior.
 It supports a few options:
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
-Lotus::View.configure do
+Hanami::View.configure do
   # Set the root path where to search for templates
   # Argument: String, Pathname, #to_pathname, defaults to the current directory
   #
@@ -604,49 +604,49 @@ that changes are inherited from the top to the bottom, but not bubbled up in the
 opposite direction.
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
-Lotus::View.configure do
+Hanami::View.configure do
   root '/path/to/root'
 end
 
 class Show
-  include Lotus::View
+  include Hanami::View
   root '/another/root'
 end
 
-Lotus::View.configuration.root # => #<Pathname:/path/to/root>
+Hanami::View.configuration.root # => #<Pathname:/path/to/root>
 Show.root                      # => #<Pathname:/another/root>
 ```
 
 ### Reusability
 
-__Lotus::View__ can be used as a singleton framework as seen in this README.
-The application code includes `Lotus::View` or `Lotus::Layout` directly
+__Hanami::View__ can be used as a singleton framework as seen in this README.
+The application code includes `Hanami::View` or `Hanami::Layout` directly
 and the configuration is unique per Ruby process.
 
 While this is convenient for tiny applications, it doesn't fit well for more
 complex scenarios, where we want micro applications to coexist together.
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
-Lotus::View.configure do
+Hanami::View.configure do
   root '/path/to/root'
 end
 
 module WebApp
-  View = Lotus::View.duplicate(self)
+  View = Hanami::View.duplicate(self)
 end
 
 module ApiApp
-  View = Lotus::View.duplicate(self) do
+  View = Hanami::View.duplicate(self) do
     root '/another/root'
   end
 end
 
-Lotus::View.configuration.root  # => #<Pathname:/path/to/root>
-WebApp::View.configuration.root # => #<Pathname:/path/to/root>, inherited from Lotus::View
+Hanami::View.configuration.root  # => #<Pathname:/path/to/root>
+WebApp::View.configuration.root # => #<Pathname:/path/to/root>, inherited from Hanami::View
 ApiApp::View.configuration.root # => #<Pathname:/another/root>
 ```
 
@@ -656,39 +656,39 @@ configuration.
 
 ### Thread safety
 
-__Lotus::View__ is thread safe during the runtime, but it isn't during the loading process.
+__Hanami::View__ is thread safe during the runtime, but it isn't during the loading process.
 Please load the framework as the last thing before your application starts.
 Also, be sure that your app provides a thread safe context while it's loaded.
 
 
 ```ruby
 Mutex.new.synchronize do
-  Lotus::View.load!
+  Hanami::View.load!
 end
 ```
 
 After this operation, all the class variables are frozen, in order to prevent accidental modifications at the run time.
 
-**This is not necessary, when Lotus::View is used within a Lotus application.**
+**This is not necessary, when Hanami::View is used within a Hanami application.**
 
 ### Security
 
 The output of views and presenters is always **autoescaped**.
 
 **ATTENTION:** In order to prevent XSS attacks, please read the instructions below.
-Because Lotus::View supports a lot of template engines, the escape happens at the level of the view.
+Because Hanami::View supports a lot of template engines, the escape happens at the level of the view.
 Most of the time everything happens automatically, but there are still some corner cases that need your manual intervention.
 
 #### View autoescape
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 User = Struct.new(:name)
 
 module Users
   class Show
-    include Lotus::View
+    include Hanami::View
 
     def user_name
       user.name
@@ -702,7 +702,7 @@ end
 user = User.new("<script>alert('xss')</script>")
 
 # THIS IS USEFUL FOR UNIT TESTING:
-template = Lotus::View::Template.new('users/show.html.erb')
+template = Hanami::View::Template.new('users/show.html.erb')
 view     = Users::Show.new(template, user: user)
 view.user_name # => "&lt;script&gt;alert(&apos;xss&apos;)&lt;&#x2F;script&gt;"
 
@@ -714,12 +714,12 @@ Users::Show.render(format: :html, user: user)
 #### Presenter autoescape
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 User = Struct.new(:name)
 
 class UserPresenter
-  include Lotus::Presenter
+  include Hanami::Presenter
 end
 
 user      = User.new("<script>alert('xss')</script>")
@@ -744,13 +744,13 @@ You have two alternatives:
 Both those solutions allow you to keep the template syntax unchanged, but to have a safer output.
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 User = Struct.new(:first_name, :last_name)
 
 module Users
   class Show
-    include Lotus::View
+    include Hanami::View
 
     def user
       _escape locals[:user]
@@ -791,13 +791,13 @@ Please note that **this may open your application to XSS attacks.**
 #### Raw contents in views
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 User = Struct.new(:name)
 
 module Users
   class Show
-    include Lotus::View
+    include Hanami::View
 
     def user_name
       _raw user.name
@@ -818,12 +818,12 @@ html
 #### Raw contents in presenters
 
 ```ruby
-require 'lotus/view'
+require 'hanami/view'
 
 User = Struct.new(:name)
 
 class UserPresenter
-  include Lotus::Presenter
+  include Hanami::Presenter
 
   def first_name
     _raw @object.first_name
@@ -838,7 +838,7 @@ presenter.name # => "<script>alert('xss')</script>"
 
 ## Versioning
 
-__Lotus::View__ uses [Semantic Versioning 2.0.0](http://semver.org)
+__Hanami::View__ uses [Semantic Versioning 2.0.0](http://semver.org)
 
 ## Contributing
 
@@ -851,3 +851,4 @@ __Lotus::View__ uses [Semantic Versioning 2.0.0](http://semver.org)
 ## Copyright
 
 Copyright 2014-2016 Luca Guidi – Released under MIT License
+This project was formerly known as Lotus (`lotus-view`).

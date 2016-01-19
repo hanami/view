@@ -1,18 +1,18 @@
 require 'set'
-require 'lotus/utils/class'
-require 'lotus/utils/kernel'
-require 'lotus/utils/string'
-require 'lotus/utils/load_paths'
-require 'lotus/view/rendering/layout_finder'
+require 'hanami/utils/class'
+require 'hanami/utils/kernel'
+require 'hanami/utils/string'
+require 'hanami/utils/load_paths'
+require 'hanami/view/rendering/layout_finder'
 
-module Lotus
+module Hanami
   module View
     # Configuration for the framework, controllers and actions.
     #
-    # Lotus::Controller has its own global configuration that can be manipulated
-    # via `Lotus::View.configure`.
+    # Hanami::Controller has its own global configuration that can be manipulated
+    # via `Hanami::View.configure`.
     #
-    # Every time that `Lotus::View` and `Lotus::Layout` are included, that
+    # Every time that `Hanami::View` and `Hanami::Layout` are included, that
     # global configuration is being copied to the recipient. The copy will
     # inherit all the settings from the original, but all the subsequent changes
     # aren't reflected from the parent to the children, and viceversa.
@@ -43,33 +43,33 @@ module Lotus
       # Return the original configuration of the framework instance associated
       # with the given class.
       #
-      # When multiple instances of Lotus::View are used in the same application,
+      # When multiple instances of Hanami::View are used in the same application,
       # we want to make sure that a controller or an action will  receive the
       # expected configuration.
       #
       # @param base [Class] a view or a layout
       #
-      # @return [Lotus::Controller::Configuration] the configuration associated
+      # @return [Hanami::Controller::Configuration] the configuration associated
       #   to the given class.
       #
       # @since 0.2.0
       # @api private
       #
       # @example Direct usage of the framework
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   class Show
-      #     include Lotus::View
+      #     include Hanami::View
       #   end
       #
-      #   Lotus::View::Configuration.for(Show)
-      #     # => will return from Lotus::View
+      #   Hanami::View::Configuration.for(Show)
+      #     # => will return from Hanami::View
       #
       # @example Multiple instances of the framework
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module MyApp
-      #     View = Lotus::View.duplicate(self)
+      #     View = Hanami::View.duplicate(self)
       #
       #     module Views::Dashboard
       #       class Index
@@ -79,24 +79,24 @@ module Lotus
       #   end
       #
       #   class Show
-      #     include Lotus::Action
+      #     include Hanami::Action
       #   end
       #
-      #   Lotus::View::Configuration.for(Show)
-      #     # => will return from Lotus::View
+      #   Hanami::View::Configuration.for(Show)
+      #     # => will return from Hanami::View
       #
-      #   Lotus::View::Configuration.for(MyApp::Views::Dashboard::Index)
+      #   Hanami::View::Configuration.for(MyApp::Views::Dashboard::Index)
       #     # => will return from MyApp::View
       def self.for(base)
-        # TODO this implementation is similar to Lotus::Controller::Configuration consider to extract it into Lotus::Utils
+        # TODO this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
         namespace = Utils::String.new(base).namespace
-        framework = Utils::Class.load_from_pattern!("(#{namespace}|Lotus)::View")
+        framework = Utils::Class.load_from_pattern!("(#{namespace}|Hanami)::View")
         framework.configuration
       end
 
       # Initialize a configuration instance
       #
-      # @return [Lotus::View::Configuration] a new configuration's instance
+      # @return [Hanami::View::Configuration] a new configuration's instance
       #
       # @since 0.2.0
       def initialize
@@ -127,14 +127,14 @@ module Lotus
       # @since 0.2.0
       #
       # @example Getting the value
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
-      #   Lotus::View.configuration.namespace # => Object
+      #   Hanami::View.configuration.namespace # => Object
       #
       # @example Setting the value
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
-      #   Lotus::View.configure do
+      #   Hanami::View.configure do
       #     namespace 'MyApp::Views'
       #   end
       def namespace(value = nil)
@@ -165,23 +165,23 @@ module Lotus
       #
       # @since 0.2.0
       #
-      # @see Lotus::View::Dsl#root
+      # @see Hanami::View::Dsl#root
       # @see http://www.ruby-doc.org/stdlib-2.1.2/libdoc/pathname/rdoc/Pathname.html
-      # @see http://rdoc.info/gems/lotus-utils/Lotus/Utils/Kernel#Pathname-class_method
+      # @see http://rdoc.info/gems/hanami-utils/Hanami/Utils/Kernel#Pathname-class_method
       #
       # @example Getting the value
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
-      #   Lotus::View.configuration.root # => #<Pathname:.>
+      #   Hanami::View.configuration.root # => #<Pathname:.>
       #
       # @example Setting the value
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
-      #   Lotus::View.configure do
+      #   Hanami::View.configure do
       #     root '/path/to/templates'
       #   end
       #
-      #   Lotus::View.configuration.root # => #<Pathname:/path/to/templates>
+      #   Hanami::View.configuration.root # => #<Pathname:/path/to/templates>
       def root(value = nil)
         if value
           @root = Utils::Kernel.Pathname(value).realpath
@@ -193,7 +193,7 @@ module Lotus
       # Set the global layout
       #
       # If not set, this value defaults to `nil`, while at the rendering time
-      # it will use `Lotus::View::Rendering::NullLayout`.
+      # it will use `Hanami::View::Rendering::NullLayout`.
       #
       # This is part of a DSL, for this reason when this method is called with
       # an argument, it will set the corresponding instance variable. When
@@ -209,27 +209,27 @@ module Lotus
       #
       # @since 0.2.0
       #
-      # @see Lotus::View::Dsl#layout
+      # @see Hanami::View::Dsl#layout
       #
       # @example Getting the value
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
-      #   Lotus::View.configuration.layout # => nil
+      #   Hanami::View.configuration.layout # => nil
       #
       # @example Setting the value
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
-      #   Lotus::View.configure do
+      #   Hanami::View.configure do
       #     layout :application
       #   end
       #
-      #   Lotus::View.configuration.layout # => ApplicationLayout
+      #   Hanami::View.configuration.layout # => ApplicationLayout
       #
       # @example Setting the value in a namespaced app
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module MyApp
-      #     View = Lotus::View.duplicate(self) do
+      #     View = Hanami::View.duplicate(self) do
       #       layout :application
       #     end
       #   end
@@ -263,23 +263,23 @@ module Lotus
       # @since 0.5.0
       #
       # @example Set UTF-8 As A String
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
-      #   Lotus::View.configure do
+      #   Hanami::View.configure do
       #     default_encoding 'utf-8'
       #   end
       #
       # @example Set UTF-8 As An Encoding Constant
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
-      #   Lotus::View.configure do
+      #   Hanami::View.configure do
       #     default_encoding Encoding::UTF_8
       #   end
       #
       # @example Raise An Error For Unknown Encoding
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
-      #   Lotus::View.configure do
+      #   Hanami::View.configure do
       #     default_encoding 'foo'
       #   end
       #
@@ -294,7 +294,7 @@ module Lotus
 
       # Prepare the views.
       #
-      # The given block will be yielded when `Lotus::View` will be included by
+      # The given block will be yielded when `Hanami::View` will be included by
       # a view.
       #
       # This method can be called multiple times.
@@ -307,11 +307,11 @@ module Lotus
       #
       # @since 0.3.0
       #
-      # @see Lotus::View.configure
-      # @see Lotus::View.duplicate
+      # @see Hanami::View.configure
+      # @see Hanami::View.duplicate
       #
       # @example Including shared utilities
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module UrlHelpers
       #     def comments_path
@@ -319,19 +319,19 @@ module Lotus
       #     end
       #   end
       #
-      #   Lotus::View.configure do
+      #   Hanami::View.configure do
       #     prepare do
       #       include UrlHelpers
       #     end
       #   end
       #
-      #   Lotus::View.load!
+      #   Hanami::View.load!
       #
       #   module Comments
       #     class New
       #       # The following include will cause UrlHelpers to be included too.
       #       # This makes `comments_path` available in the view context
-      #       include Lotus::View
+      #       include Hanami::View
       #
       #       def form
       #         %(<form action="#{ comments_path }" method="POST"></form>)
@@ -340,9 +340,9 @@ module Lotus
       #   end
       #
       # @example Preparing multiple times
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
-      #   Lotus::View.configure do
+      #   Hanami::View.configure do
       #     prepare do
       #       include UrlHelpers
       #     end
@@ -352,13 +352,13 @@ module Lotus
       #     end
       #   end
       #
-      #   Lotus::View.configure do
+      #   Hanami::View.configure do
       #     prepare do
       #       include FormattingHelpers
       #     end
       #   end
       #
-      #   Lotus::View.load!
+      #   Hanami::View.load!
       #
       #   module Articles
       #     class Index
@@ -367,7 +367,7 @@ module Lotus
       #       #   * FormattingHelpers
       #       #
       #       # It also sets the view to render only JSON
-      #       include Lotus::View
+      #       include Hanami::View
       #     end
       #   end
       def prepare(&blk)
@@ -396,7 +396,7 @@ module Lotus
 
       # Duplicate by copying the settings in a new instance.
       #
-      # @return [Lotus::View::Configuration] a copy of the configuration
+      # @return [Hanami::View::Configuration] a copy of the configuration
       #
       # @since 0.2.0
       # @api private

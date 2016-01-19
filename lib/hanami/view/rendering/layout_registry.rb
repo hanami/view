@@ -1,7 +1,7 @@
-require 'lotus/view/rendering/null_template'
-require 'lotus/view/rendering/templates_finder'
+require 'hanami/view/rendering/null_template'
+require 'hanami/view/rendering/templates_finder'
 
-module Lotus
+module Hanami
   module View
     module Rendering
       # Holds the references of all the registered layouts.
@@ -10,7 +10,7 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::Layout::ClassMethods#registry
+      # @see Hanami::Layout::ClassMethods#registry
       class LayoutRegistry
         # Initialize the registry
         #
@@ -29,11 +29,11 @@ module Lotus
         # @param context [Hash] the rendering context
         # @option context [Symbol] :format the requested format
         #
-        # @return [Lotus::Layout, Lotus::View::Rendering::NullTemplate]
+        # @return [Hanami::Layout, Hanami::View::Rendering::NullTemplate]
         #   the layout associated with the given context or a `NullTemplate` if
         #   it can't be found.
         #
-        # @raise [Lotus::View::MissingFormatError] if the given context doesn't
+        # @raise [Hanami::View::MissingFormatError] if the given context doesn't
         #   have the :format key
         #
         # @api private

@@ -1,4 +1,4 @@
-module Lotus
+module Hanami
   module View
     # Inheriting mechanisms
     #
@@ -10,10 +10,10 @@ module Lotus
       # @since 0.1.0
       #
       # @example
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   class IndexView
-      #     include Lotus::View
+      #     include Hanami::View
       #   end
       #
       #   class JsonIndexView < IndexView
@@ -36,7 +36,7 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::View.load!
+      # @see Hanami::View.load!
       def load!
         subclasses.freeze
         views.freeze

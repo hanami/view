@@ -3,7 +3,7 @@ require 'test_helper'
 describe 'Escape' do
   before do
     path     = Pathname.new(__dir__ + '/fixtures/templates/users/show.html.erb')
-    template = Lotus::View::Template.new(path, 'utf-8')
+    template = Hanami::View::Template.new(path, 'utf-8')
 
     @user = User.new(%(<script>alert('username')</script>))
     @book = Book.new(%(<script>alert('title')</script>))

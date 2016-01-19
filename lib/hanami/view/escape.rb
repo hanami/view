@@ -1,7 +1,7 @@
-require 'lotus/utils/escape'
-require 'lotus/presenter'
+require 'hanami/utils/escape'
+require 'hanami/presenter'
 
-module Lotus
+module Hanami
   module View
     # Auto escape logic for views and presenters.
     #
@@ -15,19 +15,19 @@ module Lotus
         #
         # @param string [String] the input string
         #
-        # @return [Lotus::Utils::Escape::SafeString] the string marked as safe
+        # @return [Hanami::Utils::Escape::SafeString] the string marked as safe
         #
         # @since 0.4.0
         # @api public
         #
         # @example View usage
-        #   require 'lotus/view'
+        #   require 'hanami/view'
         #
         #   User = Struct.new(:name)
         #
         #   module Users
         #     class Show
-        #       include Lotus::View
+        #       include Hanami::View
         #
         #       def user_name
         #         _raw user.name
@@ -44,12 +44,12 @@ module Lotus
         #   html # => <div id="user_name"><script>alert('xss')</script></div>
         #
         # @example Presenter usage
-        #   require 'lotus/view'
+        #   require 'hanami/view'
         #
         #   User = Struct.new(:name)
         #
         #   class UserPresenter
-        #     include Lotus::Presenter
+        #     include Hanami::Presenter
         #
         #     def name
         #       _raw @object.name
@@ -61,29 +61,29 @@ module Lotus
         #
         #   presenter.name # => "<script>alert('xss')</script>"
         def _raw(string)
-          ::Lotus::Utils::Escape::SafeString.new(string)
+          ::Hanami::Utils::Escape::SafeString.new(string)
         end
 
         # Force the output escape for the given object
         #
         # @param object [Object] the input object
         #
-        # @return [Lotus::View::Escape::Presenter] a presenter with output
+        # @return [Hanami::View::Escape::Presenter] a presenter with output
         #   autoescape
         #
         # @since 0.4.0
         # @api public
         #
-        # @see Lotus::View::Escape::Presenter
+        # @see Hanami::View::Escape::Presenter
         #
         # @example View usage
-        #   require 'lotus/view'
+        #   require 'hanami/view'
         #
         #   User = Struct.new(:first_name, :last_name)
         #
         #   module Users
         #     class Show
-        #       include Lotus::View
+        #       include Hanami::View
         #
         #       def user
         #         _escape locals[:user]
@@ -115,7 +115,7 @@ module Lotus
         #     #   &lt;script&gt;alert(&apos;last_name&apos;)&lt;&#x2F;script&gt;
         #     # </div>
         def _escape(object)
-          ::Lotus::View::Escape::Presenter.new(object)
+          ::Hanami::View::Escape::Presenter.new(object)
         end
       end
 
@@ -124,9 +124,9 @@ module Lotus
       # @since 0.4.0
       # @api private
       #
-      # @see Lotus::View::Escape::InstanceMethods#_escape
+      # @see Hanami::View::Escape::InstanceMethods#_escape
       class Presenter
-        include ::Lotus::Presenter
+        include ::Hanami::Presenter
       end
 
       # Escape the given input if it's a string, otherwise return the oject as it is.
@@ -152,8 +152,8 @@ module Lotus
       # @api private
       def self.extended(base)
         base.class_eval do
-          include ::Lotus::Utils::ClassAttribute
-          include ::Lotus::View::Escape::InstanceMethods
+          include ::Hanami::Utils::ClassAttribute
+          include ::Hanami::View::Escape::InstanceMethods
 
           class_attribute :autoescape_methods
           self.autoescape_methods = {}
@@ -168,7 +168,7 @@ module Lotus
         unless autoescape_methods[method_name]
           prepend Module.new {
             module_eval %{
-              def #{ method_name }(*args, &blk); ::Lotus::View::Escape.html super; end
+              def #{ method_name }(*args, &blk); ::Hanami::View::Escape.html super; end
             }
           }
 

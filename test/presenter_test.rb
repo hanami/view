@@ -1,6 +1,6 @@
 require 'test_helper'
 
-describe Lotus::Presenter do
+describe Hanami::Presenter do
   subject do
     MapPresenter.new(map)
   end

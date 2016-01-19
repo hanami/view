@@ -1,4 +1,4 @@
-module Lotus
+module Hanami
   module View
     # @since 0.5.0
     class Error < ::StandardError
@@ -6,7 +6,7 @@ module Lotus
 
     # Missing template error
     #
-    # This is raised at the runtime when Lotus::View cannot find a template for
+    # This is raised at the runtime when Hanami::View cannot find a template for
     # the requested format.
     #
     # We can't raise this error during the loading phase, because at that time
@@ -29,13 +29,13 @@ module Lotus
     #
     # @since 0.1.0
     #
-    # @see Lotus::View::Rendering#render
+    # @see Hanami::View::Rendering#render
     class MissingFormatError < Error
     end
 
     # Missing template layout error
     #
-    # This is raised at the runtime when Lotus::Layout cannot find it's template.
+    # This is raised at the runtime when Hanami::Layout cannot find it's template.
     #
     # @since 0.5.0
     class MissingTemplateLayoutError < Error
