@@ -1,14 +1,14 @@
 require 'test_helper'
 
 describe 'Framework freeze' do
-  describe 'Lotus::View' do
+  describe 'Hanami::View' do
     before do
-      Lotus::View.unload!
-      Lotus::View.load!
+      Hanami::View.unload!
+      Hanami::View.load!
     end
 
     it 'freezes framework configuration' do
-      Lotus::View.configuration.must_be :frozen?
+      Hanami::View.configuration.must_be :frozen?
     end
 
     it 'freezes view configuration' do

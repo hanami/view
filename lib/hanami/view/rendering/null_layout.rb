@@ -1,4 +1,4 @@
-module Lotus
+module Hanami
   module View
     module Rendering
       # Null Object pattern for Layout.
@@ -8,11 +8,11 @@ module Lotus
       # @since 0.1.0
       #
       # @example
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #       layout false
       #     end
       #   end
@@ -22,14 +22,14 @@ module Lotus
 
         # Initialize a layout
         #
-        # @param scope [Lotus::View::Rendering::Scope] view rendering scope
+        # @param scope [Hanami::View::Rendering::Scope] view rendering scope
         # @param rendered [String] the output of the view rendering process
         #
         # @api private
         # @since 0.1.0
         #
-        # @see Lotus::Layout#initialize
-        # @see Lotus::View::Rendering#render
+        # @see Hanami::Layout#initialize
+        # @see Hanami::View::Rendering#render
         def initialize(scope, rendered)
           @rendered = rendered
         end
@@ -41,8 +41,8 @@ module Lotus
         # @api private
         # @since 0.1.0
         #
-        # @see Lotus::Layout#render
-        # @see Lotus::View::Rendering#render
+        # @see Hanami::Layout#render
+        # @see Hanami::View::Rendering#render
         def render
           @rendered
         end

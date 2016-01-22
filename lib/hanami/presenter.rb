@@ -1,6 +1,6 @@
-require 'lotus/view/escape'
+require 'hanami/view/escape'
 
-module Lotus
+module Hanami
   # Presenter pattern implementation
   #
   # It delegates to the wrapped object the missing method invocations.
@@ -10,7 +10,7 @@ module Lotus
   # @since 0.1.0
   #
   # @example Basic usage
-  #   require 'lotus/view'
+  #   require 'hanami/view'
   #
   #   class Map
   #     attr_reader :locations
@@ -25,7 +25,7 @@ module Lotus
   #   end
   #
   #   class MapPresenter
-  #     include Lotus::Presenter
+  #     include Hanami::Presenter
   #
   #     def count
   #       locations.count
@@ -56,12 +56,12 @@ module Lotus
   #   puts presenter.inspect_object # => #<Map:0x007fdeada0b2f0 @locations=["Rome", "Boston"]>
   #
   # @example Escape
-  #   require 'lotus/view'
+  #   require 'hanami/view'
   #
   #   User = Struct.new(:first_name, :last_name)
   #
   #   class UserPresenter
-  #     include Lotus::Presenter
+  #     include Hanami::Presenter
   #
   #     def full_name
   #       [first_name, last_name].join(' ')
@@ -88,9 +88,9 @@ module Lotus
     # @since 0.4.0
     # @api private
     #
-    # @see Lotus::View::Escape
+    # @see Hanami::View::Escape
     def self.included(base)
-      base.extend ::Lotus::View::Escape
+      base.extend ::Hanami::View::Escape
     end
 
     # Initialize the presenter
@@ -109,7 +109,7 @@ module Lotus
     # @since 0.1.0
     def method_missing(m, *args, &blk)
       if @object.respond_to?(m)
-        ::Lotus::View::Escape.html(@object.__send__(m, *args, &blk))
+        ::Hanami::View::Escape.html(@object.__send__(m, *args, &blk))
       else
         super
       end

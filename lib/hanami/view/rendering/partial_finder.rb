@@ -1,13 +1,13 @@
-require 'lotus/view/rendering/template_finder'
+require 'hanami/view/rendering/template_finder'
 
-module Lotus
+module Hanami
   module View
     module Rendering
       # Find a partial for the current view context.
       # It's used when a template wants to render a partial.
       #
-      # @see Lotus::View::Rendering::Partial
-      # @see Lotus::View::Rendering::TemplateFinder
+      # @see Hanami::View::Rendering::Partial
+      # @see Hanami::View::Rendering::TemplateFinder
       #
       # @api private
       # @since 0.1.0
@@ -27,9 +27,9 @@ module Lotus
         # view template, if not found it will search recursivly from 
         # the view root.
         #
-        # @return [Lotus::View::Template] the requested template
+        # @return [Hanami::View::Template] the requested template
         #
-        # @see Lotus::View::Rendering::TemplateFinder#find
+        # @see Hanami::View::Rendering::TemplateFinder#find
         #
         # @since 0.4.3
         # @api private

@@ -19,9 +19,9 @@ end
 
 require 'minitest/autorun'
 $:.unshift 'lib'
-require 'lotus/view'
+require 'hanami/view'
 
-Lotus::View.configure do
+Hanami::View.configure do
   root Pathname.new __dir__ + '/fixtures/templates'
 end
 
@@ -33,19 +33,19 @@ module Unloadable
 end
 
 require 'fixtures'
-Lotus::View.load!
+Hanami::View.load!
 
-Lotus::View.class_eval do
+Hanami::View.class_eval do
   extend Unloadable
 end
 
-Lotus::Utils::LoadPaths.class_eval do
+Hanami::Utils::LoadPaths.class_eval do
   def include?(object)
     @paths.include?(object)
   end
 
   def ==(other)
-    other.kind_of?(Lotus::Utils::LoadPaths) &&
+    other.kind_of?(Hanami::Utils::LoadPaths) &&
       other.paths == self.paths
   end
 
@@ -53,9 +53,9 @@ Lotus::Utils::LoadPaths.class_eval do
   attr_reader :paths
 end
 
-Lotus::View::Configuration.class_eval do
+Hanami::View::Configuration.class_eval do
   def ==(other)
-    other.kind_of?(Lotus::View::Configuration) &&
+    other.kind_of?(Hanami::View::Configuration) &&
       self.namespace  == other.namespace  &&
       self.root       == other.root       &&
       self.layout     == other.layout     &&

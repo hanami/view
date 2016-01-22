@@ -1,9 +1,9 @@
 require 'test_helper'
 
-describe Lotus::View do
+describe Hanami::View do
   describe '.load!' do
     # before do
-    #   Lotus::View.load!
+    #   Hanami::View.load!
     # end
 
     # it 'freezes .layout for all the views' do

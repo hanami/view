@@ -1,7 +1,7 @@
-require 'lotus/view/rendering/layout_registry'
-require 'lotus/view/rendering/view_finder'
+require 'hanami/view/rendering/layout_registry'
+require 'hanami/view/rendering/view_finder'
 
-module Lotus
+module Hanami
   module View
     module Rendering
       # Holds all the references of all the registered subclasses of a view.
@@ -10,19 +10,19 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::View::Rendering::LayoutRegistry
-      # @see Lotus::View::Rendering#registry
+      # @see Hanami::View::Rendering::LayoutRegistry
+      # @see Hanami::View::Rendering#registry
       #
       # @example
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module Articles
       #     class Index
-      #       include Lotus::View
+      #       include Hanami::View
       #     end
       #
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #     end
       #
       #     class JsonShow < Show
@@ -57,13 +57,13 @@ module Lotus
       #   # It holds the references for all the templates and the views
       #   Articles::Index.send(:registry).inspect
       #     # => { :all  => [Articles::Index, nil],
-      #     #      :atom => [Articles::Index, #<Lotus::View::Template ... @file="/path/to/templates/articles/index.atom.erb"],
-      #     #      :html => [Articles::Index, #<Lotus::View::Template ... @file="/path/to/templates/articles/index.html.erb"] }
+      #     #      :atom => [Articles::Index, #<Hanami::View::Template ... @file="/path/to/templates/articles/index.atom.erb"],
+      #     #      :html => [Articles::Index, #<Hanami::View::Template ... @file="/path/to/templates/articles/index.html.erb"] }
       #
       #   Articles::Show.send(:registry).inspect
       #     # => { :all  => [Articles::Show, nil],
-      #     #      :html => [Articles::Show,     #<Lotus::View::Template ... @file="/path/to/templates/articles/show.html.erb"],
-      #     #      :json => [Articles::JsonShow, #<Lotus::View::Template ... @file="/path/to/templates/articles/show.json.erb"],
+      #     #      :html => [Articles::Show,     #<Hanami::View::Template ... @file="/path/to/templates/articles/show.html.erb"],
+      #     #      :json => [Articles::JsonShow, #<Hanami::View::Template ... @file="/path/to/templates/articles/show.json.erb"],
       #     #      :xml  => [Articles::XmlShow, nil] }
       class Registry < LayoutRegistry
         # Default format for views without an explicit format.
@@ -71,7 +71,7 @@ module Lotus
         # @api private
         # @since 0.1.0
         #
-        # @see Lotus::View::Dsl#format
+        # @see Hanami::View::Dsl#format
         DEFAULT_FORMAT = :all
 
         # Returns the view for the given context.
@@ -79,15 +79,15 @@ module Lotus
         # @param context [Hash] the rendering context
         # @option context [Symbol] :format the requested format
         #
-        # @return [Lotus::View] the view associated with the given context
+        # @return [Hanami::View] the view associated with the given context
         #
-        # @raise [Lotus::View::MissingFormatError] if the given context doesn't
+        # @raise [Hanami::View::MissingFormatError] if the given context doesn't
         #   have the :format key
         #
         # @api private
         # @since 0.1.0
         #
-        # @see Lotus::View::Rendering#render
+        # @see Hanami::View::Rendering#render
         def resolve(context)
           view, template = @registry.fetch(format(context)) { @registry[DEFAULT_FORMAT] }
           view.new(template, context)

@@ -1,14 +1,14 @@
-require 'lotus/utils/class_attribute'
-require 'lotus/view/rendering/layout_registry'
-require 'lotus/view/rendering/layout_scope'
-require 'lotus/view/rendering/null_layout'
+require 'hanami/utils/class_attribute'
+require 'hanami/view/rendering/layout_registry'
+require 'hanami/view/rendering/layout_scope'
+require 'hanami/view/rendering/null_layout'
 
-module Lotus
+module Hanami
   # Layout
   #
   # @since 0.1.0
   #
-  # @see Lotus::Layout::ClassMethods
+  # @see Hanami::Layout::ClassMethods
   module Layout
     # Register a layout
     #
@@ -16,17 +16,17 @@ module Lotus
     # @since 0.1.0
     #
     # @example
-    #   require 'lotus/view'
+    #   require 'hanami/view'
     #
     #   class ApplicationLayout
-    #     include Lotus::Layout
+    #     include Hanami::Layout
     #   end
     def self.included(base)
-      conf = Lotus::View::Configuration.for(base)
+      conf = Hanami::View::Configuration.for(base)
       conf.add_layout(base)
 
       base.class_eval do
-        extend Lotus::View::Dsl.dup
+        extend Hanami::View::Dsl.dup
         extend ClassMethods
 
         include Utils::ClassAttribute
@@ -47,8 +47,8 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::Layout::ClassMethods#suffix
-      # @see Lotus::Layout::ClassMethods#template
+      # @see Hanami::Layout::ClassMethods#suffix
+      # @see Hanami::Layout::ClassMethods#template
       SUFFIX = '_layout'.freeze
 
       # A registry that holds all the registered layouts.
@@ -56,7 +56,7 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::View::Rendering::LayoutRegistry
+      # @see Hanami::View::Rendering::LayoutRegistry
       def registry
         @registry ||= View::Rendering::LayoutRegistry.new(self)
       end
@@ -66,14 +66,14 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::Layout::ClassMethods#SUFFIX
-      # @see Lotus::Layout::ClassMethods#suffix
+      # @see Hanami::Layout::ClassMethods#SUFFIX
+      # @see Hanami::Layout::ClassMethods#suffix
       #
       # @example
       #   # Given a template 'templates/application.html.erb'
       #
       #   class ApplicationLayout
-      #     include Lotus::Layout
+      #     include Hanami::Layout
       #   end
       #
       # ApplicationLayout.template # => 'application'
@@ -86,8 +86,8 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::Layout::ClassMethods#SUFFIX
-      # @see Lotus::Layout::ClassMethods#template
+      # @see Hanami::Layout::ClassMethods#SUFFIX
+      # @see Hanami::Layout::ClassMethods#template
       def suffix
         SUFFIX
       end
@@ -98,7 +98,7 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::View.load!
+      # @see Hanami::View.load!
       def load!
         registry.freeze
         configuration.freeze
@@ -107,13 +107,13 @@ module Lotus
 
     # Initialize a layout
     #
-    # @param scope [Lotus::View::Rendering::Scope] view rendering scope
+    # @param scope [Hanami::View::Rendering::Scope] view rendering scope
     # @param rendered [String] the output of the view rendering process
     #
     # @api private
     # @since 0.1.0
     #
-    # @see Lotus::View::Rendering#render
+    # @see Hanami::View::Rendering#render
     def initialize(scope, rendered)
       @scope, @rendered = View::Rendering::LayoutScope.new(self, scope), rendered
     end
@@ -125,7 +125,7 @@ module Lotus
     # @api private
     # @since 0.1.0
     #
-    # @see Lotus::View::Rendering#render
+    # @see Hanami::View::Rendering#render
     def render
       template.render(@scope, &Proc.new{@rendered})
     end

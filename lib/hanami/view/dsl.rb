@@ -1,7 +1,7 @@
-require 'lotus/view/rendering/template_name'
-require 'lotus/view/rendering/layout_finder'
+require 'hanami/view/rendering/template_name'
+require 'hanami/view/rendering/layout_finder'
 
-module Lotus
+module Hanami
   module View
     # Class level DSL
     #
@@ -10,7 +10,7 @@ module Lotus
       # When a value is given, specify a templates root path for the view.
       # Otherwise, it returns templates root path.
       #
-      # When not initialized, it will return the global value from `Lotus::View.root`.
+      # When not initialized, it will return the global value from `Hanami::View.root`.
       #
       # @param value [String] the templates root for this view
       #
@@ -19,28 +19,28 @@ module Lotus
       # @since 0.1.0
       #
       # @example Default usage
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #     end
       #   end
       #
-      #   Lotus::View.configuration.root # => 'app/templates'
+      #   Hanami::View.configuration.root # => 'app/templates'
       #   Articles::Show.root            # => 'app/templates'
       #
       # @example Custom root
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #       root 'path/to/articles/templates'
       #     end
       #   end
       #
-      #   Lotus::View.configuration.root # => 'app/templates'
+      #   Hanami::View.configuration.root # => 'app/templates'
       #   Articles::Show.root            # => 'path/to/articles/templates'
       def root(value = nil)
         if value.nil?
@@ -60,11 +60,11 @@ module Lotus
       # @since 0.1.0
       #
       # @example
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #     end
       #
       #     class JsonShow < Show
@@ -83,7 +83,7 @@ module Lotus
       end
 
       # When a value is given, specify the relative path to the template.
-      # Otherwise, it returns the name that follows Lotus::View conventions.
+      # Otherwise, it returns the name that follows Hanami::View conventions.
       #
       # @param value [String] relative template path
       #
@@ -93,11 +93,11 @@ module Lotus
       # @since 0.1.0
       #
       # @example Default usage
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #     end
       #
       #     class JsonShow < Show
@@ -109,11 +109,11 @@ module Lotus
       #   Articles::JsonShow.template # => 'articles/show'
       #
       # @example Custom template
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #       template 'articles/single_article'
       #     end
       #
@@ -126,10 +126,10 @@ module Lotus
       #   Articles::JsonShow.template # => 'articles/single_article'
       #
       # @example With namespace
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module Furnitures
-      #     View = Lotus::View.generate(self)
+      #     View = Hanami::View.generate(self)
       #
       #     class Standalone
       #       include Furnitures::View
@@ -146,10 +146,10 @@ module Lotus
       #   Furnitures::Catalog::Index.template # => 'catalog/index'
       #
       # @example With nested namespace
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module Frontend
-      #     View = Lotus::View.generate(self)
+      #     View = Hanami::View.generate(self)
       #
       #     class StandaloneView
       #       include Frontend::View
@@ -173,11 +173,11 @@ module Lotus
       #   Frontend::Views::Sessions::New.template # => 'sessions/new'
       #
       # @example With deeply nested namespace
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module Bookshelf
       #     module Web
-      #       View = Lotus::View.generate(self)
+      #       View = Hanami::View.generate(self)
       #
       #       module Views
       #         module Books
@@ -189,7 +189,7 @@ module Lotus
       #     end
       #
       #     module Api
-      #       View = Lotus::View.generate(self)
+      #       View = Hanami::View.generate(self)
       #
       #       module Views
       #         module Books
@@ -212,10 +212,10 @@ module Lotus
       end
 
       # When a value is given, it specifies the layout.
-      # When false is given, Lotus::View::Rendering::NullLayout is returned.
+      # When false is given, Hanami::View::Rendering::NullLayout is returned.
       # Otherwise, it returns the previously specified layout.
       #
-      # When the global configuration is set (`Lotus::View.layout=`), after the
+      # When the global configuration is set (`Hanami::View.layout=`), after the
       # loading process, it will return that layout if not otherwise specified.
       #
       # @param value [Symbol, FalseClass, nil] the layout name
@@ -224,29 +224,29 @@ module Lotus
       #
       # @since 0.1.0
       #
-      # @see Lotus::Layout
+      # @see Hanami::Layout
       #
       # @example Default usage
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #     end
       #   end
       #
       #   Articles::Show.layout # => nil
       #
       # @example Custom layout
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   class ArticlesLayout
-      #     include Lotus::Layout
+      #     include Hanami::Layout
       #   end
       #
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #       layout :articles
       #     end
       #   end
@@ -254,69 +254,69 @@ module Lotus
       #   Articles::Show.layout # => :articles
       #
       # @example Global configuration
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   class ApplicationLayout
-      #     include Lotus::Layout
+      #     include Hanami::Layout
       #   end
       #
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #     end
       #   end
       #
-      #   Lotus::View.layout = :application
+      #   Hanami::View.layout = :application
       #   Articles::Show.layout # => nil
       #
-      #   Lotus::View.load!
+      #   Hanami::View.load!
       #   Articles::Show.layout # => :application
       #
       # @example Global configuration with custom layout
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   class ApplicationLayout
-      #     include Lotus::Layout
+      #     include Hanami::Layout
       #   end
       #
       #   class ArticlesLayout
-      #     include Lotus::Layout
+      #     include Hanami::Layout
       #   end
       #
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #       layout :articles
       #     end
       #   end
       #
-      #   Lotus::View.layout = :application
+      #   Hanami::View.layout = :application
       #   Articles::Show.layout # => :articles
       #
-      #   Lotus::View.load!
+      #   Hanami::View.load!
       #   Articles::Show.layout # => :articles
       #
       # @example Disable layout for the view
-      #   require 'lotus/view'
+      #   require 'hanami/view'
       #
       #   class ApplicationLayout
-      #     include Lotus::Layout
+      #     include Hanami::Layout
       #   end
       #
       #   module Articles
       #     class Show
-      #       include Lotus::View
+      #       include Hanami::View
       #       layout false
       #     end
       #   end
       #
-      #   Lotus::View.load!
-      #   Articles::Show.layout # => Lotus::View::Rendering::NullLayout
+      #   Hanami::View.load!
+      #   Articles::Show.layout # => Hanami::View::Rendering::NullLayout
       def layout(value = nil)
         if value.nil?
           @_layout ||= Rendering::LayoutFinder.find(@layout || configuration.layout, configuration.namespace)
         elsif !value
-          @layout = Lotus::View::Rendering::NullLayout
+          @layout = Hanami::View::Rendering::NullLayout
         else
           @layout = value
         end
@@ -329,7 +329,7 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::View.load!
+      # @see Hanami::View.load!
       def load!
         super
 

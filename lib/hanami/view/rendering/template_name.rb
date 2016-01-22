@@ -1,6 +1,6 @@
-require 'lotus/utils/string'
+require 'hanami/utils/string'
 
-module Lotus
+module Hanami
   module View
     module Rendering
       # @since 0.2.0

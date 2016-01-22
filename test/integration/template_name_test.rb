@@ -5,14 +5,14 @@ describe 'Template name' do
     ##
     # Reset the configuration
     #
-    Lotus::View.unload!
+    Hanami::View.unload!
 
     # # #
     #
     # Standalone usage:
     #
     #
-    Display = Class.new { include Lotus::View }
+    Display = Class.new { include Hanami::View }
 
     # # #
     #
@@ -36,16 +36,16 @@ describe 'Template name' do
     # application.rb
     #
     #     module InformationTech
-    #       class Application < Lotus::Application
+    #       class Application < Hanami::Application
     #       end
     #     end
     #
-    #     Lotus::View.configure do
+    #     Hanami::View.configure do
     #       root 'app/templates'
     #     end
     #
     #     class HardwareController
-    #       include Lotus::Controller
+    #       include Hanami::Controller
     #
     #       action 'Display' do
     #         def call(params)
@@ -54,7 +54,7 @@ describe 'Template name' do
     #     end
     #
     #     class SoftwareController
-    #       include Lotus::Controller
+    #       include Hanami::Controller
     #
     #       action 'Display' do
     #         def call(params)
@@ -62,7 +62,7 @@ describe 'Template name' do
     #       end
     #     end
     module HardwareView
-      Display = Class.new { include Lotus::View }
+      Display = Class.new { include Hanami::View }
     end
 
     # # #
@@ -91,7 +91,7 @@ describe 'Template name' do
     #         index.rb                   Furnitures::Furnitures::Index
     # application.rb                     Furnitures::Application
     module Furnitures
-      View = Lotus::View.duplicate(self) do
+      View = Hanami::View.duplicate(self) do
         # This line is here only for ducumentation purposes, but it's commented
         # because the path doesn't exist.
         #
@@ -138,7 +138,7 @@ describe 'Template name' do
     #   backend/
     #     application.rb                 Backend::Application
     module Frontend
-      View = Lotus::View.duplicate(self) do
+      View = Hanami::View.duplicate(self) do
         # This line is here only for ducumentation purposes, but it's commented
         # because the path doesn't exist.
         #
@@ -190,7 +190,7 @@ describe 'Template name' do
     #     application.rb          Bookshelf::Api
     module Bookshelf
       module Web
-        View = Lotus::View.duplicate(self) do
+        View = Hanami::View.duplicate(self) do
           # This line is here only for ducumentation purposes, but it's
           # commented because the path doesn't exist.
           #
@@ -207,7 +207,7 @@ describe 'Template name' do
       end
 
       module Api
-        View = Lotus::View.duplicate(self) do
+        View = Hanami::View.duplicate(self) do
           # This line is here only for ducumentation purposes, but it's
           # commented because the path doesn't exist.
           #

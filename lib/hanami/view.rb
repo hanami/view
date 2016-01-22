@@ -1,17 +1,17 @@
 require 'set'
 require 'pathname'
-require 'lotus/utils/class_attribute'
-require 'lotus/view/version'
-require 'lotus/view/configuration'
-require 'lotus/view/inheritable'
-require 'lotus/view/rendering'
-require 'lotus/view/escape'
-require 'lotus/view/dsl'
-require 'lotus/view/errors'
-require 'lotus/layout'
-require 'lotus/presenter'
+require 'hanami/utils/class_attribute'
+require 'hanami/view/version'
+require 'hanami/view/configuration'
+require 'hanami/view/inheritable'
+require 'hanami/view/rendering'
+require 'hanami/view/escape'
+require 'hanami/view/dsl'
+require 'hanami/view/errors'
+require 'hanami/layout'
+require 'hanami/presenter'
 
-module Lotus
+module Hanami
   # View
   #
   # @since 0.1.0
@@ -31,61 +31,61 @@ module Lotus
     #
     # @since 0.2.0
     #
-    # @see Lotus::View::Configuration
+    # @see Hanami::View::Configuration
     #
     # @example
-    #   require 'lotus/view'
+    #   require 'hanami/view'
     #
-    #   Lotus::View.configure do
+    #   Hanami::View.configure do
     #     root '/path/to/root'
     #   end
     def self.configure(&blk)
       configuration.instance_eval(&blk)
     end
 
-    # Duplicate Lotus::View in order to create a new separated instance
+    # Duplicate Hanami::View in order to create a new separated instance
     # of the framework.
     #
     # The new instance of the framework will be completely decoupled from the
     # original. It will inherit the configuration, but all the changes that
     # happen after the duplication, won't be reflected on the other copies.
     #
-    # @return [Module] a copy of Lotus::View
+    # @return [Module] a copy of Hanami::View
     #
     # @since 0.2.0
     # @api private
     #
     # @example Basic usage
-    #   require 'lotus/view'
+    #   require 'hanami/view'
     #
     #   module MyApp
-    #     View = Lotus::View.dupe
+    #     View = Hanami::View.dupe
     #   end
     #
-    #   MyApp::View == Lotus::View # => false
+    #   MyApp::View == Hanami::View # => false
     #
     #   MyApp::View.configuration ==
-    #     Lotus::View.configuration # => false
+    #     Hanami::View.configuration # => false
     #
     # @example Inheriting configuration
-    #   require 'lotus/view'
+    #   require 'hanami/view'
     #
-    #   Lotus::View.configure do
+    #   Hanami::View.configure do
     #     root '/path/to/root'
     #   end
     #
     #   module MyApp
-    #     View = Lotus::View.dupe
+    #     View = Hanami::View.dupe
     #   end
     #
     #   module MyApi
-    #     View = Lotus::View.dupe
+    #     View = Hanami::View.dupe
     #     View.configure do
     #       root '/another/root'
     #     end
     #   end
     #
-    #   Lotus::View.configuration.root # => #<Pathname:/path/to/root>
+    #   Hanami::View.configuration.root # => #<Pathname:/path/to/root>
     #   MyApp::View.configuration.root # => #<Pathname:/path/to/root>
     #   MyApi::View.configuration.root # => #<Pathname:/another/root>
     def self.dupe
@@ -101,19 +101,19 @@ module Lotus
     #   views will live
     # @param blk [Proc] an optional block to configure the framework
     #
-    # @return [Module] a copy of Lotus::View
+    # @return [Module] a copy of Hanami::View
     #
     # @since 0.2.0
     #
-    # @see Lotus::View#dupe
-    # @see Lotus::View::Configuration
-    # @see Lotus::View::Configuration#namespace
+    # @see Hanami::View#dupe
+    # @see Hanami::View::Configuration
+    # @see Hanami::View::Configuration#namespace
     #
     # @example Basic usage
-    #   require 'lotus/view'
+    #   require 'hanami/view'
     #
     #   module MyApp
-    #     View = Lotus::View.duplicate(self)
+    #     View = Hanami::View.duplicate(self)
     #   end
     #
     #   # It will:
@@ -131,10 +131,10 @@ module Lotus
     #  end
     #
     # @example Compare code
-    #   require 'lotus/view'
+    #   require 'hanami/view'
     #
     #   module MyApp
-    #     View = Lotus::View.duplicate(self) do
+    #     View = Hanami::View.duplicate(self) do
     #       # ...
     #     end
     #   end
@@ -142,8 +142,8 @@ module Lotus
     #   # it's equivalent to:
     #
     #   module MyApp
-    #     View   = Lotus::View.dupe
-    #     Layout = Lotus::Layout.dup
+    #     View   = Hanami::View.dupe
+    #     Layout = Hanami::Layout.dup
     #
     #     module Views
     #     end
@@ -158,10 +158,10 @@ module Lotus
     #   end
     #
     # @example Custom views module
-    #   require 'lotus/view
+    #   require 'hanami/view
     #
     #   module MyApp
-    #     View = Lotus::View.duplicate(self, 'Vs')
+    #     View = Hanami::View.duplicate(self, 'Vs')
     #   end
     #
     #   defined?(MyApp::Views) # => nil
@@ -173,10 +173,10 @@ module Lotus
     #   end
     #
     # @example Nil views module
-    #   require 'lotus/view'
+    #   require 'hanami/view'
     #
     #   module MyApp
-    #     View = Lotus::View.duplicate(self, nil)
+    #     View = Hanami::View.duplicate(self, nil)
     #   end
     #
     #   defined?(MyApp::Views) # => nil
@@ -187,22 +187,22 @@ module Lotus
     #   end
     #
     # @example Block usage
-    #   require 'lotus/view'
+    #   require 'hanami/view'
     #
     #   module MyApp
-    #     View = Lotus::View.duplicate(self) do
+    #     View = Hanami::View.duplicate(self) do
     #       root '/path/to/root'
     #     end
     #   end
     #
-    #   Lotus::View.configuration.root # => #<Pathname:.>
+    #   Hanami::View.configuration.root # => #<Pathname:.>
     #   MyApp::View.configuration.root # => #<Pathname:/path/to/root>
     def self.duplicate(mod, views = 'Views', &blk)
       dupe.tap do |duplicated|
         mod.module_eval %{ module #{ views }; end } if views
         mod.module_eval %{
-          Layout = Lotus::Layout.dup
-          Presenter = Lotus::Presenter.dup
+          Layout = Hanami::Layout.dup
+          Presenter = Hanami::Presenter.dup
         }
 
         duplicated.configure do
@@ -214,7 +214,7 @@ module Lotus
     end
 
     # Override Ruby's hook for modules.
-    # It includes basic Lotus::View modules to the given Class.
+    # It includes basic Hanami::View modules to the given Class.
     # It sets a copy of the framework configuration
     #
     # @param base [Class] the target view
@@ -224,15 +224,15 @@ module Lotus
     #
     # @see http://www.ruby-doc.org/core-2.1.2/Module.html#method-i-included
     #
-    # @see Lotus::View::Dsl
-    # @see Lotus::View::Inheritable
-    # @see Lotus::View::Rendering
+    # @see Hanami::View::Dsl
+    # @see Hanami::View::Inheritable
+    # @see Hanami::View::Rendering
     #
     # @example
-    #   require 'lotus/view'
+    #   require 'hanami/view'
     #
     #   class IndexView
-    #     include Lotus::View
+    #     include Hanami::View
     #   end
     def self.included(base)
       conf = self.configuration

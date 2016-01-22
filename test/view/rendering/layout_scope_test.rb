@@ -1,10 +1,10 @@
 require 'test_helper'
 
-describe Lotus::View::Rendering::LayoutScope do
+describe Hanami::View::Rendering::LayoutScope do
   before do
     layout     = LayoutForScopeTest.new
-    view_scope = Lotus::View::Rendering::Scope.new(ViewForScopeTest.new)
-    @scope     = Lotus::View::Rendering::LayoutScope.new(layout, view_scope)
+    view_scope = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new)
+    @scope     = Hanami::View::Rendering::LayoutScope.new(layout, view_scope)
   end
 
   describe '#respond_to?' do
@@ -29,7 +29,7 @@ describe Lotus::View::Rendering::LayoutScope do
 
   describe '#class' do
     it 'returns proper class name' do
-      @scope.class.must_equal Lotus::View::Rendering::LayoutScope
+      @scope.class.must_equal Hanami::View::Rendering::LayoutScope
     end
   end
 

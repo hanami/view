@@ -1,4 +1,4 @@
-module Lotus
+module Hanami
   module View
     module Rendering
       # Find a view
@@ -6,7 +6,7 @@ module Lotus
       # @api private
       # @since 0.1.0
       #
-      # @see Lotus::View::Rendering::Registry
+      # @see Hanami::View::Rendering::Registry
       class ViewFinder
         # Initialize a finder
         #
@@ -21,7 +21,7 @@ module Lotus
         # Find a view for the given template.
         # It looks up for the current view and its subclasses.
         #
-        # @param template [Lotus::View::Template] a template to be associated
+        # @param template [Hanami::View::Template] a template to be associated
         #   to a view
         #
         # @return [Class] a view associated with the given template

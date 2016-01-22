@@ -1,7 +1,7 @@
 require 'test_helper'
 
-describe Lotus::View::VERSION do
+describe Hanami::View::VERSION do
   it 'returns current version' do
-    Lotus::View::VERSION.must_equal '0.5.0'
+    Hanami::View::VERSION.must_equal '0.6.0'
   end
 end

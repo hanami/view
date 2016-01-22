@@ -1,6 +1,6 @@
-require 'lotus/view/template'
+require 'hanami/view/template'
 
-module Lotus
+module Hanami
   module View
     module Rendering
       # Find templates for a view
@@ -42,20 +42,20 @@ module Lotus
         # It recursively looks for templates under the root path of the view,
         # that are matching the template name
         #
-        # @return [Array<Lotus::View::Template>] the templates
+        # @return [Array<Hanami::View::Template>] the templates
         #
         # @api private
         # @since 0.1.0
         #
-        # @see Lotus::View::Dsl#root
-        # @see Lotus::View::Dsl#template
+        # @see Hanami::View::Dsl#root
+        # @see Hanami::View::Dsl#template
         #
         # @example
-        #   require 'lotus/view'
+        #   require 'hanami/view'
         #
         #   module Articles
         #     class Show
-        #       include Lotus::View
+        #       include Hanami::View
         #     end
         #   end
         #
@@ -66,8 +66,8 @@ module Lotus
         #   #
         #   #   "/path/to/templates/articles/show.html.erb"
         #
-        #   Lotus::View::Rendering::TemplatesFinder.new(Articles::Show).find
-        #     # => [#<Lotus::View::Template:0x007f8a0a86a970 ... @file="/path/to/templates/articles/show.html.erb">]
+        #   Hanami::View::Rendering::TemplatesFinder.new(Articles::Show).find
+        #     # => [#<Hanami::View::Template:0x007f8a0a86a970 ... @file="/path/to/templates/articles/show.html.erb">]
         def find
           _find.map do |template|
             View::Template.new(template, @view.configuration.default_encoding)

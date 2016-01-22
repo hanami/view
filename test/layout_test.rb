@@ -1,6 +1,6 @@
 require 'test_helper'
 
-describe Lotus::Layout do
+describe Hanami::Layout do
   describe 'rendering from layout' do
     it 'renders partial' do
       rendered = IndexView.render(format: :html)
@@ -9,17 +9,17 @@ describe Lotus::Layout do
   end
 
   it "raise subclassed error if template isn't found" do
-    Lotus::View.unload!
+    Hanami::View.unload!
 
     class MissingLayout
-      include Lotus::Layout
+      include Hanami::Layout
     end
 
     error = -> {
-      Lotus::View.load!
-    }.must_raise(Lotus::View::MissingTemplateLayoutError)
+      Hanami::View.load!
+    }.must_raise(Hanami::View::MissingTemplateLayoutError)
     error.message.must_include "Can't find layout template 'MissingLayout'"
-    error.class.ancestors.must_include Lotus::View::Error
+    error.class.ancestors.must_include Hanami::View::Error
   end
 
   it 'concrete methods are available in layout template' do
@@ -42,12 +42,12 @@ describe Lotus::Layout do
   it 'renders content to return value from layout' do
     rendered = Store::Views::Products::Show.render(format: :html)
     rendered.must_match %(Product)
-    rendered.must_match %(<meta name="lotusrb-version" content="0.3.1">)
+    rendered.must_match %(<meta name="hanamirb-version" content="0.3.1">)
   end
 
   describe 'disable layout in view' do
     it 'return NullLayout' do
-      DisabledLayoutView.layout.must_equal Lotus::View::Rendering::NullLayout
+      DisabledLayoutView.layout.must_equal Hanami::View::Rendering::NullLayout
     end
   end
 end
