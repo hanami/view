@@ -23,9 +23,10 @@ module Hanami
         PREFIX = '_'.freeze
 
         # Find a template for a partial. Initially it will look for the
-        # partial template under the directory of the parent directory 
-        # view template, if not found it will search recursivly from 
-        # the view root.
+        # partial template in the framework configuration where it may
+        # already be cached. Failing that it will look under the
+        # directory of the parent directory view template, if not found
+        # it will search recursively from the view root.
         #
         # @return [Hanami::View::Template] the requested template
         #
@@ -34,14 +35,18 @@ module Hanami
         # @since 0.4.3
         # @api private
         def find
-          if path = partial_template_under_view_path
-            View::Template.new(path, @view.configuration.default_encoding)
-          else
-            super
-          end
+          Hanami::View::Configuration.for(@view).
+            find_partial(relative_partial_path, template_name, format)
         end
 
         protected
+
+        # @since x.x.x
+        # @api private
+        def relative_partial_path
+          [view_template_dir, template_name].join(separator)
+        end
+
         # @since 0.4.3
         # @api private
         def partial_template_under_view_path

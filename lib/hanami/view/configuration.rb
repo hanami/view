@@ -4,6 +4,7 @@ require 'hanami/utils/kernel'
 require 'hanami/utils/string'
 require 'hanami/utils/load_paths'
 require 'hanami/view/rendering/layout_finder'
+require 'hanami/view/rendering/partial_templates_finder'
 
 module Hanami
   module View
@@ -39,6 +40,7 @@ module Hanami
       attr_reader :views
       attr_reader :layouts
       attr_reader :modules
+      attr_reader :partials
 
       # Return the original configuration of the framework instance associated
       # with the given class.
@@ -418,7 +420,37 @@ module Hanami
       def load!
         views.each   { |v| v.__send__(:load!) }
         layouts.each { |l| l.__send__(:load!) }
+        load_partials!
         freeze
+      end
+
+      # Load partials for each partial template file found under the
+      # given load paths
+      #
+      # @since x.x.x
+      # @api private
+      def load_partials!
+        Hanami::View::Rendering::PartialTemplatesFinder.new(self).find.each do |partial|
+          add_partial(partial)
+        end
+      end
+
+      # Load partials for each partial template file found under the
+      # given load paths
+      #
+      # @since x.x.x
+      # @api private
+      def find_partial(relative_partial_path, template_name, format)
+        partials_for_view = partials.has_key?(relative_partial_path) ?  partials[relative_partial_path] : partials[template_name]
+        partials_for_view ? partials_for_view[format.to_sym] : nil
+      end
+
+      # Add a partial to the registry
+      #
+      # @since x.x.x
+      # @api private
+      def add_partial(partial)
+        @partials[partial.key][partial.format.to_sym] = partial.template
       end
 
       # Reset all the values to the defaults
@@ -429,6 +461,7 @@ module Hanami
         root             DEFAULT_ROOT
         default_encoding DEFAULT_ENCODING
 
+        @partials   = Hash.new { |h, k| h[k] = Hash.new }
         @views      = Set.new
         @layouts    = Set.new
         @load_paths = Utils::LoadPaths.new(root)
