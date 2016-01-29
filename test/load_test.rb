@@ -2,9 +2,21 @@ require 'test_helper'
 
 describe Hanami::View do
   describe '.load!' do
-    # before do
-    #   Hanami::View.load!
-    # end
+    before do
+      Hanami::View.unload!
+      Hanami::View.class_eval do
+        configure do
+          root Pathname.new __dir__ + '/fixtures/templates'
+        end
+      end
+
+      Hanami::View.load!
+    end
+
+    it 'partials must be included in the framework configuration registry but not copied to individual view configurations' do
+      Hanami::View.configuration.partials.keys.must_include('shared/_sidebar')
+      Articles::Show.configuration.partials.keys.wont_include('shared/_sidebar')
+    end
 
     # it 'freezes .layout for all the views' do
     #   AppView.layout.frozen?.must_equal true
