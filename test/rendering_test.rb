@@ -157,6 +157,15 @@ describe Hanami::View do
 
       rendered = Contacts::Show.render(format: :html, person: person)
       rendered.must_match %(<h1>Luca</h1>)
+      rendered.must_match %(<script type="text/javascript" src="/javascripts/contacts.js"></script>)
+    end
+
+    it 'uses Slim engine' do
+      desk = OpenStruct.new(type: 'Standing')
+
+      rendered = Desks::Show.render(format: :html, desk: desk)
+      rendered.must_match %(<h1>Standing</h1>)
+      rendered.must_match %(<script type="text/javascript" src="/javascripts/desks.js"></script>)
     end
 
     describe 'when without a template' do
