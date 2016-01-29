@@ -1,5 +1,13 @@
 require 'json'
 
+module Helpers
+  module AssetTagHelpers
+    def javascript_tag(source)
+      Hanami::Utils::Escape::SafeString.new %(<script type="text/javascript" src="/javascripts/#{ source }.js"></script>)
+    end
+  end
+end
+
 class HelloWorldView
   include Hanami::View
 end
@@ -257,6 +265,14 @@ end
 module Contacts
   class Show
     include Hanami::View
+    include Helpers::AssetTagHelpers
+  end
+end
+
+module Desks
+  class Show
+    include Hanami::View
+    include Helpers::AssetTagHelpers
   end
 end
 
@@ -384,13 +400,7 @@ module Store
   View = Hanami::View.duplicate(self)
   View.extend Unloadable
 
-  module Helpers
-    module AssetTagHelpers
-      def javascript_tag(source)
-        Hanami::Utils::Escape::SafeString.new %(<script type="text/javascript" src="/javascripts/#{ source }.js" />)
-      end
-    end
-  end
+  Helpers = ::Helpers
 
   module Views
     class StoreLayout
