@@ -1,6 +1,13 @@
 # Hanami::View
 View layer for Hanami
 
+## v0.6.1 - 2016-02-05
+### Changed
+- [Steve Hook] Preload partial templates in order to boost performances for partials rendering (2x faster)
+
+### Fixed
+- [Luca Guidi] Disable Slim autoescape to use `Hanami::View`'s feature
+
 ## v0.6.0 - 2016-01-22
 ### Changed
 - [Luca Guidi] Renamed the project
