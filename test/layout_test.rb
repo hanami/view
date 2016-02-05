@@ -1,6 +1,9 @@
 require 'test_helper'
+require 'support/reload_configuration_helper'
 
 describe Hanami::Layout do
+  reload_configuration!
+
   describe 'rendering from layout' do
     it 'renders partial' do
       rendered = IndexView.render(format: :html)
