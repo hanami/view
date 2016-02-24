@@ -13,8 +13,8 @@ script:
 rvm:
   - 2.2.4
   - 2.3.0
+  - jruby-9.0.5.0
   - ruby-head
-  - jruby-9000
   - jruby-head
 
 matrix:
