@@ -1,5 +1,4 @@
 require 'hanami/utils/escape'
-require 'hanami/view/rendering/null_local'
 
 module Hanami
   module View
@@ -112,20 +111,6 @@ module Hanami
         # @since 0.1.0
         def locals
           @locals || @scope.locals
-        end
-
-        # Return a local for the corresponding key, otherwise it returns a null object
-        #
-        # @return [Objeect,Hanami::View::Rendering::NullLocal] the returning value
-        #
-        # @since x.x.x
-        #
-        # @example
-        #   <% if local(:plan).overdue? %>
-        #     <h2>Your plan is overdue.</h2>
-        #   <% end %>
-        def local(key)
-          locals.fetch(key) { NullLocal.new(key) }
         end
 
         # Returns a content for the given key, by trying to invoke on the current

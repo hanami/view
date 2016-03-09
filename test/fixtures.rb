@@ -139,7 +139,7 @@ module Articles
     include Hanami::View
 
     def errors
-      {}
+      local(:result).errors
     end
   end
 
@@ -148,7 +148,7 @@ module Articles
     template 'articles/new'
 
     def errors
-      {title: 'Title is required'}
+      result.errors
     end
   end
 

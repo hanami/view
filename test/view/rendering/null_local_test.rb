@@ -5,12 +5,31 @@ describe Hanami::View::Rendering::NullLocal do
     @null = Hanami::View::Rendering::NullLocal.new(:result)
   end
 
-  it 'does not complain for uknown sent messages' do
-    @null.foo.must_be_nil
+  it 'does not complain for unknown sent messages' do
+    actual = @null.foo
+
+    actual.must_be_instance_of(Hanami::View::Rendering::NullLocal)
+    actual.inspect.must_match ":result.foo"
+  end
+
+  it 'returns false to all?' do
+    @null.all?.must_equal false
+  end
+
+  it 'returns false to any?' do
+    @null.any?.must_equal false
+  end
+
+  it 'returns true to empty?' do
+    @null.empty?.must_equal true
   end
 
   it 'returns true to nil?' do
-    assert @null.nil?, "Expect #{ @null } to be #nil?"
+    @null.nil?.must_equal true
+  end
+
+  it 'returns false to any method ending with question mark' do
+    @null.downloadable?.must_equal false
   end
 
   it 'always returns true for respond_to? check' do

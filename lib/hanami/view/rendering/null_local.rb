@@ -7,7 +7,7 @@ module Hanami
       #
       # @since x.x.x
       #
-      # @see Hanami::View::Rendering::LayoutScope
+      # @see Hanami::View::Rendering#local
       class NullLocal < Utils::BasicObject
         # @since x.x.x
         # @api private
@@ -16,13 +16,33 @@ module Hanami
         end
 
         # @since x.x.x
-        # @api private
-        def method_missing(*)
+        def all?
+          false
+        end
+
+        # @since x.x.x
+        def any?
+          false
+        end
+
+        # @since x.x.x
+        def empty?
+          true
         end
 
         # @since x.x.x
         def nil?
           true
+        end
+
+        # @since x.x.x
+        # @api private
+        def method_missing(m, *)
+          if m.match(/\?\z/)
+            false
+          else
+            self.class.new("#{ @local }.#{ m }")
+          end
         end
 
         private

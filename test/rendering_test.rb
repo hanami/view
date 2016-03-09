@@ -91,8 +91,9 @@ describe Hanami::View do
 
     it 'renders different template, as specified by DSL' do
       article = OpenStruct.new(title: 'Bonjour')
+      result  = OpenStruct.new(errors: {title: 'Title is required'})
 
-      rendered = Articles::Create.render(format: :html, article: article)
+      rendered = Articles::Create.render(format: :html, article: article, result: result)
       rendered.must_match %(<h1>New Article</h1>)
       rendered.must_match %(<h2>Errors</h2>)
     end
