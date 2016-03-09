@@ -105,7 +105,8 @@ module Hanami
           layout.render
         end
 
-        # Return a local for the corresponding key, otherwise it returns a null object
+        # It tries to invoke a method for the view or a local for the given key.
+        # If the lookup fails, it returns a null object.
         #
         # @return [Objeect,Hanami::View::Rendering::NullLocal] the returning value
         #
@@ -116,7 +117,11 @@ module Hanami
         #     <h2>Your plan is overdue.</h2>
         #   <% end %>
         def local(key)
-          locals.fetch(key) { NullLocal.new(key) }
+          if respond_to?(key)
+            __send__(key)
+          else
+            locals.fetch(key) { NullLocal.new(key) }
+          end
         end
 
         protected

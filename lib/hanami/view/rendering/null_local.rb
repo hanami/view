@@ -11,6 +11,10 @@ module Hanami
       class NullLocal < Utils::BasicObject
         # @since x.x.x
         # @api private
+        TO_STR = "".freeze
+
+        # @since x.x.x
+        # @api private
         def initialize(local)
           @local = local
         end
@@ -33,6 +37,12 @@ module Hanami
         # @since x.x.x
         def nil?
           true
+        end
+
+        # @since x.x.x
+        # @api private
+        def to_str
+          TO_STR
         end
 
         # @since x.x.x

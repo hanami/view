@@ -12,6 +12,10 @@ describe Hanami::View::Rendering::NullLocal do
     actual.inspect.must_match ":result.foo"
   end
 
+  it 'returns empty string for to_str' do
+    @null.to_str.must_equal ''
+  end
+
   it 'returns false to all?' do
     @null.all?.must_equal false
   end
