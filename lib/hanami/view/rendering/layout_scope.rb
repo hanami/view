@@ -124,6 +124,7 @@ module Hanami
         # @return [String,NilClass] returning content if scope respond to the
         #   requested method
         #
+        # @deprecated Use {#local} instead
         # @since 0.4.1
         #
         # @example
@@ -183,15 +184,15 @@ module Hanami
         #     <!-- ... -->
         #     <body>
         #       <!-- ... -->
-        #       <%= content :footer %>
+        #       <%= local :footer %>
         #     </body>
         #   </html>
         #
         #   # Case 1:
-        #   #   Products::Index doesn't respond to #footer, content will return nil
+        #   #   Products::Index doesn't respond to #footer, local will return nil
         #   #
         #   # Case 2:
-        #   #   Products::Show responds to #footer, content will send back
+        #   #   Products::Show responds to #footer, local will send back
         #   #     #footer returning value
         #
         #   module Products
