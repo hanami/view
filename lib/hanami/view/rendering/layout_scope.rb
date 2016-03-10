@@ -1,4 +1,6 @@
+require 'hanami/view/rendering/null_local'
 require 'hanami/utils/escape'
+require 'hanami/utils/deprecation'
 
 module Hanami
   module View
@@ -122,6 +124,7 @@ module Hanami
         # @return [String,NilClass] returning content if scope respond to the
         #   requested method
         #
+        # @deprecated Use {#local} instead
         # @since 0.4.1
         #
         # @example
@@ -157,7 +160,60 @@ module Hanami
         #     end
         #   end
         def content(key)
+          Utils::Deprecation.new("#content is deprecated, please use #local")
           __send__(key) if respond_to?(key)
+        end
+
+        # It tries to invoke a method for the view or a local for the given key.
+        # If the lookup fails, it returns a null object.
+        #
+        # @return [Objeect,Hanami::View::Rendering::NullLocal] the returning value
+        #
+        # @since x.x.x
+        #
+        # @example Safe method navigation
+        #   <% if local(:plan).overdue? %>
+        #     <h2>Your plan is overdue.</h2>
+        #   <% end %>
+        #
+        # @example Optional Contents
+        #   # Given the following layout template
+        #
+        #   <!doctype HTML>
+        #   <html>
+        #     <!-- ... -->
+        #     <body>
+        #       <!-- ... -->
+        #       <%= local :footer %>
+        #     </body>
+        #   </html>
+        #
+        #   # Case 1:
+        #   #   Products::Index doesn't respond to #footer, local will return nil
+        #   #
+        #   # Case 2:
+        #   #   Products::Show responds to #footer, local will send back
+        #   #     #footer returning value
+        #
+        #   module Products
+        #     class Index
+        #       include Hanami::View
+        #     end
+        #
+        #     class Show
+        #       include Hanami::View
+        #
+        #       def footer
+        #         "contents for footer"
+        #       end
+        #     end
+        #   end
+        def local(key)
+          if respond_to?(key)
+            __send__(key)
+          else
+            locals.fetch(key) { NullLocal.new(key) }
+          end
         end
 
         # Implements "respond to" logic

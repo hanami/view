@@ -91,8 +91,9 @@ describe Hanami::View do
 
     it 'renders different template, as specified by DSL' do
       article = OpenStruct.new(title: 'Bonjour')
+      result  = OpenStruct.new(errors: {title: 'Title is required'})
 
-      rendered = Articles::Create.render(format: :html, article: article)
+      rendered = Articles::Create.render(format: :html, article: article, result: result)
       rendered.must_match %(<h1>New Article</h1>)
       rendered.must_match %(<h2>Errors</h2>)
     end
@@ -118,6 +119,21 @@ describe Hanami::View do
       rendered = Dashboard::Index.render(format: :html, map: map)
       rendered.must_match %(<h1>Map</h1>)
       rendered.must_match %(<h2>2 locations</h2>)
+    end
+
+    it 'safely ignores missing locals' do
+      map = Map.new(['Rome', 'Cambridge'])
+
+      rendered = Dashboard::Index.render(format: :html, map: map)
+      rendered.wont_match %(<h3>Annotations</h3>)
+    end
+
+    it 'uses optional locals, if present' do
+      map         = Map.new(['Rome', 'Cambridge'])
+      annotations = OpenStruct.new(written?: true)
+
+      rendered = Dashboard::Index.render(format: :html, annotations: annotations, map: map)
+      rendered.must_match %(<h3>Annotations</h3>)
     end
 
     it 'renders a partial' do
@@ -193,6 +209,21 @@ describe Hanami::View do
         rendered.must_match %(<h1>A Wonderful Day!</h1>)
         rendered.must_match %(<html>)
         rendered.must_match %(<title>Title: articles</title>)
+      end
+
+      it 'safely ignores missing locals' do
+        articles = [ OpenStruct.new(title: 'A Wonderful Day!') ]
+
+        rendered = Articles::Index.render(format: :html, articles: articles)
+        rendered.wont_match %(<h2>Your plan is overdue.</h2>)
+      end
+
+      it 'uses optional locals, if present' do
+        articles = [ OpenStruct.new(title: 'A Wonderful Day!') ]
+        plan     =   OpenStruct.new(overdue?: true)
+
+        rendered = Articles::Index.render(format: :html, plan: plan, articles: articles)
+        rendered.must_match %(<h2>Your plan is overdue.</h2>)
       end
     end
   end

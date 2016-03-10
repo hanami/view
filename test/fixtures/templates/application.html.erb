@@ -4,6 +4,10 @@
   </head>
 
   <body>
+    <% if local(:plan).overdue? %>
+      <h2>Your plan is overdue.</h2>
+    <% end %>
+
     <%= render partial: 'shared/sidebar' %>
     <%= yield %>
   </body>
