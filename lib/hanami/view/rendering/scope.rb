@@ -21,7 +21,9 @@ module Hanami
         # @api private
         # @since 0.1.0
         def initialize(view, locals = {})
-          @view, @locals, @layout = view, locals, layout
+          @view   = view
+          @locals = locals
+          @layout = layout
         end
 
         # Returns an inspect String

@@ -76,7 +76,7 @@ module Hanami
       #   Articles::JsonShow.format # => :json
       def format(value = nil)
         if value.nil?
-          @format
+          @format ||= nil
         else
           @format = value
         end
@@ -314,6 +314,7 @@ module Hanami
       #   Articles::Show.layout # => Hanami::View::Rendering::NullLayout
       def layout(value = nil)
         if value.nil?
+          @layout  ||= nil
           @_layout ||= Rendering::LayoutFinder.find(@layout || configuration.layout, configuration.namespace)
         elsif !value
           @layout = Hanami::View::Rendering::NullLayout
