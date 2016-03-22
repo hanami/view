@@ -1,5 +1,6 @@
 require 'hanami/view/rendering/registry'
 require 'hanami/view/rendering/scope'
+require 'hanami/view/rendering/null_local'
 
 module Hanami
   module View
@@ -102,6 +103,25 @@ module Hanami
         #   view.render # => {title: ...}
         def render
           layout.render
+        end
+
+        # It tries to invoke a method for the view or a local for the given key.
+        # If the lookup fails, it returns a null object.
+        #
+        # @return [Objeect,Hanami::View::Rendering::NullLocal] the returning value
+        #
+        # @since x.x.x
+        #
+        # @example
+        #   <% if local(:plan).overdue? %>
+        #     <h2>Your plan is overdue.</h2>
+        #   <% end %>
+        def local(key)
+          if respond_to?(key)
+            __send__(key)
+          else
+            locals.fetch(key) { NullLocal.new(key) }
+          end
         end
 
         protected

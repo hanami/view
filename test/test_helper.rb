@@ -6,7 +6,7 @@ if ENV['COVERAGE'] == 'true'
   require 'simplecov'
   require 'coveralls'
 
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov.formatters = [
     SimpleCov::Formatter::HTMLFormatter,
     Coveralls::SimpleCov::Formatter
   ]
@@ -43,14 +43,6 @@ Hanami::Utils::LoadPaths.class_eval do
   def include?(object)
     @paths.include?(object)
   end
-
-  def ==(other)
-    other.kind_of?(Hanami::Utils::LoadPaths) &&
-      other.paths == self.paths
-  end
-
-  protected
-  attr_reader :paths
 end
 
 Hanami::View::Configuration.class_eval do

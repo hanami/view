@@ -472,10 +472,12 @@ As per convention, layout templates are located under `Hanami::View.root` or `Ap
 
 ### Optional Content
 
-If we want to render optional contents such as sidebar links or page specific javascripts, we can use `#content`
+#### Optional View Methods
+
+If we want to render optional contents such as sidebar links or page specific javascripts, we can use `#local`
 It accepts a key that represents a method that should be available within the rendering context.
 That context is made of the locals, and the methods that view and layout respond to.
-If the context can't dispatch that method, it returns `nil`.
+If the context can't dispatch that method, it returns returns a null object (`Hanami::View::Rendering::NullLocal`).
 
 Given the following layout template.
 
@@ -485,14 +487,14 @@ Given the following layout template.
   <!-- ... -->
   <body>
     <!-- ... -->
-    <%= content :footer %>
+    <%= local :footer %>
   </body>
 </html>
 ```
 
 We have two views, one responds to `#footer` (`Products::Show`) and the other doesn't (`Products::Index`).
-When the first is rendered, `content` gives back the returning value of `#footer`.
-In the other case, `content` returns `nil`.
+When the first is rendered, `local` gives back the returning value of `#footer`.
+In the other case, `local` returns a null object (`Hanami::View::Rendering::NullLocal`).
 
 ```ruby
 module Products
@@ -509,6 +511,20 @@ module Products
   end
 end
 ```
+
+#### Optional Locals
+
+If we want to show announcements to our customers, but we want only load them from the database if there is something to show.
+This is an optional local.
+
+```erb
+<% if local(:announcement).show? %>
+  <h2><%= announcement.message %></h2>
+<% end %>
+```
+
+The first line is safely evaluated in all the cases: if announcement is present or not.
+In case we enter the `if` statement, we're sure we can safely reference that object.
 
 ### Presenters
 
