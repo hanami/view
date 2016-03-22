@@ -24,6 +24,7 @@ module Hanami
           @view   = view
           @locals = locals
           @layout = layout
+          @scope  = nil
         end
 
         # Returns an inspect String
