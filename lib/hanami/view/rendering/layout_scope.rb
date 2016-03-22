@@ -18,7 +18,10 @@ module Hanami
         # @api private
         # @since 0.1.0
         def initialize(layout, scope)
-          @layout, @scope = layout, scope
+          @layout = layout
+          @scope  = scope
+          @view   = nil
+          @locals = nil
         end
 
         # Returns the classname as string
