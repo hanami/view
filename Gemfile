@@ -4,7 +4,6 @@ gemspec
 
 group :test do
   gem 'byebug', platform: :mri
-  gem 'rack-test'
   gem 'slim'
 
   gem 'codeclimate-test-reporter', platform: :rbx
