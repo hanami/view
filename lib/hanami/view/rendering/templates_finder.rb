@@ -78,19 +78,23 @@ module Hanami
 
         # @api private
         # @since 0.4.3
+        #
+        # Searches first for files at `../templates/articles/index.*.*`
+        # If none are found, falls back to recursive search in `../templates/**/articles/index.*.*`
+        #
         def _find(lookup = search_path)
-          primary_templates = templates_in_base_path
-          if primary_templates.none?
-            Dir.glob( "#{ [root, lookup, template_name].join(separator) }.#{ format }.#{ engines }" )
+          base_path = templates_path(root, template_name)
+          if base_path.none?
+            templates_path(root, lookup, template_name)
           else
-            primary_templates
+            base_path
           end
         end
 
         # @api private
         # @since 0.7.0
-        def templates_in_base_path
-          Dir.glob("#{ [root, template_name].join(separator) }.#{ format }.#{ engines }")
+        def templates_path(*parts)
+          Dir.glob("#{ parts.join(separator) }.#{ format }.#{ engines }")
         end
 
         # @api private
