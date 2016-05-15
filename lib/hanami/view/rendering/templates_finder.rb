@@ -79,7 +79,18 @@ module Hanami
         # @api private
         # @since 0.4.3
         def _find(lookup = search_path)
-          Dir.glob( "#{ [root, lookup, template_name].join(separator) }.#{ format }.#{ engines }" )
+          primary_templates = templates_in_base_path
+          if primary_templates.none?
+            Dir.glob( "#{ [root, lookup, template_name].join(separator) }.#{ format }.#{ engines }" )
+          else
+            primary_templates
+          end
+        end
+
+        # @api private
+        # @since 0.7.0
+        def templates_in_base_path
+          Dir.glob("#{ [root, template_name].join(separator) }.#{ format }.#{ engines }")
         end
 
         # @api private

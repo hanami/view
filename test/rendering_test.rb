@@ -54,6 +54,10 @@ describe Hanami::View do
       rendered = Articles::Index.render(format: :html, articles: articles)
       rendered.wont_match %(<h1>Wrong Article Template</h1>)
       rendered.must_match %(<h1>Man on the Moon!</h1>)
+
+      rendered = Members::Articles::Index.render(format: :html, articles: articles)
+      rendered.must_match %(<h1>Wrong Article Template</h1>)
+      rendered.wont_match %(<h1>Man on the Moon!</h1>)
     end
 
     describe 'calling an action method from the template' do
