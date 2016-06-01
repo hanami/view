@@ -115,6 +115,19 @@ end
 class GlobalLayout
 end
 
+module Members
+  module Articles
+    class Index
+      include Hanami::View
+      layout :application
+
+      def title
+        "#{ layout.title } articles"
+      end
+    end
+  end
+end
+
 module Articles
   class Index
     include Hanami::View
