@@ -9,8 +9,13 @@ rescue LoadError; end
 
 SPEC_ROOT = Pathname(__FILE__).dirname
 
-require 'tilt/erubis'
+require 'erb'
 require 'slim'
+
+# Prefer plain ERB processor rather than erubis (which has problems on JRuby)
+require 'tilt'
+Tilt.register 'erb', Tilt::ERBTemplate
+
 require 'dry-view'
 
 RSpec.configure do |config|
