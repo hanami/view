@@ -9,8 +9,14 @@ rescue LoadError; end
 
 SPEC_ROOT = Pathname(__FILE__).dirname
 
-require 'dry-view'
+require 'erb'
 require 'slim'
+
+# Prefer plain ERB processor rather than erubis (which has problems on JRuby)
+require 'tilt'
+Tilt.register 'erb', Tilt::ERBTemplate
+
+require 'dry-view'
 
 RSpec.configure do |config|
   config.disable_monkey_patching!

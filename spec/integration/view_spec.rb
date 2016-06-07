@@ -1,15 +1,13 @@
 RSpec.describe 'dry-view' do
   let(:view_class) do
-    klass = Class.new(Dry::View::Layout)
-
-    klass.configure do |config|
-      config.root = SPEC_ROOT.join('fixtures/templates')
-      config.name = 'app'
-      config.template = 'users'
-      config.formats = {html: :slim, txt: :erb}
+    Class.new(Dry::View::Layout) do
+      configure do |config|
+        config.root = SPEC_ROOT.join('fixtures/templates')
+        config.name = 'app'
+        config.template = 'users'
+        config.formats = {html: :slim, txt: :erb}
+      end
     end
-
-    klass
   end
 
   let(:scope) do
