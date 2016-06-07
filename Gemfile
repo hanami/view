@@ -5,6 +5,7 @@ gemspec
 group :test do
   gem 'byebug', platform: :mri
   gem 'slim'
+  gem 'erubis'
 
   gem 'codeclimate-test-reporter', platform: :rbx
 end

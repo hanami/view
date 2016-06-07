@@ -9,9 +9,9 @@ rescue LoadError; end
 
 SPEC_ROOT = Pathname(__FILE__).dirname
 
-require 'dry-view'
+require 'tilt/erubis'
 require 'slim'
-require 'erb'
+require 'dry-view'
 
 RSpec.configure do |config|
   config.disable_monkey_patching!
