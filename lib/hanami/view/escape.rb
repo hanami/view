@@ -165,8 +165,9 @@ module Hanami
       # @since 0.4.0
       # @api private
       def method_added(method_name)
+        visibility = :public
         visibility = :private if private_method_defined? method_name
-        visibility ||= :protected if protected_method_defined? method_name
+        visibility = :protected if protected_method_defined? method_name
 
         unless autoescape_methods[method_name]
           prepend Module.new {

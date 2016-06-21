@@ -52,5 +52,6 @@ describe 'Escape' do
   it "does not alter the method visibility" do
     Users::Show.private_instance_methods.must_include(:private_username)
     Users::Show.protected_instance_methods.must_include(:protected_username)
+    Users::Show.public_instance_methods.must_include(:raw_username)
   end
 end
