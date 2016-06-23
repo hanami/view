@@ -1,5 +1,4 @@
 require 'hanami/utils/escape'
-require 'hanami/presenter'
 
 module Hanami
   module View
@@ -9,6 +8,7 @@ module Hanami
     module Escape
       module InstanceMethods
         private
+
         # Mark the given string as safe to render.
         #
         # !!! ATTENTION !!! This may open your application to XSS attacks.
@@ -119,6 +119,49 @@ module Hanami
         end
       end
 
+      module Presentable
+        # Inject escape logic into the given class.
+        #
+        # @since x.x.x
+        # @api private
+        #
+        # @see Hanami::View::Escape
+        def self.included(base)
+          base.extend ::Hanami::View::Escape
+        end
+
+        # Initialize the presenter
+        #
+        # @param object [Object] the object to present
+        #
+        # @since x.x.x
+        def initialize(object)
+          @object = object
+        end
+
+        protected
+
+        # Override Ruby's method_missing
+        #
+        # @api private
+        # @since x.x.x
+        def method_missing(m, *args, &blk)
+          if @object.respond_to?(m)
+            ::Hanami::View::Escape.html(@object.__send__(m, *args, &blk))
+          else
+            super
+          end
+        end
+
+        # Override Ruby's respond_to_missing? in order to support proper delegation
+        #
+        # @api private
+        # @since 0.3.0
+        def respond_to_missing?(m, include_private = false)
+          @object.respond_to?(m, include_private)
+        end
+      end
+
       # Auto escape presenter
       #
       # @since 0.4.0
@@ -126,7 +169,7 @@ module Hanami
       #
       # @see Hanami::View::Escape::InstanceMethods#_escape
       class Presenter
-        include ::Hanami::Presenter
+        include Presentable
       end
 
       # Escape the given input if it's a string, otherwise return the oject as it is.
