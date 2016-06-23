@@ -31,7 +31,7 @@ describe 'Escape' do
   end
 
   it "doesn't interfer with other views" do
-    Users::Show.autoescape_methods.must_equal({custom: true, username: true, raw_username: true, book: true})
+    Users::Show.autoescape_methods.must_equal({custom: true, username: true, raw_username: true, book: true, protected_username: true, private_username: true})
     Users::Extra.autoescape_methods.must_equal({username: true})
   end
 
@@ -47,5 +47,11 @@ describe 'Escape' do
     json = Users::Show.render(format: :json, user: user)
 
     json.must_match %({"username":"L"})
+  end
+
+  it "does not alter the method visibility" do
+    Users::Show.private_instance_methods.must_include(:private_username)
+    Users::Show.protected_instance_methods.must_include(:protected_username)
+    Users::Show.public_instance_methods.must_include(:raw_username)
   end
 end

@@ -499,6 +499,17 @@ module Users
     def book
       _escape(locals[:book])
     end
+
+    protected
+
+    def protected_username
+      user.username
+    end
+
+    private
+    def private_username
+      user.username
+    end
   end
 
   class XmlShow < Show
