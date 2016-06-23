@@ -90,37 +90,9 @@ module Hanami
     #
     # @see Hanami::View::Escape
     def self.included(base)
-      base.extend ::Hanami::View::Escape
-    end
-
-    # Initialize the presenter
-    #
-    # @param object [Object] the object to present
-    #
-    # @since 0.1.0
-    def initialize(object)
-      @object = object
-    end
-
-    protected
-    # Override Ruby's method_missing
-    #
-    # @api private
-    # @since 0.1.0
-    def method_missing(m, *args, &blk)
-      if @object.respond_to?(m)
-        ::Hanami::View::Escape.html(@object.__send__(m, *args, &blk))
-      else
-        super
+      base.class_eval do
+        include ::Hanami::View::Escape::Presentable
       end
-    end
-
-    # Override Ruby's respond_to_missing? in order to support proper delegation
-    #
-    # @api private
-    # @since 0.3.0
-    def respond_to_missing?(m, include_private = false)
-      @object.respond_to?(m, include_private)
     end
   end
 end
