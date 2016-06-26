@@ -37,7 +37,7 @@ module Dry
       end
 
       def tilt(path)
-        tilts.fetch(path) { tilts[path] = Tilt[engine].new(path) }
+        tilts.fetch(path) { tilts[path] = Tilt[engine].new(path, nil, default_encoding: "utf-8") }
       end
 
       def lookup(name)
