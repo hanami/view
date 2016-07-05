@@ -21,9 +21,10 @@ require 'minitest/autorun'
 $:.unshift 'lib'
 require 'hanami/view'
 
-Hanami::View.configure do
-  root Pathname.new __dir__ + '/fixtures/templates'
-end
+# Hanami::View.configure do
+#   root Pathname.new __dir__ + '/fixtures/templates'
+#   namespace 'Test'
+# end
 
 module Unloadable
   def unload!

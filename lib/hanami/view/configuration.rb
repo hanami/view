@@ -90,10 +90,12 @@ module Hanami
       #   Hanami::View::Configuration.for(MyApp::Views::Dashboard::Index)
       #     # => will return from MyApp::View
       def self.for(base)
-        # TODO this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
-        namespace = Utils::String.new(base).namespace
-        framework = Utils::Class.load_from_pattern!("(#{namespace}|Hanami)::View")
-        framework.configuration
+        result = Utils::Class.each_namespace(base) do |const|
+          const.respond_to?(:configuration) # &&
+            # const.configuration.is_a?(Hanami::Configuration)
+        end
+
+        (result && result.configuration) || Hanami::View.configuration
       end
 
       # Initialize a configuration instance

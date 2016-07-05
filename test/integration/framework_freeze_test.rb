@@ -12,11 +12,11 @@ describe 'Framework freeze' do
     end
 
     it 'freezes view configuration' do
-      AppView.configuration.must_be :frozen?
+      Test::AppView.configuration.must_be :frozen?
     end
 
     it 'freezes view subclass configuration' do
-      AppViewLayout.configuration.must_be :frozen?
+      Test::AppViewLayout.configuration.must_be :frozen?
     end
 
     it 'freezes layout configuration' do

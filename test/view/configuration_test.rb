@@ -113,13 +113,13 @@ describe Hanami::View::Configuration do
     end
 
     it 'allows to add views' do
-      @configuration.add_view(HelloWorldView)
-      @configuration.views.must_include(HelloWorldView)
+      @configuration.add_view(Test::HelloWorldView)
+      @configuration.views.must_include(Test::HelloWorldView)
     end
 
     it 'eliminates duplications' do
-      @configuration.add_view(RenderView)
-      @configuration.add_view(RenderView)
+      @configuration.add_view(Test::RenderView)
+      @configuration.add_view(Test::RenderView)
 
       @configuration.views.size.must_equal(1)
     end
@@ -223,8 +223,8 @@ describe Hanami::View::Configuration do
       @configuration.load_paths << '..'
       @configuration.layout :application
       @configuration.default_encoding 'UTF-7'
-      @configuration.add_view(HelloWorldView)
-      @configuration.add_layout(ApplicationLayout)
+      @configuration.add_view(Test::HelloWorldView)
+      @configuration.add_layout(Test::ApplicationLayout)
       @configuration.add_partial(Hanami::View::Rendering::PartialFile.new('shared/_foo', 'json', Object.new))
       @configuration.prepare { include Kernel }
 
@@ -247,7 +247,7 @@ describe Hanami::View::Configuration do
       @config.load_paths << '../..'
       @config.layout :global
       @config.default_encoding 'iso-8859-1'
-      @config.add_view(RenderView)
+      @config.add_view(Test::RenderView)
       @config.add_layout(GlobalLayout)
       @config.add_partial(Hanami::View::Rendering::PartialFile.new('shared/_bar', 'html', Object.new))
       @config.prepare { include Comparable }
@@ -259,7 +259,7 @@ describe Hanami::View::Configuration do
       @config.load_paths.must_include '../..'
 
       @config.layout.must_equal          GlobalLayout
-      @config.views.must_include         RenderView
+      @config.views.must_include         Test::RenderView
       @config.layouts.must_include       GlobalLayout
       @config.partials.keys.must_include 'shared/_bar'
       @config.modules.size.must_equal    2
@@ -274,10 +274,10 @@ describe Hanami::View::Configuration do
 
       @configuration.layout.must_equal     ApplicationLayout
 
-      @configuration.views.must_include    HelloWorldView
-      @configuration.views.wont_include    RenderView
+      @configuration.views.must_include    Test::HelloWorldView
+      @configuration.views.wont_include    Test::RenderView
 
-      @configuration.layouts.must_include  ApplicationLayout
+      @configuration.layouts.must_include  Test::ApplicationLayout
       @configuration.layouts.wont_include  GlobalLayout
 
       @configuration.partials.keys.must_include  'shared/_foo'
@@ -293,14 +293,16 @@ describe Hanami::View::Configuration do
 
     describe 'layout lazy loading' do
       before do
-        Hanami::View.configure do
-          layout :application
-        end
-
         module LazyApp
           View = Hanami::View.duplicate(self)
 
           module Views
+            include Hanami::View.konfiguration
+            configure do |config|
+              config.namespace LazyApp::Views
+              layout :application
+            end
+
             module Dashboard
               class Index
                 include LazyApp::View
@@ -374,7 +376,7 @@ describe Hanami::View::Configuration do
       @configuration.load_paths << '..'
       @configuration.layout :application
       @configuration.default_encoding 'Windows-1253'
-      @configuration.add_view(HelloWorldView)
+      @configuration.add_view(Test::HelloWorldView)
       @configuration.add_layout(ApplicationLayout)
       @configuration.add_partial(Hanami::View::Rendering::PartialFile.new('shared/_foo', 'html', Object.new))
 

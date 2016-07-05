@@ -16,6 +16,29 @@ module Hanami
   #
   # @since 0.1.0
   module View
+    module Framework
+      module Configurable
+        def self.included(base)
+          base.class_eval do
+            include Utils::ClassAttribute
+            class_attribute :configuration
+
+            extend ClassMethods
+          end
+        end
+
+        module ClassMethods
+          def configure(&blk)
+            self.configuration = Configuration.new.tap { |c| c.instance_eval(&blk) }
+          end
+        end
+      end
+    end
+
+    def self.konfiguration
+      Framework::Configurable
+    end
+
     include Utils::ClassAttribute
     # Framework configuration
     #
@@ -235,9 +258,6 @@ module Hanami
     #     include Hanami::View
     #   end
     def self.included(base)
-      conf = self.configuration
-      conf.add_view(base)
-
       base.class_eval do
         extend Inheritable
         extend Dsl
@@ -247,10 +267,12 @@ module Hanami
         include Utils::ClassAttribute
         class_attribute :configuration
 
-        self.configuration = conf.duplicate
-      end
+        conf = Configuration.for(base)#self.configuration
+        conf.add_view(base)
 
-      conf.copy!(base)
+        self.configuration = conf.duplicate
+        conf.copy!(base)
+      end
     end
 
     # Load the framework

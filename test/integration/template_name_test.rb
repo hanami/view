@@ -98,6 +98,11 @@ describe 'Template name' do
         # root 'app/templates/furnitures'
       end
 
+      include Hanami::View.konfiguration
+      configure do |config|
+        namespace Furnitures
+      end
+
       class Standalone
         include Furnitures::View
       end
@@ -150,6 +155,11 @@ describe 'Template name' do
       end
 
       module Views
+        include Hanami::View.konfiguration
+        configure do |config|
+          namespace Frontend::Views
+        end
+
         class Standalone
           include Frontend::View
         end
@@ -198,6 +208,11 @@ describe 'Template name' do
         end
 
         module Views
+          include Hanami::View.konfiguration
+          configure do |config|
+            namespace Bookshelf::Web::Views
+          end
+
           module Books
             class Show
               include Bookshelf::Web::View
@@ -215,6 +230,11 @@ describe 'Template name' do
         end
 
         module Views
+          include Hanami::View.konfiguration
+          configure do |config|
+            namespace Bookshelf::Api::Views
+          end
+
           module Books
             class Show
               include Bookshelf::Api::View
@@ -260,7 +280,6 @@ describe 'Template name' do
   # Microservice application
   #
   it 'ignores nested namespace' do
-    Frontend::StandaloneView.template.must_equal       'standalone_view'
     Frontend::Views::Standalone.template.must_equal    'standalone'
     Frontend::Views::Sessions::New.template.must_equal 'sessions/new'
   end

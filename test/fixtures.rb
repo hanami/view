@@ -8,79 +8,112 @@ module Helpers
   end
 end
 
-class HelloWorldView
-  include Hanami::View
-end
+class ApplicationLayout
+  include Hanami::Layout
 
-class DisabledLayoutView
-  include Hanami::View
-  layout false
-end
-
-class RenderView
-  include Hanami::View
-end
-
-class RenderViewMethodOverride
-  include Hanami::View
-
-  def select
-    'foo'
+  def title
+    'Title:'
   end
 end
 
-class RenderViewMethodWithArgs
-  include Hanami::View
+module Test
+  include Hanami::View.konfiguration
 
-  def planet(name)
-    name.to_s
+  configure do # |config|
+    # config.root      = Pathname.new(__dir__ + '/fixtures/templates')
+    # config.namespace = 'Test'
+    root Pathname.new __dir__ + '/fixtures/templates'
+    namespace 'Test'
+  end
+
+  class ApplicationLayout
+    include Hanami::Layout
+
+    def title
+      'Title:'
+    end
+  end
+
+  class HelloWorldView
+    include Hanami::View
+  end
+
+  class DisabledLayoutView
+    include Hanami::View
+    layout false
+  end
+
+  class RenderView
+    include Hanami::View
+  end
+
+  class RenderViewMethodOverride
+    include Hanami::View
+
+    def select
+      'foo'
+    end
+  end
+
+  class RenderViewMethodWithArgs
+    include Hanami::View
+
+    def planet(name)
+      name.to_s
+    end
+  end
+
+  class RenderViewMethodWithBlock
+    include Hanami::View
+
+    def each_thing
+      yield 'thing 1'
+      yield 'thing 2'
+      yield 'thing 3'
+    end
+  end
+
+  class RenderViewWithMissingPartialTemplate
+    include Hanami::View
+  end
+
+  class EncodingView
+    include Hanami::View
+  end
+
+  class JsonRenderView
+    include Hanami::View
+    format :json
+  end
+
+  class AppView
+    include Hanami::View
+    root __dir__ + '/fixtures/templates/app'
+    layout :application
+  end
+
+  class AppViewLayout < AppView
+    layout false
+  end
+
+  class AppViewRoot < AppView
+    root '.'
+  end
+
+  class NestedView
+    include Hanami::View
+    root __dir__ + '/fixtures/templates'
+  end
+
+  class IndexView
+    include Hanami::View
+    layout :application
   end
 end
-
-class RenderViewMethodWithBlock
-  include Hanami::View
-
-  def each_thing
-    yield 'thing 1'
-    yield 'thing 2'
-    yield 'thing 3'
-  end
-end
-
-class RenderViewWithMissingPartialTemplate
-  include Hanami::View
-end
-
-class EncodingView
-  include Hanami::View
-end
-
-class JsonRenderView
-  include Hanami::View
-  format :json
-end
-
-class AppView
-  include Hanami::View
-  root __dir__ + '/fixtures/templates/app'
-  layout :application
-end
-
-class AppViewLayout < AppView
-  layout false
-end
-
-class AppViewRoot < AppView
-  root '.'
-end
-
-class NestedView
-  include Hanami::View
-  root __dir__ + '/fixtures/templates'
-end
-
 
 module Organisations
+  include Hanami::View.konfiguration
+
   class Action
     include Hanami::View
     root __dir__ + '/fixtures/templates'
@@ -104,18 +137,15 @@ module App
   end
 end
 
-class ApplicationLayout
-  include Hanami::Layout
-
-  def title
-    'Title:'
-  end
-end
-
 class GlobalLayout
 end
 
 module Members
+  include Hanami::View.konfiguration
+  configure do |config|
+    namespace Members
+  end
+
   module Articles
     class Index
       include Hanami::View
@@ -128,60 +158,78 @@ module Members
   end
 end
 
-module Articles
-  class Index
-    include Hanami::View
-    layout :application
-
-    def title
-      "#{ layout.title } articles"
-    end
-  end
-
-  class RssIndex < Index
-    format :rss
-    layout false
-  end
-
-  class AtomIndex < RssIndex
-    format :atom
-    layout false
-  end
-
-  class New
-    include Hanami::View
-
-    def errors
-      local(:result).errors
-    end
-  end
-
-  class Create
-    include Hanami::View
-    template 'articles/new'
-
-    def errors
-      result.errors
-    end
-  end
-
-  class Show
-    include Hanami::View
-
-    def title
-      @title ||= article.title.upcase
-    end
-  end
-
-  class JsonShow < Show
-    format :json
-
-    def article
-      OpenStruct.new(title: locals[:article].title.reverse)
+module Kiosk
+  module Views
+    include Hanami::View.konfiguration
+    configure do |config|
+      namespace Kiosk::Views
+      root __dir__ + '/fixtures/templates/kiosk/templates'
     end
 
-    def title
-      super.downcase
+    class ApplicationLayout
+      include Hanami::Layout
+
+      def title
+        'Kiosk'
+      end
+    end
+
+    module Articles
+      class Index
+        include Hanami::View
+        layout :application
+
+        def title
+          "#{ layout.title } articles"
+        end
+      end
+
+      class RssIndex < Index
+        format :rss
+        layout false
+      end
+
+      class AtomIndex < RssIndex
+        format :atom
+        layout false
+      end
+
+      class New
+        include Hanami::View
+
+        def errors
+          local(:result).errors
+        end
+      end
+
+      class Create
+        include Hanami::View
+        template 'articles/new'
+
+        def errors
+          result.errors
+        end
+      end
+
+      class Show
+        include Hanami::View
+
+        def title
+          @title ||= article.title.upcase
+        end
+      end
+
+      class JsonShow < Show
+        format :json
+
+        def article
+          OpenStruct.new(title: locals[:article].title.reverse)
+        end
+
+        def title
+          super.downcase
+        end
+      end
     end
   end
 end
@@ -234,12 +282,6 @@ module Dashboard
       MapPresenter.new(locals[:map])
     end
   end
-end
-
-class IndexView
-  include Hanami::View
-
-  layout :application
 end
 
 class SongWidget
@@ -302,6 +344,18 @@ module MyOtherCustomModule
 end
 
 module CardDeck
+  include Hanami::View.konfiguration
+
+  configure do |config|
+    namespace CardDeck
+    root __dir__ + '/fixtures/templates/card_deck/app/templates'
+    layout :application
+    prepare do
+      include MyCustomModule
+      include MyOtherCustomModule
+    end
+  end
+
   View = Hanami::View.duplicate(self) do
     namespace CardDeck
     root __dir__ + '/fixtures/templates/card_deck/app/templates'
@@ -379,6 +433,11 @@ module App1
   end
 
   module Views
+    include Hanami::View.konfiguration
+    configure do |config|
+      namespace App1::Views
+    end
+
     module Home
       class Index
         include App1::View
@@ -395,6 +454,11 @@ module App2
   end
 
   module Views
+    include Hanami::View.konfiguration
+    configure do |config|
+      namespace App2::Views
+    end
+
     module Home
       class Index
         include App2::View
@@ -416,6 +480,11 @@ module Store
   Helpers = ::Helpers
 
   module Views
+    include Hanami::View.konfiguration
+    configure do |config|
+      config.namespace Store::Views
+    end
+
     class StoreLayout
       include Store::Layout
       include Store::Helpers::AssetTagHelpers
