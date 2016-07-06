@@ -2,8 +2,16 @@
 View layer for Hanami
 
 ## v0.7.0 - (unreleased)
+### Added
+- [Luca Guidi] Introduced `#local` for views, layouts and templates. It allows to safely access locals without raising errors in case the referenced local is missing.
+
+### Fixed
+- [nessur] Find the correct partial in case of deeply nested templates.
+- [Marcello Rocha] Ensure `Hanami::Presenter` to respect method visibility of wrapped object.
+
 ### Changed
-– [Luca Guidi] Drop support for Ruby 2.0 and 2.1
+– [Luca Guidi] Drop support for Ruby 2.0 and 2.1. Official support for JRuby 9.0.5.0+.
+– [Luca Guidi] Deprecate `#content` in favor of `#local`.
 
 ## v0.6.1 - 2016-02-05
 ### Changed
