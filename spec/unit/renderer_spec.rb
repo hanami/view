@@ -1,8 +1,9 @@
+require 'dry/view/path'
 require 'dry/view/renderer'
 
 RSpec.describe Dry::View::Renderer do
   subject(:renderer) do
-    Dry::View::Renderer.new(SPEC_ROOT.join('fixtures/templates'), format: 'html', engine: :slim)
+    Dry::View::Renderer.new([Dry::View::Path.new(SPEC_ROOT.join('fixtures/templates'))], format: 'html', engine: :slim)
   end
 
   let(:scope) { double(:scope) }

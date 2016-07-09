@@ -2,6 +2,7 @@ require 'dry-configurable'
 require 'dry-equalizer'
 require 'inflecto'
 
+require 'dry/view/path'
 require 'dry/view/part'
 require 'dry/view/value_part'
 require 'dry/view/null_part'
@@ -16,7 +17,7 @@ module Dry
 
       extend Dry::Configurable
 
-      setting :root
+      setting :paths
       setting :name
       setting :template
       setting :formats, { html: :erb }
@@ -24,6 +25,10 @@ module Dry
 
       attr_reader :config, :scope, :layout_dir, :layout_path, :template_path,
         :default_format
+
+      def self.paths
+        Array(config.paths).map { |path| Dry::View::Path.new(path) }
+      end
 
       def self.renderer(format = default_format)
         unless config.formats.key?(format.to_sym)
@@ -35,9 +40,7 @@ module Dry
 
       def self.renderers
         @renderers ||= Hash.new do |h, key|
-          h[key.to_sym] = Renderer.new(
-            config.root, format: key, engine: config.formats[key.to_sym]
-          )
+          h[key.to_sym] = Renderer.new(paths, format: key, engine: config.formats[key.to_sym])
         end
       end
 

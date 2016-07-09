@@ -4,21 +4,20 @@ require 'dry-equalizer'
 module Dry
   module View
     class Renderer
-      include Dry::Equalizer(:dir, :root, :engine)
+      include Dry::Equalizer(:paths, :format, :engine)
 
       TemplateNotFoundError = Class.new(StandardError)
 
-      attr_reader :dir, :root, :format, :engine, :tilts
+      attr_reader :paths, :format, :engine, :tilts
 
       def self.tilts
         @__engines__ ||= {}
       end
 
-      def initialize(dir, options = {})
-        @dir = dir
-        @root = options.fetch(:root, dir)
-        @format = options[:format]
-        @engine = options[:engine]
+      def initialize(paths, options = {})
+        @paths = paths
+        @format = options.fetch(:format)
+        @engine = options.fetch(:engine)
         @tilts = self.class.tilts
       end
 
@@ -28,7 +27,8 @@ module Dry
         if path
           render(path, scope, &block)
         else
-          raise TemplateNotFoundError, "Template #{template} could not be looked up within #{root}"
+          msg = "Template #{template} could not be found in paths:\n#{paths.map { |pa| "- #{pa.to_s}" }.join("\n")}"
+          raise TemplateNotFoundError, msg
         end
       end
 
@@ -36,32 +36,24 @@ module Dry
         tilt(path).render(scope, &block)
       end
 
-      def tilt(path)
-        tilts.fetch(path) { tilts[path] = Tilt[engine].new(path, nil, default_encoding: "utf-8") }
+      def chdir(dirname)
+        new_paths = paths.map { |path| path.chdir(dirname) }
+
+        self.class.new(new_paths, engine: engine, format: format)
       end
 
       def lookup(name)
-        template?(name) || template?("shared/#{name}") || !root? && chdir('..').lookup(name)
+        template_name = "#{name}.#{format}.#{engine}"
+
+        paths.inject(false) { |result, path|
+          result || path.lookup(template_name)
+        }
       end
 
-      def root?
-        dir == root
-      end
+      private
 
-      def template?(name)
-        template_path = path(name)
-
-        if File.exist?(template_path)
-          template_path
-        end
-      end
-
-      def path(name)
-        dir.join("#{name}.#{format}.#{engine}")
-      end
-
-      def chdir(dirname)
-        self.class.new(dir.join(dirname), engine: engine, format: format, root: root)
+      def tilt(path)
+        tilts.fetch(path) { tilts[path] = Tilt[engine].new(path, nil, default_encoding: "utf-8") }
       end
     end
   end

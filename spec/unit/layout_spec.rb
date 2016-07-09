@@ -5,7 +5,7 @@ RSpec.describe Dry::View::Layout do
     klass = Class.new(Dry::View::Layout)
 
     klass.configure do |config|
-      config.root = SPEC_ROOT.join('fixtures/templates')
+      config.paths = SPEC_ROOT.join('fixtures/templates')
       config.name = 'app'
       config.template = 'user'
       config.formats = {html: :slim}
