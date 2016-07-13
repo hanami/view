@@ -11,12 +11,16 @@ module Dry
         @renderer = renderer
       end
 
-      def render(path, &block)
-        renderer.render(path, self, &block)
+      def render(path, scope = {}, &block)
+        renderer.render(path, self.with(scope), &block)
       end
 
       def template?(name)
         renderer.lookup("_#{name}")
+      end
+
+      def with(scope)
+        ValuePart.new(renderer, scope)
       end
 
       def respond_to_missing?(meth, include_private = false)
@@ -29,7 +33,7 @@ module Dry
         template_path = template?(meth)
 
         if template_path
-          render(template_path, &block)
+          render(template_path, *args, &block)
         else
           super
         end
@@ -37,3 +41,5 @@ module Dry
     end
   end
 end
+
+require 'dry/view/value_part'

@@ -26,6 +26,10 @@ module Dry
         _value.each(&block)
       end
 
+      def with(scope)
+        self.class.new(renderer, _data.merge(scope))
+      end
+
       def respond_to_missing?(meth, include_private = false)
         _data.key?(meth) || super
       end
@@ -36,7 +40,7 @@ module Dry
         template_path = template?(meth)
 
         if template_path
-          render(template_path, &block)
+          render(template_path, *args, &block)
         elsif _data.key?(meth)
           _data[meth]
         elsif _value.respond_to?(meth)

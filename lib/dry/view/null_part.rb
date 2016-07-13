@@ -10,6 +10,10 @@ module Dry
       def each(&block)
       end
 
+      def with(scope)
+        ValuePart.new(renderer, _data.merge(scope))
+      end
+
       def respond_to_missing?(*)
         true
       end
@@ -20,7 +24,7 @@ module Dry
         template_path = template?("#{meth}_missing")
 
         if template_path
-          render(template_path)
+          render(template_path, *args, &block)
         else
           nil
         end
