@@ -2,7 +2,7 @@ RSpec.describe 'dry-view' do
   let(:view_class) do
     Class.new(Dry::View::Layout) do
       configure do |config|
-        config.root = SPEC_ROOT.join('fixtures/templates')
+        config.paths = SPEC_ROOT.join('fixtures/templates')
         config.name = 'app'
         config.template = 'users'
         config.formats = {html: :slim, txt: :erb}
@@ -40,11 +40,28 @@ RSpec.describe 'dry-view' do
     )
   end
 
+  it 'renders a view with a template on another view path' do
+    view = Class.new(view_class) do
+      configure do |config|
+        config.paths = [SPEC_ROOT.join('fixtures/templates_override')] + Array(config.paths)
+      end
+    end.new
+
+    users = [
+      { name: 'Jane', email: 'jane@doe.org' },
+      { name: 'Joe', email: 'joe@doe.org' }
+    ]
+
+    expect(view.(scope: scope, locals: {subtitle: 'Users List', users: users })).to eq(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h1>OVERRIDE</h1><h2>Users List</h2><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
+    )
+  end
+
   describe 'inheritance' do
     let(:parent_view) do
       klass = Class.new(Dry::View::Layout)
 
-      klass.setting :root, SPEC_ROOT.join('fixtures/templates')
+      klass.setting :paths, SPEC_ROOT.join('fixtures/templates')
       klass.setting :name, 'app'
       klass.setting :formats, {html: :slim}
 
