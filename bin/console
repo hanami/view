@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "dry-view"
+
+require "pry"
+Pry.start
