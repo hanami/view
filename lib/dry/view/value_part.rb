@@ -44,7 +44,7 @@ module Dry
         template_path = template?(meth)
 
         if template_path
-          render(template_path, *args, &block)
+          render(template_path, prepare_render_scope(meth, *args), &block)
         elsif _data.key?(meth)
           _data[meth]
         elsif _value.respond_to?(meth)
