@@ -27,7 +27,7 @@ module Dry
         if path
           render(path, scope, &block)
         else
-          msg = "Template #{template} could not be found in paths:\n#{paths.map { |pa| "- #{pa.to_s}" }.join("\n")}"
+          msg = "Template #{template} could not be found in paths:\n#{paths.map { |pa| "- #{pa}" }.join("\n")}"
           raise TemplateNotFoundError, msg
         end
       end
