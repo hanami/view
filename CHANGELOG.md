@@ -1,3 +1,10 @@
+# 0.2.0 / Unreleased
+
+### Added
+
+- Support for multiple template paths. Changed `Dry::View::Layout`'s `root` setting to `paths`, which can now accept an array of one or more file paths. These will be searched for templates in order, with the first match winning (timriley)
+- Support for supplying extra values to partial templates by accepting arguments on view part methods that resolve to partial renders (timriley)
+
 # 0.1.1 / 2016-07-07
 
 ### Changed
