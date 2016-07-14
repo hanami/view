@@ -20,7 +20,11 @@ module Dry
       end
 
       def with(scope)
-        ValuePart.new(renderer, scope)
+        if scope.any?
+          ValuePart.new(renderer, scope)
+        else
+          self
+        end
       end
 
       def respond_to_missing?(meth, include_private = false)

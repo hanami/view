@@ -27,7 +27,11 @@ module Dry
       end
 
       def with(scope)
-        self.class.new(renderer, _data.merge(scope))
+        if scope.any?
+          self.class.new(renderer, _data.merge(scope))
+        else
+          self
+        end
       end
 
       def respond_to_missing?(meth, include_private = false)

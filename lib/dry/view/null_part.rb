@@ -11,7 +11,11 @@ module Dry
       end
 
       def with(scope)
-        ValuePart.new(renderer, _data.merge(scope))
+        if scope.any?
+          ValuePart.new(renderer, _data.merge(scope))
+        else
+          self
+        end
       end
 
       def respond_to_missing?(*)
