@@ -1,20 +1,11 @@
-require 'dry/view/value_part'
+require 'dry/view/part'
 
-RSpec.describe Dry::View::ValuePart do
+RSpec.describe Dry::View::Part do
   subject(:part) do
-    Dry::View::ValuePart.new(renderer, data)
+    Dry::View::Part.new(renderer)
   end
-
-  let(:name) { :user }
-  let(:data) { { user: { email: 'jane@doe.org' } } }
 
   let(:renderer) { double(:renderer) }
-
-  describe '#[]' do
-    it 'gives access to data values' do
-      expect(part[:email]).to eql('jane@doe.org')
-    end
-  end
 
   describe '#render' do
     it 'renders given template' do
@@ -33,8 +24,8 @@ RSpec.describe Dry::View::ValuePart do
   end
 
   describe "#with" do
-    it "builds a new instance with the extra data" do
-      expect(part.with(foo: "bar")).to eq Dry::View::ValuePart.new(renderer, data.merge(foo: "bar"))
+    it "builds a new value part with the extra data" do
+      expect(part.with(foo: "bar")).to eq Dry::View::ValuePart.new(renderer, foo: "bar")
     end
 
     it "returns self when no data passed" do

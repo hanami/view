@@ -52,8 +52,25 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(view.(scope: scope, locals: {subtitle: 'Users List', users: users })).to eq(
+    expect(view.(scope: scope, locals: {subtitle: 'Users List', users: users})).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h1>OVERRIDE</h1><h2>Users List</h2><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
+    )
+  end
+
+  it 'renders a view that passes arguments to it parts' do
+    view = Class.new(view_class) do
+      configure do |config|
+        config.template = 'parts_with_args'
+      end
+    end.new
+
+    users = [
+      { name: 'Jane', email: 'jane@doe.org' },
+      { name: 'Joe', email: 'joe@doe.org' }
+    ]
+
+    expect(view.(scope: scope, locals: {users: users})).to eq(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><div class="box"><h2>Nombre</h2>Jane</div><div class="box"><h2>Nombre</h2>Joe</div></div></body></html>'
     )
   end
 
