@@ -49,7 +49,7 @@ RSpec.describe Dry::View::ValuePart do
       expect(renderer).to receive(:render).with('form.slim', part, &block)
       expect(renderer).to receive(:render).with('fields.slim', part)
 
-      part.form(block)
+      part.form(&block)
     end
   end
 end

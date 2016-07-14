@@ -2,11 +2,8 @@ require 'dry/view/null_part'
 
 RSpec.describe Dry::View::NullPart do
   subject(:part) do
-    Dry::View::NullPart.new(renderer, data)
+    Dry::View::NullPart.new(renderer, {user: nil})
   end
-
-  let(:name) { :user }
-  let(:data) { { user: nil } }
 
   let(:renderer) { double(:renderer) }
 
@@ -33,7 +30,7 @@ RSpec.describe Dry::View::NullPart do
       expect(renderer).to receive(:render).with('form_missing.slim', part, &block)
       expect(renderer).to receive(:render).with('fields_missing.slim', part)
 
-      part.form(block)
+      part.form(&block)
     end
   end
 end
