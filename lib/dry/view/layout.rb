@@ -17,6 +17,7 @@ module Dry
 
       extend Dry::Configurable
 
+      setting :root # deprecated
       setting :paths
       setting :name
       setting :template
@@ -25,6 +26,15 @@ module Dry
 
       attr_reader :config, :scope, :layout_dir, :layout_path, :template_path,
         :default_format
+
+      def self.configure(&block)
+        super(&block)
+
+        if config.root
+          warn "[DEPRECATION] Dry::View::Layout `root` setting is deprecated.  Please use `paths` instead."
+          config.paths = config.root unless config.paths
+        end
+      end
 
       def self.paths
         Array(config.paths).map { |path| Dry::View::Path.new(path) }
