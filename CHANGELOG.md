@@ -8,6 +8,7 @@ View layer for Hanami
 ### Fixed
 - [nessur] Find the correct partial in case of deeply nested templates.
 - [Marcello Rocha] Ensure `Hanami::Presenter` to respect method visibility of wrapped object.
+- [Luca Guidi] Ensure to use new registry when loading the framework
 
 ### Changed
 – [Luca Guidi] Drop support for Ruby 2.0 and 2.1. Official support for JRuby 9.0.5.0+.
