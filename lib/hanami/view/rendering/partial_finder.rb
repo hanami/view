@@ -41,7 +41,7 @@ module Hanami
 
         protected
 
-        # @since x.x.x
+        # @since 0.7.0
         # @api private
         def relative_partial_path
           [view_template_dir, template_name].join(separator)

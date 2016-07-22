@@ -122,7 +122,7 @@ module Hanami
       module Presentable
         # Inject escape logic into the given class.
         #
-        # @since x.x.x
+        # @since 0.7.0
         # @api private
         #
         # @see Hanami::View::Escape
@@ -134,7 +134,7 @@ module Hanami
         #
         # @param object [Object] the object to present
         #
-        # @since x.x.x
+        # @since 0.7.0
         def initialize(object)
           @object = object
         end
@@ -144,7 +144,7 @@ module Hanami
         # Override Ruby's method_missing
         #
         # @api private
-        # @since x.x.x
+        # @since 0.7.0
         def method_missing(m, *args, &blk)
           if @object.respond_to?(m)
             ::Hanami::View::Escape.html(@object.__send__(m, *args, &blk))

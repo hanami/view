@@ -7,18 +7,18 @@ module Hanami
       # Find partial templates in the file system
       #
       # @api private
-      # @since x.x.x
+      # @since 0.7.0
       #
       # @see View::Template
       class PartialTemplatesFinder
         # Search pattern for partial file names
         #
         # @api private
-        # @since x.x.x
+        # @since 0.7.0
         PARTIAL_PATTERN = '_*'.freeze
 
         # @api private
-        # @since x.x.x
+        # @since 0.7.0
         PARTIAL_PARTS_SEPARATOR = '.'.freeze
 
         attr_reader :configuration
@@ -27,7 +27,7 @@ module Hanami
         #
         # @param configuration [Configuration] the configuration object
         #
-        # @since x.x.x
+        # @since 0.7.0
         def initialize(configuration)
           @configuration = configuration
         end
@@ -36,7 +36,7 @@ module Hanami
         #
         # @return [Array] array of PartialFinder objects
         #
-        # @since x.x.x
+        # @since 0.7.0
         def find
           _find_partials(configuration.root).map do |template|
             partial_path, partial_base_name = Pathname(template).relative_path_from(configuration.root).split
@@ -58,7 +58,7 @@ module Hanami
         #
         # @return [Array] an array of strings for each matching partial template file found
         #
-        # @since x.x.x
+        # @since 0.7.0
         # @api private
         def _find_partials(path)
           Dir.glob("#{ [path, TemplatesFinder::RECURSIVE, PARTIAL_PATTERN].join(::File::SEPARATOR) }.#{TemplatesFinder::FORMAT}.#{TemplatesFinder::ENGINES}")

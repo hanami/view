@@ -427,7 +427,7 @@ module Hanami
       # Load partials for each partial template file found under the
       # given load paths
       #
-      # @since x.x.x
+      # @since 0.7.0
       # @api private
       def load_partials!
         Hanami::View::Rendering::PartialTemplatesFinder.new(self).find.each do |partial|
@@ -438,7 +438,7 @@ module Hanami
       # Load partials for each partial template file found under the
       # given load paths
       #
-      # @since x.x.x
+      # @since 0.7.0
       # @api private
       def find_partial(relative_partial_path, template_name, format)
         partials_for_view = partials.has_key?(relative_partial_path) ?  partials[relative_partial_path] : partials[template_name]
@@ -447,7 +447,7 @@ module Hanami
 
       # Add a partial to the registry
       #
-      # @since x.x.x
+      # @since 0.7.0
       # @api private
       def add_partial(partial)
         @partials[partial.key][partial.format.to_sym] = partial.template

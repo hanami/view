@@ -1,12 +1,12 @@
 module Hanami
   module View
     module Rendering
-      # @since x.x.x
+      # @since 0.7.0
       # @api private
       class PartialFile
         attr_reader :key, :format, :template
 
-        # @since x.x.x
+        # @since 0.7.0
         # @api private
         def initialize(key, format, template)
           @key      = key
