@@ -18,6 +18,24 @@ describe Hanami::View do
       Articles::Show.configuration.partials.keys.wont_include('shared/_sidebar')
     end
 
+    it 'ensures to reload view registry each time load is invoked' do
+      CardDeck::View.load!
+      old = CardDeck::Views::Home::Index.__send__(:registry).object_id
+      CardDeck::View.load!
+      current = CardDeck::Views::Home::Index.__send__(:registry).object_id
+
+      current.wont_equal old
+    end
+
+    it 'ensures to reload layout registry each time load is invoked' do
+      CardDeck::View.load!
+      old = CardDeck::ApplicationLayout.__send__(:registry).object_id
+      CardDeck::View.load!
+      current = CardDeck::ApplicationLayout.__send__(:registry).object_id
+
+      current.wont_equal old
+    end
+
     # it 'freezes .layout for all the views' do
     #   AppView.layout.frozen?.must_equal true
     # end
