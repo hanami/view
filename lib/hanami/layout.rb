@@ -93,6 +93,7 @@ module Hanami
       end
 
       protected
+
       # Loading mechanism hook.
       #
       # @api private
@@ -100,8 +101,15 @@ module Hanami
       #
       # @see Hanami::View.load!
       def load!
-        registry.freeze
+        load_registry!
         configuration.freeze
+      end
+
+      private
+
+      def load_registry!
+        @registry = nil
+        registry.freeze
       end
     end
 
