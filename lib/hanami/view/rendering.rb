@@ -266,7 +266,7 @@ module Hanami
       # @see Hanami::View.load!
       def load!
         super
-        registry.freeze
+        load_registry!
       end
 
       private
@@ -279,6 +279,11 @@ module Hanami
       # @see Hanami::View::Rendering::Registry
       def registry
         @registry ||= Registry.new(self)
+      end
+
+      def load_registry!
+        @registry = nil
+        registry.freeze
       end
     end
   end
