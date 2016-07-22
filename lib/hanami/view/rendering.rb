@@ -110,7 +110,7 @@ module Hanami
         #
         # @return [Objeect,Hanami::View::Rendering::NullLocal] the returning value
         #
-        # @since x.x.x
+        # @since 0.7.0
         #
         # @example
         #   <% if local(:plan).overdue? %>

@@ -1,7 +1,7 @@
 # Hanami::View
 View layer for Hanami
 
-## v0.7.0 - (unreleased)
+## v0.7.0 - 2016-07-22
 ### Added
 - [Luca Guidi] Introduced `#local` for views, layouts and templates. It allows to safely access locals without raising errors in case the referenced local is missing.
 

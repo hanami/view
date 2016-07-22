@@ -5,47 +5,47 @@ module Hanami
     module Rendering
       # Null local
       #
-      # @since x.x.x
+      # @since 0.7.0
       #
       # @see Hanami::View::Rendering#local
       class NullLocal < Utils::BasicObject
-        # @since x.x.x
+        # @since 0.7.0
         # @api private
         TO_STR = "".freeze
 
-        # @since x.x.x
+        # @since 0.7.0
         # @api private
         def initialize(local)
           @local = local
         end
 
-        # @since x.x.x
+        # @since 0.7.0
         def all?
           false
         end
 
-        # @since x.x.x
+        # @since 0.7.0
         def any?
           false
         end
 
-        # @since x.x.x
+        # @since 0.7.0
         def empty?
           true
         end
 
-        # @since x.x.x
+        # @since 0.7.0
         def nil?
           true
         end
 
-        # @since x.x.x
+        # @since 0.7.0
         # @api private
         def to_str
           TO_STR
         end
 
-        # @since x.x.x
+        # @since 0.7.0
         # @api private
         def method_missing(m, *)
           if m.match(/\?\z/)
@@ -57,13 +57,13 @@ module Hanami
 
         private
 
-        # @since x.x.x
+        # @since 0.7.0
         # @api private
         def respond_to_missing?(method_name, include_all)
           true
         end
 
-        # @since x.x.x
+        # @since 0.7.0
         # @api private
         def __inspect
           " :#{ @local }"
