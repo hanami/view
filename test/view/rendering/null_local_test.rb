@@ -16,6 +16,10 @@ describe Hanami::View::Rendering::NullLocal do
     @null.to_str.must_equal ''
   end
 
+  it 'returns empty string for to_s' do
+    @null.to_s.must_equal ''
+  end
+
   it 'returns false to all?' do
     @null.all?.must_equal false
   end
