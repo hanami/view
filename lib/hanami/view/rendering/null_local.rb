@@ -45,6 +45,10 @@ module Hanami
           TO_STR
         end
 
+        # @since x.x.x
+        # @api private
+        alias to_s to_str
+
         # @since 0.7.0
         # @api private
         def method_missing(m, *)
