@@ -5,6 +5,24 @@ require 'ostruct'
 describe Hanami::View do
   reload_configuration!
 
+  describe 'initializing' do
+    before do
+      @view = Class.new do
+        include Hanami::View
+      end
+
+      @template = Hanami::View::Template.new(__dir__ + '/fixtures/templates/hello_world.html.erb')
+    end
+
+    it 'initializes view without keyword arguments' do
+      @view.new(@template).locals.must_equal Hash[]
+    end
+
+    it 'initializes view with keyword arguments' do
+      @view.new(@template, hello: 'world').locals.must_equal({hello: 'world'})
+    end
+  end
+
   describe 'rendering' do
     it 'renders a template' do
       HelloWorldView.render(format: :html).must_include %(<h1>Hello, World!</h1>)

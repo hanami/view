@@ -36,7 +36,7 @@ module Hanami
         #
         #   template = Hanami::View::Template.new('index.html.erb')
         #   view     = IndexView.new(template, {article: article})
-        def initialize(template, locals)
+        def initialize(template, **locals)
           @template = template
           @locals   = locals
           @scope    = Scope.new(self, @locals)
