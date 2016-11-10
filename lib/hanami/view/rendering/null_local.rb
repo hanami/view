@@ -45,7 +45,7 @@ module Hanami
           TO_STR
         end
 
-        # @since x.x.x
+        # @since 0.8.0
         # @api private
         alias to_s to_str
 

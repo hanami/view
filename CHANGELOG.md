@@ -1,6 +1,13 @@
 # Hanami::View
 View layer for Hanami
 
+## v0.8.0 - (unreleased)
+### Fixed
+- [Luca Guidi] Ensure `Rendering::NullLocal` to work with HAML templates
+
+### Changed
+- [Luca Guidi] Official support for Ruby: MRI 2.3+ and JRuby 9.1.5.0+
+
 ## v0.7.0 - 2016-07-22
 ### Added
 - [Luca Guidi] Introduced `#local` for views, layouts and templates. It allows to safely access locals without raising errors in case the referenced local is missing.
