@@ -34,7 +34,7 @@ Like all the other Hanami components, it can be used as a standalone framework o
 
 ## Rubies
 
-__Hanami::View__ supports Ruby (MRI) 2+
+__Hanami::View__ supports Ruby (MRI) 2.3+ and JRuby 9.1.5.0+
 
 ## Installation
 

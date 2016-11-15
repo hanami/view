@@ -1,7 +1,7 @@
 # Hanami::View
 View layer for Hanami
 
-## v0.8.0 - (unreleased)
+## v0.8.0 - 2016-11-15
 ### Fixed
 - [Luca Guidi] Ensure `Rendering::NullLocal` to work with HAML templates
 
