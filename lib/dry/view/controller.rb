@@ -10,7 +10,7 @@ require 'dry/view/renderer'
 
 module Dry
   module View
-    class Layout
+    class Controller
       include Dry::Equalizer(:config)
 
       DEFAULT_DIR = 'layouts'.freeze
@@ -31,7 +31,7 @@ module Dry
         super(&block)
 
         if config.root
-          warn "[DEPRECATION] Dry::View::Layout `root` setting is deprecated.  Please use `paths` instead."
+          warn "[DEPRECATION] Dry::View::Controller `root` setting is deprecated.  Please use `paths` instead."
           config.paths = config.root unless config.paths
         end
       end

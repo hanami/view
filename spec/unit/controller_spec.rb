@@ -1,8 +1,8 @@
-RSpec.describe Dry::View::Layout do
+RSpec.describe Dry::View::Controller do
   subject(:layout) { layout_class.new }
 
   let(:layout_class) do
-    klass = Class.new(Dry::View::Layout)
+    klass = Class.new(Dry::View::Controller)
 
     klass.configure do |config|
       config.paths = SPEC_ROOT.join('fixtures/templates')

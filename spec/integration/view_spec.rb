@@ -1,6 +1,6 @@
 RSpec.describe 'dry-view' do
   let(:view_class) do
-    Class.new(Dry::View::Layout) do
+    Class.new(Dry::View::Controller) do
       configure do |config|
         config.paths = SPEC_ROOT.join('fixtures/templates')
         config.name = 'app'
@@ -76,7 +76,7 @@ RSpec.describe 'dry-view' do
 
   describe 'inheritance' do
     let(:parent_view) do
-      klass = Class.new(Dry::View::Layout)
+      klass = Class.new(Dry::View::Controller)
 
       klass.setting :paths, SPEC_ROOT.join('fixtures/templates')
       klass.setting :name, 'app'
