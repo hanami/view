@@ -19,7 +19,7 @@ module Dry
 
       setting :root # deprecated
       setting :paths
-      setting :name
+      setting :layout
       setting :template
       setting :formats, { html: :erb }
       setting :scope
@@ -62,7 +62,7 @@ module Dry
         @config = self.class.config
         @default_format = self.class.default_format
         @layout_dir = DEFAULT_DIR
-        @layout_path = "#{layout_dir}/#{config.name}"
+        @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
         @scope = config.scope
       end

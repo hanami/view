@@ -3,7 +3,7 @@ RSpec.describe 'dry-view' do
     Class.new(Dry::View::Controller) do
       configure do |config|
         config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.name = 'app'
+        config.layout = 'app'
         config.template = 'users'
         config.formats = {html: :slim, txt: :erb}
       end
@@ -79,7 +79,7 @@ RSpec.describe 'dry-view' do
       klass = Class.new(Dry::View::Controller)
 
       klass.setting :paths, SPEC_ROOT.join('fixtures/templates')
-      klass.setting :name, 'app'
+      klass.setting :layout, 'app'
       klass.setting :formats, {html: :slim}
 
       klass
