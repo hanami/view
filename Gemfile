@@ -11,7 +11,8 @@ group :test do
   gem 'rack', '>= 1.0.0', '<= 2.0.0'
   gem 'slim'
 
-  gem 'codeclimate-test-reporter', platform: :rbx
+  gem 'simplecov'
+  gem 'codeclimate-test-reporter'
 end
 
 group :benchmarks do
