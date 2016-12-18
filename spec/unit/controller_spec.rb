@@ -33,23 +33,4 @@ RSpec.describe Dry::View::Controller do
       )
     end
   end
-
-  describe '#parts' do
-    it 'returns view parts' do
-      part = layout.parts({ user: { id: 1, name: 'Jane' } }, renderer)
-
-      expect(part[:id]).to be(1)
-      expect(part[:name]).to eql('Jane')
-    end
-
-    it 'builds null parts for nil values' do
-      part = layout.parts({ user: nil }, renderer)
-
-      expect(part[:id]).to be_nil
-    end
-
-    it 'returns empty part when no locals are passed' do
-      expect(layout.parts({}, renderer)).to be_instance_of(Dry::View::Part)
-    end
-  end
 end

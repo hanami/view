@@ -81,7 +81,9 @@ module Dry
         options.fetch(:locals, {})
       end
 
-      def parts(locals, renderer)
+      private
+
+      def view_parts(locals, renderer)
         return empty_part(template_path, renderer) unless locals.any?
 
         part_hash = locals.each_with_object({}) do |(key, value), result|
@@ -104,8 +106,6 @@ module Dry
         part(template_path, renderer, part_hash)
       end
 
-      private
-
       def layout_scope(options, renderer)
         part_hash = {
           page: layout_part(:page, renderer, options.fetch(:scope, scope))
@@ -115,7 +115,7 @@ module Dry
       end
 
       def template_scope(options, renderer)
-        parts(locals(options), renderer)
+        view_parts(locals(options), renderer)
       end
 
       def layout_part(name, renderer, value)
