@@ -1,12 +1,12 @@
-RSpec.describe Dry::View::Layout do
+RSpec.describe Dry::View::Controller do
   subject(:layout) { layout_class.new }
 
   let(:layout_class) do
-    klass = Class.new(Dry::View::Layout)
+    klass = Class.new(Dry::View::Controller)
 
     klass.configure do |config|
       config.paths = SPEC_ROOT.join('fixtures/templates')
-      config.name = 'app'
+      config.layout = 'app'
       config.template = 'user'
       config.formats = {html: :slim}
     end
@@ -31,25 +31,6 @@ RSpec.describe Dry::View::Layout do
       expect(layout.(options)).to eql(
         '<!DOCTYPE html><html><head><title>Test</title></head><body><h1>User</h1><p>Jane</p></body></html>'
       )
-    end
-  end
-
-  describe '#parts' do
-    it 'returns view parts' do
-      part = layout.parts({ user: { id: 1, name: 'Jane' } }, renderer)
-
-      expect(part[:id]).to be(1)
-      expect(part[:name]).to eql('Jane')
-    end
-
-    it 'builds null parts for nil values' do
-      part = layout.parts({ user: nil }, renderer)
-
-      expect(part[:id]).to be_nil
-    end
-
-    it 'returns empty part when no locals are passed' do
-      expect(layout.parts({}, renderer)).to be_instance_of(Dry::View::Part)
     end
   end
 end

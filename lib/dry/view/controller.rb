@@ -10,7 +10,7 @@ require 'dry/view/renderer'
 
 module Dry
   module View
-    class Layout
+    class Controller
       include Dry::Equalizer(:config)
 
       DEFAULT_DIR = 'layouts'.freeze
@@ -19,7 +19,7 @@ module Dry
 
       setting :root # deprecated
       setting :paths
-      setting :name
+      setting :layout
       setting :template
       setting :formats, { html: :erb }
       setting :scope
@@ -31,7 +31,7 @@ module Dry
         super(&block)
 
         if config.root
-          warn "[DEPRECATION] Dry::View::Layout `root` setting is deprecated.  Please use `paths` instead."
+          warn "[DEPRECATION] Dry::View::Controller `root` setting is deprecated.  Please use `paths` instead."
           config.paths = config.root unless config.paths
         end
       end
@@ -62,7 +62,7 @@ module Dry
         @config = self.class.config
         @default_format = self.class.default_format
         @layout_dir = DEFAULT_DIR
-        @layout_path = "#{layout_dir}/#{config.name}"
+        @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
         @scope = config.scope
       end
@@ -81,7 +81,9 @@ module Dry
         options.fetch(:locals, {})
       end
 
-      def parts(locals, renderer)
+      private
+
+      def view_parts(locals, renderer)
         return empty_part(template_path, renderer) unless locals.any?
 
         part_hash = locals.each_with_object({}) do |(key, value), result|
@@ -104,8 +106,6 @@ module Dry
         part(template_path, renderer, part_hash)
       end
 
-      private
-
       def layout_scope(options, renderer)
         part_hash = {
           page: layout_part(:page, renderer, options.fetch(:scope, scope))
@@ -115,7 +115,7 @@ module Dry
       end
 
       def template_scope(options, renderer)
-        parts(locals(options), renderer)
+        view_parts(locals(options), renderer)
       end
 
       def layout_part(name, renderer, value)
