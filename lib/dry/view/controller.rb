@@ -3,6 +3,7 @@ require 'dry-equalizer'
 require 'inflecto'
 
 require 'dry/view/path'
+require 'dry/view/exposures'
 require 'dry/view/part'
 require 'dry/view/value_part'
 require 'dry/view/null_part'
@@ -49,11 +50,11 @@ module Dry
       end
 
       def self.expose(name, &block)
-        exposures << [name, block]
+        exposures.add name, &block
       end
 
       def self.exposures
-        @exposures ||= []
+        @exposures ||= Exposures.new
       end
 
       def initialize
@@ -76,16 +77,10 @@ module Dry
       end
 
       def locals(options = {})
-        exposed_locals(options).merge(options.fetch(:locals, {}))
+        self.class.exposures.locals(options).merge(options.fetch(:locals, {}))
       end
 
       private
-
-      def exposed_locals(input)
-        self.class.exposures.each_with_object({}) { |(name, block), memo|
-          memo[name] = block ? instance_exec(input, &block) : __send__(name, input)
-        }
-      end
 
       def layout_scope(options, renderer)
         part_hash = {
