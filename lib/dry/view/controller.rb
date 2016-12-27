@@ -48,6 +48,14 @@ module Dry
         config.formats.keys.first
       end
 
+      def self.expose(name, &block)
+        exposures << [name, block]
+      end
+
+      def self.exposures
+        @exposures ||= []
+      end
+
       def initialize
         @config = self.class.config
         @default_format = self.class.default_format
@@ -67,11 +75,29 @@ module Dry
         end
       end
 
-      def locals(options)
-        options.fetch(:locals, {})
+      def locals(options = {})
+        exposed_locals(options).merge(options.fetch(:locals, {}))
       end
 
       private
+
+      def exposed_locals(input)
+        self.class.exposures.each_with_object({}) { |(name, block), memo|
+          memo[name] = block ? instance_exec(input, &block) : __send__(name, input)
+        }
+      end
+
+      def layout_scope(options, renderer)
+        part_hash = {
+          page: layout_part(:page, renderer, options.fetch(:scope, scope))
+        }
+
+        part(layout_dir, renderer, part_hash)
+      end
+
+      def template_scope(options, renderer)
+        view_parts(locals(options), renderer)
+      end
 
       def view_parts(locals, renderer)
         return empty_part(template_path, renderer) unless locals.any?
@@ -94,18 +120,6 @@ module Dry
         end
 
         part(template_path, renderer, part_hash)
-      end
-
-      def layout_scope(options, renderer)
-        part_hash = {
-          page: layout_part(:page, renderer, options.fetch(:scope, scope))
-        }
-
-        part(layout_dir, renderer, part_hash)
-      end
-
-      def template_scope(options, renderer)
-        view_parts(locals(options), renderer)
       end
 
       def layout_part(name, renderer, value)
