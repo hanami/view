@@ -17,9 +17,9 @@ module Dry
       end
 
       def bind(obj)
-        bound_exposures = exposures.map { |name, exposure|
+        bound_exposures = Hash[exposures.map { |name, exposure|
           [name, exposure.bind(obj)]
-        }.to_h
+        }]
 
         self.class.new(bound_exposures)
       end
