@@ -19,9 +19,9 @@ RSpec.describe Dry::View::Exposure do
         expect(described_class.new(:hello).proc).to be_nil
       end
 
-      it "requires proc to take at least one arguemnt" do
+      it "allows proc to take no arguments" do
         proc = -> { "hi" }
-        expect { described_class.new(:hello, proc) }.to raise_error ArgumentError
+        expect { described_class.new(:hello, proc) }.not_to raise_error
       end
 
       it "requires proc to take positional arguments only" do
@@ -29,11 +29,6 @@ RSpec.describe Dry::View::Exposure do
         expect { described_class.new(:hello, proc) }.to raise_error ArgumentError
 
         proc = -> input, a: { "hi" }
-        expect { described_class.new(:hello, proc) }.to raise_error ArgumentError
-      end
-
-      it "requires the proc's arguments to have no default values" do
-        proc = -> input = "hi" { input }
         expect { described_class.new(:hello, proc) }.to raise_error ArgumentError
       end
     end

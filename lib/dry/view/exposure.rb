@@ -1,6 +1,8 @@
 module Dry
   module View
     class Exposure
+      SUPPORTED_PARAMETER_TYPES = [:req, :opt].freeze
+
       attr_reader :name
       attr_reader :proc
       attr_reader :to_view
@@ -38,8 +40,9 @@ module Dry
       end
 
       def ensure_proc_parameters(proc)
-        raise ArgumentError, "+proc+ must take at least one argument" if proc.parameters.empty?
-        raise ArgumentError, "+proc+ must take positional arugments only" if proc.parameters.any? { |type, _| type != :req }
+        if proc.parameters.any? { |type, _| !SUPPORTED_PARAMETER_TYPES.include?(type) }
+          raise ArgumentError, "+proc+ must take positional arugments only"
+        end
       end
     end
   end
