@@ -8,12 +8,20 @@ module Dry
 
       attr_reader :exposures
 
-      def initialize
-        @exposures = {}
+      def initialize(exposures = {})
+        @exposures = exposures
       end
 
       def add(name, &block)
-        @exposures[name] = Exposure.new(block)
+        @exposures[name] = Exposure.new(name, block)
+      end
+
+      def bind(obj)
+        bound_exposures = exposures.map { |name, exposure|
+          [name, exposure.bind(obj)]
+        }.to_h
+
+        self.class.new(bound_exposures)
       end
 
       def locals(input)

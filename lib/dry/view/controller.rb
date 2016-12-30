@@ -24,8 +24,13 @@ module Dry
       setting :formats, { html: :erb }
       setting :scope
 
-      attr_reader :config, :scope, :layout_dir, :layout_path, :template_path,
-        :default_format
+      attr_reader :config
+      attr_reader :scope
+      attr_reader :layout_dir
+      attr_reader :layout_path
+      attr_reader :template_path
+      attr_reader :default_format
+      attr_reader :exposures
 
       def self.paths
         Array(config.paths).map { |path| Dry::View::Path.new(path) }
@@ -50,7 +55,7 @@ module Dry
       end
 
       def self.expose(name, &block)
-        exposures.add name, &block
+        exposures.add(name, &block)
       end
 
       def self.exposures
@@ -64,6 +69,7 @@ module Dry
         @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
         @scope = config.scope
+        @exposures = self.class.exposures.bind(self)
       end
 
       def call(options = {})
@@ -77,7 +83,7 @@ module Dry
       end
 
       def locals(options = {})
-        self.class.exposures.locals(options).merge(options.fetch(:locals, {}))
+        exposures.locals(options).merge(options.fetch(:locals, {}))
       end
 
       private
