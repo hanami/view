@@ -6,7 +6,7 @@ module Dry
       attr_reader :to_view
 
       def initialize(name, proc = nil, to_view: true)
-        # TODO: raise error if proc parameters aren't right
+        ensure_proc_parameters(proc) if proc
 
         @name = name
         @proc = proc
@@ -35,6 +35,11 @@ module Dry
 
       def with_proc(proc)
         self.class.new(name, proc, to_view: to_view)
+      end
+
+      def ensure_proc_parameters(proc)
+        raise ArgumentError, "+proc+ must take at least one argument" if proc.parameters.empty?
+        raise ArgumentError, "+proc+ must take positional arugments only" if proc.parameters.any? { |type, _| type != :req }
       end
     end
   end
