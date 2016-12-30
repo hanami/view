@@ -12,8 +12,12 @@ module Dry
         @exposures = exposures
       end
 
+      def [](name)
+        exposures[name]
+      end
+
       def add(name, proc = nil, **options)
-        @exposures[name] = Exposure.new(name, proc, **options)
+        exposures[name] = Exposure.new(name, proc, **options)
       end
 
       def bind(obj)
@@ -26,9 +30,9 @@ module Dry
 
       def locals(input)
         tsort.each_with_object({}) { |name, memo|
-          memo[name] = exposures[name].(input, memo) if exposures.key?(name)
+          memo[name] = self[name].(input, memo) if exposures.key?(name)
         }.each_with_object({}) { |(name, val), memo|
-          memo[name] = val if exposures[name].to_view?
+          memo[name] = val if self[name].to_view?
         }
       end
 
@@ -39,7 +43,7 @@ module Dry
       end
 
       def tsort_each_child(name, &block)
-        exposures[name].dependencies.each(&block) if exposures.key?(name)
+        self[name].dependencies.each(&block) if exposures.key?(name)
       end
     end
   end

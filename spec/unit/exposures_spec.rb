@@ -12,8 +12,8 @@ RSpec.describe Dry::View::Exposures do
       proc = -> input { "hi" }
       exposures.add :hello, proc
 
-      expect(exposures.exposures[:hello].name).to eq :hello
-      expect(exposures.exposures[:hello].proc).to eq proc
+      expect(exposures[:hello].name).to eq :hello
+      expect(exposures[:hello].proc).to eq proc
     end
   end
 
@@ -33,7 +33,7 @@ RSpec.describe Dry::View::Exposures do
     end
 
     it "binds each of the exposures" do
-      expect(bound_exposures.exposures[:hello].proc).to eq object.method(:hello)
+      expect(bound_exposures[:hello].proc).to eq object.method(:hello)
     end
 
     it "returns a new copy of the exposures" do
