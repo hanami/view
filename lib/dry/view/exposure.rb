@@ -26,8 +26,12 @@ module Dry
       alias_method :to_view?, :to_view
 
       def call(input, locals = {})
-        params = dependencies.map { |name|
-          name == :input ? input : locals.fetch(name)
+        params = dependencies.map.with_index.map { |name, position|
+          if position.zero?
+            locals.fetch(name) { input }
+          else
+            locals.fetch(name)
+          end
         }
 
         proc.(*params)
