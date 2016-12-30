@@ -54,8 +54,8 @@ module Dry
         config.formats.keys.first
       end
 
-      def self.expose(name, &block)
-        exposures.add(name, &block)
+      def self.expose(name, options = {}, &block)
+        exposures.add(name, block, **options)
       end
 
       def self.exposures

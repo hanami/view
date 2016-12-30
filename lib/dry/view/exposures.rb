@@ -12,8 +12,8 @@ module Dry
         @exposures = exposures
       end
 
-      def add(name, &block)
-        @exposures[name] = Exposure.new(name, block)
+      def add(name, block, **options)
+        @exposures[name] = Exposure.new(name, block, **options)
       end
 
       def bind(obj)
@@ -27,6 +27,8 @@ module Dry
       def locals(input)
         tsort.each_with_object({}) { |name, memo|
           memo[name] = exposures[name].(input, memo) if exposures.key?(name)
+        }.each_with_object({}) { |(name, val), memo|
+          memo[name] = val if exposures[name].to_view?
         }
       end
 
