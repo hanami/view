@@ -25,10 +25,10 @@ RSpec.describe Dry::View::Exposure do
       end
 
       it "requires proc to take positional arguments only" do
-        proc = -> a: { "hi" }
+        proc = -> a: "a" { "hi" }
         expect { described_class.new(:hello, proc) }.to raise_error ArgumentError
 
-        proc = -> input, a: { "hi" }
+        proc = -> input, a: "a" { "hi" }
         expect { described_class.new(:hello, proc) }.to raise_error ArgumentError
       end
     end
