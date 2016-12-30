@@ -85,6 +85,38 @@ RSpec.describe 'exposures' do
     )
   end
 
+  it 'supports defining multiple exposures at once' do
+    vc = Class.new(Dry::View::Controller) do
+      configure do |config|
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = 'app'
+        config.template = 'users_with_count'
+        config.formats = {html: :slim}
+      end
+
+      expose :users, :users_count
+
+      private
+
+      def users(input)
+        input.fetch(:users)
+      end
+
+      def users_count(users)
+        "#{users.length} users"
+      end
+    end.new
+
+    users = [
+      {name: 'Jane', email: 'jane@doe.org'},
+      {name: 'Joe', email: 'joe@doe.org'}
+    ]
+
+    expect(vc.(users: users, scope: scope, locals: {subtitle: 'Users List'})).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h2>Users List</h2><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">2 users</div></body></html>'
+    )
+  end
+
   it 'allows exposures to be hidden from the view' do
     vc = Class.new(Dry::View::Controller) do
       configure do |config|

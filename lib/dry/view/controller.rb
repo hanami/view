@@ -54,12 +54,18 @@ module Dry
         config.formats.keys.first
       end
 
-      def self.expose(name, &block)
-        exposures.add(name, block)
+      def self.expose(*names, **options, &block)
+        if names.length == 1
+          exposures.add(names.first, block, **options)
+        else
+          names.each do |name|
+            exposures.add(name, nil, **options)
+          end
+        end
       end
 
-      def self.private_expose(name, &block)
-        exposures.add(name, block, to_view: false)
+      def self.private_expose(*names, &block)
+        expose(*names, to_view: false, &block)
       end
 
       def self.exposures
