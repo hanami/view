@@ -94,7 +94,7 @@ RSpec.describe 'exposures' do
         config.formats = {html: :slim}
       end
 
-      expose :prefix, to_view: false do
+      private_expose :prefix do
         "COUNT: "
       end
 
