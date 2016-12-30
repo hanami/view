@@ -12,8 +12,8 @@ module Dry
         @exposures = exposures
       end
 
-      def add(name, block, **options)
-        @exposures[name] = Exposure.new(name, block, **options)
+      def add(name, proc = nil, **options)
+        @exposures[name] = Exposure.new(name, proc, **options)
       end
 
       def bind(obj)
