@@ -2,39 +2,39 @@ module Dry
   module View
     class Exposure
       attr_reader :name
-      attr_reader :block
+      attr_reader :proc
       attr_reader :to_view
 
-      def initialize(name, block, to_view: true)
-        # TODO: raise error if block parameters aren't right
+      def initialize(name, proc = nil, to_view: true)
+        # TODO: raise error if proc parameters aren't right
 
         @name = name
-        @block = block
+        @proc = proc
         @to_view = to_view
       end
 
       def bind(obj)
-        block ? self : with_block(obj.method(name))
+        proc ? self : with_proc(obj.method(name))
       end
 
       def dependencies
-        block.parameters.map(&:last)
+        proc.parameters.map(&:last)
       end
 
       alias_method :to_view?, :to_view
 
-      def call(input, locals)
+      def call(input, locals = {})
         params = dependencies.map { |name|
           name == :input ? input : locals.fetch(name)
         }
 
-        block.(*params)
+        proc.(*params)
       end
 
       private
 
-      def with_block(block)
-        self.class.new(name, block, to_view: to_view)
+      def with_proc(proc)
+        self.class.new(name, proc, to_view: to_view)
       end
     end
   end
