@@ -3,6 +3,7 @@ require 'dry-equalizer'
 require 'inflecto'
 
 require 'dry/view/path'
+require 'dry/view/exposures'
 require 'dry/view/part'
 require 'dry/view/value_part'
 require 'dry/view/null_part'
@@ -23,8 +24,13 @@ module Dry
       setting :formats, { html: :erb }
       setting :scope
 
-      attr_reader :config, :scope, :layout_dir, :layout_path, :template_path,
-        :default_format
+      attr_reader :config
+      attr_reader :scope
+      attr_reader :layout_dir
+      attr_reader :layout_path
+      attr_reader :template_path
+      attr_reader :default_format
+      attr_reader :exposures
 
       def self.paths
         Array(config.paths).map { |path| Dry::View::Path.new(path) }
@@ -48,6 +54,24 @@ module Dry
         config.formats.keys.first
       end
 
+      def self.expose(*names, **options, &block)
+        if names.length == 1
+          exposures.add(names.first, block, **options)
+        else
+          names.each do |name|
+            exposures.add(name, nil, **options)
+          end
+        end
+      end
+
+      def self.private_expose(*names, &block)
+        expose(*names, to_view: false, &block)
+      end
+
+      def self.exposures
+        @exposures ||= Exposures.new
+      end
+
       def initialize
         @config = self.class.config
         @default_format = self.class.default_format
@@ -55,6 +79,7 @@ module Dry
         @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
         @scope = config.scope
+        @exposures = self.class.exposures.bind(self)
       end
 
       def call(options = {})
@@ -67,11 +92,23 @@ module Dry
         end
       end
 
-      def locals(options)
-        options.fetch(:locals, {})
+      def locals(options = {})
+        exposures.locals(options).merge(options.fetch(:locals, {}))
       end
 
       private
+
+      def layout_scope(options, renderer)
+        part_hash = {
+          page: layout_part(:page, renderer, options.fetch(:scope, scope))
+        }
+
+        part(layout_dir, renderer, part_hash)
+      end
+
+      def template_scope(options, renderer)
+        view_parts(locals(options), renderer)
+      end
 
       def view_parts(locals, renderer)
         return empty_part(template_path, renderer) unless locals.any?
@@ -94,18 +131,6 @@ module Dry
         end
 
         part(template_path, renderer, part_hash)
-      end
-
-      def layout_scope(options, renderer)
-        part_hash = {
-          page: layout_part(:page, renderer, options.fetch(:scope, scope))
-        }
-
-        part(layout_dir, renderer, part_hash)
-      end
-
-      def template_scope(options, renderer)
-        view_parts(locals(options), renderer)
       end
 
       def layout_part(name, renderer, value)
