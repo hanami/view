@@ -14,7 +14,7 @@ module Dry
     class Controller
       include Dry::Equalizer(:config)
 
-      DEFAULT_DIR = 'layouts'.freeze
+      DEFAULT_LAYOUTS_DIR = 'layouts'.freeze
 
       extend Dry::Configurable
 
@@ -75,7 +75,7 @@ module Dry
       def initialize
         @config = self.class.config
         @default_format = self.class.default_format
-        @layout_dir = DEFAULT_DIR
+        @layout_dir = DEFAULT_LAYOUTS_DIR
         @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
         @scope = config.scope
