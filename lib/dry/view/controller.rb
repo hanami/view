@@ -14,12 +14,12 @@ module Dry
     class Controller
       include Dry::Equalizer(:config)
 
-      DEFAULT_DIR = 'layouts'.freeze
+      DEFAULT_LAYOUTS_DIR = 'layouts'.freeze
 
       extend Dry::Configurable
 
       setting :paths
-      setting :layout
+      setting :layout, false
       setting :template
       setting :formats, { html: :erb }
       setting :scope
@@ -27,6 +27,7 @@ module Dry
       attr_reader :config
       attr_reader :scope
       attr_reader :layout_dir
+      attr_reader :layout
       attr_reader :layout_path
       attr_reader :template_path
       attr_reader :default_format
@@ -75,7 +76,8 @@ module Dry
       def initialize
         @config = self.class.config
         @default_format = self.class.default_format
-        @layout_dir = DEFAULT_DIR
+        @layout_dir = DEFAULT_LAYOUTS_DIR
+        @layout = config.layout
         @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
         @scope = config.scope
@@ -87,6 +89,8 @@ module Dry
 
         template_content = renderer.(template_path, template_scope(options, renderer))
 
+        return template_content unless layout?
+
         renderer.(layout_path, layout_scope(options, renderer)) do
           template_content
         end
@@ -97,6 +101,10 @@ module Dry
       end
 
       private
+
+      def layout?
+        !!layout
+      end
 
       def layout_scope(options, renderer)
         part_hash = {
