@@ -18,7 +18,7 @@ describe 'Framework configuration' do
     card_configuration.layout.must_equal(CardDeck::ApplicationLayout)
   end
 
-  it 'allow views to inherith the layout' do
+  it 'allow views to inherit the layout' do
     view_configuration = CardDeck::Views::Home::Index.configuration
     view_configuration.layout.must_equal(CardDeck::ApplicationLayout)
   end
@@ -46,7 +46,7 @@ describe 'Framework configuration' do
   #   * layout
   #   * template
   #
-  # TODO move all the inherith logic into configuration:
+  # TODO move all the inherit logic into configuration:
   #
   #   Instead of HelloWorldView.subclasses, use HelloWorldView.configuration.views
   #
