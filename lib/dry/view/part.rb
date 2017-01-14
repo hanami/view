@@ -1,8 +1,25 @@
 require 'dry-equalizer'
+require 'inflecto'
 
 module Dry
   module View
     class Part
+      def self.build(renderer:, name: nil, value:)
+        raise ArgumentError, '+name+ must be provided for a non-Hash +value+' unless name || value.is_a?(Hash)
+
+        case value
+        when nil
+          NullPart.new(renderer)
+        when Array
+          el_name = Inflecto.singularize(name).to_sym
+          parts = value.map { |el| build(renderer: renderer, name: el_name, value: el) }
+          ValuePart.new(renderer, {name => parts})
+        else
+          data = name ? {name => value} : value
+          ValuePart.new(renderer, data)
+        end
+      end
+
       include Dry::Equalizer(:renderer)
 
       attr_reader :renderer
@@ -57,3 +74,4 @@ module Dry
 end
 
 require 'dry/view/value_part'
+require 'dry/view/null_part'
