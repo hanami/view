@@ -28,8 +28,8 @@ module Dry
         @renderer = renderer
       end
 
-      def render(path, *additional_scope, &block)
-        renderer.render(path, _with(_render_scope(*additional_scope)), &block)
+      def render(path, *scope_args, &block)
+        renderer.render(path, _with(_render_scope(*scope_args)), &block)
       end
 
       def template?(name)
