@@ -28,20 +28,12 @@ module Dry
         @renderer = renderer
       end
 
-      def render(path, scope = {}, &block)
-        renderer.render(path, with(scope), &block)
+      def render(path, *scope_args, &block)
+        renderer.render(path, _with(_render_scope(*scope_args)), &block)
       end
 
       def template?(name)
         renderer.lookup("_#{name}")
-      end
-
-      def with(scope)
-        if scope.any?
-          ValuePart.new(renderer, scope)
-        else
-          self
-        end
       end
 
       def respond_to_missing?(name, include_private = false)
@@ -54,19 +46,23 @@ module Dry
         template_path = template?(name)
 
         if template_path
-          render(template_path, prepare_render_scope(name, *args), &block)
+          render(template_path, *args, &block)
         else
           super
         end
       end
 
-      def prepare_render_scope(name, *args)
-        if args.none?
+      def _with(additional_scope)
+        self.class.build(renderer: renderer, value: additional_scope)
+      end
+
+      def _render_scope(*args)
+        if args.empty?
           {}
         elsif args.length == 1 && args.first.respond_to?(:to_hash)
           args.first.to_hash
         else
-          {name => args.length == 1 ? args.first : args}
+          raise ArgumentError, "render arguments must be a Hash"
         end
       end
     end
