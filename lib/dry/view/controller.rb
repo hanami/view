@@ -1,12 +1,9 @@
 require 'dry-configurable'
 require 'dry-equalizer'
-require 'inflecto'
 
 require 'dry/view/path'
 require 'dry/view/exposures'
 require 'dry/view/part'
-require 'dry/view/value_part'
-require 'dry/view/null_part'
 require 'dry/view/renderer'
 
 module Dry
@@ -107,55 +104,28 @@ module Dry
       end
 
       def layout_scope(options, renderer)
-        part_hash = {
-          page: layout_part(:page, renderer, options.fetch(:scope, scope))
+        parts = {
+          page: layout_part(renderer, name: :page, value: options.fetch(:scope, scope))
         }
 
-        part(layout_dir, renderer, part_hash)
+        layout_part(renderer, value: parts)
       end
 
       def template_scope(options, renderer)
-        view_parts(locals(options), renderer)
+        locals = locals(options)
+        parts = locals.each_with_object({}) { |(key, value), result|
+          result[key] = template_part(renderer, name: key, value: value)
+        }
+
+        template_part(renderer, value: parts)
       end
 
-      def view_parts(locals, renderer)
-        return empty_part(template_path, renderer) unless locals.any?
-
-        part_hash = locals.each_with_object({}) do |(key, value), result|
-          part =
-            case value
-            when Array
-              el_key = Inflecto.singularize(key).to_sym
-
-              template_part(
-                key, renderer,
-                value.map { |element| template_part(el_key, renderer, element) }
-              )
-            else
-              template_part(key, renderer, value)
-            end
-
-          result[key] = part
-        end
-
-        part(template_path, renderer, part_hash)
+      def layout_part(renderer, name: nil, value:)
+        Part.build(renderer: renderer.chdir(layout_dir), name: name, value: value)
       end
 
-      def layout_part(name, renderer, value)
-        part(layout_dir, renderer, { name => value })
-      end
-
-      def template_part(name, renderer, value)
-        part(template_path, renderer, { name => value })
-      end
-
-      def part(dir, renderer, value = {})
-        part_class = value.values[0] ? ValuePart : NullPart
-        part_class.new(renderer.chdir(dir), value)
-      end
-
-      def empty_part(dir, renderer)
-        Part.new(renderer.chdir(dir))
+      def template_part(renderer, name: nil, value:)
+        Part.build(renderer: renderer.chdir(template_path), name: name, value: value)
       end
     end
   end

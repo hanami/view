@@ -1,5 +1,4 @@
 require 'dry-equalizer'
-require 'dry/view/part'
 
 module Dry
   module View
@@ -10,6 +9,7 @@ module Dry
 
       def initialize(renderer, data)
         super(renderer)
+
         @_data = data
         @_value = data.values[0]
       end

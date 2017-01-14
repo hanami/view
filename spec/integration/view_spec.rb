@@ -44,6 +44,18 @@ RSpec.describe 'dry-view' do
     )
   end
 
+  it 'renders a view without locals' do
+    vc = Class.new(view_class) do
+      configure do |config|
+        config.template = 'empty'
+      end
+    end.new
+
+    expect(vc.(scope: scope, locals: {})).to eq(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p>This is a view with no locals.</p></body></html>'
+    )
+  end
+
   it 'renders a view with an alternative format and engine' do
     view = view_class.new
 
