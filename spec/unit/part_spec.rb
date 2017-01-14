@@ -23,16 +23,6 @@ RSpec.describe Dry::View::Part do
     end
   end
 
-  describe "#with" do
-    it "builds a new value part with the extra data" do
-      expect(part.with(foo: "bar")).to eq Dry::View::ValuePart.new(renderer, foo: "bar")
-    end
-
-    it "returns self when no data passed" do
-      expect(part.with({})).to eql part
-    end
-  end
-
   describe '#method_missing' do
     context 'template matches' do
       it 'renders template' do
@@ -40,22 +30,14 @@ RSpec.describe Dry::View::Part do
         expect(renderer).to receive(:render).with('_row.slim', part)
 
         part.row
+
       end
 
       it 'renders template with extra data when a hash is passed' do
         expect(renderer).to receive(:lookup).with('_fields').and_return('_fields.html.slim')
-        expect(renderer).to receive(:render).with('_fields.html.slim', part.with(foo: "bar"))
+        expect(renderer).to receive(:render).with('_fields.html.slim', part_including(foo: "bar"))
 
         part.fields(foo: "bar")
-      end
-
-      it "renders template with extra data (keyed by the template's name) when any other object is passed" do
-        my_thing = Object.new
-
-        expect(renderer).to receive(:lookup).with('_fields').and_return('_fields.html.slim')
-        expect(renderer).to receive(:render).with('_fields.html.slim', part.with(fields: my_thing))
-
-        part.fields(my_thing)
       end
 
       it 'renders template within another when block is passed' do

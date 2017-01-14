@@ -24,3 +24,11 @@ RSpec.configure do |config|
   config.order = :random
   Kernel.srand config.seed
 end
+
+RSpec::Matchers.define :part_including do |data|
+  match { |actual|
+    data.all? { |(key, val)|
+      actual._data[key] == val
+    }
+  }
+end
