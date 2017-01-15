@@ -12,6 +12,7 @@ module Dry
       include Dry::Equalizer(:config)
 
       DEFAULT_LAYOUTS_DIR = 'layouts'.freeze
+      LAYOUT_PART_NAME = :layout
 
       extend Dry::Configurable
 
@@ -105,7 +106,7 @@ module Dry
 
       def layout_scope(options, renderer)
         parts = {
-          page: layout_part(renderer, name: :page, value: options.fetch(:scope, scope))
+          LAYOUT_PART_NAME => layout_part(renderer, name: LAYOUT_PART_NAME, value: options.fetch(:scope, scope))
         }
 
         layout_part(renderer, value: parts)
