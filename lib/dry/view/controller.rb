@@ -18,14 +18,14 @@ module Dry
 
       setting :paths
       setting :layout, false
+      setting :layout_scope
       setting :template
       setting :formats, { html: :erb }
-      setting :scope
 
       attr_reader :config
-      attr_reader :scope
-      attr_reader :layout_dir
       attr_reader :layout
+      attr_reader :default_layout_scope
+      attr_reader :layout_dir
       attr_reader :layout_path
       attr_reader :template_path
       attr_reader :default_format
@@ -78,7 +78,7 @@ module Dry
         @layout = config.layout
         @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
-        @scope = config.scope
+        @default_layout_scope = config.layout_scope
         @exposures = self.class.exposures.bind(self)
       end
 
@@ -106,7 +106,7 @@ module Dry
 
       def layout_scope(options, renderer)
         parts = {
-          LAYOUT_PART_NAME => layout_part(renderer, name: LAYOUT_PART_NAME, value: options.fetch(:scope, scope))
+          LAYOUT_PART_NAME => layout_part(renderer, name: LAYOUT_PART_NAME, value: options.fetch(:layout_scope, default_layout_scope))
         }
 
         layout_part(renderer, value: parts)

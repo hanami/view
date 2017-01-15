@@ -22,7 +22,7 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(view.(scope: scope, locals: { subtitle: "Users List", users: users })).to eql(
+    expect(view.(layout_scope: scope, locals: { subtitle: "Users List", users: users })).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h2>Users List</h2><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
     )
   end
@@ -39,7 +39,7 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(scope: scope, locals: { subtitle: "Users List", users: users })).to eql(
+    expect(vc.(layout_scope: scope, locals: { subtitle: "Users List", users: users })).to eql(
       '<h2>Users List</h2><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div>'
     )
   end
@@ -51,7 +51,7 @@ RSpec.describe 'dry-view' do
       end
     end.new
 
-    expect(vc.(scope: scope, locals: {})).to eq(
+    expect(vc.(layout_scope: scope, locals: {})).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p>This is a view with no locals.</p></body></html>'
     )
   end
@@ -64,7 +64,7 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(view.(scope: scope, locals: { subtitle: 'Users List', users: users }, format: 'txt').strip).to eql(
+    expect(view.(layout_scope: scope, locals: { subtitle: 'Users List', users: users }, format: 'txt').strip).to eql(
       "# dry-view rocks!\n\n## Users List\n\n* Jane (jane@doe.org)\n* Joe (joe@doe.org)"
     )
   end
@@ -81,7 +81,7 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(view.(scope: scope, locals: {subtitle: 'Users List', users: users})).to eq(
+    expect(view.(layout_scope: scope, locals: {subtitle: 'Users List', users: users})).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h1>OVERRIDE</h1><h2>Users List</h2><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
     )
   end
@@ -98,7 +98,7 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(view.(scope: scope, locals: {users: users})).to eq(
+    expect(view.(layout_scope: scope, locals: {users: users})).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><div class="box"><h2>Nombre</h2>Jane</div><div class="box"><h2>Nombre</h2>Joe</div></div></body></html>'
     )
   end
@@ -125,7 +125,7 @@ RSpec.describe 'dry-view' do
     it 'renders within a parent class layout using provided scope' do
       view = child_view.new
 
-      expect(view.(scope: scope, locals: { tasks: [{ title: 'one' }, { title: 'two' }] })).to eql(
+      expect(view.(layout_scope: scope, locals: { tasks: [{ title: 'one' }, { title: 'two' }] })).to eql(
         '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ol><li>one</li><li>two</li></ol></body></html>'
       )
     end
