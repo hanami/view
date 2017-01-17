@@ -7,7 +7,7 @@ RSpec.describe 'exposures' do
         config.paths = SPEC_ROOT.join('fixtures/templates')
         config.layout = 'app'
         config.template = 'users'
-        config.formats = {html: :slim}
+        config.default_format = :html
       end
 
       expose :users do |input|
@@ -33,7 +33,7 @@ RSpec.describe 'exposures' do
         config.paths = SPEC_ROOT.join('fixtures/templates')
         config.layout = 'app'
         config.template = 'users'
-        config.formats = {html: :slim}
+        config.default_format = :html
       end
 
       expose :users
@@ -63,7 +63,7 @@ RSpec.describe 'exposures' do
         config.paths = SPEC_ROOT.join('fixtures/templates')
         config.layout = 'app'
         config.template = 'users_with_count'
-        config.formats = {html: :slim}
+        config.default_format = :html
       end
 
       expose :users do |input|
@@ -91,7 +91,7 @@ RSpec.describe 'exposures' do
         config.paths = SPEC_ROOT.join('fixtures/templates')
         config.layout = 'app'
         config.template = 'users_with_count'
-        config.formats = {html: :slim}
+        config.default_format = :html
       end
 
       expose :users, :users_count
@@ -123,7 +123,7 @@ RSpec.describe 'exposures' do
         config.paths = SPEC_ROOT.join('fixtures/templates')
         config.layout = 'app'
         config.template = 'users_with_count'
-        config.formats = {html: :slim}
+        config.default_format = :html
       end
 
       private_expose :prefix do

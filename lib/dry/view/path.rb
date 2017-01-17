@@ -12,8 +12,8 @@ module Dry
         @root = Pathname(options.fetch(:root, dir))
       end
 
-      def lookup(name)
-        template?(name) || template?("shared/#{name}") || !root? && chdir('..').lookup(name)
+      def lookup(name, format)
+        template?(name, format) || template?("shared/#{name}", format) || !root? && chdir('..').lookup(name, format)
       end
 
       def chdir(dirname)
@@ -30,8 +30,10 @@ module Dry
         dir == root
       end
 
-      def template?(name)
-        dir.join(name) if File.exist?(dir.join(name))
+      # Search for a template using a wildcard for the engine extension
+      def template?(name, format)
+        glob = dir.join("#{name}.#{format}.*")
+        Dir[glob].first
       end
     end
   end
