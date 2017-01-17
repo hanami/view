@@ -1,6 +1,8 @@
 if RUBY_ENGINE == 'ruby'
   require 'simplecov'
-  SimpleCov.start
+  SimpleCov.start do
+    add_filter "/spec/"
+  end
 end
 
 begin
