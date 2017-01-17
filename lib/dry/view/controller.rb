@@ -103,13 +103,13 @@ module Dry
       end
 
       def layout_scope(renderer, options)
-        context = options.fetch(:context) { self.class.config.context }
+        context = options.fetch(:context) { config.context }
 
         Scope.new(renderer.chdir(layout_dir), {}, context)
       end
 
       def template_scope(renderer, options)
-        context = options.fetch(:context) { self.class.config.context }
+        context = options.fetch(:context) { config.context }
 
         Scope.new(renderer.chdir(template_path), locals(options), context)
       end
