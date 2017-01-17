@@ -3,8 +3,8 @@ require 'dry-equalizer'
 
 require 'dry/view/path'
 require 'dry/view/exposures'
-require 'dry/view/part'
 require 'dry/view/renderer'
+require 'dry/view/scope'
 
 module Dry
   module View
@@ -85,11 +85,11 @@ module Dry
       def call(options = {})
         renderer = self.class.renderer(options.fetch(:format, default_format))
 
-        template_content = renderer.(template_path, template_scope(options, renderer))
+        template_content = renderer.(template_path, template_scope(renderer, options))
 
         return template_content unless layout?
 
-        renderer.(layout_path, layout_scope(options, renderer)) do
+        renderer.(layout_path, layout_scope(renderer, options)) do
           template_content
         end
       end
@@ -104,29 +104,14 @@ module Dry
         !!layout
       end
 
-      def layout_scope(options, renderer)
-        parts = {
-          LAYOUT_PART_NAME => layout_part(renderer, name: LAYOUT_PART_NAME, value: options.fetch(:layout_scope, default_layout_scope))
-        }
+      def layout_scope(renderer, options)
+        scope = {LAYOUT_PART_NAME => options.fetch(:layout_scope, default_layout_scope)}
 
-        layout_part(renderer, value: parts)
+        Scope.new(renderer.chdir(layout_dir), scope)
       end
 
-      def template_scope(options, renderer)
-        locals = locals(options)
-        parts = locals.each_with_object({}) { |(key, value), result|
-          result[key] = template_part(renderer, name: key, value: value)
-        }
-
-        template_part(renderer, value: parts)
-      end
-
-      def layout_part(renderer, name: nil, value:)
-        Part.build(renderer: renderer.chdir(layout_dir), name: name, value: value)
-      end
-
-      def template_part(renderer, name: nil, value:)
-        Part.build(renderer: renderer.chdir(template_path), name: name, value: value)
+      def template_scope(renderer, options)
+        Scope.new(renderer.chdir(template_path), locals(options))
       end
     end
   end
