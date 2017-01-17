@@ -14,7 +14,7 @@ end
 action_renderer = ActionRender.new
 dry_view_renderer = Dry::View::Renderer.new(Pathname(__FILE__).dirname.join('templates'), format: :html)
 
-template = Pathname(__FILE__).dirname.join('templates').join("button.html.erb")
+template = Pathname(__FILE__).dirname.join('templates').join('button.html.erb')
 SCOPE = {}
 
 Benchmark.ips do |x|
