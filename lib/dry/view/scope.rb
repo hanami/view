@@ -7,14 +7,16 @@ module Dry
 
       attr_reader :_renderer
       attr_reader :_data
+      attr_reader :_context
 
-      def initialize(renderer, data = {})
+      def initialize(renderer, data, context = nil)
         @_renderer = renderer
-        @_data = data
+        @_data = data.to_hash
+        @_context = context
       end
 
       def respond_to_missing?(name, include_private = false)
-        _template?(name) || _data.key?(name)
+        _template?(name) || _data.key?(name) || _context.respond_to?(name)
       end
 
       private
@@ -26,6 +28,8 @@ module Dry
           _render(template_path, *args, &block)
         elsif _data.key?(name)
           _data[name]
+        elsif _context.respond_to?(name)
+          _context.public_send(name, *args, &block)
         else
           super
         end
@@ -43,9 +47,9 @@ module Dry
         if args.empty?
           self
         elsif args.length == 1 && args.first.respond_to?(:to_hash)
-          self.class.new(_renderer, args.first.to_hash)
+          self.class.new(_renderer, args.first, _context)
         else
-          raise ArgumentError, "render arguments must be a Hash"
+          raise ArgumentError, "render argument must be a Hash"
         end
       end
     end

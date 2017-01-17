@@ -1,5 +1,5 @@
 RSpec.describe 'exposures' do
-  let(:scope) { Struct.new(:title).new('dry-view rocks!') }
+  let(:context) { Struct.new(:title, :assets).new('dry-view rocks!', -> input { "#{input}.jpg" }) }
 
   it 'uses exposures to build view locals' do
     vc = Class.new(Dry::View::Controller) do
@@ -22,8 +22,8 @@ RSpec.describe 'exposures' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(users: users, layout_scope: scope, locals: {subtitle: 'Users List'})).to eql(
-      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h2>Users List</h2><div class="users"><table><tbody><tr><td>JANE</td><td>jane@doe.org</td></tr><tr><td>JOE</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
+    expect(vc.(users: users, context: context, locals: {subtitle: 'Users List'})).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h2>Users List</h2><div class="users"><table><tbody><tr><td>JANE</td><td>jane@doe.org</td></tr><tr><td>JOE</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
 
@@ -52,8 +52,8 @@ RSpec.describe 'exposures' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(users: users, layout_scope: scope, locals: {subtitle: 'Users List'})).to eql(
-      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h2>Users List</h2><div class="users"><table><tbody><tr><td>JANE</td><td>jane@doe.org</td></tr><tr><td>JOE</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
+    expect(vc.(users: users, context: context, locals: {subtitle: 'Users List'})).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h2>Users List</h2><div class="users"><table><tbody><tr><td>JANE</td><td>jane@doe.org</td></tr><tr><td>JOE</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
 
@@ -80,7 +80,7 @@ RSpec.describe 'exposures' do
       {name: 'Joe', email: 'joe@doe.org'}
     ]
 
-    expect(vc.(users: users, layout_scope: scope, locals: {subtitle: 'Users List'})).to eql(
+    expect(vc.(users: users, context: context, locals: {subtitle: 'Users List'})).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h2>Users List</h2><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">2 users</div></body></html>'
     )
   end
@@ -112,7 +112,7 @@ RSpec.describe 'exposures' do
       {name: 'Joe', email: 'joe@doe.org'}
     ]
 
-    expect(vc.(users: users, layout_scope: scope, locals: {subtitle: 'Users List'})).to eql(
+    expect(vc.(users: users, context: context, locals: {subtitle: 'Users List'})).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h2>Users List</h2><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">2 users</div></body></html>'
     )
   end
@@ -144,7 +144,7 @@ RSpec.describe 'exposures' do
       {name: 'Joe', email: 'joe@doe.org'}
     ]
 
-    input = {users: users, layout_scope: scope, locals: {subtitle: 'Users List'}}
+    input = {users: users, context: context, locals: {subtitle: 'Users List'}}
 
     expect(vc.(input)).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h2>Users List</h2><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">COUNT: 2 users</div></body></html>'

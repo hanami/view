@@ -19,7 +19,7 @@ RSpec.describe Dry::View::Controller do
   end
 
   let(:options) do
-    { layout_scope: page, locals: { user: { name: 'Jane' }, header: { title: 'User' } } }
+    { context: page, locals: { user: { name: 'Jane' }, header: { title: 'User' } } }
   end
 
   let(:renderer) do
