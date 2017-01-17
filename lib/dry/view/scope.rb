@@ -1,20 +1,20 @@
+require 'dry-equalizer'
+
 module Dry
   module View
     class Scope
+      include Dry::Equalizer(:_renderer, :_data)
+
       attr_reader :_renderer
-      attr_reader :_scope
+      attr_reader :_data
 
-      def initialize(renderer, scope = {})
+      def initialize(renderer, data = {})
         @_renderer = renderer
-        @_scope = scope
-      end
-
-      def render(path, *args, &block)
-        _renderer.render(path, _render_args(*args), &block)
+        @_data = data
       end
 
       def respond_to_missing?(name, include_private = false)
-        _template?(name) || _scope.key?(name)
+        _template?(name) || _data.key?(name)
       end
 
       private
@@ -23,9 +23,9 @@ module Dry
         template_path = _template?(name)
 
         if template_path
-          render(template_path, *args, &block)
-        elsif _scope.key?(name)
-          _scope[name]
+          _render(template_path, *args, &block)
+        elsif _data.key?(name)
+          _data[name]
         else
           super
         end
@@ -33,6 +33,10 @@ module Dry
 
       def _template?(name)
         _renderer.lookup("_#{name}")
+      end
+
+      def _render(path, *args, &block)
+        _renderer.render(path, _render_args(*args), &block)
       end
 
       def _render_args(*args)
