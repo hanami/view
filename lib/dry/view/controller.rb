@@ -12,19 +12,18 @@ module Dry
       include Dry::Equalizer(:config)
 
       DEFAULT_LAYOUTS_DIR = 'layouts'.freeze
-      LAYOUT_PART_NAME = :layout
+      DEFAULT_CONTEXT = Object.new.freeze
 
       extend Dry::Configurable
 
       setting :paths
       setting :layout, false
-      setting :layout_scope
+      setting :context, DEFAULT_CONTEXT
       setting :template
       setting :formats, { html: :erb }
 
       attr_reader :config
       attr_reader :layout
-      attr_reader :default_layout_scope
       attr_reader :layout_dir
       attr_reader :layout_path
       attr_reader :template_path
@@ -78,7 +77,6 @@ module Dry
         @layout = config.layout
         @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
-        @default_layout_scope = config.layout_scope
         @exposures = self.class.exposures.bind(self)
       end
 
@@ -105,13 +103,15 @@ module Dry
       end
 
       def layout_scope(renderer, options)
-        scope = {LAYOUT_PART_NAME => options.fetch(:layout_scope, default_layout_scope)}
+        context = options.fetch(:context) { config.context }
 
-        Scope.new(renderer.chdir(layout_dir), scope)
+        Scope.new(renderer.chdir(layout_dir), {}, context)
       end
 
       def template_scope(renderer, options)
-        Scope.new(renderer.chdir(template_path), locals(options))
+        context = options.fetch(:context) { config.context }
+
+        Scope.new(renderer.chdir(template_path), locals(options), context)
       end
     end
   end

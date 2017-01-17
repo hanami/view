@@ -1,24 +1,29 @@
 require 'dry/view/scope'
 
 RSpec.describe Dry::View::Scope do
-  subject(:scope) do
-    described_class.new(renderer, data)
-  end
+  subject(:scope) {
+    described_class.new(renderer, data, context)
+  }
 
   let(:renderer) { double("renderer") }
   let(:data) { {user_name: "Jane Doe"} }
+  let(:context) {
+    Class.new do
+      def asset(name)
+        "#{name}.jpg"
+      end
 
-  # describe '#render' do
-  #   it "renders with the current data if no arguments passed" do
-  #     scope.render
-
-  #   end
-
-  #   it "renders with a new scope using the arguments passed"
-  #   it "raises an error if a non-Hash is passed as the argument"
-  # end
+      def current_user
+        "current user"
+      end
+    end.new
+  }
 
   describe "missing method behavior" do
+    before do
+      allow(renderer).to receive(:lookup).and_return false
+    end
+
     describe "rendering" do
       before do
         allow(renderer).to receive(:lookup).with('_list').and_return '_list.html.slim'
@@ -50,10 +55,8 @@ RSpec.describe Dry::View::Scope do
       end
     end
 
-    describe "accessing scope data" do
-      before do
-        allow(renderer).to receive(:lookup).and_return false
-      end
+    describe "accessing data" do
+      let(:data) { {user_name: "Jane Doe", current_user: "provided by data"} }
 
       it "returns matching scope data" do
         expect(scope.user_name).to eq "Jane Doe"
@@ -61,6 +64,17 @@ RSpec.describe Dry::View::Scope do
 
       it "raises an error when no data matches" do
         expect { scope.missing }.to raise_error(NoMethodError)
+      end
+
+      it "returns data in favour of context methods" do
+        expect(scope.current_user).to eq "provided by data"
+      end
+    end
+
+    describe "accessing context" do
+      it "forwards to matching methods on the context" do
+        expect(scope.current_user).to eq "current user"
+        expect(scope.asset("mindblown")).to eq "mindblown.jpg"
       end
     end
   end
