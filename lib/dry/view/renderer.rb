@@ -4,7 +4,7 @@ require 'dry-equalizer'
 module Dry
   module View
     class Renderer
-      include Dry::Equalizer(:paths, :format, :engine)
+      include Dry::Equalizer(:paths, :format)
 
       TemplateNotFoundError = Class.new(StandardError)
 
@@ -14,10 +14,9 @@ module Dry
         @__engines__ ||= {}
       end
 
-      def initialize(paths, options = {})
+      def initialize(paths, format:)
         @paths = paths
-        @format = options.fetch(:format)
-        @engine = options.fetch(:engine)
+        @format = format
         @tilts = self.class.tilts
       end
 
@@ -39,21 +38,22 @@ module Dry
       def chdir(dirname)
         new_paths = paths.map { |path| path.chdir(dirname) }
 
-        self.class.new(new_paths, engine: engine, format: format)
+        self.class.new(new_paths, format: format)
       end
 
       def lookup(name)
-        template_name = "#{name}.#{format}.#{engine}"
-
         paths.inject(false) { |result, path|
-          result || path.lookup(template_name)
+          result || path.lookup(name, format)
         }
       end
 
       private
 
+      # TODO: make default_encoding configurable
       def tilt(path)
-        tilts.fetch(path) { tilts[path] = Tilt[engine].new(path, nil, default_encoding: "utf-8") }
+        tilts.fetch(path) {
+          tilts[path] = Tilt.new(path, nil, default_encoding: "utf-8")
+        }
       end
     end
   end

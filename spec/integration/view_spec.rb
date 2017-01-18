@@ -5,7 +5,7 @@ RSpec.describe 'dry-view' do
         config.paths = SPEC_ROOT.join('fixtures/templates')
         config.layout = 'app'
         config.template = 'users'
-        config.formats = {html: :slim, txt: :erb}
+        config.default_format = :html
       end
     end
   end
