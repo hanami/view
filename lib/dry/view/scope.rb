@@ -22,14 +22,12 @@ module Dry
       private
 
       def method_missing(name, *args, &block)
-        template_path = _template?(name)
-
-        if template_path
-          _render(template_path, *args, &block)
-        elsif _data.key?(name)
+        if _data.key?(name)
           _data[name]
         elsif _context.respond_to?(name)
           _context.public_send(name, *args, &block)
+        elsif (template_path = _template?(name))
+          _render(template_path, *args, &block)
         else
           super
         end
