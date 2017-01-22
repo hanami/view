@@ -22,8 +22,8 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(context: context, locals: { subtitle: "Users List", users: users })).to eql(
-      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h2>Users List</h2><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
+    expect(vc.(context: context, locals: {users: users})).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
 
@@ -39,8 +39,8 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(context: context, locals: { subtitle: "Users List", users: users })).to eql(
-      '<h2>Users List</h2><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" />'
+    expect(vc.(context: context, locals: {users: users})).to eql(
+      '<div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" />'
     )
   end
 
@@ -64,8 +64,8 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(context: context, locals: { subtitle: 'Users List', users: users }, format: 'txt').strip).to eql(
-      "# dry-view rocks!\n\n## Users List\n\n* Jane (jane@doe.org)\n* Joe (joe@doe.org)"
+    expect(vc.(context: context, locals: {users: users}, format: 'txt').strip).to eql(
+      "# dry-view rocks!\n\n* Jane (jane@doe.org)\n* Joe (joe@doe.org)"
     )
   end
 
@@ -81,8 +81,8 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(context: context, locals: {subtitle: 'Users List', users: users})).to eq(
-      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h1>OVERRIDE</h1><h2>Users List</h2><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
+    expect(vc.(context: context, locals: {users: users})).to eq(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h1>OVERRIDE</h1><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
     )
   end
 
