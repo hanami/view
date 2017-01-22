@@ -1,5 +1,5 @@
 RSpec.describe 'dry-view' do
-  let(:view_class) do
+  let(:vc_class) do
     Class.new(Dry::View::Controller) do
       configure do |config|
         config.paths = SPEC_ROOT.join('fixtures/templates')
@@ -15,20 +15,20 @@ RSpec.describe 'dry-view' do
   end
 
   it 'renders within a layout and makes the provided context available everywhere' do
-    view = view_class.new
+    vc = vc_class.new
 
     users = [
       { name: 'Jane', email: 'jane@doe.org' },
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(view.(context: context, locals: { subtitle: "Users List", users: users })).to eql(
+    expect(vc.(context: context, locals: { subtitle: "Users List", users: users })).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h2>Users List</h2><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
 
   it 'renders without a layout' do
-    vc = Class.new(view_class) do
+    vc = Class.new(vc_class) do
       configure do |config|
         config.layout = false
       end
@@ -45,7 +45,7 @@ RSpec.describe 'dry-view' do
   end
 
   it 'renders a view without locals' do
-    vc = Class.new(view_class) do
+    vc = Class.new(vc_class) do
       configure do |config|
         config.template = 'empty'
       end
@@ -57,20 +57,20 @@ RSpec.describe 'dry-view' do
   end
 
   it 'renders a view with an alternative format and engine' do
-    view = view_class.new
+    vc = vc_class.new
 
     users = [
       { name: 'Jane', email: 'jane@doe.org' },
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(view.(context: context, locals: { subtitle: 'Users List', users: users }, format: 'txt').strip).to eql(
+    expect(vc.(context: context, locals: { subtitle: 'Users List', users: users }, format: 'txt').strip).to eql(
       "# dry-view rocks!\n\n## Users List\n\n* Jane (jane@doe.org)\n* Joe (joe@doe.org)"
     )
   end
 
   it 'renders a view with a template on another view path' do
-    view = Class.new(view_class) do
+    vc = Class.new(vc_class) do
       configure do |config|
         config.paths = [SPEC_ROOT.join('fixtures/templates_override')] + Array(config.paths)
       end
@@ -81,13 +81,13 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(view.(context: context, locals: {subtitle: 'Users List', users: users})).to eq(
+    expect(vc.(context: context, locals: {subtitle: 'Users List', users: users})).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h1>OVERRIDE</h1><h2>Users List</h2><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
     )
   end
 
   it 'renders a view that passes arguments to partials' do
-    view = Class.new(view_class) do
+    vc = Class.new(vc_class) do
       configure do |config|
         config.template = 'parts_with_args'
       end
@@ -98,7 +98,7 @@ RSpec.describe 'dry-view' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(view.(context: context, locals: {users: users})).to eq(
+    expect(vc.(context: context, locals: {users: users})).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><div class="box"><h2>Nombre</h2>Jane</div><div class="box"><h2>Nombre</h2>Joe</div></div></body></html>'
     )
   end
@@ -123,9 +123,9 @@ RSpec.describe 'dry-view' do
     end
 
     it 'renders within a parent class layout using provided context' do
-      view = child_view.new
+      vc = child_view.new
 
-      expect(view.(context: context, locals: { tasks: [{ title: 'one' }, { title: 'two' }] })).to eql(
+      expect(vc.(context: context, locals: { tasks: [{ title: 'one' }, { title: 'two' }] })).to eql(
         '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ol><li>one</li><li>two</li></ol></body></html>'
       )
     end
