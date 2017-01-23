@@ -13,10 +13,13 @@ rvm:
   - 2.3.3
   - 2.2.6
   - 2.1.10
-  - jruby-9.1.5.0
+  - jruby-9.1.6.0
 env:
   global:
     - JRUBY_OPTS='--dev -J-Xmx1024M'
+matrix:
+  allow_failures:
+    - rvm: jruby-9.1.6.0
 notifications:
   email: false
   webhooks:

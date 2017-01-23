@@ -9,10 +9,11 @@ require 'dry/view/scope'
 module Dry
   module View
     class Controller
-      include Dry::Equalizer(:config)
-
       DEFAULT_LAYOUTS_DIR = 'layouts'.freeze
       DEFAULT_CONTEXT = Object.new.freeze
+      EMPTY_LOCALS = {}.freeze
+
+      include Dry::Equalizer(:config)
 
       extend Dry::Configurable
 
@@ -68,20 +69,20 @@ module Dry
         @exposures = self.class.exposures.bind(self)
       end
 
-      def call(options = {})
-        renderer = self.class.renderer(options.fetch(:format, config.default_format))
+      def call(format: config.default_format, **input)
+        renderer = self.class.renderer(format)
 
-        template_content = renderer.(template_path, template_scope(renderer, options))
+        template_content = renderer.(template_path, template_scope(renderer, **input))
 
         return template_content unless layout?
 
-        renderer.(layout_path, layout_scope(renderer, options)) do
+        renderer.(layout_path, layout_scope(renderer, **input)) do
           template_content
         end
       end
 
-      def locals(options = {})
-        exposures.locals(options).merge(options.fetch(:locals, {}))
+      def locals(locals: EMPTY_LOCALS, **input)
+        exposures.locals(input).merge(locals)
       end
 
       private
@@ -90,16 +91,16 @@ module Dry
         !!config.layout
       end
 
-      def layout_scope(renderer, options)
-        context = options.fetch(:context) { config.context }
-
-        Scope.new(renderer.chdir(layout_dir), {}, context)
+      def layout_scope(renderer, context: config.context, **)
+        scope(renderer.chdir(layout_dir), EMPTY_LOCALS, context)
       end
 
-      def template_scope(renderer, options)
-        context = options.fetch(:context) { config.context }
+      def template_scope(renderer, context: config.context, **input)
+        scope(renderer.chdir(template_path), locals(**input), context)
+      end
 
-        Scope.new(renderer.chdir(template_path), locals(options), context)
+      def scope(renderer, locals, context)
+        Scope.new(renderer, locals, context)
       end
     end
   end
