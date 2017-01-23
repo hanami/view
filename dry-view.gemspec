@@ -6,9 +6,9 @@ require 'dry/view/version'
 Gem::Specification.new do |spec|
   spec.name          = "dry-view"
   spec.version       = Dry::View::VERSION
-  spec.authors       = ["Piotr Solnica"]
-  spec.email         = ["piotr.solnica@gmail.com"]
-  spec.summary       = "Lightweight web application stack on top of Roda"
+  spec.authors       = ["Piotr Solnica", "Tim Riley"]
+  spec.email         = ["piotr.solnica@gmail.com", "tim@icelab.com.au"]
+  spec.summary       = "Functional view rendering system"
   spec.description   = spec.summary
   spec.homepage      = "https://github.com/dry-rb/dry-view"
   spec.license       = "MIT"
@@ -21,7 +21,6 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.1.0'
 
-  spec.add_runtime_dependency "inflecto", "~> 0"
   spec.add_runtime_dependency "tilt", "~> 2.0"
   spec.add_runtime_dependency "dry-configurable", "~> 0.1"
   spec.add_runtime_dependency "dry-equalizer", "~> 0.2"

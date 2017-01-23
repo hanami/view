@@ -12,4 +12,4 @@
 [![Test Coverage](https://img.shields.io/codeclimate/coverage/github/dry-rb/dry-view.svg)][code_climate]
 [![API Documentation Coverage](http://inch-ci.org/github/dry-rb/dry-view.svg)][inch]
 
-Data-oriented view rendering system.
+Functional view rendering system.
