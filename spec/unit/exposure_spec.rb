@@ -62,24 +62,34 @@ RSpec.describe Dry::View::Exposure do
 
       let(:exposure) { described_class.new(:hello) }
 
-      let(:object) do
-        Class.new do
-          def hello(input)
-            "hi there, #{input.fetch(:name)}"
-          end
-        end.new
+      context "matching instance method" do
+        let(:object) do
+          Class.new do
+            def hello(input)
+              "hi there, #{input.fetch(:name)}"
+            end
+          end.new
+        end
+
+        it "returns a new object" do
+          expect(bound_exposure).not_to eql exposure
+        end
+
+        it "sets the proc to the method on the object matching the exposure's name" do
+          expect(bound_exposure.proc).to eql object.method(:hello)
+        end
       end
 
-      it "returns a new object" do
-        expect(bound_exposure).not_to eql exposure
-      end
+      context "no matching instance method" do
+        let(:object) { Object.new }
 
-      it "sets the proc to the method on the object matching the exposure's name" do
-        expect(bound_exposure.proc).to eql object.method(:hello)
-      end
+        it "returns a new object" do
+          expect(bound_exposure).not_to eql exposure
+        end
 
-      it "raises an error if the object has no matching method" do
-        expect { described_class.new(:something_else).bind(object) }.to raise_error NameError
+        it "builds a proc that passes through data from a matching key in the input" do
+          expect(bound_exposure.proc.(hello: "hello in input")).to eq "hello in input"
+        end
       end
     end
   end
