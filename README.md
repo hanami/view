@@ -94,7 +94,7 @@ Hanami::View.load!
 
 path     = Hanami::View.configuration.root.join('articles/index.html.erb')
 template = Hanami::View::Template.new(path)
-articles = ArticleRepository.all
+articles = ArticleRepository.new.all
 
 Articles::Index.new(template, articles: articles).render
 ```
@@ -121,7 +121,7 @@ end
 
 Hanami::View.load!
 
-articles = ArticleRepository.all
+articles = ArticleRepository.new.all
 
 Articles::Index.render(format: :html, articles: articles)
   # => This will use Articles::Index
