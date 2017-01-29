@@ -16,7 +16,7 @@ module Dry
       end
 
       def bind(obj)
-        proc ? self : with_proc(obj.method(name))
+        proc ? self : with_default_proc(obj)
       end
 
       def dependencies
@@ -39,8 +39,16 @@ module Dry
 
       private
 
-      def with_proc(proc)
-        self.class.new(name, proc, to_view: to_view)
+      def with_default_proc(obj)
+        self.class.new(name, build_default_proc(obj), to_view: to_view)
+      end
+
+      def build_default_proc(obj)
+        if obj.respond_to?(name, _include_private = true)
+          obj.method(name)
+        else
+          -> input { input.fetch(name) }
+        end
       end
 
       def ensure_proc_parameters(proc)

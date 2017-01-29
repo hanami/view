@@ -57,6 +57,28 @@ RSpec.describe 'exposures' do
     )
   end
 
+  it 'passes matching input data if no proc or instance method is available' do
+    vc = Class.new(Dry::View::Controller) do
+      configure do |config|
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = 'app'
+        config.template = 'users'
+        config.default_format = :html
+      end
+
+      expose :users
+    end.new
+
+    users = [
+      { name: 'Jane', email: 'jane@doe.org' },
+      { name: 'Joe', email: 'joe@doe.org' }
+    ]
+
+    expect(vc.(users: users, context: context)).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
+    )
+  end
+
   it 'allows exposures to depend on each other' do
     vc = Class.new(Dry::View::Controller) do
       configure do |config|
