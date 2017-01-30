@@ -1,7 +1,8 @@
 RSpec.describe Dry::View::Exposure do
-  subject(:exposure) { described_class.new(:hello, proc) }
+  subject(:exposure) { described_class.new(:hello, proc, object) }
 
   let(:proc) { -> input { "hi" } }
+  let(:object) { nil }
 
   describe "initialization and attributes" do
     describe "#name" do
@@ -18,18 +19,17 @@ RSpec.describe Dry::View::Exposure do
       it "allows a nil proc" do
         expect(described_class.new(:hello).proc).to be_nil
       end
+    end
 
-      it "allows proc to take no arguments" do
-        proc = -> { "hi" }
-        expect { described_class.new(:hello, proc) }.not_to raise_error
+    describe "#object" do
+      let(:object) { Object.new }
+
+      it "accepts an object" do
+        expect(exposure.object).to eq object
       end
 
-      it "requires proc to take positional arguments only" do
-        proc = -> a: "a" { "hi" }
-        expect { described_class.new(:hello, proc) }.to raise_error ArgumentError
-
-        proc = -> input, a: "a" { "hi" }
-        expect { described_class.new(:hello, proc) }.to raise_error ArgumentError
+      it "allows a nil object" do
+        expect(described_class.new(:hello).object).to be_nil
       end
     end
 
@@ -45,25 +45,29 @@ RSpec.describe Dry::View::Exposure do
   end
 
   describe "#bind" do
-    context "proc provided" do
-      subject(:bound_exposure) { exposure.bind(Object.new) }
+    subject(:bound_exposure) { exposure.bind(bind_object) }
 
-      it "returns itself" do
-        expect(bound_exposure).to eql exposure
-      end
+    let(:bind_object) { Object.new }
 
-      it "retains the same proc" do
+    it "returns a new object" do
+      expect(bound_exposure).not_to eql exposure
+    end
+
+    it "retains the bind object" do
+      expect(bound_exposure.object).to eq bind_object
+    end
+
+    context "proc is set" do
+      it "retains the existing proc" do
         expect(bound_exposure.proc).to eql proc
       end
     end
 
-    context "no proc provided" do
-      subject(:bound_exposure) { exposure.bind(object) }
-
-      let(:exposure) { described_class.new(:hello) }
+    context "proc is nil" do
+      let(:proc) { nil }
 
       context "matching instance method" do
-        let(:object) do
+        let(:bind_object) do
           Class.new do
             def hello(input)
               "hi there, #{input.fetch(:name)}"
@@ -71,75 +75,108 @@ RSpec.describe Dry::View::Exposure do
           end.new
         end
 
-        it "returns a new object" do
-          expect(bound_exposure).not_to eql exposure
-        end
-
         it "sets the proc to the method on the object matching the exposure's name" do
-          expect(bound_exposure.proc).to eql object.method(:hello)
+          expect(bound_exposure.proc).to eql bind_object.method(:hello)
         end
       end
 
       context "no matching instance method" do
         let(:object) { Object.new }
 
-        it "returns a new object" do
-          expect(bound_exposure).not_to eql exposure
-        end
-
-        it "builds a proc that passes through data from a matching key in the input" do
-          expect(bound_exposure.proc.(hello: "hello in input")).to eq "hello in input"
+        it "leaves proc as nil" do
+          expect(bound_exposure.proc).to be_nil
         end
       end
     end
   end
 
   describe "#dependencies" do
-    let(:proc) { -> input, foo, bar { "hi" } }
+    context "proc provided" do
+      let(:proc) { -> input, foo, bar { "hi" } }
 
-    it "returns an array of exposure dependencies derived from the proc's argument names" do
-      expect(exposure.dependencies).to eql [:input, :foo, :bar]
+      it "returns an array of exposure dependencies derived from the proc's argument names" do
+        expect(exposure.dependencies).to eql [:input, :foo, :bar]
+      end
+    end
+
+    context "matching instance method" do
+      let(:proc) { nil }
+
+      let(:object) do
+        Class.new do
+          def hello(input, bar, baz)
+            "hi there, #{input.fetch(:name)}"
+          end
+        end.new
+      end
+
+      it "returns an array of exposure dependencies derived from the instance method's argument names" do
+        expect(exposure.dependencies).to eql [:input, :bar, :baz]
+      end
+    end
+
+    context "proc is nil" do
+      let(:proc) { nil }
+
+      it "returns no dependencies" do
+        expect(exposure.dependencies).to eql []
+      end
     end
   end
 
   describe "#call" do
-    let(:input) { double("input") }
-
-    before do
-      allow(proc).to receive(:call)
-    end
+    let(:input) { "input" }
 
     context "proc expects input only" do
-      it "sends the input to the proc" do
-        exposure.(input)
+      let(:proc) { -> input { input } }
 
-        expect(proc).to have_received(:call).with(input)
+      it "sends the input to the proc" do
+        expect(exposure.(input)).to eql "input"
       end
     end
 
     context "proc expects input and dependencies" do
-      let(:proc) { -> input, greeting { "#{greeting}, #{input.fetch(:name)}" } }
+      let(:proc) { -> input, greeting { "#{greeting}, #{input}" } }
       let(:locals) { {greeting: "Hola"} }
 
-      before do
-        exposure.(input, locals)
-      end
-
       it "sends the input and dependency values to the proc" do
-        expect(proc).to have_received(:call).with(input, "Hola")
+        expect(exposure.(input, locals)).to eq "Hola, input"
       end
     end
 
     context "proc expects dependencies only" do
-      let(:proc) { -> greeting, farewell { "#{greeting}, #{input.fetch(:name)}" } }
+      let(:proc) { -> greeting, farewell { "#{greeting}, #{farewell}" } }
       let(:locals) { {greeting: "Hola", farewell: "Adios"} }
 
-      before do
-        exposure.(input, locals)
+      it "sends the dependency values to the proc" do
+        expect(exposure.(input, locals)).to eq "Hola, Adios"
+      end
+    end
+
+    context "proc accesses object instance" do
+      let(:proc) { -> input { "#{input} from #{name}" } }
+
+      let(:object) do
+        Class.new do
+          attr_reader :name
+
+          def initialize(name)
+            @name = name
+          end
+        end.new("Jane")
       end
 
-      it "sends the dependency values to the proc" do
-        expect(proc).to have_received(:call).with "Hola", "Adios"
+      it "makes the instance available as self" do
+        expect(exposure.(input)).to eq "input from Jane"
+      end
+    end
+
+    context "no proc" do
+      let(:proc) { nil }
+      let(:input) { {hello: "hi there"} }
+
+      it "returns a matching key from the input" do
+        expect(exposure.(input)).to eq "hi there"
       end
     end
   end

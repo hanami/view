@@ -48,7 +48,7 @@ module Dry
           exposures.add(names.first, block, **options)
         else
           names.each do |name|
-            exposures.add(name, nil, **options)
+            exposures.add(name, **options)
           end
         end
       end

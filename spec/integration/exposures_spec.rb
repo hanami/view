@@ -1,7 +1,7 @@
 RSpec.describe 'exposures' do
   let(:context) { Struct.new(:title, :assets).new('dry-view rocks!', -> input { "#{input}.jpg" }) }
 
-  it 'uses exposures to build view locals' do
+  it 'uses exposures with blocks to build view locals' do
     vc = Class.new(Dry::View::Controller) do
       configure do |config|
         config.paths = SPEC_ROOT.join('fixtures/templates')
@@ -27,7 +27,40 @@ RSpec.describe 'exposures' do
     )
   end
 
-  it 'supports both blocks and instance methods as exposures' do
+  it 'gives the exposure blocks access to the view controller instance' do
+    vc = Class.new(Dry::View::Controller) do
+      configure do |config|
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = 'app'
+        config.template = 'users'
+        config.default_format = :html
+      end
+
+      attr_reader :prefix
+
+      def initialize
+        super
+        @prefix = "My friend "
+      end
+
+      expose :users do |input|
+        input.fetch(:users).map { |user|
+          user.merge(name: prefix + user[:name])
+        }
+      end
+    end.new
+
+    users = [
+      { name: 'Jane', email: 'jane@doe.org' },
+      { name: 'Joe', email: 'joe@doe.org' }
+    ]
+
+    expect(vc.(users: users, context: context)).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>My friend Jane</td><td>jane@doe.org</td></tr><tr><td>My friend Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
+    )
+  end
+
+  it 'supports instance methods as exposures' do
     vc = Class.new(Dry::View::Controller) do
       configure do |config|
         config.paths = SPEC_ROOT.join('fixtures/templates')

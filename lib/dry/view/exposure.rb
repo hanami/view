@@ -5,28 +5,30 @@ module Dry
 
       attr_reader :name
       attr_reader :proc
+      attr_reader :object
       attr_reader :to_view
 
-      def initialize(name, proc = nil, to_view: true)
-        ensure_proc_parameters(proc) if proc
-
+      def initialize(name, proc = nil, object = nil, to_view: true)
         @name = name
-        @proc = proc
+        @proc = prepare_proc(proc, object)
+        @object = object
         @to_view = to_view
       end
 
       def bind(obj)
-        proc ? self : with_default_proc(obj)
+        self.class.new(name, proc, obj, to_view: to_view)
       end
 
       def dependencies
-        proc.parameters.map(&:last)
+        proc ? proc.parameters.map(&:last) : []
       end
 
       alias_method :to_view?, :to_view
 
       def call(input, locals = {})
-        params = dependencies.map.with_index { |name, position|
+        return input.fetch(name) unless proc
+
+        args = dependencies.map.with_index { |name, position|
           if position.zero?
             locals.fetch(name) { input }
           else
@@ -34,26 +36,24 @@ module Dry
           end
         }
 
-        proc.(*params)
+        call_proc(*args)
       end
 
       private
 
-      def with_default_proc(obj)
-        self.class.new(name, build_default_proc(obj), to_view: to_view)
-      end
-
-      def build_default_proc(obj)
-        if obj.respond_to?(name, _include_private = true)
-          obj.method(name)
+      def call_proc(*args)
+        if proc.is_a?(Method)
+          proc.(*args)
         else
-          -> input { input.fetch(name) }
+          object.instance_exec(*args, &proc)
         end
       end
 
-      def ensure_proc_parameters(proc)
-        if proc.parameters.any? { |type, _| !SUPPORTED_PARAMETER_TYPES.include?(type) }
-          raise ArgumentError, "+proc+ must take positional arugments only"
+      def prepare_proc(proc, object)
+        if proc
+          proc
+        elsif object.respond_to?(name, _include_private = true)
+          object.method(name)
         end
       end
     end
