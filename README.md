@@ -12,4 +12,11 @@
 [![Test Coverage](https://img.shields.io/codeclimate/coverage/github/dry-rb/dry-view.svg)][code_climate]
 [![API Documentation Coverage](http://inch-ci.org/github/dry-rb/dry-view.svg)][inch]
 
-Functional view rendering system.
+
+A simple, standalone view rendering system built around functional view
+controllers and templates. dry-view allows you to model your views as stateless
+transformations, accepting user input and returning your rendered view.
+
+## Links
+
+* [Documentation](http://dry-rb.org/gems/dry-view)
