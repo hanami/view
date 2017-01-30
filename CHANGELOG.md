@@ -1,3 +1,9 @@
+# 0.2.1 / 2017-01-30
+
+### Fixed
+
+- Exposure blocks now have access to the view controller instance when they're called (timriley)
+
 # 0.2.0 / 2017-01-30
 
 This release is a major reorientation for dry-view, and it should allow for more natural, straightforward template authoring.
