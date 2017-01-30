@@ -1,9 +1,23 @@
-# 0.2.0 / Unreleased
+# 0.2.0 / 2017-01-30
+
+This release is a major reorientation for dry-view, and it should allow for more natural, straightforward template authoring.
+
+### Changed
+
+- [BREAKING] `Dry::View::Layout` renamed to `Dry::View::Controller`. The "view controller" name better represents this object's job: to  (timriley)
+- [BREAKING] `Dry::View::Controller`'s `name` setting is replaced by `template`, which also supports falsey values to disable layout rendering entirely (timriley)
+- [BREAKING] `Dry::View::Controller`'s `formats` setting is replaced by `default_format`, which expects a simple string or symbol. The default value is `:html`. (timriley)
+- [BREAKING] `Dry::View::Controller`'s `root` setting is replaced by `paths`, which can now accept an array of one or more directories. These will be searched for templates in order, with the first match winning (timriley)
+- [BREAKING] `Dry::View::Controller`'s `scope` setting is removed and replaced by `context`, which will be made available to all templates rendered from a view controller (layouts and partials inculded), not just the layout (timriley)
+- [BREAKING] View parts have been replaced by a simple `Scope`. Data passed to the templates can be accessed directly, rather than wrapped up in a view part. (timriley)
+- [BREAKING] With view parts removed, partials can only be rendered by top-level method calls within templates (timriley)
+- Ruby version 2.1.0 is now the earliest supported version (timriley)
 
 ### Added
 
-- Support for multiple template paths. Changed `Dry::View::Layout`'s `root` setting to `paths`, which can now accept an array of one or more file paths. These will be searched for templates in order, with the first match winning (timriley)
-- Support for supplying extra values to partial templates by accepting arguments on view part methods that resolve to partial renders (timriley)
+- Will render templates using any Tilt-supported engine, based on the template's final file extension (e.g. `hello.html.slim` will use Slim). For thread-safety, be sure to explicitly require any engine gems you intend to use. (timriley)
+- `expose` (and `expose_private`) `Dry::View::Controller` class methods allow you to more easily declare and prepare the data for your template (timriley)
+- Added `Dry::View::Scope`, which is the scope used for rendering templates. This includes the data from the exposures along with the context object (timriley)
 
 # 0.1.1 / 2016-07-07
 
