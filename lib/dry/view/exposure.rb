@@ -26,7 +26,7 @@ module Dry
       alias_method :to_view?, :to_view
 
       def call(input, locals = {})
-        return input.fetch(name) unless proc
+        return input[name] unless proc
 
         args = dependencies.map.with_index { |name, position|
           if position.zero?

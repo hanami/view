@@ -178,6 +178,10 @@ RSpec.describe Dry::View::Exposure do
       it "returns a matching key from the input" do
         expect(exposure.(input)).to eq "hi there"
       end
+
+      it "returns nil when no input key matches" do
+        expect(exposure.(nothing_matches_here: true)).to be_nil
+      end
     end
   end
 end
