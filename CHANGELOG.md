@@ -1,3 +1,9 @@
+# 0.2.2 / 2017-01-31
+
+### Changed
+
+- Make input passthrough exposures (when there is no block or matching instance metod) return nil instead of raise in the case of a missing input key (timriley)
+
 # 0.2.1 / 2017-01-30
 
 ### Fixed
