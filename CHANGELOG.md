@@ -1,6 +1,11 @@
 # Hanami::View
 View layer for Hanami
 
+## v1.0.0.beta1 (unreleased)
+### Added
+- [Luca Guidi] Official support for Ruby: MRI 2.4
+- [Vladimir Dralo] Allow `View#initialize` to splat keyword arguments
+
 ## v0.8.0 - 2016-11-15
 ### Fixed
 - [Luca Guidi] Ensure `Rendering::NullLocal` to work with HAML templates
