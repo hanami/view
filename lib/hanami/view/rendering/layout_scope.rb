@@ -1,6 +1,5 @@
 require 'hanami/view/rendering/null_local'
 require 'hanami/utils/escape'
-require 'hanami/utils/deprecation'
 
 module Hanami
   module View
@@ -116,55 +115,6 @@ module Hanami
         # @since 0.1.0
         def locals
           @locals || @scope.locals
-        end
-
-        # Returns a content for the given key, by trying to invoke on the current
-        # scope, a method with the same name.
-        #
-        # The scope is made of locals and concrete methods from view and layout.
-        #
-        # @param key [Symbol] a method to invoke within current scope
-        # @return [String,NilClass] returning content if scope respond to the
-        #   requested method
-        #
-        # @deprecated Use {#local} instead
-        # @since 0.4.1
-        #
-        # @example
-        #   # Given the following layout template
-        #
-        #   <!doctype HTML>
-        #   <html>
-        #     <!-- ... -->
-        #     <body>
-        #       <!-- ... -->
-        #       <%= content :footer %>
-        #     </body>
-        #   </html>
-        #
-        #   # Case 1:
-        #   #   Products::Index doesn't respond to #footer, content will return nil
-        #   #
-        #   # Case 2:
-        #   #   Products::Show responds to #footer, content will send back
-        #   #     #footer returning value
-        #
-        #   module Products
-        #     class Index
-        #       include Hanami::View
-        #     end
-        #
-        #     class Show
-        #       include Hanami::View
-        #
-        #       def footer
-        #         "contents for footer"
-        #       end
-        #     end
-        #   end
-        def content(key)
-          Utils::Deprecation.new("#content is deprecated, please use #local")
-          __send__(key) if respond_to?(key)
         end
 
         # It tries to invoke a method for the view or a local for the given key.
