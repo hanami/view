@@ -60,15 +60,18 @@ module Hanami
           all.join(separator)
         end
 
+        # @api private
         def template_name
           *all, last = partial_name.split(separator)
           all.push( last.prepend(prefix) ).join(separator)
         end
 
+        # @api private
         def partial_name
           @options[:partial]
         end
 
+        # @api private
         def prefix
           PREFIX
         end

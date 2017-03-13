@@ -21,6 +21,8 @@ module Hanami
         # @since 0.7.0
         PARTIAL_PARTS_SEPARATOR = '.'.freeze
 
+        # @api private
+        # @since 0.7.0
         attr_reader :configuration
 
         # Initializes a new PartialTemplatesFinder
@@ -28,6 +30,7 @@ module Hanami
         # @param configuration [Configuration] the configuration object
         #
         # @since 0.7.0
+        # @api private
         def initialize(configuration)
           @configuration = configuration
         end
@@ -37,6 +40,7 @@ module Hanami
         # @return [Array] array of PartialFinder objects
         #
         # @since 0.7.0
+        # @api private
         def find
           _find_partials(configuration.root).map do |template|
             partial_path, partial_base_name = Pathname(template).relative_path_from(configuration.root).split
@@ -67,4 +71,3 @@ module Hanami
     end
   end
 end
-

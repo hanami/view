@@ -18,7 +18,6 @@ module Hanami
         # @return [Hanami::Utils::Escape::SafeString] the string marked as safe
         #
         # @since 0.4.0
-        # @api public
         #
         # @example View usage
         #   require 'hanami/view'
@@ -72,7 +71,6 @@ module Hanami
         #   autoescape
         #
         # @since 0.4.0
-        # @api public
         #
         # @see Hanami::View::Escape::Presenter
         #

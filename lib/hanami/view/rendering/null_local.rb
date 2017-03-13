@@ -20,21 +20,25 @@ module Hanami
         end
 
         # @since 0.7.0
+        # @api private
         def all?
           false
         end
 
         # @since 0.7.0
+        # @api private
         def any?
           false
         end
 
         # @since 0.7.0
+        # @api private
         def empty?
           true
         end
 
         # @since 0.7.0
+        # @api private
         def nil?
           true
         end

@@ -43,6 +43,8 @@ module Hanami
         end
 
         protected
+        # @api private
+        # @since 0.1.0
         def prepare!
           templates.each do |template|
             @registry.merge! template.format => template
@@ -50,10 +52,14 @@ module Hanami
           @registry.any? or raise MissingTemplateLayoutError.new(@view)
         end
 
+        # @api private
+        # @since 0.1.0
         def templates
           TemplatesFinder.new(@view).find
         end
 
+        # @api private
+        # @since 0.1.0
         def format(context)
           context.fetch(:format) { raise MissingFormatError }
         end

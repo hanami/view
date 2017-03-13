@@ -40,10 +40,12 @@ module Hanami
         end
 
         protected
+        # @api private
         def template_name
           @options[:template]
         end
 
+        # @api private
         def format
           @options[:format]
         end

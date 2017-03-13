@@ -107,6 +107,7 @@ module Hanami
 
       private
 
+      # @api private
       def load_registry!
         @registry = nil
         registry.freeze

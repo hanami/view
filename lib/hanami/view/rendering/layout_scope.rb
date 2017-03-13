@@ -224,6 +224,7 @@ module Hanami
         # @return [TrueClass,FalseClass]
         #
         # @since 0.3.0
+        # @api private
         #
         # @see http://ruby-doc.org/core/Object.html#method-i-respond_to-3F
         def respond_to?(m, include_all = false)
@@ -271,6 +272,7 @@ module Hanami
           end
         end
 
+        # @api private
         def renderer(options)
           if options[:partial]
             Rendering::Partial
@@ -280,6 +282,7 @@ module Hanami
         end
 
         private
+        # @api private
         def _options(options)
           options.dup.tap do |opts|
             opts.merge!(format: format)

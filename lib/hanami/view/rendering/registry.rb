@@ -94,31 +94,37 @@ module Hanami
         end
 
         private
+        # @api private
         def prepare!
           prepare_views!
           prepare_templates!
         end
 
+        # @api private
         def prepare_views!
           views.each do |view|
             @registry.merge! view.format || DEFAULT_FORMAT => [ view, template_for(view) ]
           end
         end
 
+        # @api private
         def prepare_templates!
           templates.each do |template|
             @registry.merge! template.format => [ view_for(template), template ]
           end
         end
 
+        # @api private
         def views
           @view.subclasses + [ @view ]
         end
 
+        # @api private
         def view_for(template)
           ViewFinder.new(@view).find(template)
         end
 
+        # @api private
         def template_for(view)
           templates.find {|template| template.format == view.format }
         end

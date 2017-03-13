@@ -17,6 +17,8 @@ module Hanami
     #
     # @since 0.1.0
     class MissingTemplateError < Error
+      # @since 0.1.0
+      # @api private
       def initialize(template, format)
         super("Can't find template '#{ template }' for '#{ format }' format.")
       end
@@ -39,6 +41,8 @@ module Hanami
     #
     # @since 0.5.0
     class MissingTemplateLayoutError < Error
+      # @since 0.5.0
+      # @api private
       def initialize(template)
         super("Can't find layout template '#{ template }'")
       end

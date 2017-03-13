@@ -45,10 +45,12 @@ module Hanami
         end
 
         protected
+        # @api private
         def template
           TemplateFinder.new(@view.class, @options).find
         end
 
+        # @api private
         def scope
           Scope.new(@view, @options[:locals])
         end

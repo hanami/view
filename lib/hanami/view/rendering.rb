@@ -10,6 +10,8 @@ module Hanami
     #
     # @see Hanami::View::Rendering::InstanceMethods
     module Rendering
+      # @since 0.1.0
+      # @api private
       def self.extended(base)
         base.class_eval do
           include InstanceMethods
@@ -281,6 +283,7 @@ module Hanami
         @registry ||= Registry.new(self)
       end
 
+      # @api private
       def load_registry!
         @registry = nil
         registry.freeze

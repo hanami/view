@@ -62,6 +62,7 @@ module Hanami
         end
 
         protected
+        # @api private
         def method_missing(m, *args, &block)
           ::Hanami::View::Escape.html(
             if @view.respond_to?(m)
