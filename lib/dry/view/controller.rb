@@ -4,7 +4,8 @@ require 'dry-equalizer'
 require 'dry/view/path'
 require 'dry/view/exposures'
 require 'dry/view/renderer'
-require 'dry/view/scope'
+require 'dry/view/decorator'
+require 'dry/view/part'
 
 module Dry
   module View
@@ -22,6 +23,7 @@ module Dry
       setting :context, DEFAULT_CONTEXT
       setting :template
       setting :default_format, :html
+      setting :decorator, Decorator.new
 
       attr_reader :config
       attr_reader :layout_dir
@@ -29,20 +31,24 @@ module Dry
       attr_reader :template_path
       attr_reader :exposures
 
+      # @api public
       def self.paths
         Array(config.paths).map { |path| Dry::View::Path.new(path) }
       end
 
+      # @api private
       def self.renderer(format)
         renderers.fetch(format) {
           renderers[format] = Renderer.new(paths, format: format)
         }
       end
 
+      # @api private
       def self.renderers
         @renderers ||= {}
       end
 
+      # @api public
       def self.expose(*names, **options, &block)
         if names.length == 1
           exposures.add(names.first, block, **options)
@@ -53,10 +59,12 @@ module Dry
         end
       end
 
+      # @api public
       def self.private_expose(*names, &block)
         expose(*names, to_view: false, &block)
       end
 
+      # @api private
       def self.exposures
         @exposures ||= Exposures.new
       end
@@ -100,7 +108,22 @@ module Dry
       end
 
       def scope(renderer, locals, context)
-        Scope.new(renderer, locals, context)
+        Part.new(
+          renderer: renderer,
+          context: context,
+          locals: decorated_locals(locals, renderer, context)
+        )
+      end
+
+      def decorated_locals(locals, renderer, context)
+        decorator = self.class.config.decorator
+
+        locals.map { |key, val|
+          # Don't decorate falsy objects
+          decorated_val = val ? decorator.(val, renderer, context) : val
+
+          [key, decorated_val]
+        }.to_h
       end
     end
   end

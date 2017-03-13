@@ -1,3 +1,3 @@
 .users
   - users.each do |user|
-    == box user: user, label: "Nombre"
+    == user.render :box, label: "Nombre"
