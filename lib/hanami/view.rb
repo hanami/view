@@ -11,6 +11,9 @@ require 'hanami/view/errors'
 require 'hanami/layout'
 require 'hanami/presenter'
 
+# Hanami
+#
+# @since 0.1.0
 module Hanami
   # View
   #
@@ -103,7 +106,7 @@ module Hanami
     #
     # @return [Module] a copy of Hanami::View
     #
-    # @since 0.2.0
+    # @since 0.2.0
     #
     # @see Hanami::View#dupe
     # @see Hanami::View::Configuration

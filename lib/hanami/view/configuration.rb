@@ -483,14 +483,21 @@ module Hanami
         end
       end
 
+      # @api private
       alias_method :unload!, :reset!
 
       protected
+      # @api private
       attr_writer :namespace
+      # @api private
       attr_writer :root
+      # @api private
       attr_writer :load_paths
+      # @api private
       attr_writer :layout
+      # @api private
       attr_writer :default_encoding
+      # @api private
       attr_writer :modules
     end
   end

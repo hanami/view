@@ -20,6 +20,8 @@ module Hanami
       #   <%= render partial: 'shared/sidebar' %>
       class Partial < Template
         protected
+        # @api private
+        # @since 0.1.0
         def template
           PartialFinder.new(@view.class, @options).find
         end
