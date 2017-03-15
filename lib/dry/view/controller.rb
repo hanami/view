@@ -122,8 +122,16 @@ module Dry
         decorator = self.class.config.decorator
 
         locals.map { |key, val|
+          options = exposures[key]&.options || {}
+
           # Decorate truthy objects only
-          val = decorator.(val, renderer, context) if val
+          val = decorator.(
+            key,
+            val,
+            renderer: renderer,
+            context: context,
+            **options
+          ) if val
 
           [key, val]
         }.to_h
