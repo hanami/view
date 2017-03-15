@@ -20,9 +20,9 @@ module Dry
 
       setting :paths
       setting :layout, false
-      setting :context, DEFAULT_CONTEXT
       setting :template
       setting :default_format, :html
+      setting :context, DEFAULT_CONTEXT
       setting :decorator, Decorator.new
 
       attr_reader :config
@@ -69,6 +69,7 @@ module Dry
         @exposures ||= Exposures.new
       end
 
+      # @api public
       def initialize
         @config = self.class.config
         @layout_dir = DEFAULT_LAYOUTS_DIR
@@ -77,18 +78,20 @@ module Dry
         @exposures = self.class.exposures.bind(self)
       end
 
-      def call(format: config.default_format, **input)
+      # @api public
+      def call(format: config.default_format, context: config.context, **input)
         renderer = self.class.renderer(format)
 
-        template_content = renderer.(template_path, template_scope(renderer, **input))
+        template_content = renderer.(template_path, template_scope(renderer, context, **input))
 
         return template_content unless layout?
 
-        renderer.(layout_path, layout_scope(renderer, **input)) do
+        renderer.(layout_path, layout_scope(renderer, context)) do
           template_content
         end
       end
 
+      # @api public
       def locals(locals: EMPTY_LOCALS, **input)
         exposures.locals(input).merge(locals)
       end
@@ -99,30 +102,30 @@ module Dry
         !!config.layout
       end
 
-      def layout_scope(renderer, context: config.context, **)
-        scope(renderer.chdir(layout_dir), EMPTY_LOCALS, context)
+      def layout_scope(renderer, context)
+        scope(renderer.chdir(layout_dir), context)
       end
 
-      def template_scope(renderer, context: config.context, **input)
-        scope(renderer.chdir(template_path), locals(**input), context)
+      def template_scope(renderer, context, **input)
+        scope(renderer.chdir(template_path), context, locals(**input))
       end
 
-      def scope(renderer, locals, context)
+      def scope(renderer, context, locals = EMPTY_LOCALS)
         Part.new(
           renderer: renderer,
           context: context,
-          locals: decorated_locals(locals, renderer, context)
+          locals: decorated_locals(renderer, context, locals)
         )
       end
 
-      def decorated_locals(locals, renderer, context)
+      def decorated_locals(renderer, context, locals)
         decorator = self.class.config.decorator
 
         locals.map { |key, val|
-          # Don't decorate falsy objects
-          decorated_val = val ? decorator.(val, renderer, context) : val
+          # Decorate truthy objects only
+          val = decorator.(val, renderer, context) if val
 
-          [key, decorated_val]
+          [key, val]
         }.to_h
       end
     end
