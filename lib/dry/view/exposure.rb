@@ -1,29 +1,35 @@
+require 'dry-equalizer'
+
 module Dry
   module View
     class Exposure
+      include Dry::Equalizer(:name, :proc, :object, :options)
+
       SUPPORTED_PARAMETER_TYPES = [:req, :opt].freeze
 
       attr_reader :name
       attr_reader :proc
       attr_reader :object
-      attr_reader :to_view
+      attr_reader :options
 
-      def initialize(name, proc = nil, object = nil, to_view: true)
+      def initialize(name, proc = nil, object = nil, **options)
         @name = name
         @proc = prepare_proc(proc, object)
         @object = object
-        @to_view = to_view
+        @options = options
       end
 
       def bind(obj)
-        self.class.new(name, proc, obj, to_view: to_view)
+        self.class.new(name, proc, obj, **options)
       end
 
       def dependencies
         proc ? proc.parameters.map(&:last) : []
       end
 
-      alias_method :to_view?, :to_view
+      def private?
+        options.fetch(:private) { false }
+      end
 
       def call(input, locals = {})
         return input[name] unless proc

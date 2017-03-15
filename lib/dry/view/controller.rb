@@ -60,8 +60,8 @@ module Dry
       end
 
       # @api public
-      def self.private_expose(*names, &block)
-        expose(*names, to_view: false, &block)
+      def self.private_expose(*names, **options, &block)
+        expose(*names, **options.merge(private: true), &block)
       end
 
       # @api private

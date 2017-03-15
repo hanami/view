@@ -32,7 +32,7 @@ module Dry
         tsort.each_with_object({}) { |name, memo|
           memo[name] = self[name].(input, memo) if exposures.key?(name)
         }.each_with_object({}) { |(name, val), memo|
-          memo[name] = val if self[name].to_view?
+          memo[name] = val unless self[name].private?
         }
       end
 
