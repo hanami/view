@@ -2,16 +2,19 @@ require 'dry/view/part'
 
 module Dry
   module View
-    # Default decorator, wraps everything in Parts
     class Decorator
       attr_reader :config
 
       def call(name, object, renderer:, context:, **options)
         if object.respond_to?(:to_ary)
-          object.to_ary.map { |obj| Part.new(obj, renderer: renderer, context: context) }
+          object.to_ary.map { |obj| part_class(name, options).new(obj, renderer: renderer, context: context) }
         else
-          Part.new(object, renderer: renderer, context: context)
+          part_class(name, options).new(object, renderer: renderer, context: context)
         end
+      end
+
+      def part_class(name, options)
+        options.fetch(:as) { Part }
       end
     end
   end
