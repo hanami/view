@@ -1,7 +1,5 @@
 require 'dry-equalizer'
 
-# This is looking pretty good. Could even just have a plain view part as the main view scope.
-
 module Dry
   module View
     class Part
