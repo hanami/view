@@ -3,18 +3,18 @@ require 'dry-equalizer'
 module Dry
   module View
     class Part
-      include Dry::Equalizer(:_object, :_renderer, :_context, :_locals)
+      include Dry::Equalizer(:_object, :_locals, :_context, :_renderer)
 
       attr_reader :_object
-      attr_reader :_renderer
-      attr_reader :_context
       attr_reader :_locals
+      attr_reader :_context
+      attr_reader :_renderer
 
       def initialize(object = nil, renderer:, context: nil, locals: {})
         @_object = object
-        @_renderer = renderer
-        @_context = context
         @_locals = locals
+        @_context = context
+        @_renderer = renderer
       end
 
       def __render(partial_name, object = _object, **locals, &block)
