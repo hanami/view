@@ -42,4 +42,6 @@ end
 
 Hanami::View.load!
 
-require 'byebug'
+unless ENV['TRAVIS']
+  require 'byebug'
+end
