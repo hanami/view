@@ -26,10 +26,6 @@ module Dry
         _object.to_s
       end
 
-      # TODO: nicer, custom inspect
-      # def inspect
-      # end
-
       private
 
       def method_missing(name, *args, &block)
