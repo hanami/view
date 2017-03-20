@@ -29,18 +29,25 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 end
 
+TEMPLATE_ROOT_DIRECTORY = Pathname.new __dir__ + '/support/fixtures/templates'
+
 $LOAD_PATH.unshift 'lib'
 require 'hanami/view'
 
-Hanami::Utils.require!('spec/support')
+require_relative 'unloadable.rb'
+require_relative 'helpers.rb'
 
-TEMPLATE_ROOT_DIRECTORY = Pathname.new __dir__ + '/support/fixtures/templates'
+Hanami::Utils.require!('spec/support')
 
 Hanami::View.configure do
   root TEMPLATE_ROOT_DIRECTORY
 end
 
 Hanami::View.load!
+
+Hanami::View.class_eval do
+  extend Unloadable
+end
 
 unless ENV['TRAVIS']
   require 'byebug'

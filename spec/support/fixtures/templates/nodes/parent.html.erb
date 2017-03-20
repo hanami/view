@@ -1,0 +1,6 @@
+<h1><%= node.name %></h1>
+<ul>
+  <% node.children.each do |child| %>
+    <%= render template: 'nodes/child', locals: { node: child } %>
+  <% end %>
+</ul>
