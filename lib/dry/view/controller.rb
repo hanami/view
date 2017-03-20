@@ -122,7 +122,7 @@ module Dry
         decorator = self.class.config.decorator
 
         locals.map { |key, val|
-          options = exposures[key]&.options || {}
+          options = exposures[key] ? exposures[key].options : {}
 
           # Decorate truthy objects only
           val = decorator.(
