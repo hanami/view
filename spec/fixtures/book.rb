@@ -1,0 +1,1 @@
+Book = Struct.new(:title)
