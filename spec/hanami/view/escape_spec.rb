@@ -1,6 +1,6 @@
-describe Hanami::View::Escape do
+RSpec.describe Hanami::View::Escape do
   before do
-    path     = Pathname.new("#{FILE_FIXTURES_PATH}/users/show.html.erb")
+    path     = Pathname.new("#{TEMPLATE_ROOT_DIRECTORY}/users/show.html.erb")
     template = Hanami::View::Template.new(path, 'utf-8')
 
     @user = User.new(%(<script>alert('username')</script>))
