@@ -20,11 +20,21 @@ Tilt.register 'erb', Tilt::ERBTemplate
 
 require 'dry-view'
 
+module Test
+  def self.remove_constants
+    constants.each(&method(:remove_const))
+  end
+end
+
 RSpec.configure do |config|
   config.disable_monkey_patching!
 
   config.order = :random
   Kernel.srand config.seed
+
+  config.after do
+    Test.remove_constants
+  end
 end
 
 RSpec::Matchers.define :part_including do |data|
