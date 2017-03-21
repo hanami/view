@@ -49,6 +49,9 @@ module Dry
       def __render_scope(object, **locals)
         return self if object == _object && (locals == _locals || locals.empty?)
 
+        # Don't rewrap existing parts
+        object = object._object if object.is_a?(Part)
+
         self.class.new(
           object,
           renderer: _renderer,
