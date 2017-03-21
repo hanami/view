@@ -6,10 +6,13 @@ module Dry
       attr_reader :config
 
       def call(name, object, renderer:, context:, **options)
+        klass = part_class(name, options)
+
         if object.respond_to?(:to_ary)
-          object.to_ary.map { |obj| part_class(name, options).new(obj, renderer: renderer, context: context) }
+          arr = object.to_ary.map { |obj| klass.new(obj, renderer: renderer, context: context) }
+          klass.new(arr, renderer: renderer, context: context)
         else
-          part_class(name, options).new(object, renderer: renderer, context: context)
+          klass.new(object, renderer: renderer, context: context)
         end
       end
 
