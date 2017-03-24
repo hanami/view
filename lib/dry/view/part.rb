@@ -1,24 +1,29 @@
 require 'dry-equalizer'
+require 'dry/view/scope'
 
 module Dry
   module View
     class Part
-      include Dry::Equalizer(:_value, :_locals, :_context, :_renderer)
+      include Dry::Equalizer(:_name, :_value, :_context, :_renderer)
 
+      attr_reader :_name
       attr_reader :_value
-      attr_reader :_locals
       attr_reader :_context
       attr_reader :_renderer
 
-      def initialize(value = nil, renderer:, context: nil, locals: {})
+      def initialize(name:, value:, renderer:, context: nil)
+        @_name = name
         @_value = value
-        @_locals = locals
         @_context = context
         @_renderer = renderer
       end
 
-      def __render(partial_name, value = _value, **locals, &block)
-        _renderer.render(__partial(partial_name), __render_scope(value, **locals), &block)
+      def __render(partial_name, as: _name, **locals, &block)
+        _renderer.render(
+          __partial(partial_name),
+          __render_scope(as, **locals),
+          &block
+        )
       end
       alias_method :render, :__render
 
@@ -29,14 +34,10 @@ module Dry
       private
 
       def method_missing(name, *args, &block)
-        if _locals.key?(name)
-          _locals[name]
-        elsif _value.respond_to?(name)
+        if _value.respond_to?(name)
           _value.public_send(name, *args, &block)
         elsif _value.is_a?(Hash) && _value.key?(name)
           _value[name]
-        elsif _context.respond_to?(name)
-          _context.public_send(name, *args, &block)
         else
           super
         end
@@ -46,17 +47,11 @@ module Dry
         _renderer.lookup("_#{name}")
       end
 
-      def __render_scope(value, **locals)
-        return self if value == _value && (locals == _locals || locals.empty?)
-
-        # Don't rewrap existing parts
-        value = value._value if value.is_a?(Part)
-
-        self.class.new(
-          value,
-          renderer: _renderer,
+      def __render_scope(name, **locals)
+        Scope.new(
+          locals: locals.merge(name => self),
           context: _context,
-          locals: locals,
+          renderer: _renderer,
         )
       end
     end

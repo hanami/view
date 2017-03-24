@@ -5,7 +5,7 @@ require 'dry/view/path'
 require 'dry/view/exposures'
 require 'dry/view/renderer'
 require 'dry/view/decorator'
-require 'dry/view/part'
+require 'dry/view/scope'
 
 module Dry
   module View
@@ -111,7 +111,7 @@ module Dry
       end
 
       def scope(renderer, context, locals = EMPTY_LOCALS)
-        Part.new(
+        Scope.new(
           renderer: renderer,
           context: context,
           locals: decorated_locals(renderer, context, locals)

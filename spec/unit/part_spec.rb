@@ -1,7 +1,13 @@
-RSpec.describe Dry::View::Part do
-  subject(:part) { described_class.new(value, renderer: renderer, context: context, locals: locals) }
+RSpec::Matchers.define :template_scope do |locals|
+  match do |actual|
+    locals == locals.map { |k,v| [k, actual.send(k)] }.to_h
+  end
+end
 
-  let(:locals) { {} }
+RSpec.describe Dry::View::Part do
+  subject(:part) { described_class.new(name: name, value: value, renderer: renderer, context: context) }
+
+  let(:name) { :user }
   let(:value) { double('value') }
   let(:context) { double('context') }
   let(:renderer) { double('renderer') }
@@ -12,49 +18,19 @@ RSpec.describe Dry::View::Part do
       allow(renderer).to receive(:render)
     end
 
-    it 'renders a partial using the supplied renderer' do
+    it 'renders a partial with the part available in its scope' do
       part.render(:info)
-      expect(renderer).to have_received(:render).with('_info.html.erb', any_args)
+      expect(renderer).to have_received(:render).with('_info.html.erb', template_scope(user: part))
     end
 
-    describe 'render scope' do
-      context 'scope argument not supplied' do
-        it 'is the part itself' do
-          part.render(:info)
-          expect(renderer).to have_received(:render).with('_info.html.erb', part)
-        end
+    it 'allows the part to be made available on a different name' do
+      part.render(:info, as: :admin)
+      expect(renderer).to have_received(:render).with('_info.html.erb', template_scope(admin: part))
+    end
 
-        it 'replaces locals with those provided' do
-          part.render(:info, foo: 'bar')
-          expect(renderer).to have_received(:render).with('_info.html.erb', itself_with(locals: {foo: 'bar'}))
-        end
-      end
-
-      context 'plain value supplied as scope argument' do
-        it 'wraps the value in a new part, keeping existing renderer, context, and locals' do
-          part.render(:info, 'hello')
-          expect(renderer).to have_received(:render).with('_info.html.erb', itself_with('hello'))
-        end
-
-        it 'replaces locals with those provided' do
-          part.render(:info, 'hello', foo: 'bar')
-          expect(renderer).to have_received(:render).with('_info.html.erb', itself_with('hello', locals: {foo: 'bar'}))
-        end
-      end
-
-      context 'part object supplied as scope argument' do
-        it 'is the supplied part' do
-          another_part = itself_with('hello')
-          part.render(:info, another_part)
-          expect(renderer).to have_received(:render).with('_info.html.erb', another_part)
-        end
-
-        it 'replaces locals with those provided' do
-          another_part = itself_with('hello')
-          part.render(:info, another_part, foo: 'bar')
-          expect(renderer).to have_received(:render).with('_info.html.erb', itself_with('hello', locals: {foo: 'bar'}))
-        end
-      end
+    it 'includes extra locals in the scope' do
+      part.render(:info, extra_local: "hello")
+      expect(renderer).to have_received(:render).with('_info.html.erb', template_scope(user: part, extra_local: "hello"))
     end
   end
 
@@ -69,16 +45,6 @@ RSpec.describe Dry::View::Part do
   end
 
   describe '#method_missing' do
-    describe 'matching locals' do
-      let(:locals) { {greeting: 'hello from locals'} }
-      let(:object) { double(greeting: 'hello from object') }
-      let(:context) { double(greeting: 'hello from context') }
-
-      it 'returns a matching local, in favour of matches on the object and context' do
-        expect(part.greeting).to eq 'hello from locals'
-      end
-    end
-
     describe 'matching the value' do
       let(:context) { double(greeting: 'hello from context') }
 
@@ -108,23 +74,6 @@ RSpec.describe Dry::View::Part do
       end
     end
 
-    describe 'matching the context' do
-      let(:context) { double(greeting: 'hello from context') }
-
-      it 'calls the matching method on the context' do
-        expect(part.greeting).to eq 'hello from context'
-      end
-
-      it 'forwards all arguments to the method' do
-        allow(context).to receive(:farewell)
-
-        blk = -> { }
-        part.farewell "args here", &blk
-
-        expect(context).to have_received(:farewell).with("args here", &blk)
-      end
-    end
-
     describe 'no matches' do
       it 'raises an error' do
         expect { part.greeting }.to raise_error(NoMethodError)
@@ -132,13 +81,13 @@ RSpec.describe Dry::View::Part do
     end
   end
 
-  def itself_with(new_object = part._object, **overrides)
+  def itself_with(**overrides)
     described_class.new(
-      new_object,
       {
+        name: part._name,
+        value: part._value,
         renderer: part._renderer,
         context: part._context,
-        locals: part._locals
       }.merge(overrides)
     )
   end

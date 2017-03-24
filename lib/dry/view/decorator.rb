@@ -1,3 +1,4 @@
+require 'inflecto'
 require 'dry/view/part'
 
 module Dry
@@ -9,10 +10,11 @@ module Dry
         klass = part_class(name, options)
 
         if value.respond_to?(:to_ary)
-          arr = value.to_ary.map { |obj| klass.new(obj, renderer: renderer, context: context) }
-          klass.new(arr, renderer: renderer, context: context)
+          singular_name = Inflecto.singularize(name).to_sym
+          arr = value.to_ary.map { |obj| klass.new(name: singular_name, value: obj, renderer: renderer, context: context) }
+          klass.new(name: name, value: arr, renderer: renderer, context: context)
         else
-          klass.new(value, renderer: renderer, context: context)
+          klass.new(name: name, value: value, renderer: renderer, context: context)
         end
       end
 
