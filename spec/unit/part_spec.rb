@@ -1,8 +1,8 @@
 RSpec.describe Dry::View::Part do
-  subject(:part) { described_class.new(object, renderer: renderer, context: context, locals: locals) }
+  subject(:part) { described_class.new(value, renderer: renderer, context: context, locals: locals) }
 
-  let(:object) { double('object') }
   let(:locals) { {} }
+  let(:value) { double('value') }
   let(:context) { double('context') }
   let(:renderer) { double('renderer') }
 
@@ -60,11 +60,11 @@ RSpec.describe Dry::View::Part do
 
   describe '#to_s' do
     before do
-      allow(object).to receive(:to_s).and_return 'to_s on the object'
+      allow(value).to receive(:to_s).and_return 'to_s on the value'
     end
 
-    it 'delegates to the wrapped object' do
-      expect(part.to_s).to eq 'to_s on the object'
+    it 'delegates to the wrapped value' do
+      expect(part.to_s).to eq 'to_s on the value'
     end
   end
 
@@ -79,31 +79,31 @@ RSpec.describe Dry::View::Part do
       end
     end
 
-    describe 'matching the wrapped object' do
+    describe 'matching the value' do
       let(:context) { double(greeting: 'hello from context') }
 
       describe 'methods' do
-        let(:object) { double(greeting: 'hello from object') }
+        let(:value) { double(greeting: 'hello from value') }
 
-        it 'calls a matching method on the object, in favour of a matching method on the context' do
-          expect(part.greeting).to eq 'hello from object'
+        it 'calls a matching method on the value, in favour of a matching method on the context' do
+          expect(part.greeting).to eq 'hello from value'
         end
 
         it 'forwards all arguments to the method' do
-          allow(object).to receive(:farewell)
+          allow(value).to receive(:farewell)
 
           blk = -> { }
           part.farewell "args here", &blk
 
-          expect(object).to have_received(:farewell).with("args here", &blk)
+          expect(value).to have_received(:farewell).with("args here", &blk)
         end
       end
 
       describe 'hash keys' do
-        let(:object) { {greeting: 'hello from object hash'} }
+        let(:value) { {greeting: 'hello from value hash'} }
 
-        it 'returns a matching value from the object, in favour of a matching method on the context' do
-          expect(part.greeting).to eq 'hello from object hash'
+        it 'returns a matching value from the value, in favour of a matching method on the context' do
+          expect(part.greeting).to eq 'hello from value hash'
         end
       end
     end

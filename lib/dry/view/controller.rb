@@ -124,7 +124,7 @@ module Dry
         locals.map { |key, val|
           options = exposures[key] ? exposures[key].options : {}
 
-          # Decorate truthy objects only
+          # Decorate truthy values only
           val = decorator.(
             key,
             val,

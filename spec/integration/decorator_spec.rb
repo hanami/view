@@ -3,7 +3,7 @@ RSpec.describe 'decorator' do
     module Test
       class CustomPart < Dry::View::Part
         def to_s
-          "Custom part wrapping #{_object}"
+          "Custom part wrapping #{_value}"
         end
       end
     end

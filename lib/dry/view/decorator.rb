@@ -5,14 +5,14 @@ module Dry
     class Decorator
       attr_reader :config
 
-      def call(name, object, renderer:, context:, **options)
+      def call(name, value, renderer:, context:, **options)
         klass = part_class(name, options)
 
-        if object.respond_to?(:to_ary)
-          arr = object.to_ary.map { |obj| klass.new(obj, renderer: renderer, context: context) }
+        if value.respond_to?(:to_ary)
+          arr = value.to_ary.map { |obj| klass.new(obj, renderer: renderer, context: context) }
           klass.new(arr, renderer: renderer, context: context)
         else
-          klass.new(object, renderer: renderer, context: context)
+          klass.new(value, renderer: renderer, context: context)
         end
       end
 
