@@ -62,15 +62,4 @@ RSpec.describe Dry::View::Part do
       expect { part.farewell }.to raise_error(NoMethodError)
     end
   end
-
-  def itself_with(**overrides)
-    described_class.new(
-      {
-        name: part._name,
-        value: part._value,
-        renderer: part._renderer,
-        context: part._context,
-      }.merge(overrides)
-    )
-  end
 end
