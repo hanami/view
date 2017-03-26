@@ -12,6 +12,10 @@ module Dry
         @exposures = exposures
       end
 
+      def key?(name)
+        exposures.key?(name)
+      end
+
       def [](name)
         exposures[name]
       end

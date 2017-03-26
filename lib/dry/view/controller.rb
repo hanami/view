@@ -121,20 +121,22 @@ module Dry
       def decorated_locals(renderer, context, locals)
         decorator = self.class.config.decorator
 
-        locals.map { |key, val|
-          options = exposures[key] ? exposures[key].options : {}
-
+        locals.each_with_object({}) { |(key, val), result|
           # Decorate truthy values only
-          val = decorator.(
-            key,
-            val,
-            renderer: renderer,
-            context: context,
-            **options
-          ) if val
+          if val
+            options = exposures.key?(key) ? exposures[key].options : {}
 
-          [key, val]
-        }.to_h
+            val = decorator.(
+              key,
+              val,
+              renderer: renderer,
+              context: context,
+              **options
+            )
+          end
+
+          result[key] = val
+        }
       end
     end
   end
