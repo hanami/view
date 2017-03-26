@@ -45,39 +45,21 @@ RSpec.describe Dry::View::Part do
   end
 
   describe '#method_missing' do
-    describe 'matching the value' do
-      let(:context) { double(greeting: 'hello from context') }
+    let(:value) { double(greeting: 'hello from value') }
 
-      describe 'methods' do
-        let(:value) { double(greeting: 'hello from value') }
-
-        it 'calls a matching method on the value, in favour of a matching method on the context' do
-          expect(part.greeting).to eq 'hello from value'
-        end
-
-        it 'forwards all arguments to the method' do
-          allow(value).to receive(:farewell)
-
-          blk = -> { }
-          part.farewell "args here", &blk
-
-          expect(value).to have_received(:farewell).with("args here", &blk)
-        end
-      end
-
-      describe 'hash keys' do
-        let(:value) { {greeting: 'hello from value hash'} }
-
-        it 'returns a matching value from the value, in favour of a matching method on the context' do
-          expect(part.greeting).to eq 'hello from value hash'
-        end
-      end
+    it 'calls a matching method on the value' do
+      expect(part.greeting).to eq 'hello from value'
     end
 
-    describe 'no matches' do
-      it 'raises an error' do
-        expect { part.greeting }.to raise_error(NoMethodError)
-      end
+    it 'forwards all arguments to the method' do
+      blk = -> { }
+      part.greeting 'args', &blk
+
+      expect(value).to have_received(:greeting).with('args', &blk)
+    end
+
+    it 'raises an error if no metho matches' do
+      expect { part.farewell }.to raise_error(NoMethodError)
     end
   end
 

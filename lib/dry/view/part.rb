@@ -36,8 +36,6 @@ module Dry
       def method_missing(name, *args, &block)
         if _value.respond_to?(name)
           _value.public_send(name, *args, &block)
-        elsif _value.is_a?(Hash) && _value.key?(name)
-          _value[name]
         else
           super
         end
