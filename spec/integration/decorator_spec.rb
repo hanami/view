@@ -51,7 +51,5 @@ RSpec.describe 'decorator' do
         '<p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
       )
     end
-
-
   end
 end
