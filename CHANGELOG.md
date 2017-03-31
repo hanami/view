@@ -1,6 +1,8 @@
 # Hanami::View
 View layer for Hanami
 
+## v1.0.0.rc1 - 2017-03-31
+
 ## v1.0.0.beta2 - 2017-03-17
 ### Changed
 - [Luca Guidi] Remove deprecated `Hanami::View::Rendering::LayoutScope#content`

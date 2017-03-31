@@ -6,8 +6,8 @@ require 'hanami/view/version'
 Gem::Specification.new do |spec|
   spec.name          = 'hanami-view'
   spec.version       = Hanami::View::VERSION
-  spec.authors       = ['Luca Guidi', 'Trung Lê', 'Alfonso Uceda']
-  spec.email         = ['me@lucaguidi.com', 'trung.le@ruby-journal.com', 'uceda73@gmail.com']
+  spec.authors       = ['Luca Guidi']
+  spec.email         = ['me@lucaguidi.com']
   spec.description   = %q{View layer for Hanami}
   spec.summary       = %q{View layer for Hanami, with a separation between views and templates}
   spec.homepage      = 'http://hanamirb.org'
@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.3.0'
 
   spec.add_runtime_dependency 'tilt',         '~> 2.0', '>= 2.0.1'
-  spec.add_runtime_dependency 'hanami-utils', '~> 1.0.0.beta1'
+  spec.add_runtime_dependency 'hanami-utils', '~> 1.0.0.rc1'
 
   spec.add_development_dependency 'bundler',  '~> 1.5'
   spec.add_development_dependency 'minitest', '~> 5'
