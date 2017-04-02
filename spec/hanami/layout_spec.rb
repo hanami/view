@@ -17,12 +17,13 @@ RSpec.describe Hanami::Layout do
       include Hanami::Layout
     end
 
-    expect do
+    begin
       Hanami::View.load!
-    end.to raise_error(Hanami::View::MissingTemplateLayoutError, "Can't find layout template 'MissingLayout'")
-
-    pending('How do I do this in RSpec?')
-    error.class.ancestors.must_include Hanami::View::Error
+    rescue => error
+      expect(error).to be_a(Hanami::View::MissingTemplateLayoutError)
+      expect(error.message).to eq("Can't find layout template 'MissingLayout'")
+      expect(error.class).to be < Hanami::View::Error
+    end
   end
 
   it 'concrete methods are available in layout template' do

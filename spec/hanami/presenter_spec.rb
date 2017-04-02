@@ -18,8 +18,7 @@ RSpec.describe Hanami::Presenter do
   end
 
   it 'has a direct access to the object' do
-    pending('Not sure about test semantics... #<MapPresenter:0x007ff8f293c4f0 @object=#<Map:0x007ff8f293c518 @locations=["Rome"]>>')
-    expect(subject).to match '#<Map'
+    expect(subject.inspect).to include '#<Map:'
   end
 
   it 'responds to whatever the object responds to' do
