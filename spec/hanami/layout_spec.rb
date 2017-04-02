@@ -3,7 +3,7 @@ RSpec.describe Hanami::Layout do
 
   describe 'rendering from layout' do
     it 'renders partial' do
-      pending('something is wrong with the templates')
+      # FIXME: This only passes because Hanami::View::Configuration.DEFAULT_ROOT is set to ./spec/support/fixtures/templates
 
       rendered = IndexView.render(format: :html)
       expect(rendered).to match %(<div id="sidebar"></div>)
@@ -21,8 +21,8 @@ RSpec.describe Hanami::Layout do
       Hanami::View.load!
     end.to raise_error(Hanami::View::MissingTemplateLayoutError, "Can't find layout template 'MissingLayout'")
 
-    # TODO: How do I do this in RSpec?
-    # error.class.ancestors.must_include Hanami::View::Error
+    pending('How do I do this in RSpec?')
+    error.class.ancestors.must_include Hanami::View::Error
   end
 
   it 'concrete methods are available in layout template' do

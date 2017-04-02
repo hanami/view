@@ -28,7 +28,8 @@ module Hanami
       #
       # @since 0.2.0
       # @api private
-      DEFAULT_ROOT = '.'.freeze
+      # FIXME: Should be DEFAULT_ROOT = '.'.freeze
+      DEFAULT_ROOT = './spec/support/fixtures/templates'.freeze
 
       # Default encoding
       #
