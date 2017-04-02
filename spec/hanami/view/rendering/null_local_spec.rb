@@ -6,9 +6,7 @@ RSpec.describe Hanami::View::Rendering::NullLocal do
   it 'does not complain for unknown sent messages' do
     actual = @null.foo
 
-    pending('Meta-programming weirdness is going on here, better to fix the code than the test...')
-
-    expect(actual).to be_instance_of(Hanami::View::Rendering::NullLocal)
+    expect(actual.class).to eq(Hanami::View::Rendering::NullLocal)
     expect(actual.inspect).to match ':result.foo'
   end
 
