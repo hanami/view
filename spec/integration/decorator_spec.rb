@@ -31,7 +31,7 @@ RSpec.describe 'decorator' do
   describe 'custom decorator and part classes' do
     it 'supports wrapping in custom parts based on exposure names' do
       decorator = Class.new(Dry::View::Decorator) do
-        def part_class(name, options)
+        def part_class(name, value, **options)
           name == :custom ? Test::CustomPart : super
         end
       end.new
