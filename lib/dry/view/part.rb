@@ -18,14 +18,14 @@ module Dry
         @_renderer = renderer
       end
 
-      def __render(partial_name, as: _name, **locals, &block)
+      def _render(partial_name, as: _name, **locals, &block)
         _renderer.render(
-          __partial(partial_name),
-          __render_scope(as, **locals),
+          _partial(partial_name),
+          _render_scope(as, **locals),
           &block
         )
       end
-      alias_method :render, :__render
+      alias_method :render, :_render
 
       def to_s
         _value.to_s
@@ -41,11 +41,11 @@ module Dry
         end
       end
 
-      def __partial(name)
+      def _partial(name)
         _renderer.lookup("_#{name}")
       end
 
-      def __render_scope(name, **locals)
+      def _render_scope(name, **locals)
         Scope.new(
           locals: locals.merge(name => self),
           context: _context,
