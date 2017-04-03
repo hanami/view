@@ -6,8 +6,9 @@ module Dry
     class Decorator
       attr_reader :config
 
+      # @api public
       def call(name, value, renderer:, context:, **options)
-        klass = part_class(name, options)
+        klass = part_class(name, value, **options)
 
         if value.respond_to?(:to_ary)
           singular_name = Inflecto.singularize(name).to_sym
@@ -18,7 +19,8 @@ module Dry
         end
       end
 
-      def part_class(name, options)
+      # @api public
+      def part_class(name, value, **options)
         options.fetch(:as) { Part }
       end
     end
