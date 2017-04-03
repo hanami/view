@@ -4,11 +4,16 @@ require 'dry/view/scope'
 module Dry
   module View
     class Part
+      CONVENIENCE_METHODS = %i[render value].freeze
+
       include Dry::Equalizer(:_name, :_value, :_context, :_renderer)
 
       attr_reader :_name
+
       attr_reader :_value
+
       attr_reader :_context
+
       attr_reader :_renderer
 
       def initialize(name:, value:, renderer:, context: nil)
@@ -25,7 +30,6 @@ module Dry
           &block
         )
       end
-      alias_method :render, :_render
 
       def to_s
         _value.to_s
@@ -36,6 +40,8 @@ module Dry
       def method_missing(name, *args, &block)
         if _value.respond_to?(name)
           _value.public_send(name, *args, &block)
+        elsif CONVENIENCE_METHODS.include?(name)
+          __send__(:"_#{name}", *args, &block)
         else
           super
         end
