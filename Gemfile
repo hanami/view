@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'inflecto'
+
 group :tools do
   gem 'pry'
 end
