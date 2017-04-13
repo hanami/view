@@ -12,7 +12,11 @@ module Dry
 
         if value.respond_to?(:to_ary)
           singular_name = Dry::Core::Inflector.singularize(name).to_sym
-          arr = value.to_ary.map { |obj| klass.new(name: singular_name, value: obj, renderer: renderer, context: context) }
+
+          arr = value.to_ary.map { |obj|
+            call(singular_name, obj, renderer: renderer, context: context, **options)
+          }
+
           klass.new(name: name, value: arr, renderer: renderer, context: context)
         else
           klass.new(name: name, value: value, renderer: renderer, context: context)
