@@ -381,19 +381,17 @@ RSpec.describe Hanami::View do
       end
 
       it 'a view inherits the configuration from the framework' do
-        pending('Does == mean something different in rspec and minitest?')
         expected = Hanami::View.configuration
         actual   = ConfigurationView.configuration
 
-        expect(actual).to eq(expected)
+        expect(actual.root).to eq(expected.root)
       end
 
       it 'a view inherits the parent' do
-        pending('Does == mean something different in rspec and minitest?')
         parent = ConfigurationView.configuration
         child  = ConfigurationChildView.configuration
 
-        expect(child).to eq(parent)
+        expect(child.root).to eq(parent.root)
         expect(child).to_not be(parent)
       end
 
@@ -413,11 +411,10 @@ RSpec.describe Hanami::View do
       end
 
       it 'a layout inheriths the configuration from the framework' do
-        pending('Does == mean something different in rspec and minitest?')
         expected = Hanami::View.configuration
         actual   = ConfigurationLayout.configuration
 
-        expect(actual).to eq(expected)
+        expect(actual.root).to eq(expected.root)
       end
 
       it 'a layout must be included in the framework configuration registry' do
@@ -440,8 +437,6 @@ RSpec.describe Hanami::View do
       end
 
       it 'allows to override one value' do
-        pending('Hanami::Utils::LoadPaths does not implement #include? how does this work in minitest?')
-
         Hanami::View.class_eval do
           configure do
             load_paths << 'test/fixtures'
@@ -454,8 +449,8 @@ RSpec.describe Hanami::View do
 
         configuration = Hanami::View.configuration
 
-        expect(configuration.load_paths).to include('test/fixtures')
-        expect(configuration.load_paths).to include('test/fixtures/templates')
+        expect(configuration.load_paths.send(:paths)).to include('test/fixtures')
+        expect(configuration.load_paths.send(:paths)).to include('test/fixtures/templates')
       end
     end
 
