@@ -1,97 +1,57 @@
-require 'dry/view/scope'
-
 RSpec.describe Dry::View::Scope do
-  subject(:scope) {
-    described_class.new(renderer, data, context)
-  }
+  subject(:scope) { described_class.new(renderer: renderer, context: context, locals: locals) }
 
-  let(:renderer) { double("renderer") }
-  let(:data) { {} }
-  let(:context) { Object.new }
+  let(:locals) { {} }
+  let(:context) { double('context') }
+  let(:renderer) { double('renderer') }
 
-  describe "missing method behavior" do
+  describe '#render' do
     before do
-      allow(renderer).to receive(:lookup).and_return false
+      allow(renderer).to receive(:lookup).with('_info').and_return '_info.html.erb'
       allow(renderer).to receive(:render)
     end
 
-    describe "accessing data" do
-      let(:data) { {user_name: "Jane Doe", current_user: "data's current_user"} }
-      let(:context) {
-        Class.new do
-          def current_user
-            "context's current_user"
-          end
-        end.new
-      }
+    it 'renders a partial with itself as the scope' do
+      scope.render(:info)
+      expect(renderer).to have_received(:render).with('_info.html.erb', scope)
+    end
 
-      before do
-        allow(renderer).to receive(:lookup).with('_current_user').and_return '_current_user.html.slim'
-      end
+    it 'renders a partial with provided locals' do
+      scope_with_locals = described_class.new(renderer: renderer, context: context, locals: {foo: 'bar'})
 
-      it "returns matching scope data" do
-        expect(scope.user_name).to eq "Jane Doe"
-      end
+      scope.render(:info, foo: 'bar')
+      expect(renderer).to have_received(:render).with('_info.html.erb', scope_with_locals)
+    end
+  end
 
-      it "raises an error when no data matches" do
-        expect { scope.missing }.to raise_error(NoMethodError)
-      end
+  describe '#method_missing' do
+    context 'matching locals' do
+      let(:locals) { {greeting: 'hello from locals'} }
+      let(:context) { double('context', greeting: 'hello from context') }
 
-      it "returns data in favour of both context methods and partials" do
-        expect(scope.current_user).to eq "data's current_user"
+      it 'returns a matching value from the locals, in favour of a matching method on the context' do
+        expect(scope.greeting).to eq 'hello from locals'
       end
     end
 
-    describe "accessing context" do
-      let(:context) {
-        Class.new do
-          def current_user
-            "context's current_user"
-          end
+    context 'matching context' do
+      let(:context) { double('context', greeting: 'hello from context') }
 
-          def asset(name)
-            "#{name}.jpg"
-          end
-        end.new
-      }
-
-      before do
-        allow(renderer).to receive(:lookup).with('_current_user').and_return '_current_user.html.slim'
+      it 'calls the matching method on the context' do
+        expect(scope.greeting).to eq 'hello from context'
       end
 
-      it "forwards to matching methods on the context in favour of partials" do
-        expect(scope.current_user).to eq "context's current_user"
-      end
+      it 'forwards all arguments to the method' do
+        blk = -> { }
+        scope.greeting 'args', &blk
 
-      it "allows arguments to be passed to those methods as normal" do
-        expect(scope.asset("mindblown")).to eq "mindblown.jpg"
-      end
-
-      it "raises an error when no method matches" do
-        expect { scope.missing }.to raise_error(NoMethodError)
+        expect(context).to have_received(:greeting).with('args', &blk)
       end
     end
 
-    describe "rendering" do
-      before do
-        allow(renderer).to receive(:lookup).with('_list').and_return '_list.html.slim'
-      end
-
-      it "renders a matching partial using the existing scope" do
-        scope.list
-
-        expect(renderer).to have_received(:render).with('_list.html.slim', scope)
-      end
-
-      it "renders a matching partial using a scope based on arguments passed" do
-        scope.list(something: 'else')
-
-        expect(renderer).to have_received(:render)
-          .with('_list.html.slim', described_class.new(renderer, something: 'else'))
-      end
-
-      it "raises an error if arguments passed are not a hash" do
-        expect { scope.list('hi') }.to raise_error(ArgumentError)
+    describe 'no matches' do
+      it 'raises an error' do
+        expect { scope.greeting }.to raise_error(NoMethodError)
       end
     end
   end

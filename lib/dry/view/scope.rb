@@ -3,51 +3,47 @@ require 'dry-equalizer'
 module Dry
   module View
     class Scope
-      include Dry::Equalizer(:_renderer, :_data)
+      include Dry::Equalizer(:_locals, :_context, :_renderer)
 
-      attr_reader :_renderer
-      attr_reader :_data
+      attr_reader :_locals
       attr_reader :_context
+      attr_reader :_renderer
 
-      def initialize(renderer, data, context = nil)
-        @_renderer = renderer
-        @_data = data.to_hash
+      def initialize(renderer:, context: nil, locals: {})
+        @_locals = locals
         @_context = context
+        @_renderer = renderer
       end
 
-      def respond_to_missing?(name, include_private = false)
-        _template?(name) || _data.key?(name) || _context.respond_to?(name)
+      def render(partial_name, **locals, &block)
+        _renderer.render(
+          __partial(partial_name),
+          __render_scope(**locals),
+          &block
+        )
       end
 
       private
 
       def method_missing(name, *args, &block)
-        if _data.key?(name)
-          _data[name]
+        if _locals.key?(name)
+          _locals[name]
         elsif _context.respond_to?(name)
           _context.public_send(name, *args, &block)
-        elsif (template_path = _template?(name))
-          _render(template_path, *args, &block)
         else
           super
         end
       end
 
-      def _template?(name)
+      def __partial(name)
         _renderer.lookup("_#{name}")
       end
 
-      def _render(path, *args, &block)
-        _renderer.render(path, _render_args(*args), &block)
-      end
-
-      def _render_args(*args)
-        if args.empty?
-          self
-        elsif args.length == 1 && args.first.respond_to?(:to_hash)
-          self.class.new(_renderer, args.first, _context)
+      def __render_scope(**locals)
+        if locals.any?
+          self.class.new(renderer: _renderer, context: _context, locals: locals)
         else
-          raise ArgumentError, "render argument must be a Hash"
+          self
         end
       end
     end

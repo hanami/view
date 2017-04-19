@@ -4,6 +4,7 @@ require 'dry-equalizer'
 require 'dry/view/path'
 require 'dry/view/exposures'
 require 'dry/view/renderer'
+require 'dry/view/decorator'
 require 'dry/view/scope'
 
 module Dry
@@ -19,9 +20,10 @@ module Dry
 
       setting :paths
       setting :layout, false
-      setting :context, DEFAULT_CONTEXT
       setting :template
       setting :default_format, :html
+      setting :context, DEFAULT_CONTEXT
+      setting :decorator, Decorator.new
 
       attr_reader :config
       attr_reader :layout_dir
@@ -29,20 +31,24 @@ module Dry
       attr_reader :template_path
       attr_reader :exposures
 
+      # @api public
       def self.paths
         Array(config.paths).map { |path| Dry::View::Path.new(path) }
       end
 
+      # @api private
       def self.renderer(format)
         renderers.fetch(format) {
           renderers[format] = Renderer.new(paths, format: format)
         }
       end
 
+      # @api private
       def self.renderers
         @renderers ||= {}
       end
 
+      # @api public
       def self.expose(*names, **options, &block)
         if names.length == 1
           exposures.add(names.first, block, **options)
@@ -53,14 +59,17 @@ module Dry
         end
       end
 
-      def self.private_expose(*names, &block)
-        expose(*names, to_view: false, &block)
+      # @api public
+      def self.private_expose(*names, **options, &block)
+        expose(*names, **options.merge(private: true), &block)
       end
 
+      # @api private
       def self.exposures
         @exposures ||= Exposures.new
       end
 
+      # @api public
       def initialize
         @config = self.class.config
         @layout_dir = DEFAULT_LAYOUTS_DIR
@@ -69,18 +78,20 @@ module Dry
         @exposures = self.class.exposures.bind(self)
       end
 
-      def call(format: config.default_format, **input)
+      # @api public
+      def call(format: config.default_format, context: config.context, **input)
         renderer = self.class.renderer(format)
 
-        template_content = renderer.(template_path, template_scope(renderer, **input))
+        template_content = renderer.(template_path, template_scope(renderer, context, **input))
 
         return template_content unless layout?
 
-        renderer.(layout_path, layout_scope(renderer, **input)) do
+        renderer.(layout_path, layout_scope(renderer, context)) do
           template_content
         end
       end
 
+      # @api public
       def locals(locals: EMPTY_LOCALS, **input)
         exposures.locals(input).merge(locals)
       end
@@ -91,16 +102,41 @@ module Dry
         !!config.layout
       end
 
-      def layout_scope(renderer, context: config.context, **)
-        scope(renderer.chdir(layout_dir), EMPTY_LOCALS, context)
+      def layout_scope(renderer, context)
+        scope(renderer.chdir(layout_dir), context)
       end
 
-      def template_scope(renderer, context: config.context, **input)
-        scope(renderer.chdir(template_path), locals(**input), context)
+      def template_scope(renderer, context, **input)
+        scope(renderer.chdir(template_path), context, locals(**input))
       end
 
-      def scope(renderer, locals, context)
-        Scope.new(renderer, locals, context)
+      def scope(renderer, context, locals = EMPTY_LOCALS)
+        Scope.new(
+          renderer: renderer,
+          context: context,
+          locals: decorated_locals(renderer, context, locals)
+        )
+      end
+
+      def decorated_locals(renderer, context, locals)
+        decorator = self.class.config.decorator
+
+        locals.each_with_object({}) { |(key, val), result|
+          # Decorate truthy values only
+          if val
+            options = exposures.key?(key) ? exposures[key].options : {}
+
+            val = decorator.(
+              key,
+              val,
+              renderer: renderer,
+              context: context,
+              **options
+            )
+          end
+
+          result[key] = val
+        }
       end
     end
   end

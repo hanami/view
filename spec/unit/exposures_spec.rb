@@ -54,7 +54,7 @@ RSpec.describe Dry::View::Exposures do
     end
 
     it "does not return any values from private exposures" do
-      exposures.add(:hidden, -> input { "shh" }, to_view: false)
+      exposures.add(:hidden, -> input { "shh" }, private: true)
 
       expect(locals).to include(:greeting, :farewell)
       expect(locals).not_to include(:hidden)

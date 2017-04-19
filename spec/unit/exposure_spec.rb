@@ -33,13 +33,13 @@ RSpec.describe Dry::View::Exposure do
       end
     end
 
-    describe "#to_view" do
-      it "is true by default" do
-        expect(exposure.to_view).to be true
+    describe "#private?" do
+      it "is false by default" do
+        expect(exposure).not_to be_private
       end
 
-      it "can be set to false on initialization" do
-        expect(described_class.new(:hello, to_view: false).to_view).to be false
+      it "can be set on initialization" do
+        expect(described_class.new(:hello, private: true)).to be_private
       end
     end
   end

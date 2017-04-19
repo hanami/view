@@ -12,6 +12,10 @@ module Dry
         @exposures = exposures
       end
 
+      def key?(name)
+        exposures.key?(name)
+      end
+
       def [](name)
         exposures[name]
       end
@@ -21,9 +25,9 @@ module Dry
       end
 
       def bind(obj)
-        bound_exposures = Hash[exposures.map { |name, exposure|
-          [name, exposure.bind(obj)]
-        }]
+        bound_exposures = exposures.each_with_object({}) { |(name, exposure), memo|
+          memo[name] = exposure.bind(obj)
+        }
 
         self.class.new(bound_exposures)
       end
@@ -32,7 +36,7 @@ module Dry
         tsort.each_with_object({}) { |name, memo|
           memo[name] = self[name].(input, memo) if exposures.key?(name)
         }.each_with_object({}) { |(name, val), memo|
-          memo[name] = val if self[name].to_view?
+          memo[name] = val unless self[name].private?
         }
       end
 
