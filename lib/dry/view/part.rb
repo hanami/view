@@ -4,7 +4,11 @@ require 'dry/view/scope'
 module Dry
   module View
     class Part
-      CONVENIENCE_METHODS = %i[render value].freeze
+      CONVENIENCE_METHODS = %i[
+        context
+        render
+        value
+      ].freeze
 
       include Dry::Equalizer(:_name, :_value, :_context, :_renderer)
 
