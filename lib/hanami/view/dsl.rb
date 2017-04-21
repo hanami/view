@@ -7,6 +7,13 @@ module Hanami
     #
     # @since 0.1.0
     module Dsl
+      def self.extended(base)
+        base.class_eval do
+          include Utils::ClassAttribute
+          class_attribute :_root
+        end
+      end
+
       # When a value is given, specify a templates root path for the view.
       # Otherwise, it returns templates root path.
       #
@@ -44,9 +51,9 @@ module Hanami
       #   Articles::Show.root            # => 'path/to/articles/templates'
       def root(value = nil)
         if value.nil?
-          configuration.root
+          _root
         else
-          configuration.root(value)
+          self._root = Utils::Kernel.Pathname(value).realpath
         end
       end
 

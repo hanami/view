@@ -251,6 +251,7 @@ module Hanami
         class_attribute :configuration
 
         self.configuration = conf.duplicate
+        self._root = configuration.root
       end
 
       conf.copy!(base)

@@ -48,14 +48,18 @@ describe Hanami::View do
       child.wont_be_same_as(parent)
     end
 
-    it "doesn't interfer with parent configuration" do
+    it "doesn't mutate configuration" do
       parent = AppView.configuration
       child  = AppViewRoot.configuration
 
-      child.root.wont_equal(parent.root)
+      child.must_equal(parent)
+    end
+
+    it "uses different root" do
+      parent = AppView.root
+      child  = AppViewRoot.root
 
       child.wont_equal(parent)
-      child.wont_be_same_as(parent)
     end
 
     it 'a view must be included in the framework configuration registry' do
