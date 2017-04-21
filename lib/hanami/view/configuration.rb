@@ -101,9 +101,10 @@ module Hanami
       # @return [Hanami::View::Configuration] a new configuration's instance
       #
       # @since 0.2.0
-      def initialize
+      def initialize(&blk)
         @namespace = Object
         reset!
+        instance_eval(&blk) unless blk.nil?
       end
 
       # Set the Ruby namespace where to lookup for views.
