@@ -12,9 +12,10 @@ module Dry
 
         if value.respond_to?(:to_ary)
           singular_name = Dry::Core::Inflector.singularize(name).to_sym
+          singular_options = singularize_options(options)
 
           arr = value.to_ary.map { |obj|
-            call(singular_name, obj, renderer: renderer, context: context, **options)
+            call(singular_name, obj, renderer: renderer, context: context, **singular_options)
           }
 
           klass.new(name: name, value: arr, renderer: renderer, context: context)
@@ -26,6 +27,15 @@ module Dry
       # @api public
       def part_class(name, value, **options)
         options.fetch(:as) { Part }
+      end
+
+      private
+
+      # @api private
+      def singularize_options(**options)
+        options = options.dup
+        options[:as] = options.delete(:each_as) if options.key?(:each_as)
+        options
       end
     end
   end

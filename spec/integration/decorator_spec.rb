@@ -10,7 +10,7 @@ RSpec.describe 'decorator' do
   end
 
   describe 'default decorator' do
-    it 'supports wrapping in custom part classes provided to exposure :as option' do
+    it 'supports wrapping in custom part classes provided to exposure :as and :each_as options' do
       vc = Class.new(Dry::View::Controller) do
         configure do |config|
           config.paths = SPEC_ROOT.join('fixtures/templates')
@@ -18,12 +18,13 @@ RSpec.describe 'decorator' do
           config.template = 'decorated_parts'
         end
 
+        expose :customs, each_as: Test::CustomPart
         expose :custom, as: Test::CustomPart
         expose :ordinary
       end.new
 
-      expect(vc.(custom: 'custom thing', ordinary: 'ordinary thing')).to eql(
-        '<p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
+      expect(vc.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing')).to eql(
+        '<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
       )
     end
   end
@@ -44,11 +45,11 @@ RSpec.describe 'decorator' do
           config.template = 'decorated_parts'
         end
 
-        expose :custom, :ordinary
+        expose :customs, :custom, :ordinary
       end.new
 
-      expect(vc.(custom: 'custom thing', ordinary: 'ordinary thing')).to eql(
-        '<p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
+      expect(vc.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing')).to eql(
+        '<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
       )
     end
   end
