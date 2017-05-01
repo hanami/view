@@ -33,7 +33,6 @@ module Dry
 
       # @api private
       def singularize_options(**options)
-        options = options.dup
         options[:as] = options.delete(:each_as) if options.key?(:each_as)
         options
       end
