@@ -37,11 +37,11 @@ require 'hanami/view'
 require_relative 'unloadable.rb'
 require_relative 'helpers.rb'
 
-Hanami::Utils.require!('spec/support')
-
 Hanami::View.configure do
   root TEMPLATE_ROOT_DIRECTORY
 end
+
+Hanami::Utils.require!('spec/support')
 
 Hanami::View.load!
 
@@ -68,4 +68,3 @@ Hanami::View::Configuration.class_eval do
       self.load_paths == other.load_paths
   end
 end
-
