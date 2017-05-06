@@ -140,7 +140,6 @@ RSpec.describe Hanami::View do
     end
 
     it 'renders a template according to the requested format' do
-      # FIXME: This only passes because Hanami::View::Configuration.DEFAULT_ROOT is set to ./spec/support/fixtures/templates
       articles = [ OpenStruct.new(title: 'Man on the Moon!') ]
 
       rendered = Articles::Index.render(format: :json, articles: articles)
@@ -152,7 +151,6 @@ RSpec.describe Hanami::View do
 
     # this test was added to show that ../templates/members/articles/index.html.erb interferres with the normal behavior
     it 'renders the correct template when a subdirectory also exists' do
-      # FIXME: This only passes because Hanami::View::Configuration.DEFAULT_ROOT is set to ./spec/support/fixtures/templates
       articles = [ OpenStruct.new(title: 'Man on the Moon!') ]
 
       rendered = Articles::Index.render(format: :html, articles: articles)
@@ -319,7 +317,6 @@ RSpec.describe Hanami::View do
 
     describe 'layout' do
       it 'renders contents from layout' do
-        # FIXME: This only passes because Hanami::View::Configuration.DEFAULT_ROOT is set to ./spec/support/fixtures/templates
         articles = [ OpenStruct.new(title: 'A Wonderful Day!') ]
 
         rendered = Articles::Index.render(format: :html, articles: articles)
@@ -336,7 +333,6 @@ RSpec.describe Hanami::View do
       end
 
       it 'uses optional locals, if present' do
-        # FIXME: This only passes because Hanami::View::Configuration.DEFAULT_ROOT is set to ./spec/support/fixtures/templates
         articles = [ OpenStruct.new(title: 'A Wonderful Day!') ]
         plan     =   OpenStruct.new(overdue?: true)
 

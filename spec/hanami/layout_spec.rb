@@ -3,8 +3,6 @@ RSpec.describe Hanami::Layout do
 
   describe 'rendering from layout' do
     it 'renders partial' do
-      # FIXME: This only passes because Hanami::View::Configuration.DEFAULT_ROOT is set to ./spec/support/fixtures/templates
-
       rendered = IndexView.render(format: :html)
       expect(rendered).to match %(<div id="sidebar"></div>)
     end
