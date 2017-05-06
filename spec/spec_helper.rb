@@ -52,3 +52,20 @@ end
 unless ENV['TRAVIS']
   require 'byebug'
 end
+
+Hanami::Utils::LoadPaths.class_eval do
+  def include?(object)
+    @paths.include?(object)
+  end
+end
+
+Hanami::View::Configuration.class_eval do
+  def ==(other)
+    other.kind_of?(Hanami::View::Configuration) &&
+      self.namespace  == other.namespace  &&
+      self.root       == other.root       &&
+      self.layout     == other.layout     &&
+      self.load_paths == other.load_paths
+  end
+end
+

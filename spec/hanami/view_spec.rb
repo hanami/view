@@ -376,8 +376,7 @@ RSpec.describe Hanami::View do
       end
 
       it 'defaults root to the current dir' do
-        # FIXME: Should be expect(Hanami::View.configuration.root).to eq(Pathname.new('.').realpath)
-        expect(Hanami::View.configuration.root).to eq(Pathname.new('./spec/support/fixtures/templates').realpath)
+        expect(Hanami::View.configuration.root).to eq(Pathname.new('.').realpath)
       end
 
       it 'a view inherits the configuration from the framework' do

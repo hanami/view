@@ -50,8 +50,7 @@ RSpec.describe Hanami::View::Configuration do
 
     describe "when a value isn't given" do
       it 'defaults to the current path' do
-        # FIXME: Should be expect(@configuration.root).to eq Pathname.new('.').realpath
-        expect(@configuration.root).to eq Pathname.new('./spec/support/fixtures/templates').realpath
+        expect(@configuration.root).to eq Pathname.new('.').realpath
       end
     end
   end
@@ -63,13 +62,11 @@ RSpec.describe Hanami::View::Configuration do
 
     describe 'by default' do
       it "it's equal to root" do
-        pending('Hanami::Utils::LoadPaths does not implement #include? how does this work in minitest?')
         expect(@configuration.load_paths).to include @configuration.root
       end
     end
 
     it 'allows to add other paths' do
-      pending('Hanami::Utils::LoadPaths does not implement #include? how does this work in minitest?')
       @configuration.load_paths << '..'
       expect(@configuration.load_paths).to include '..'
     end
@@ -257,8 +254,6 @@ RSpec.describe Hanami::View::Configuration do
 
       expect(@config.root).to eq                            Pathname.new('.').realpath
 
-      pending('Hanami::Utils::LoadPaths does not implement #include? how does this work in minitest?')
-
       expect(@config.load_paths).to include                 @config.root
       expect(@config.load_paths).to include                 '..'
       expect(@config.load_paths).to include                 '../..'
@@ -267,7 +262,7 @@ RSpec.describe Hanami::View::Configuration do
       expect(@config.views).to include                      RenderView
       expect(@config.layouts).to include                    GlobalLayout
       expect(@config.partials.keys).to include              'shared/_bar'
-      expect(@config.modules).size.to eq                    2
+      expect(@config.modules.size).to eq                    2
 
       expect(@configuration.root).to eq                     Pathname.new('test').realpath
 
@@ -387,12 +382,9 @@ RSpec.describe Hanami::View::Configuration do
     end
 
     it 'resets root' do
-      # FIXME: Should be root = Pathname.new('.').realpath
-      root = Pathname.new('./spec/support/fixtures/templates').realpath
+      root = Pathname.new('.').realpath
 
       expect(@configuration.root).to eq root
-
-      pending('Hanami::Utils::LoadPaths does not implement #include? how does this work in minitest?')
 
       expect(@configuration.load_paths).to include root
       expect(@configuration.layout).to eq Hanami::View::Rendering::NullLayout
