@@ -26,14 +26,18 @@ module Dry
 
       # @api public
       def part_class(name, value, **options)
-        options.fetch(:as) { Part }
+        if options[:as].is_a?(Hash)
+          options[:as].keys.first
+        else
+          options.fetch(:as) { Part }
+        end
       end
 
       private
 
       # @api private
       def singularize_options(**options)
-        options[:as] = options.delete(:each_as) if options.key?(:each_as)
+        options[:as] = options[:as].values.first if options[:as].is_a?(Hash)
         options
       end
     end
