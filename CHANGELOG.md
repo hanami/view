@@ -1,3 +1,16 @@
+# 0.3.0 / 2017-05-14
+
+This release reintroduces view parts in a more helpful form. You can provide your own custom view part classes to encapsulate your view logic, as well as a  decorator for custom, shared behavior arouund view part wrapping.
+
+### Changed
+
+- [BREAKING] Partial rendering in templates requires an explicit `render` method call instead of method_missing behaviour usinig the partial's name (e.g. `<%= render :my_partial %>` instead of `<%= my_partial %>`)
+
+### Added
+
+- Wrap all values passed to the template in `Dry::View::Part` objects
+- Added a `decorator` config to `Dry::View::Controller`, with a default `Dry::View::Decorator` that wraps the exposure values in `Dry::View::Part` objects (as above). Provide your own part classes by passing an `:as` option to your exposures, e.g. `expose :user, as: MyApp::UserPart`
+
 # 0.2.2 / 2017-01-31
 
 ### Changed
