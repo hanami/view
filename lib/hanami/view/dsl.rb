@@ -11,6 +11,7 @@ module Hanami
         base.class_eval do
           include Utils::ClassAttribute
           class_attribute :_root
+          class_attribute :_namespace
         end
       end
 
@@ -212,7 +213,7 @@ module Hanami
       #   Bookshelf::Api::Views::Books::Index.template # => 'books/index'
       def template(value = nil)
         if value.nil?
-          @template ||= Rendering::TemplateName.new(name, configuration.namespace).to_s
+          @template ||= Rendering::TemplateName.new(name, _namespace).to_s
         else
           @template = value
         end
@@ -322,7 +323,7 @@ module Hanami
       def layout(value = nil)
         if value.nil?
           @layout  ||= nil
-          @_layout ||= Rendering::LayoutFinder.find(@layout || configuration.layout, configuration.namespace)
+          @_layout ||= Rendering::LayoutFinder.find(@layout || configuration.layout, _namespace)
         elsif !value
           @layout = Hanami::View::Rendering::NullLayout
         else

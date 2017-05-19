@@ -252,6 +252,7 @@ module Hanami
 
         self.configuration = conf.duplicate
         self._root = configuration.root
+        self._namespace = configuration.namespace
       end
 
       conf.copy!(base)
