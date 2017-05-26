@@ -253,6 +253,10 @@ module Hanami
         self.configuration = conf.duplicate
         self._root = configuration.root
         self._namespace = configuration.namespace
+
+        if configuration.layout != Hanami::View::Rendering::NullLayout
+          self._layout = configuration.layout
+        end
       end
 
       conf.copy!(base)

@@ -12,6 +12,7 @@ module Hanami
           include Utils::ClassAttribute
           class_attribute :_root
           class_attribute :_namespace
+          class_attribute :_layout
         end
       end
 
@@ -323,9 +324,9 @@ module Hanami
       def layout(value = nil)
         if value.nil?
           @layout  ||= nil
-          @_layout ||= Rendering::LayoutFinder.find(@layout || configuration.layout, _namespace)
+          @_layout ||= Rendering::LayoutFinder.find(@layout || _layout, _namespace)
         elsif !value
-          @layout = Hanami::View::Rendering::NullLayout
+          @_layout = Hanami::View::Rendering::NullLayout
         else
           @layout = value
         end

@@ -32,9 +32,11 @@ module Hanami
         include Utils::ClassAttribute
         class_attribute :configuration
 
+        # FIXME: merge with Hanami::View.included
         self.configuration = conf.duplicate
         self._root = configuration.root
         self._namespace = configuration.namespace
+        self._layout = configuration.layout
       end
 
       conf.copy!(base)

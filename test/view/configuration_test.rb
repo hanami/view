@@ -293,22 +293,29 @@ describe Hanami::View::Configuration do
 
     describe 'layout lazy loading' do
       before do
-        Hanami::View.configure do
+        @configuration = Hanami::View.configuration
+
+        configuration = Hanami::View::Configuration.new do
           layout :application
         end
+
+        Hanami::View.configuration = configuration
 
         module LazyApp
           View = Hanami::View.duplicate(self)
 
           module Views
+            # FIXME: put ApplicationLayout definition after Dashboard::View
+            # in order to verify with tests that loading order doesn't affect the
+            # ability to safely load a layout.
+            class ApplicationLayout
+              include LazyApp::Layout
+            end
+
             module Dashboard
               class Index
                 include LazyApp::View
               end
-            end
-
-            class ApplicationLayout
-              include LazyApp::Layout
             end
           end
         end
@@ -316,6 +323,7 @@ describe Hanami::View::Configuration do
 
       after do
         Object.send(:remove_const, :LazyApp)
+        Hanami::View.configuration = @configuration
       end
 
       it 'lazily loads the layout' do

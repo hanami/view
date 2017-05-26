@@ -217,11 +217,18 @@ describe Hanami::View do
 
   describe 'global layout' do
     before do
-      Hanami::View.class_eval do
-        configure do
-          layout :application
-        end
+      @configuration = Hanami::View.configuration
+      # Hanami::View.class_eval do
+      #   configure do
+      #     layout :application
+      #   end
+      # end
+      configuration = Hanami::View::Configuration.new do
+        root Pathname.new __dir__ + '/fixtures/templates'
+        layout :application
       end
+
+      Hanami::View.configuration = configuration
 
       class ViewWithInheritedLayout
         include Hanami::View
@@ -230,6 +237,7 @@ describe Hanami::View do
 
     after do
       Object.send(:remove_const, :ViewWithInheritedLayout)
+      Hanami::View.configuration = @configuration
     end
 
     it 'sets global layout' do
