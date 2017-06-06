@@ -28,6 +28,12 @@ module Hanami
         # @since 0.2.0
         RECURSIVE = '**'.freeze
 
+        # Excluded chars in file names
+        #
+        # @api private
+        # @since x.x.x
+        EXCLUDED = '[^~]'.freeze
+
         # Initialize a finder
         #
         # @param view [Class] the view
@@ -94,7 +100,7 @@ module Hanami
         # @api private
         # @since 0.7.0
         def templates_path(*parts)
-          Dir.glob("#{ parts.join(separator) }.#{ format }.#{ engines }")
+          Dir.glob("#{ parts.join(separator) }.#{ format }.#{ engines }#{ excluded }")
         end
 
         # @api private
@@ -137,6 +143,12 @@ module Hanami
         # @since 0.1.0
         def engines
           ENGINES
+        end
+
+        # @api private
+        # @since x.x.x
+        def excluded
+          EXCLUDED
         end
       end
     end
