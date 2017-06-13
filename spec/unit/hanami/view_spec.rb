@@ -13,7 +13,7 @@ RSpec.describe Hanami::View do
         include Hanami::View
       end
 
-      @template = Hanami::View::Template.new(__dir__ + '/../support/fixtures/templates/hello_world.html.erb')
+      @template = Hanami::View::Template.new(__dir__ + '/../../support/fixtures/templates/hello_world.html.erb')
     end
 
     it 'initializes view without keyword arguments' do
@@ -420,7 +420,7 @@ RSpec.describe Hanami::View do
 
     describe '.configure' do
       it 'allows to configure the framework' do
-        path = Pathname.new('.').join('test/fixtures').realpath
+        path = Pathname.new('.').join('spec/support/fixtures').realpath
 
         Hanami::View.class_eval do
           configure do
@@ -434,18 +434,18 @@ RSpec.describe Hanami::View do
       it 'allows to override one value' do
         Hanami::View.class_eval do
           configure do
-            load_paths << 'test/fixtures'
+            load_paths << 'spec/fixtures'
           end
 
           configure do
-            load_paths << 'test/fixtures/templates'
+            load_paths << 'spec/fixtures/templates'
           end
         end
 
         configuration = Hanami::View.configuration
 
-        expect(configuration.load_paths.send(:paths)).to include('test/fixtures')
-        expect(configuration.load_paths.send(:paths)).to include('test/fixtures/templates')
+        expect(configuration.load_paths.send(:paths)).to include('spec/fixtures')
+        expect(configuration.load_paths.send(:paths)).to include('spec/fixtures/templates')
       end
     end
 

@@ -8,15 +8,15 @@ RSpec.describe Hanami::View::Configuration do
     describe 'when a value is given' do
       describe "and it's a string" do
         it 'sets it as a Pathname' do
-          @configuration.root 'test'
-          expect(@configuration.root).to eq Pathname.new('test').realpath
+          @configuration.root 'spec'
+          expect(@configuration.root).to eq Pathname.new('spec').realpath
         end
       end
 
       describe "and it's a pathname" do
         it 'sets it' do
-          @configuration.root Pathname.new('test')
-          expect(@configuration.root).to eq Pathname.new('test').realpath
+          @configuration.root Pathname.new('spec')
+          expect(@configuration.root).to eq Pathname.new('spec').realpath
         end
       end
 
@@ -34,8 +34,8 @@ RSpec.describe Hanami::View::Configuration do
         end
 
         it 'sets the converted value' do
-          @configuration.root RootPath.new('test')
-          expect(@configuration.root).to eq Pathname.new('test').realpath
+          @configuration.root RootPath.new('spec')
+          expect(@configuration.root).to eq Pathname.new('spec').realpath
         end
       end
 
@@ -219,7 +219,7 @@ RSpec.describe Hanami::View::Configuration do
 
   describe '#duplicate' do
     before do
-      @configuration.root 'test'
+      @configuration.root 'spec'
       @configuration.load_paths << '..'
       @configuration.layout :application
       @configuration.default_encoding 'UTF-7'
@@ -264,7 +264,7 @@ RSpec.describe Hanami::View::Configuration do
       expect(@config.partials.keys).to include              'shared/_bar'
       expect(@config.modules.size).to eq                    2
 
-      expect(@configuration.root).to eq                     Pathname.new('test').realpath
+      expect(@configuration.root).to eq                     Pathname.new('spec').realpath
 
       expect(@configuration.load_paths).to include          @config.root
       expect(@configuration.load_paths).to include          '..'
@@ -370,7 +370,7 @@ RSpec.describe Hanami::View::Configuration do
 
   describe '#reset!' do
     before do
-      @configuration.root 'test'
+      @configuration.root 'spec'
       @configuration.load_paths << '..'
       @configuration.layout :application
       @configuration.default_encoding 'Windows-1253'
