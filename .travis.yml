@@ -1,11 +1,12 @@
 language: ruby
 sudo: false
 cache: bundler
-script: 'bundle exec rake test:coverage'
+script:
+  - bundle exec rspec
 rvm:
-  - 2.3.3
-  - 2.4.0
-  - jruby-9.1.6.0
+  - 2.3.4
+  - 2.4.1
+  - jruby-9.1.8.0
   - ruby-head
   - jruby-head
 
