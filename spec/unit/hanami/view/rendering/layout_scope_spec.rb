@@ -82,8 +82,9 @@ RSpec.describe Hanami::View::Rendering::LayoutScope do
   describe '#render' do
     describe 'render with no known render type' do
       it 'raises UnknownOrMissingRenderTypeLayoutError' do
-        exception = -> { @scope.render(templte: "misspelled") }.must_raise Hanami::View::UnknownOrMissingRenderTypeLayoutError
-        exception.message.must_include "Calls to `render` in a layout must include one of ':partial', ':template'. Found ':templte'."
+        expect do
+          @scope.render(templte: "misspelled")
+        end.to raise_error(Hanami::View::UnknownOrMissingRenderTypeLayoutError, /Calls to `render` in a layout must include one of ':partial', ':template'. Found ':templte'./)
       end
     end
   end
