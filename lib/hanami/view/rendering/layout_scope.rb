@@ -4,7 +4,12 @@ require 'hanami/utils/escape'
 module Hanami
   module View
     module Rendering
-
+        
+      # List of render types that exactly one of must be included when calling `#render`. 
+      # For example, when calling `<%= render something: 'my_thing', locals: {} %>`,
+      # 'something' must be one of the values listed here.
+      # 
+      # @since X.X.X
       KNOWN_RENDER_TYPES = [:partial, :template]
 
       # Scope for layout rendering
