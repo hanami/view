@@ -51,17 +51,17 @@ module Dry
       # @api public
       def self.expose(*names, **options, &block)
         if names.length == 1
-          exposures.add(names.first, block, **options)
+          exposures.add(names.first, block, options)
         else
           names.each do |name|
-            exposures.add(name, **options)
+            exposures.add(name, options)
           end
         end
       end
 
       # @api public
       def self.private_expose(*names, **options, &block)
-        expose(*names, **options.merge(private: true), &block)
+        expose(*names, **options, private: true, &block)
       end
 
       # @api private
@@ -82,7 +82,7 @@ module Dry
       def call(format: config.default_format, context: config.context, **input)
         renderer = self.class.renderer(format)
 
-        template_content = renderer.(template_path, template_scope(renderer, context, **input))
+        template_content = renderer.(template_path, template_scope(renderer, context, input))
 
         return template_content unless layout?
 
@@ -107,7 +107,7 @@ module Dry
       end
 
       def template_scope(renderer, context, **input)
-        scope(renderer.chdir(template_path), context, locals(**input))
+        scope(renderer.chdir(template_path), context, locals(input))
       end
 
       def scope(renderer, context, locals = EMPTY_LOCALS)

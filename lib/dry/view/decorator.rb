@@ -8,7 +8,7 @@ module Dry
 
       # @api public
       def call(name, value, renderer:, context:, **options)
-        klass = part_class(name, value, **options)
+        klass = part_class(name, value, options)
 
         if value.respond_to?(:to_ary)
           singular_name = Dry::Core::Inflector.singularize(name).to_sym

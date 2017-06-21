@@ -30,7 +30,7 @@ module Dry
       def _render(partial_name, as: _name, **locals, &block)
         _renderer.render(
           _partial(partial_name),
-          _render_scope(as, **locals),
+          _render_scope(as, locals),
           &block
         )
       end
