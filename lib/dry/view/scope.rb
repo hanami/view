@@ -23,7 +23,7 @@ module Dry
         if path
           _renderer.render(
             path,
-            __render_scope(**locals),
+            __render_scope(locals),
             &block
             )
         else

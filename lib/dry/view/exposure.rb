@@ -20,7 +20,7 @@ module Dry
       end
 
       def bind(obj)
-        self.class.new(name, proc, obj, **options)
+        self.class.new(name, proc, obj, options)
       end
 
       def dependencies
