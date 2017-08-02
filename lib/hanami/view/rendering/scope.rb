@@ -65,7 +65,11 @@ module Hanami
         # @api private
         def method_missing(m, *args, &block)
           ::Hanami::View::Escape.html(
-            if @view.respond_to?(m)
+            # FIXME: this isn't compatible with Hanami 2.0, as it extends a view
+            # that we want to be frozen in the future
+            #
+            # See https://github.com/hanami/view/issues/130#issuecomment-319326236
+            if @view.respond_to?(m, true)
               @view.__send__ m, *args, &block
             elsif @locals.key?(m)
               @locals[m]
