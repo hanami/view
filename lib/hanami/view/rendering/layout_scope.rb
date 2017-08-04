@@ -4,6 +4,14 @@ require 'hanami/utils/escape'
 module Hanami
   module View
     module Rendering
+        
+      # List of render types that exactly one of must be included when calling `#render`. 
+      # For example, when calling `<%= render something: 'my_thing', locals: {} %>`,
+      # 'something' must be one of the values listed here.
+      # 
+      # @since X.X.X
+      KNOWN_RENDER_TYPES = [:partial, :template]
+
       # Scope for layout rendering
       #
       # @since 0.1.0
@@ -87,6 +95,9 @@ module Hanami
         #   #
         #   # `user` will be available in the scope of the sidebar rendering
         def render(options)
+          if !KNOWN_RENDER_TYPES.any?{|render_type| options[render_type]}
+            ::Kernel.raise UnknownOrMissingRenderTypeLayoutError.new(KNOWN_RENDER_TYPES, options)
+          end
           renderer(options).render
         end
 
@@ -213,7 +224,11 @@ module Hanami
         #   # `article` will be looked up in the view scope first.
         #   # If not found, it will be searched within the layout.
         def method_missing(m, *args, &blk)
-          if @scope.respond_to?(m)
+          # FIXME: this isn't compatible with Hanami 2.0, as it extends a view
+          # that we want to be frozen in the future
+          #
+          # See https://github.com/hanami/view/issues/130#issuecomment-319326236
+          if @scope.respond_to?(m, true)
             @scope.__send__(m, *args, &blk)
           elsif layout.respond_to?(m)
             layout.__send__(m, *args, &blk)

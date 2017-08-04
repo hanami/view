@@ -57,7 +57,11 @@ module Hanami
         #
         # @see http://ruby-doc.org/core/Object.html#method-i-respond_to_missing-3F
         def respond_to_missing?(m, include_all)
-          @view.respond_to?(m) ||
+          # FIXME: this isn't compatible with Hanami 2.0, as it extends a view
+          # that we want to be frozen in the future
+          #
+          # See https://github.com/hanami/view/issues/130#issuecomment-319326236
+          @view.respond_to?(m, include_all) ||
             @locals.key?(m)
         end
 
@@ -65,7 +69,11 @@ module Hanami
         # @api private
         def method_missing(m, *args, &block)
           ::Hanami::View::Escape.html(
-            if @view.respond_to?(m)
+            # FIXME: this isn't compatible with Hanami 2.0, as it extends a view
+            # that we want to be frozen in the future
+            #
+            # See https://github.com/hanami/view/issues/130#issuecomment-319326236
+            if @view.respond_to?(m, true)
               @view.__send__ m, *args, &block
             elsif @locals.key?(m)
               @locals[m]
