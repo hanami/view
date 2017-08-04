@@ -1,12 +1,6 @@
 RSpec.describe Hanami::View do
   include_context 'reload configuration'
 
-  describe Hanami::View::VERSION do
-    it 'returns current version' do
-      expect(Hanami::View::VERSION).to eq '1.0.0'
-    end
-  end
-
   describe 'initializing' do
     before do
       @view = Class.new do
