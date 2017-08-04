@@ -104,6 +104,10 @@ class ApplicationLayout
   end
 end
 
+class ContactsLayout
+  include Hanami::Layout
+end
+
 class GlobalLayout
 end
 
@@ -271,6 +275,8 @@ module Contacts
   class Show
     include Hanami::View
     include Helpers::AssetTagHelpers
+
+    layout :contacts
   end
 end
 

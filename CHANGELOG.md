@@ -1,6 +1,10 @@
 # Hanami::View
 View layer for Hanami
 
+## v1.0.1 - 2017-08-04
+### Added
+- [Luca Guidi] Compatibility with `haml` 5.0
+
 ## v1.0.0 - 2017-04-06
 
 ## v1.0.0.rc1 - 2017-03-31
