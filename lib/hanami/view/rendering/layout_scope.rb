@@ -224,7 +224,11 @@ module Hanami
         #   # `article` will be looked up in the view scope first.
         #   # If not found, it will be searched within the layout.
         def method_missing(m, *args, &blk)
-          if @scope.respond_to?(m)
+          # FIXME: this isn't compatible with Hanami 2.0, as it extends a view
+          # that we want to be frozen in the future
+          #
+          # See https://github.com/hanami/view/issues/130#issuecomment-319326236
+          if @scope.respond_to?(m, true)
             @scope.__send__(m, *args, &blk)
           elsif layout.respond_to?(m)
             layout.__send__(m, *args, &blk)
