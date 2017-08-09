@@ -34,13 +34,9 @@ module Dry
       def call(input, locals = {})
         return input[name] unless proc
 
-        args = dependencies.map.with_index { |name, position|
-          if position.zero?
-            locals.fetch(name) { input }
-          else
-            locals.fetch(name)
-          end
-        }
+        args = dependencies.map do |name|
+          locals.fetch(name) { input }
+        end
 
         call_proc(*args)
       end

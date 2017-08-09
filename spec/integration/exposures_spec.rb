@@ -10,8 +10,8 @@ RSpec.describe 'exposures' do
         config.default_format = :html
       end
 
-      expose :users do |input|
-        input.fetch(:users).map { |user|
+      expose :users do |users:|
+        users.map { |user|
           user.merge(name: user[:name].upcase)
         }
       end
@@ -43,8 +43,8 @@ RSpec.describe 'exposures' do
         @prefix = "My friend "
       end
 
-      expose :users do |input|
-        input.fetch(:users).map { |user|
+      expose :users do |users:|
+        users.map { |user|
           user.merge(name: prefix + user[:name])
         }
       end
@@ -73,8 +73,8 @@ RSpec.describe 'exposures' do
 
       private
 
-      def users(input)
-        input.fetch(:users).map { |user|
+      def users(users:)
+        users.map { |user|
           user.merge(name: user[:name].upcase)
         }
       end
@@ -121,9 +121,7 @@ RSpec.describe 'exposures' do
         config.default_format = :html
       end
 
-      expose :users do |input|
-        input.fetch(:users)
-      end
+      expose :users
 
       expose :users_count do |users|
         "#{users.length} users"
@@ -137,6 +135,75 @@ RSpec.describe 'exposures' do
 
     expect(vc.(users: users, context: context)).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">2 users</div></body></html>'
+    )
+  end
+
+  it 'allows exposures to depend on each other and access keywords args from input' do
+    vc = Class.new(Dry::View::Controller) do
+      configure do |config|
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = 'app'
+        config.template = 'greeting'
+        config.default_format = :html
+      end
+
+      expose :greeting do |prefix, greeting:|
+        "#{prefix} #{greeting}"
+      end
+
+      expose :prefix do
+        'Hello'
+      end
+    end.new
+
+    expect(vc.(greeting: 'From dry-view internals', context: context)).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p>Hello From dry-view internals</p></body></html>'
+    )
+  end
+
+  it 'set default values for keyword arguments' do
+    vc = Class.new(Dry::View::Controller) do
+      configure do |config|
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = 'app'
+        config.template = 'greeting'
+        config.default_format = :html
+      end
+
+      expose :greeting do |prefix, greeting: 'From the defaults'|
+        "#{prefix} #{greeting}"
+      end
+
+      expose :prefix do
+        'Hello'
+      end
+    end.new
+
+    expect(vc.(context: context)).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p>Hello From the defaults</p></body></html>'
+    )
+  end
+
+  it 'still works accessing the input as before' do
+    vc = Class.new(Dry::View::Controller) do
+      configure do |config|
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = 'app'
+        config.template = 'greeting'
+        config.default_format = :html
+      end
+
+      expose :greeting do |prefix, input|
+        "#{prefix} #{input.fetch(:greeting)}"
+      end
+
+      expose :prefix do
+        'Hello'
+      end
+    end.new
+
+    expect(vc.(greeting: 'From dry-view internals', context: context)).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p>Hello From dry-view internals</p></body></html>'
     )
   end
 
