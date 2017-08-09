@@ -1,6 +1,10 @@
 # Hanami::View
 View layer for Hanami
 
+## v1.1.0.beta1 (unreleased)
+### Fixed
+- [yjukaku] Raise `Hanami::View::UnknownRenderTypeError` when an argument different from `:template` or `:partial` is passed to `render`
+
 ## v1.0.1 - 2017-08-04
 ### Added
 - [Luca Guidi] Compatibility with `haml` 5.0
