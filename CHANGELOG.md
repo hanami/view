@@ -1,7 +1,7 @@
 # Hanami::View
 View layer for Hanami
 
-## v1.1.0.beta1 (unreleased)
+## v1.1.0.beta1 - 2017-08-11
 ### Fixed
 - [yjukaku] Raise `Hanami::View::UnknownRenderTypeError` when an argument different from `:template` or `:partial` is passed to `render`
 
