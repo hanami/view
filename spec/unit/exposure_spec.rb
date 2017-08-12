@@ -125,22 +125,22 @@ RSpec.describe Dry::View::Exposure do
   end
 
   describe "#call" do
-    let(:input) { "input" }
+    let(:input) { {name: "Jane"} }
 
     context "proc expects input only" do
-      let(:proc) { -> input { input } }
+      let(:proc) { -> **input { input[:name] } }
 
       it "sends the input to the proc" do
-        expect(exposure.(input)).to eql "input"
+        expect(exposure.(input)).to eql "Jane"
       end
     end
 
     context "proc expects input and dependencies" do
-      let(:proc) { -> input, greeting { "#{greeting}, #{input}" } }
+      let(:proc) { -> greeting, **input { "#{greeting}, #{input[:name]}" } }
       let(:locals) { {greeting: "Hola"} }
 
       it "sends the input and dependency values to the proc" do
-        expect(exposure.(input, locals)).to eq "Hola, input"
+        expect(exposure.(input, locals)).to eq "Hola, Jane"
       end
     end
 
@@ -154,20 +154,20 @@ RSpec.describe Dry::View::Exposure do
     end
 
     context "proc accesses object instance" do
-      let(:proc) { -> input { "#{input} from #{name}" } }
+      let(:proc) { -> **input { "My name is #{input[:name]} but call me #{title} #{input[:name]}" } }
 
       let(:object) do
         Class.new do
-          attr_reader :name
+          attr_reader :title
 
-          def initialize(name)
-            @name = name
+          def initialize(title)
+            @title = title
           end
-        end.new("Jane")
+        end.new("Dr")
       end
 
       it "makes the instance available as self" do
-        expect(exposure.(input)).to eq "input from Jane"
+        expect(exposure.(input)).to eq "My name is Jane but call me Dr Jane"
       end
     end
 

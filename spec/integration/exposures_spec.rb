@@ -123,7 +123,7 @@ RSpec.describe 'exposures' do
 
       expose :users
 
-      expose :users_count do |users|
+      expose :users_count do |users:|
         "#{users.length} users"
       end
     end.new
@@ -193,7 +193,7 @@ RSpec.describe 'exposures' do
         config.default_format = :html
       end
 
-      expose :greeting do |prefix, input|
+      expose :greeting do |prefix, **input|
         "#{prefix} #{input.fetch(:greeting)}"
       end
 
@@ -220,7 +220,7 @@ RSpec.describe 'exposures' do
 
       private
 
-      def users(input)
+      def users(**input)
         input.fetch(:users)
       end
 
@@ -252,7 +252,7 @@ RSpec.describe 'exposures' do
         "COUNT: "
       end
 
-      expose :users do |input|
+      expose :users do |**input|
         input.fetch(:users)
       end
 

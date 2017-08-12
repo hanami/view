@@ -5,7 +5,8 @@ module Dry
     class Exposure
       include Dry::Equalizer(:name, :proc, :object, :options)
 
-      SUPPORTED_PARAMETER_TYPES = [:req, :opt].freeze
+      EXPOSURE_DEPENDENCY_PARAMETER_TYPES = [:req, :opt].freeze
+      INPUT_PARAMETER_TYPES = [:key, :keyreq, :keyrest].freeze
 
       attr_reader :name
       attr_reader :proc
@@ -24,7 +25,13 @@ module Dry
       end
 
       def dependency_names
-        proc ? proc.parameters.map(&:last) : []
+        if proc
+          proc.parameters.select { |param_info|
+            EXPOSURE_DEPENDENCY_PARAMETER_TYPES.include?(param_info.first)
+          }.map(&:last)
+        else
+          []
+        end
       end
 
       def private?
@@ -34,20 +41,30 @@ module Dry
       def call(input, locals = {})
         return input[name] unless proc
 
-        args = dependencies.map do |name|
-          locals.fetch(name) { input }
-        end
+        *dependency_args = dependency_names.map { |name|
+          locals.fetch(name)
+        }
 
-        call_proc(*args)
+        call_proc(input, *dependency_args)
       end
 
       private
 
-      def call_proc(*args)
+      def call_proc(input, *dependency_args)
+        args = proc_args(input, *dependency_args)
+
         if proc.is_a?(Method)
           proc.(*args)
         else
           object.instance_exec(*args, &proc)
+        end
+      end
+
+      def proc_args(input, *dependency_args)
+        if proc.parameters.map(&:first).any? { |type| INPUT_PARAMETER_TYPES.include?(type) }
+          dependency_args << input
+        else
+          dependency_args
         end
       end
 
