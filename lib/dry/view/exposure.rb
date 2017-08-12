@@ -23,7 +23,7 @@ module Dry
         self.class.new(name, proc, obj, options)
       end
 
-      def dependencies
+      def dependency_names
         proc ? proc.parameters.map(&:last) : []
       end
 

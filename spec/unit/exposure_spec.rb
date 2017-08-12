@@ -90,12 +90,12 @@ RSpec.describe Dry::View::Exposure do
     end
   end
 
-  describe "#dependencies" do
+  describe "#dependency_names" do
     context "proc provided" do
       let(:proc) { -> input, foo, bar { "hi" } }
 
       it "returns an array of exposure dependencies derived from the proc's argument names" do
-        expect(exposure.dependencies).to eql [:input, :foo, :bar]
+        expect(exposure.dependency_names).to eql [:input, :foo, :bar]
       end
     end
 
@@ -111,7 +111,7 @@ RSpec.describe Dry::View::Exposure do
       end
 
       it "returns an array of exposure dependencies derived from the instance method's argument names" do
-        expect(exposure.dependencies).to eql [:input, :bar, :baz]
+        expect(exposure.dependency_names).to eql [:input, :bar, :baz]
       end
     end
 
@@ -119,7 +119,7 @@ RSpec.describe Dry::View::Exposure do
       let(:proc) { nil }
 
       it "returns no dependencies" do
-        expect(exposure.dependencies).to eql []
+        expect(exposure.dependency_names).to eql []
       end
     end
   end

@@ -47,7 +47,7 @@ module Dry
       end
 
       def tsort_each_child(name, &block)
-        self[name].dependencies.each(&block) if exposures.key?(name)
+        self[name].dependency_names.each(&block) if exposures.key?(name)
       end
     end
   end
