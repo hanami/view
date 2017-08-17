@@ -128,7 +128,7 @@ RSpec.describe Dry::View::Exposure do
     let(:input) { {name: "Jane"} }
 
     context "proc expects input only" do
-      let(:proc) { -> **input { input[:name] } }
+      let(:proc) { -> name: { name } }
 
       it "sends the input to the proc" do
         expect(exposure.(input)).to eql "Jane"
@@ -136,7 +136,7 @@ RSpec.describe Dry::View::Exposure do
     end
 
     context "proc expects input and dependencies" do
-      let(:proc) { -> greeting, **input { "#{greeting}, #{input[:name]}" } }
+      let(:proc) { -> greeting, name: { "#{greeting}, #{name}" } }
       let(:locals) { {greeting: "Hola"} }
 
       it "sends the input and dependency values to the proc" do
@@ -154,7 +154,7 @@ RSpec.describe Dry::View::Exposure do
     end
 
     context "proc accesses object instance" do
-      let(:proc) { -> **input { "My name is #{input[:name]} but call me #{title} #{input[:name]}" } }
+      let(:proc) { -> name: { "My name is #{name} but call me #{title} #{name}" } }
 
       let(:object) do
         Class.new do

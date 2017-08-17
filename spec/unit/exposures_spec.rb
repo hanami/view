@@ -43,7 +43,7 @@ RSpec.describe Dry::View::Exposures do
 
   describe "#locals" do
     before do
-      exposures.add(:greeting, -> **input { input.fetch(:greeting).upcase })
+      exposures.add(:greeting, -> greeting: { greeting.upcase })
       exposures.add(:farewell, -> greeting { "#{greeting} and goodbye" })
     end
 

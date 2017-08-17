@@ -220,11 +220,7 @@ RSpec.describe 'exposures' do
 
       private
 
-      def users(**input)
-        input.fetch(:users)
-      end
-
-      def users_count(users)
+      def users_count(users:)
         "#{users.length} users"
       end
     end.new
@@ -252,11 +248,9 @@ RSpec.describe 'exposures' do
         "COUNT: "
       end
 
-      expose :users do |**input|
-        input.fetch(:users)
-      end
+      expose :users
 
-      expose :users_count do |prefix, users|
+      expose :users_count do |prefix, users:|
         "#{prefix}#{users.length} users"
       end
     end.new
