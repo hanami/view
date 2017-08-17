@@ -1,0 +1,11 @@
+h1 Edit
+
+- if errors.any?
+  - errors.each do |error|
+    p.error #{error}
+- else
+  p
+    | No Errors
+
+p
+ = pretty_id

@@ -184,26 +184,26 @@ RSpec.describe 'exposures' do
     )
   end
 
-  it 'still works accessing the input as before' do
+  it 'only pass keywords arguments that are needit in the block and allow for default values' do
     vc = Class.new(Dry::View::Controller) do
       configure do |config|
         config.paths = SPEC_ROOT.join('fixtures/templates')
         config.layout = 'app'
-        config.template = 'greeting'
+        config.template = 'edit'
         config.default_format = :html
       end
 
-      expose :greeting do |prefix, **input|
-        "#{prefix} #{input.fetch(:greeting)}"
+      expose :pretty_id do |id:|
+        "Beautiful #{id}"
       end
 
-      expose :prefix do
-        'Hello'
+      expose :errors do |errors: []|
+        errors
       end
     end.new
 
-    expect(vc.(greeting: 'From dry-view internals', context: context)).to eql(
-      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p>Hello From dry-view internals</p></body></html>'
+    expect(vc.(id: 1, context: context)).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h1>Edit</h1><p>No Errors</p><p>Beautiful 1</p></body></html>'
     )
   end
 

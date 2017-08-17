@@ -61,11 +61,16 @@ module Dry
       end
 
       def proc_args(input, *dependency_args)
-        if proc.parameters.map(&:first).any? { |type| INPUT_PARAMETER_TYPES.include?(type) }
-          dependency_args << input
-        else
-          dependency_args
+        proc.parameters.each do |parameter_type, parameter_name|
+          if INPUT_PARAMETER_TYPES.include?(parameter_type) && input.key?(parameter_name)
+            dependency_args << get_key_value(input, parameter_name)
+          end
         end
+        dependency_args
+      end
+
+      def get_key_value(input, key)
+        input.select { |k, _| k == key }
       end
 
       def prepare_proc(proc, object)
