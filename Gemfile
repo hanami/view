@@ -5,11 +5,10 @@ gemspec
 gem 'inflecto'
 
 group :tools do
-  gem 'pry'
+  gem 'pry-byebug', platform: :mri
 end
 
 group :test do
-  gem 'byebug', platform: :mri
   gem 'rack', '>= 1.0.0', '<= 2.0.0'
   gem 'slim'
 
