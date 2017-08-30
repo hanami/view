@@ -49,10 +49,6 @@ Hanami::View.class_eval do
   extend Unloadable
 end
 
-unless ENV['TRAVIS']
-  require 'byebug'
-end
-
 Hanami::Utils::LoadPaths.class_eval do
   def include?(object)
     @paths.include?(object)
