@@ -425,6 +425,14 @@ module Store
       def user_name
         "Joe Blogs"
       end
+
+      def render_flash
+        return if local(:flash).nil?
+
+        local(:flash).map do |type, message|
+          %(<div class="flash-#{type}">#{message}</div>)
+        end.join("\n")
+      end
     end
 
     module Home
