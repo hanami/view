@@ -110,7 +110,7 @@ module Hanami
         # It tries to invoke a method for the view or a local for the given key.
         # If the lookup fails, it returns a null object.
         #
-        # @return [Objeect,Hanami::View::Rendering::NullLocal] the returning value
+        # @return [Object,Hanami::View::Rendering::NullLocal] the returning value
         #
         # @since 0.7.0
         #
