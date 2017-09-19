@@ -41,7 +41,7 @@ module Dry
       def call(input, locals = {})
         return input[name] unless proc
 
-        *dependency_args = dependency_names.map { |name|
+        dependency_args = dependency_names.map { |name|
           locals.fetch(name)
         }
 
