@@ -5,7 +5,8 @@ module Dry
     class Exposure
       include Dry::Equalizer(:name, :proc, :object, :options)
 
-      SUPPORTED_PARAMETER_TYPES = [:req, :opt].freeze
+      EXPOSURE_DEPENDENCY_PARAMETER_TYPES = [:req, :opt].freeze
+      INPUT_PARAMETER_TYPES = [:key, :keyreq, :keyrest].freeze
 
       attr_reader :name
       attr_reader :proc
@@ -23,8 +24,24 @@ module Dry
         self.class.new(name, proc, obj, options)
       end
 
-      def dependencies
-        proc ? proc.parameters.map(&:last) : []
+      def dependency_names
+        if proc
+          proc.parameters.each_with_object([]) { |(type, name), names|
+            names << name if EXPOSURE_DEPENDENCY_PARAMETER_TYPES.include?(type)
+          }
+        else
+          []
+        end
+      end
+
+      def input_keys
+        if proc
+          proc.parameters.each_with_object([]) { |(type, name), keys|
+            keys << name if INPUT_PARAMETER_TYPES.include?(type)
+          }
+        else
+          []
+        end
       end
 
       def private?
@@ -32,27 +49,44 @@ module Dry
       end
 
       def call(input, locals = {})
-        return input[name] unless proc
-
-        args = dependencies.map.with_index { |name, position|
-          if position.zero?
-            locals.fetch(name) { input }
-          else
-            locals.fetch(name)
-          end
-        }
-
-        call_proc(*args)
+        if proc
+          call_proc(input, locals)
+        else
+          input[name]
+        end
       end
 
       private
 
-      def call_proc(*args)
+      def call_proc(input, locals)
+        args = proc_args(input, locals)
+
         if proc.is_a?(Method)
           proc.(*args)
         else
           object.instance_exec(*args, &proc)
         end
+      end
+
+      def proc_args(input, locals)
+        dependency_args = proc_dependency_args(locals)
+        input_args = proc_input_args(input)
+
+        if input_args.any?
+          dependency_args << input_args
+        else
+          dependency_args
+        end
+      end
+
+      def proc_dependency_args(locals)
+        dependency_names.map { |name| locals.fetch(name) }
+      end
+
+      def proc_input_args(input)
+        input_keys.each_with_object({}) { |key, args|
+          args[key] = input[key] if input.key?(key)
+        }
       end
 
       def prepare_proc(proc, object)

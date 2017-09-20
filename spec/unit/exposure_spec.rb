@@ -90,12 +90,12 @@ RSpec.describe Dry::View::Exposure do
     end
   end
 
-  describe "#dependencies" do
+  describe "#dependency_names" do
     context "proc provided" do
       let(:proc) { -> input, foo, bar { "hi" } }
 
       it "returns an array of exposure dependencies derived from the proc's argument names" do
-        expect(exposure.dependencies).to eql [:input, :foo, :bar]
+        expect(exposure.dependency_names).to eql [:input, :foo, :bar]
       end
     end
 
@@ -111,7 +111,7 @@ RSpec.describe Dry::View::Exposure do
       end
 
       it "returns an array of exposure dependencies derived from the instance method's argument names" do
-        expect(exposure.dependencies).to eql [:input, :bar, :baz]
+        expect(exposure.dependency_names).to eql [:input, :bar, :baz]
       end
     end
 
@@ -119,28 +119,28 @@ RSpec.describe Dry::View::Exposure do
       let(:proc) { nil }
 
       it "returns no dependencies" do
-        expect(exposure.dependencies).to eql []
+        expect(exposure.dependency_names).to eql []
       end
     end
   end
 
   describe "#call" do
-    let(:input) { "input" }
+    let(:input) { {name: "Jane"} }
 
     context "proc expects input only" do
-      let(:proc) { -> input { input } }
+      let(:proc) { -> name: { name } }
 
       it "sends the input to the proc" do
-        expect(exposure.(input)).to eql "input"
+        expect(exposure.(input)).to eql "Jane"
       end
     end
 
     context "proc expects input and dependencies" do
-      let(:proc) { -> input, greeting { "#{greeting}, #{input}" } }
+      let(:proc) { -> greeting, name: { "#{greeting}, #{name}" } }
       let(:locals) { {greeting: "Hola"} }
 
       it "sends the input and dependency values to the proc" do
-        expect(exposure.(input, locals)).to eq "Hola, input"
+        expect(exposure.(input, locals)).to eq "Hola, Jane"
       end
     end
 
@@ -154,20 +154,20 @@ RSpec.describe Dry::View::Exposure do
     end
 
     context "proc accesses object instance" do
-      let(:proc) { -> input { "#{input} from #{name}" } }
+      let(:proc) { -> name: { "My name is #{name} but call me #{title} #{name}" } }
 
       let(:object) do
         Class.new do
-          attr_reader :name
+          attr_reader :title
 
-          def initialize(name)
-            @name = name
+          def initialize(title)
+            @title = title
           end
-        end.new("Jane")
+        end.new("Dr")
       end
 
       it "makes the instance available as self" do
-        expect(exposure.(input)).to eq "input from Jane"
+        expect(exposure.(input)).to eq "My name is Jane but call me Dr Jane"
       end
     end
 
