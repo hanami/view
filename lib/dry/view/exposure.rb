@@ -26,9 +26,19 @@ module Dry
 
       def dependency_names
         if proc
-          proc.parameters.select { |param_info|
-            EXPOSURE_DEPENDENCY_PARAMETER_TYPES.include?(param_info.first)
-          }.map(&:last)
+          proc.parameters.each_with_object([]) { |(type, name), names|
+            names << name if EXPOSURE_DEPENDENCY_PARAMETER_TYPES.include?(type)
+          }
+        else
+          []
+        end
+      end
+
+      def input_keys
+        if proc
+          proc.parameters.each_with_object([]) { |(type, name), keys|
+            keys << name if INPUT_PARAMETER_TYPES.include?(type)
+          }
         else
           []
         end
@@ -39,19 +49,17 @@ module Dry
       end
 
       def call(input, locals = {})
-        return input[name] unless proc
-
-        dependency_args = dependency_names.map { |name|
-          locals.fetch(name)
-        }
-
-        call_proc(input, *dependency_args)
+        if proc
+          call_proc(input, locals)
+        else
+          input[name]
+        end
       end
 
       private
 
-      def call_proc(input, *dependency_args)
-        args = proc_args(input, *dependency_args)
+      def call_proc(input, locals)
+        args = proc_args(input, locals)
 
         if proc.is_a?(Method)
           proc.(*args)
@@ -60,8 +68,9 @@ module Dry
         end
       end
 
-      def proc_args(input, *dependency_args)
-        input_args = keyword_args(input)
+      def proc_args(input, locals)
+        dependency_args = proc_dependency_args(locals)
+        input_args = proc_input_args(input)
 
         if input_args.any?
           dependency_args << input_args
@@ -70,12 +79,14 @@ module Dry
         end
       end
 
-      def keyword_args(input)
-        proc.parameters.each_with_object({}) do |(type, name), args|
-          if INPUT_PARAMETER_TYPES.include?(type) && input.key?(name)
-            args[name] = input[name]
-          end
-        end
+      def proc_dependency_args(locals)
+        dependency_names.map { |name| locals.fetch(name) }
+      end
+
+      def proc_input_args(input)
+        input_keys.each_with_object({}) { |key, args|
+          args[key] = input[key] if input.key?(key)
+        }
       end
 
       def prepare_proc(proc, object)
