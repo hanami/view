@@ -477,7 +477,7 @@ As per convention, layout templates are located under `Hanami::View.root` or `Ap
 If we want to render optional contents such as sidebar links or page specific javascripts, we can use `#local`
 It accepts a key that represents a method that should be available within the rendering context.
 That context is made of the locals, and the methods that view and layout respond to.
-If the context can't dispatch that method, it returns returns a null object (`Hanami::View::Rendering::NullLocal`).
+If the context can't dispatch that method, it returns a null object (`Hanami::View::Rendering::NullLocal`).
 
 Given the following layout template.
 
