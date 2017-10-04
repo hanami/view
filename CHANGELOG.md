@@ -1,6 +1,8 @@
 # Hanami::View
 View layer for Hanami
 
+## v1.1.0.beta3 - 2017-10-04
+
 ## v1.1.0.beta2 - 2017-10-03
 ### Added
 - [Luca Guidi] Added `Hanami::Layout#local` to safely access locals from layouts
