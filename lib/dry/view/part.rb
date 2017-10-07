@@ -1,5 +1,6 @@
 require 'dry-equalizer'
 require 'dry/view/scope'
+require 'dry/view/default_renderer'
 
 module Dry
   module View
@@ -18,9 +19,7 @@ module Dry
 
       attr_reader :_context
 
-      attr_reader :_renderer
-
-      def initialize(name:, value:, renderer:, context: nil)
+      def initialize(name:, value:, renderer: nil, context: nil)
         @_name = name
         @_value = value
         @_context = context
@@ -61,6 +60,10 @@ module Dry
           context: _context,
           renderer: _renderer,
         )
+      end
+
+      def _renderer
+        return @_renderer ? @_renderer : DefaultRenderer.new
       end
     end
   end
