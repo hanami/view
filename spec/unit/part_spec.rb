@@ -78,7 +78,7 @@ RSpec.describe Dry::View::Part do
       end
 
       it 'raises an exception when render is called' do
-        expect { part.render(:info) }.to raise_error(RuntimeError).with_message('No renderer provided')
+        expect { part.render(:info) }.to raise_error(Dry::View::MissingRenderer::MissingRendererError).with_message('No renderer provided')
       end
     end
   end
