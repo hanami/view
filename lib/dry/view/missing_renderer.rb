@@ -1,11 +1,14 @@
 module Dry
   module View
+    class MissingRendererError < StandardError
+      def initialize(message = "No renderer provided")
+        super
+      end
+    end
+
     class MissingRenderer
-
-      MissingRendererError = Class.new(StandardError)
-
       def method_missing(name, *args, &block)
-        raise MissingRendererError, "No renderer provided"
+        raise MissingRendererError
       end
     end
   end
