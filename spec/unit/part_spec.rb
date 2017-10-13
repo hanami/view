@@ -73,7 +73,7 @@ RSpec.describe Dry::View::Part do
     let(:context) { double('context') }
 
     describe '#new' do
-      it 'can be initialised' do
+      it 'can be initialized' do
         expect(part).to be_an_instance_of(Dry::View::Part)
       end
 
