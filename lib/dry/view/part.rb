@@ -29,11 +29,7 @@ module Dry
       end
 
       def _render(partial_name, as: _name, **locals, &block)
-        _renderer.render(
-          _partial(partial_name),
-          _render_scope(as, locals),
-          &block
-        )
+        _renderer.partial(partial_name, _render_scope(as, locals), &block)
       end
 
       def to_s
@@ -50,10 +46,6 @@ module Dry
         else
           super
         end
-      end
-
-      def _partial(name)
-        _renderer.lookup("_#{name}")
       end
 
       def _render_scope(name, **locals)
