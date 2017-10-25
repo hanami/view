@@ -48,13 +48,13 @@ module Hanami
       end
     end
 
-    # Unknown or missing render type
+    # Unknown or render type
     #
-    # This is raised at the runtime when Hanami::Layout doesn't recognize the render type.
+    # This is raised at the runtime when `Hanami::Layout` doesn't recognize the render type.
     #
-    # @since X.X.X
-    class UnknownOrMissingRenderTypeLayoutError < Error
-      # @since X.X.X
+    # @since 1.1.0
+    class UnknownRenderTypeError < Error
+      # @since 1.1.0
       # @api private
       def initialize(known_types, supplied_options)
         known_types_list = known_types.map{|t| "':#{t}'"}.join(', ')

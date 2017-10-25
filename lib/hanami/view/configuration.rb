@@ -91,7 +91,7 @@ module Hanami
       #     # => will return from MyApp::View
       def self.for(base)
         # TODO this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
-        namespace = Utils::String.new(base).namespace
+        namespace = Utils::String.namespace(base)
         framework = Utils::Class.load_from_pattern!("(#{namespace}|Hanami)::View")
         framework.configuration
       end

@@ -28,7 +28,7 @@ module Hanami
         # @api private
         def compile!(namespace)
           tokens(namespace) {|token| replace!(token) }
-          @name = Utils::String.new(@name).underscore
+          @name = Utils::String.underscore(@name)
         end
 
         # @since 0.2.0

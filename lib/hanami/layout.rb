@@ -139,6 +139,27 @@ module Hanami
       template.render(@scope, &Proc.new{@rendered})
     end
 
+    # It tries to invoke a method for the view or a local for the given key.
+    # If the lookup fails, it returns a null object.
+    #
+    # @return [Object,Hanami::View::Rendering::NullLocal] the returning value
+    #
+    # @since 1.1.0
+    #
+    # @example Safe method navigation
+    #   class ApplicationLayout
+    #     include Hanami::Layout
+    #
+    #     def render_flash
+    #       return if local(:flash).nil?
+    #
+    #       # ...
+    #     end
+    #   end
+    def local(key)
+      @scope.local(key)
+    end
+
     protected
     # The template for the current format
     #

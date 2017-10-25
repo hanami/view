@@ -65,7 +65,7 @@ module Hanami
           case layout
           when Symbol, String
             # TODO Move this low level logic into a Hanami::Utils solution
-            class_name = "#{ Utils::String.new(layout).classify }#{ SUFFIX }"
+            class_name = "#{ Utils::String.classify(layout) }#{ SUFFIX }"
             namespace  = Utils::Class.load_from_pattern!(namespace)
             namespace.const_get(class_name)
           when Class

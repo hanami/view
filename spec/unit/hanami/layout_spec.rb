@@ -47,6 +47,11 @@ RSpec.describe Hanami::Layout do
     expect(rendered).to match %(<meta name="hanamirb-version" content="0.3.1">)
   end
 
+  it 'renders optional content from layout' do
+    rendered = Store::Views::Products::Show.render(format: :html, flash: { notice: "Product successfully updated" })
+    expect(rendered).to match %(<div class="flash-notice">Product successfully updated</div>)
+  end
+
   describe 'disable layout in view' do
     it 'return NullLayout' do
       expect(DisabledLayoutView.layout).to eq Hanami::View::Rendering::NullLayout

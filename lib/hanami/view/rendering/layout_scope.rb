@@ -4,13 +4,13 @@ require 'hanami/utils/escape'
 module Hanami
   module View
     module Rendering
-        
-      # List of render types that exactly one of must be included when calling `#render`. 
+      # List of render types that exactly one of must be included when calling `#render`.
       # For example, when calling `<%= render something: 'my_thing', locals: {} %>`,
       # 'something' must be one of the values listed here.
-      # 
-      # @since X.X.X
-      KNOWN_RENDER_TYPES = [:partial, :template]
+      #
+      # @since 1.1.0
+      # @api private
+      KNOWN_RENDER_TYPES = [:partial, :template].freeze
 
       # Scope for layout rendering
       #
@@ -60,6 +60,9 @@ module Hanami
         #
         # @return [String] the output of the rendering process
         #
+        # @raise [Hanami::Error::UnknownRenderTypeError] if the given type to
+        #   be rendered is unknown
+        #
         # @since 0.1.0
         #
         # @example Rendering partial
@@ -95,9 +98,6 @@ module Hanami
         #   #
         #   # `user` will be available in the scope of the sidebar rendering
         def render(options)
-          if !KNOWN_RENDER_TYPES.any?{|render_type| options[render_type]}
-            ::Kernel.raise UnknownOrMissingRenderTypeLayoutError.new(KNOWN_RENDER_TYPES, options)
-          end
           renderer(options).render
         end
 
@@ -131,7 +131,7 @@ module Hanami
         # It tries to invoke a method for the view or a local for the given key.
         # If the lookup fails, it returns a null object.
         #
-        # @return [Objeect,Hanami::View::Rendering::NullLocal] the returning value
+        # @return [Object,Hanami::View::Rendering::NullLocal] the returning value
         #
         # @since 0.7.0
         #
@@ -243,6 +243,8 @@ module Hanami
             Rendering::Partial
           elsif options[:template]
             Rendering::Template
+          else
+            ::Kernel.raise UnknownRenderTypeError.new(KNOWN_RENDER_TYPES, options)
           end.new(view, _options(options))
         end
 

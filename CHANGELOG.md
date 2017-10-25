@@ -1,6 +1,20 @@
 # Hanami::View
 View layer for Hanami
 
+## v1.1.0 - 2017-10-25
+
+## v1.1.0.rc1 - 2017-10-16
+
+## v1.1.0.beta3 - 2017-10-04
+
+## v1.1.0.beta2 - 2017-10-03
+### Added
+- [Luca Guidi] Added `Hanami::Layout#local` to safely access locals from layouts
+
+## v1.1.0.beta1 - 2017-08-11
+### Fixed
+- [yjukaku] Raise `Hanami::View::UnknownRenderTypeError` when an argument different from `:template` or `:partial` is passed to `render`
+
 ## v1.0.1 - 2017-08-04
 ### Added
 - [Luca Guidi] Compatibility with `haml` 5.0
