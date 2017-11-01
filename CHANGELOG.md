@@ -1,3 +1,17 @@
+# 0.4.0 / 2017-11-01
+
+### Added
+
+- Raise a helpful error when trying to render a template or partial that cannot be found (GustavoCaso)
+- Raise a helpful error when trying to call a view controller with no template configured (timriley)
+- Allow a default to be specified for pass-through exposures with the `default:` option (GustavoCaso)
+
+### Changed
+
+- [BREAKING] Exposures specify the input data they require using keyword arguments. This includes support for providing default values (via the keyword argument) for keys that are missing from the input data (GustavoCaso)
+- Allow `Dry::View::Part` instances to be created without explicitly passing a `renderer`. This is helpful for unit testing view parts that don't need to render anything (dNitza)
+- Partials can be nested within additional sub-directories by rendering them their relative path as their name, e.g. `render(:"foo/bar")` will look for a `foo/_bar.html.slim` template within the normal template lookup paths (timriley)
+
 # 0.3.0 / 2017-05-14
 
 This release reintroduces view parts in a more helpful form. You can provide your own custom view part classes to encapsulate your view logic, as well as a  decorator for custom, shared behavior arouund view part wrapping.
