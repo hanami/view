@@ -10,6 +10,8 @@ require 'dry/view/scope'
 module Dry
   module View
     class Controller
+      UndefinedTemplateError = Class.new(StandardError)
+
       DEFAULT_LAYOUTS_DIR = 'layouts'.freeze
       DEFAULT_CONTEXT = Object.new.freeze
       EMPTY_LOCALS = {}.freeze
@@ -80,13 +82,15 @@ module Dry
 
       # @api public
       def call(format: config.default_format, context: config.context, **input)
+        raise UndefinedTemplateError, "no +template+ configured" unless template_path
+
         renderer = self.class.renderer(format)
 
-        template_content = renderer.(template_path, template_scope(renderer, context, input))
+        template_content = renderer.template(template_path, template_scope(renderer, context, input))
 
         return template_content unless layout?
 
-        renderer.(layout_path, layout_scope(renderer, context)) do
+        renderer.template(layout_path, layout_scope(renderer, context)) do
           template_content
         end
       end

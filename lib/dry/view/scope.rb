@@ -5,8 +5,6 @@ module Dry
     class Scope
       include Dry::Equalizer(:_locals, :_context, :_renderer)
 
-      PartialNotFoundError = Class.new(StandardError)
-
       attr_reader :_locals
       attr_reader :_context
       attr_reader :_renderer
@@ -18,18 +16,7 @@ module Dry
       end
 
       def render(partial_name, **locals, &block)
-        path = __partial(partial_name)
-
-        if path
-          _renderer.render(
-            path,
-            __render_scope(locals),
-            &block
-            )
-        else
-          msg = "Partial #{partial_name.inspect} could not be found in any path or shared folder"
-          raise PartialNotFoundError, msg
-        end
+        _renderer.partial(partial_name, __render_scope(locals), &block)
       end
 
       private
@@ -42,10 +29,6 @@ module Dry
         else
           super
         end
-      end
-
-      def __partial(name)
-        _renderer.lookup("_#{name}")
       end
 
       def __render_scope(**locals)
