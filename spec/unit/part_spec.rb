@@ -9,29 +9,24 @@ RSpec.describe Dry::View::Part do
     subject(:part) { described_class.new(name: name, value: value, renderer: renderer, context: context) }
 
     let(:name) { :user }
-    let(:value) { double('value') }
-    let(:context) { double('context') }
-    let(:renderer) { double('renderer') }
+    let(:value) { double(:value) }
+    let(:context) { double(:context) }
+    let(:renderer) { spy(:renderer) }
 
     describe '#render' do
-      before do
-        allow(renderer).to receive(:lookup).with('_info').and_return '_info.html.erb'
-        allow(renderer).to receive(:render)
-      end
-
       it 'renders a partial with the part available in its scope' do
         part.render(:info)
-        expect(renderer).to have_received(:render).with('_info.html.erb', template_scope(user: part))
+        expect(renderer).to have_received(:partial).with(:info, template_scope(user: part))
       end
 
       it 'allows the part to be made available on a different name' do
         part.render(:info, as: :admin)
-        expect(renderer).to have_received(:render).with('_info.html.erb', template_scope(admin: part))
+        expect(renderer).to have_received(:partial).with(:info, template_scope(admin: part))
       end
 
       it 'includes extra locals in the scope' do
         part.render(:info, extra_local: "hello")
-        expect(renderer).to have_received(:render).with('_info.html.erb', template_scope(user: part, extra_local: "hello"))
+        expect(renderer).to have_received(:partial).with(:info, template_scope(user: part, extra_local: "hello"))
       end
     end
 

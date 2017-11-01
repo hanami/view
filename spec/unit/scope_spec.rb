@@ -2,40 +2,20 @@ RSpec.describe Dry::View::Scope do
   subject(:scope) { described_class.new(renderer: renderer, context: context, locals: locals) }
 
   let(:locals) { {} }
-  let(:context) { double('context') }
-  let(:renderer) { double('renderer') }
+  let(:context) { double(:context) }
+  let(:renderer) { spy(:renderer) }
 
   describe '#render' do
-    context 'partial found' do
-      before do
-        allow(renderer).to receive(:lookup).with('_info').and_return '_info.html.erb'
-        allow(renderer).to receive(:render)
-      end
-
-      it 'renders a partial with itself as the scope' do
-        scope.render(:info)
-        expect(renderer).to have_received(:render).with('_info.html.erb', scope)
-      end
-
-      it 'renders a partial with provided locals' do
-        scope_with_locals = described_class.new(renderer: renderer, context: context, locals: {foo: 'bar'})
-
-        scope.render(:info, foo: 'bar')
-        expect(renderer).to have_received(:render).with('_info.html.erb', scope_with_locals)
-      end
+    it 'renders a partial with itself as the scope' do
+      scope.render(:info)
+      expect(renderer).to have_received(:partial).with(:info, scope)
     end
 
-    context 'partial not found' do
-      before do
-        allow(renderer).to receive(:lookup).with('_info').and_return false
-        allow(renderer).to receive(:render)
-      end
+    it 'renders a partial with provided locals' do
+      scope_with_locals = described_class.new(renderer: renderer, context: context, locals: {foo: 'bar'})
 
-      it 'raises error when partial was not found' do
-        expect {
-          scope.render(:info)
-        }.to raise_error(Dry::View::Scope::PartialNotFoundError, /info/)
-      end
+      scope.render(:info, foo: 'bar')
+      expect(renderer).to have_received(:partial).with(:info, scope_with_locals)
     end
   end
 

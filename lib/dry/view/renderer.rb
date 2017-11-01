@@ -23,26 +23,19 @@ module Dry
         @tilts = self.class.tilts
       end
 
-      def call(template, scope, &block)
-        path = lookup(template)
+      def template(name, scope, &block)
+        path = lookup(name)
 
         if path
           render(path, scope, &block)
         else
-          msg = "Template #{template.inspect} could not be found in paths:\n#{paths.map { |pa| "- #{pa.to_s}" }.join("\n")}"
+          msg = "Template #{name.inspect} could not be found in paths:\n#{paths.map { |pa| "- #{pa.to_s}" }.join("\n")}"
           raise TemplateNotFoundError, msg
         end
       end
 
-      def partial(template, scope, &block)
-        path = lookup_partial(template)
-
-        if path
-          render(path, scope, &block)
-        else
-          msg = "Partial #{template.inspect} could not be found in paths:\n#{paths.map { |pa| "- #{pa.to_s}" }.join("\n")}"
-          raise TemplateNotFoundError, msg
-        end
+      def partial(name, scope, &block)
+        template(name_for_partial(name), scope, &block)
       end
 
       def render(path, scope, &block)
@@ -61,14 +54,12 @@ module Dry
         }
       end
 
-      def lookup_partial(name)
+      private
+
+      def name_for_partial(name)
         name_segments = name.to_s.split(PATH_DELIMITER)
         partial_name = name_segments[0..-2].push("#{PARTIAL_PREFIX}#{name_segments[-1]}").join(PATH_DELIMITER)
-
-        lookup(partial_name)
       end
-
-      private
 
       # TODO: make default_encoding configurable
       def tilt(path)

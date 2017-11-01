@@ -82,11 +82,11 @@ module Dry
       def call(format: config.default_format, context: config.context, **input)
         renderer = self.class.renderer(format)
 
-        template_content = renderer.(template_path, template_scope(renderer, context, input))
+        template_content = renderer.template(template_path, template_scope(renderer, context, input))
 
         return template_content unless layout?
 
-        renderer.(layout_path, layout_scope(renderer, context)) do
+        renderer.template(layout_path, layout_scope(renderer, context)) do
           template_content
         end
       end
