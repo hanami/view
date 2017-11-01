@@ -60,4 +60,34 @@ RSpec.describe Dry::View::Exposures do
       expect(locals).not_to include(:hidden)
     end
   end
+
+  describe "#locals default value" do
+    it "returns 'default_value' from exposure" do
+      exposures.add(:name, default: 'John')
+      locals = exposures.locals({})
+
+      expect(locals).to eq(:name=>"John")
+    end
+
+    it "returns values from arguments" do
+      exposures.add(:name, default: 'John')
+      locals = exposures.locals(name: 'William')
+
+      expect(locals).to eq(:name=>"William")
+    end
+
+    it "returns values from arguments even when value is nil" do
+      exposures.add(:name, default: 'John')
+      locals = exposures.locals(name: nil)
+
+      expect(locals).to eq(:name=>nil)
+    end
+
+    it "returns value from proc" do
+      exposures.add(:name, -> name: { name.upcase }, default: 'John')
+      locals = exposures.locals(name: 'William')
+
+      expect(locals).to eq(:name=>"WILLIAM")
+    end
+  end
 end

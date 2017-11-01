@@ -48,11 +48,15 @@ module Dry
         options.fetch(:private) { false }
       end
 
+      def default_value
+        options[:default]
+      end
+
       def call(input, locals = {})
         if proc
           call_proc(input, locals)
         else
-          input[name]
+          input.fetch(name) { default_value }
         end
       end
 

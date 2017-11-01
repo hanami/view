@@ -1,8 +1,9 @@
 RSpec.describe Dry::View::Exposure do
-  subject(:exposure) { described_class.new(:hello, proc, object) }
+  subject(:exposure) { described_class.new(:hello, proc, object, **options) }
 
   let(:proc) { -> input { "hi" } }
   let(:object) { nil }
+  let(:options) { {} }
 
   describe "initialization and attributes" do
     describe "#name" do
@@ -40,6 +41,17 @@ RSpec.describe Dry::View::Exposure do
 
       it "can be set on initialization" do
         expect(described_class.new(:hello, private: true)).to be_private
+      end
+    end
+
+    describe "#default_value" do
+      it "is nil by default" do
+        expect(exposure.default_value).to be_nil
+      end
+
+      it "can be set on initialization" do
+        exposuse = described_class.new(:hello, default: 'Hi !')
+        expect(exposuse.default_value).to eq('Hi !')
       end
     end
   end
@@ -141,6 +153,34 @@ RSpec.describe Dry::View::Exposure do
 
       it "sends the input and dependency values to the proc" do
         expect(exposure.(input, locals)).to eq "Hola, Jane"
+      end
+    end
+
+    context "Default value" do
+      let(:options) { { default: "John" } }
+
+      context "use default value" do
+        let(:proc) { nil }
+
+        it "use the default value" do
+          expect(exposure.({})).to eq "John"
+        end
+      end
+
+      context "use input value instead of default" do
+        let(:proc) { nil }
+
+        it "use the default value" do
+          expect(exposure.({hello: "Jane"})).to eq "Jane"
+        end
+      end
+
+      context "use input value over default even when input is nil" do
+        let(:proc) { nil }
+
+        it "use the default value" do
+          expect(exposure.({hello: nil})).to eq nil
+        end
       end
     end
 
