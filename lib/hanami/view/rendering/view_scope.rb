@@ -6,12 +6,12 @@ require 'hanami/view/rendering/partial'
 module Hanami
   module View
     module Rendering
-      # Rendering scope
+      # Rendering view scope
       #
       # @since 0.1.0
       #
       # @see Hanami::View::Rendering::LayoutScope
-      class Scope < LayoutScope
+      class ViewScope < LayoutScope
         # Initialize the scope
         #
         # @param view [Class] the view
@@ -66,6 +66,7 @@ module Hanami
         end
 
         protected
+
         # @api private
         def method_missing(m, *args, &block)
           ::Hanami::View::Escape.html(
@@ -84,6 +85,17 @@ module Hanami
         end
 
         private
+
+        # @api private
+        def _options(options)
+          _locals = locals.select {|key, value| !@view.respond_to?(key) }
+
+          Utils::Hash.deep_dup(options).tap do |opts|
+            opts.merge!(format: format)
+            opts[:locals] = _locals
+            opts[:locals].merge!(options.fetch(:locals){ ::Hash.new })
+          end
+        end
 
         # @since 0.4.2
         # @api private

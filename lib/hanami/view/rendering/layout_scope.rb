@@ -1,5 +1,6 @@
 require 'hanami/view/rendering/null_local'
 require 'hanami/utils/escape'
+require 'hanami/utils/hash'
 
 module Hanami
   module View
@@ -125,7 +126,7 @@ module Hanami
         #
         # @since 0.1.0
         def locals
-          @locals || @scope.locals
+          Utils::Hash.deep_dup(@locals || @scope.locals)
         end
 
         # It tries to invoke a method for the view or a local for the given key.
@@ -206,6 +207,7 @@ module Hanami
         end
 
         protected
+
         # Forward all the missing methods to the view scope or to the layout.
         #
         # @api private
@@ -249,9 +251,10 @@ module Hanami
         end
 
         private
+
         # @api private
         def _options(options)
-          options.dup.tap do |opts|
+          Utils::Hash.deep_dup(options).tap do |opts|
             opts.merge!(format: format)
             opts[:locals] = locals
             opts[:locals].merge!(options.fetch(:locals){ ::Hash.new })

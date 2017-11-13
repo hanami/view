@@ -1,5 +1,6 @@
 require 'hanami/view/rendering/registry'
-require 'hanami/view/rendering/scope'
+require 'hanami/view/rendering/view_scope'
+require 'hanami/view/rendering/subscope'
 require 'hanami/view/rendering/null_local'
 
 module Hanami
@@ -41,7 +42,7 @@ module Hanami
         def initialize(template, **locals)
           @template = template
           @locals   = locals
-          @scope    = Scope.new(self, @locals)
+          @scope    = ViewScope.new(self, @locals)
         end
 
         # Render the template by bounding the local scope.

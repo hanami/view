@@ -542,3 +542,40 @@ module Users
     end
   end
 end
+
+module DeepPartials
+  View = Hanami::View.duplicate(self) do
+    root __dir__ + '/templates/deep_partials/templates'
+  end
+
+  module Views
+    module Home
+      class Index
+        include DeepPartials::View
+      end
+    end
+  end
+end
+
+DeepPartials::View.load!
+
+
+module App3
+  View = Hanami::View.duplicate(self) do
+    root __dir__ + '/templates/app3/templates'
+  end
+
+  module Views
+    module Home
+      class Index
+        include App3::View
+
+        def name
+          "View #{locals[:name]}"
+        end
+      end
+    end
+  end
+end
+
+App3::View.load!
