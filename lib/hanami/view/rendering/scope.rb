@@ -11,7 +11,7 @@ module Hanami
       # @since 0.1.0
       #
       # @see Hanami::View::Rendering::LayoutScope
-      class ViewScope < LayoutScope
+      class Scope < LayoutScope
         # Initialize the scope
         #
         # @param view [Class] the view

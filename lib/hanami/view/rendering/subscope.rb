@@ -1,4 +1,4 @@
-require 'hanami/view/rendering/view_scope'
+require 'hanami/view/rendering/scope'
 require 'hanami/view/rendering/options'
 
 module Hanami
@@ -8,8 +8,8 @@ module Hanami
       #
       # @since x.x.x
       #
-      # @see Hanami::View::Rendering::ViewScope
-      class Subscope < ViewScope
+      # @see Hanami::View::Rendering::Scope
+      class Subscope < Scope
 
         protected
 
