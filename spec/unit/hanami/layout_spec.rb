@@ -57,4 +57,9 @@ RSpec.describe Hanami::Layout do
       expect(DisabledLayoutView.layout).to eq Hanami::View::Rendering::NullLayout
     end
   end
+
+  it "renders correct partial scopes" do
+    rendered = PartialAndLayout::Views::Home::Index.render(format: :html, name: "Hanami")
+    expect(rendered).to match(%(Presented Hanami\n    Inside partial, Presented Hanami\n\n    Inside partial, Overwritten Hanami))
+  end
 end

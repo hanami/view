@@ -254,7 +254,8 @@ module Hanami
 
         # @api private
         def _options(options)
-          Options.build(options, locals, format)
+          current_locals = locals.reject { |key, _| @scope.respond_to?(key, true) }
+          Options.build(options, current_locals, format)
         end
 
         # @since 0.4.2

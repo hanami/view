@@ -579,3 +579,29 @@ module App3
 end
 
 App3::View.load!
+
+
+module PartialAndLayout
+  View = Hanami::View.duplicate(self) do
+    root __dir__ + '/templates/partial_and_layout/templates'
+  end
+
+  module Views
+    class MainLayout
+      include PartialAndLayout::Layout
+    end
+
+    module Home
+      class Index
+        include PartialAndLayout::View
+        layout :main
+
+        def name
+          "Presented #{locals[:name]}"
+        end
+      end
+    end
+  end
+end
+
+PartialAndLayout::View.load!
