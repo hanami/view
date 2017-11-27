@@ -86,6 +86,7 @@ module Hanami
 
         private
 
+        # @since 1.1.1
         # @api private
         def _options(options)
           current_locals = locals.reject { |key, _| @view.respond_to?(key) }
