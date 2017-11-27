@@ -52,7 +52,6 @@ module Hanami
 
         # @api private
         def scope
-          # Subscope.new(@view, @options[:locals], @options[:parent_locals])
           Subscope.new(@view, @options[:locals])
         end
 
