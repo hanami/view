@@ -1,7 +1,5 @@
-require 'hanami/utils/escape'
 require 'hanami/view/rendering/view_scope'
-require 'hanami/view/rendering/template'
-require 'hanami/view/rendering/partial'
+require 'hanami/view/rendering/options'
 
 module Hanami
   module View
@@ -34,11 +32,7 @@ module Hanami
 
         # @api private
         def _options(options)
-          Utils::Hash.deep_dup(options).tap do |opts|
-            opts.merge!(format: format)
-            opts[:locals] = locals
-            opts[:locals].merge!(options.fetch(:locals){ ::Hash.new })
-          end
+          Options.build(options, locals, format)
         end
       end
     end

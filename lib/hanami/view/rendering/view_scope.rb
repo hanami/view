@@ -88,13 +88,8 @@ module Hanami
 
         # @api private
         def _options(options)
-          _locals = locals.select {|key, value| !@view.respond_to?(key) }
-
-          Utils::Hash.deep_dup(options).tap do |opts|
-            opts.merge!(format: format)
-            opts[:locals] = _locals
-            opts[:locals].merge!(options.fetch(:locals){ ::Hash.new })
-          end
+          current_locals = locals.reject { |key, _| @view.respond_to?(key) }
+          Options.build(options, current_locals, format)
         end
 
         # @since 0.4.2
