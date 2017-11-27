@@ -1,18 +1,33 @@
-require 'hanami/view/rendering/scope'
-require 'hanami/view/rendering/options'
+# frozen_string_literal: true
+
+require "hanami/view/rendering/scope"
+require "hanami/view/rendering/options"
 
 module Hanami
   module View
     module Rendering
       # Rendering subscope
       #
-      # @since x.x.x
+      # @since 1.1.1
+      # @api private
       #
       # @see Hanami::View::Rendering::Scope
       class Subscope < Scope
+        # Implements "respond to" logic
+        #
+        # @return [TrueClass,FalseClass]
+        #
+        # @since 1.1.1
+        # @api private
+        #
+        # @see http://ruby-doc.org/core/Object.html#method-i-respond_to_missing-3F
+        def respond_to_missing?(m, _include_all)
+          @locals.key?(m)
+        end
 
         protected
 
+        # @since 1.1.1
         # @api private
         def method_missing(m, *args, &block)
           ::Hanami::View::Escape.html(
@@ -30,6 +45,7 @@ module Hanami
 
         private
 
+        # @since 1.1.1
         # @api private
         def _options(options)
           Options.build(options, locals, format)
