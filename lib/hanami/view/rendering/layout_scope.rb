@@ -230,11 +230,11 @@ module Hanami
           # that we want to be frozen in the future
           #
           # See https://github.com/hanami/view/issues/130#issuecomment-319326236
-          if @scope && @scope.respond_to?(m, true) && @scope.locals.has_key?(m) && layout.respond_to?(m)
+          if @scope && @scope.respond_to?(m, true) && @scope.locals.has_key?(m) && layout.respond_to?(m, true)
             layout.__send__(m, *args, &blk)
           elsif @scope.respond_to?(m, true)
             @scope.__send__(m, *args, &blk)
-          elsif layout.respond_to?(m)
+          elsif layout.respond_to?(m, true)
             layout.__send__(m, *args, &blk)
           else
             ::Hanami::View::Escape.html(super)
