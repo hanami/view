@@ -58,8 +58,13 @@ RSpec.describe Hanami::Layout do
     end
   end
 
-  it "renders correct partial scopes" do
+  it "renders right partial scopes" do
     rendered = PartialAndLayout::Views::Home::Index.render(format: :html, name: "Hanami")
     expect(rendered).to match(%(Presented Hanami\n    Inside partial, Presented Hanami\n\n    Inside partial, Overwritten Hanami))
+  end
+
+  it "renders right layout scope" do
+    rendered = PartialAndLayout::Views::Home::Show.render(format: :html, name: "Hanami")
+    expect(rendered).to match(%(Layout Hanami\n    Inside partial, Layout Hanami\n\n    Inside partial, Overwritten Hanami))
   end
 end

@@ -230,7 +230,9 @@ module Hanami
           # that we want to be frozen in the future
           #
           # See https://github.com/hanami/view/issues/130#issuecomment-319326236
-          if @scope.respond_to?(m, true)
+          if @scope && @scope.respond_to?(m, true) && @scope.locals.has_key?(m) && layout.respond_to?(m)
+            layout.__send__(m, *args, &blk)
+          elsif @scope.respond_to?(m, true)
             @scope.__send__(m, *args, &blk)
           elsif layout.respond_to?(m)
             layout.__send__(m, *args, &blk)

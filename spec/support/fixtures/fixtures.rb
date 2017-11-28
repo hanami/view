@@ -591,6 +591,14 @@ module PartialAndLayout
       include PartialAndLayout::Layout
     end
 
+    class SecondLayout
+      include PartialAndLayout::Layout
+
+      def name
+        "Layout Hanami"
+      end
+    end
+
     module Home
       class Index
         include PartialAndLayout::View
@@ -599,6 +607,11 @@ module PartialAndLayout
         def name
           "Presented #{locals[:name]}"
         end
+      end
+
+      class Show
+        include PartialAndLayout::View
+        layout :second
       end
     end
   end
