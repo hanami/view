@@ -599,6 +599,10 @@ module PartialAndLayout
       end
     end
 
+    class ThirdLayout
+      include PartialAndLayout::Layout
+    end
+
     module Home
       class Index
         include PartialAndLayout::View
@@ -612,6 +616,11 @@ module PartialAndLayout
       class Show
         include PartialAndLayout::View
         layout :second
+      end
+
+      class New
+        include PartialAndLayout::View
+        layout :third
       end
     end
   end

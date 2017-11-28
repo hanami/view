@@ -6,8 +6,8 @@
 
   <body>
     <%= name %>
-    <%= render partial: 'some_partial' %>
-    <%= render partial: 'some_partial', locals: { name: "Overwritten Hanami" } %>
+    <%= render partial: 'layouts/some_partial' %>
+    <%# render partial: 'layouts/some_partial', locals: { name: "Overwritten Hanami" } %>
     <%= yield %>
   </body>
 </html>

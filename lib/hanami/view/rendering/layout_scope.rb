@@ -230,7 +230,7 @@ module Hanami
           # that we want to be frozen in the future
           #
           # See https://github.com/hanami/view/issues/130#issuecomment-319326236
-          if @scope && @scope.respond_to?(m, true) && @scope.locals.has_key?(m) && layout.respond_to?(m, true)
+          if @scope.respond_to?(m, true) && @scope.locals.has_key?(m) && layout.respond_to?(m, true)
             layout.__send__(m, *args, &blk)
           elsif @scope.respond_to?(m, true)
             @scope.__send__(m, *args, &blk)
@@ -256,7 +256,10 @@ module Hanami
 
         # @api private
         def _options(options)
-          current_locals = locals.reject { |key, _| @scope.respond_to?(key, true) }
+          current_locals = locals.reject do |key, _|
+            @scope.respond_to?(key, true) &&
+              (layout.respond_to?(key, true) || @scope.view.respond_to?(:name, true))
+          end
           Options.build(options, current_locals, format)
         end
 
