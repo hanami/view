@@ -7,7 +7,7 @@
   <body>
     <%= name %>
     <%= render partial: 'layouts/some_partial' %>
-    <%# render partial: 'layouts/some_partial', locals: { name: "Overwritten Hanami" } %>
+    <%= render partial: 'layouts/nesting_partial' %>
     <%= yield %>
   </body>
 </html>

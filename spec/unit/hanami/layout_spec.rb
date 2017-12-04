@@ -68,8 +68,8 @@ RSpec.describe Hanami::Layout do
     expect(rendered).to match(%(Layout Hanami\n    Inside partial, Layout Hanami\n\n    Inside partial, Overwritten Hanami))
   end
 
-  it "renders right layout scope without method defined in layout" do
+  it "renders partials from another folders with relative path" do
     rendered = PartialAndLayout::Views::Home::New.render(format: :html, name: "Hanami")
-    expect(rendered).to match(%(Hanami\n    Inside partial, Hanami\n))
+    expect(rendered).to match(%(Hanami\n    Inside partial, Hanami\n\n    <p>Rendering another partial</p>\nInside partial, Hanami\nHi))
   end
 end

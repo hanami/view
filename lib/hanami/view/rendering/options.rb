@@ -16,7 +16,7 @@ module Hanami
           Utils::Hash.deep_dup(options).tap do |opts|
             opts[:format] = format
             opts[:locals] = locals
-            opts[:locals].merge!(options.fetch(:locals) { ::Hash.new })
+            opts[:locals].merge!(options.fetch(:locals) { ::Hash.new }).merge!(format: format)
           end
         end
       end
