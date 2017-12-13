@@ -21,6 +21,16 @@ module Dry
 
       attr_reader :_renderer
 
+      def new(klass = (self.class), name: (_name), value: (_value), **options)
+        klass.new(
+          name: name,
+          value: value,
+          context: _context,
+          renderer: _renderer,
+          **options,
+        )
+      end
+
       def initialize(name:, value:, renderer: MissingRenderer.new, context: nil)
         @_name = name
         @_value = value
