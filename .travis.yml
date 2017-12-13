@@ -5,8 +5,7 @@ cache: bundler
 bundler_args: --without tools benchmarks
 before_install:
   - gem update --system
-  - rvm @global do gem uninstall bundler -a -x
-  - rvm @global do gem install bundler -v 1.13.7
+  - gem install bundler
 script:
   - bundle exec rake
 after_success:
