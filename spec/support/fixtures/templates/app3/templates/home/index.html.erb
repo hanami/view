@@ -1,0 +1,4 @@
+View before, <%= name %>
+<%= render partial: 'shared/partial_with_implicit_locals' %>
+<%= render partial: 'shared/partial_with_explicit_locals', locals: { name: 'View partial' } %>
+View after, <%= name %>

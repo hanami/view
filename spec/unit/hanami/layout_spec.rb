@@ -57,4 +57,19 @@ RSpec.describe Hanami::Layout do
       expect(DisabledLayoutView.layout).to eq Hanami::View::Rendering::NullLayout
     end
   end
+
+  it "renders right partial scopes with method defined in view" do
+    rendered = PartialAndLayout::Views::Home::Index.render(format: :html, name: "Hanami")
+    expect(rendered).to match(%(Presented Hanami\n    Inside partial, Presented Hanami\n\n    Inside partial, Overwritten Hanami))
+  end
+
+  it "renders right layout scope with method defined in layout" do
+    rendered = PartialAndLayout::Views::Home::Show.render(format: :html, name: "Hanami")
+    expect(rendered).to match(%(Layout Hanami\n    Inside partial, Layout Hanami\n\n    Inside partial, Overwritten Hanami))
+  end
+
+  it "renders partials from another folders with relative path" do
+    rendered = PartialAndLayout::Views::Home::New.render(format: :html, name: "Hanami")
+    expect(rendered).to match(%(Hanami\n    Inside partial, Hanami\n\n    <p>Rendering another partial</p>\nInside partial, Hanami\nHi))
+  end
 end

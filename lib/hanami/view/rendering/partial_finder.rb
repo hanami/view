@@ -49,12 +49,6 @@ module Hanami
 
         # @since 0.4.3
         # @api private
-        def partial_template_under_view_path
-          _find(view_template_dir).first
-        end
-
-        # @since 0.4.3
-        # @api private
         def view_template_dir
           *all, _ = @view.template.split(separator)
           all.join(separator)

@@ -7,7 +7,7 @@ module Hanami
       #
       # A common scenario is for non-html requests.
       # Usually we have a template for the application layout
-      # (eg `templates/application.html.erb`), but we don't use to have the a
+      # (eg `templates/application.html.erb`), but we don't use to have the
       # template for JSON requests (eg `templates/application.json.erb`).
       # Because most of the times, we only return the output of the view.
       #

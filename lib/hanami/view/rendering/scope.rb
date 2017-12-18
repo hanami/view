@@ -6,7 +6,7 @@ require 'hanami/view/rendering/partial'
 module Hanami
   module View
     module Rendering
-      # Rendering scope
+      # Rendering view scope
       #
       # @since 0.1.0
       #
@@ -66,6 +66,7 @@ module Hanami
         end
 
         protected
+
         # @api private
         def method_missing(m, *args, &block)
           ::Hanami::View::Escape.html(
@@ -84,6 +85,13 @@ module Hanami
         end
 
         private
+
+        # @since 1.1.1
+        # @api private
+        def _options(options)
+          current_locals = locals.reject { |key, _| @view.respond_to?(key) }
+          Options.build(options, current_locals, format)
+        end
 
         # @since 0.4.2
         # @api private
