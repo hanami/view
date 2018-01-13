@@ -57,7 +57,8 @@ RSpec.describe Dry::View::Part do
 
         it 'renders correctly' do
           new_part = part.new(value: 'new value', renderer: new_renderer)
-          expect(part._render(:hello)).to_not eql(new_part._render(:hello))
+          expect(part._render(:hello)).to eql('<h1>Partial hello</h1>')
+          expect(new_part._render(:hello)).to eql('<h1>Partial new hello</h1>')
         end
       end
     end
