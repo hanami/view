@@ -17,6 +17,8 @@ module Dry
 
       attr_reader :_value
 
+      attr_reader :_decorated_attributes
+
       attr_reader :_context
 
       attr_reader :_renderer
@@ -31,11 +33,32 @@ module Dry
         )
       end
 
-      def initialize(name:, value:, renderer: MissingRenderer.new, context: nil)
+      # @api public
+      def self.decorate(name, **options)
+        decorated_attributes[name] = options
+      end
+
+      # @api private
+      def self.decorated_attributes
+        @decorated_attributes ||= {}
+      end
+
+      # FIXME: does MissingRenderer.new lead to needless allocations of MissingRenderer? We only need one globally.
+      def initialize(name:, value:, decorator: Dry::View::Decorator.new, renderer: MissingRenderer.new, context: nil)
         @_name = name
         @_value = value
         @_context = context
         @_renderer = renderer
+
+        @_decorated_attributes = self.class.decorated_attributes.each_with_object({}) { |(attr_name, options), attrs|
+          attrs[attr_name] = decorator.(
+            attr_name,
+            value.__send__(attr_name),
+            renderer: _renderer,
+            context: _context,
+            **options,
+          )
+        }
       end
 
       def _render(partial_name, as: _name, **locals, &block)
@@ -49,7 +72,9 @@ module Dry
       private
 
       def method_missing(name, *args, &block)
-        if _value.respond_to?(name)
+        if _decorated_attributes.key?(name)
+          _decorated_attributes[name]
+        elsif _value.respond_to?(name)
           _value.public_send(name, *args, &block)
         elsif CONVENIENCE_METHODS.include?(name)
           __send__(:"_#{name}", *args, &block)
