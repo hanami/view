@@ -32,21 +32,7 @@ RSpec.describe 'Part / Decorated attributes' do
     end
   }
 
-  let(:article_part_class) {
-    Class.new(Dry::View::Part) do
-      decorate :author
-      decorate :comments
-    end
-  }
-
   context 'using default decorator' do
-    subject(:article_part) {
-      article_part_class.new(
-        name: :article,
-        value: article,
-      )
-    }
-
     let(:article) {
       article_class.new(
         title: 'Hello world',
@@ -57,9 +43,49 @@ RSpec.describe 'Part / Decorated attributes' do
       )
     }
 
-    it 'decorates exposures with the standard Dry::View::Part class' do
-      expect(article_part.author).to be_a Dry::View::Part
-      expect(article_part.comments[0]).to be_a Dry::View::Part
+    subject(:article_part) {
+      article_part_class.new(
+        name: :article,
+        value: article,
+      )
+    }
+
+    context 'without options' do
+      let(:article_part_class) {
+        Class.new(Dry::View::Part) do
+          decorate :author
+          decorate :comments
+        end
+      }
+
+      it 'decorates exposures with the standard Dry::View::Part class' do
+        expect(article_part.author).to be_a Dry::View::Part
+        expect(article_part.comments[0]).to be_a Dry::View::Part
+      end
+    end
+
+    context 'with part class specified' do
+      before do
+        module Test
+          class AuthorPart < Dry::View::Part
+          end
+
+          class CommentPart < Dry::View::Part
+          end
+        end
+      end
+
+      let(:article_part_class) {
+        Class.new(Dry::View::Part) do
+          decorate :author, as: Test::AuthorPart
+          decorate :comments, as: Test::CommentPart
+        end
+      }
+
+      it 'deorates exposures with the specified part class' do
+        expect(article_part.author).to be_a Test::AuthorPart
+        expect(article_part.comments[0]).to be_a Test::CommentPart
+      end
     end
   end
 end
