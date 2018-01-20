@@ -32,17 +32,17 @@ RSpec.describe 'Part / Decorated attributes' do
     end
   }
 
-  context 'using default decorator' do
-    let(:article) {
-      article_class.new(
-        title: 'Hello world',
-        author: author_class.new(name: 'Jane Doe'),
-        comments: [
-          comment_class.new(author: author_class.new(name: 'Sue Smith'), body: 'Great article')
-        ]
-      )
-    }
+  let(:article) {
+    article_class.new(
+      title: 'Hello world',
+      author: author_class.new(name: 'Jane Doe'),
+      comments: [
+        comment_class.new(author: author_class.new(name: 'Sue Smith'), body: 'Great article')
+      ]
+    )
+  }
 
+  context 'using default decorator' do
     subject(:article_part) {
       article_part_class.new(
         name: :article,
@@ -50,7 +50,7 @@ RSpec.describe 'Part / Decorated attributes' do
       )
     }
 
-    context 'without options' do
+    context 'decorating without options' do
       let(:article_part_class) {
         Class.new(Dry::View::Part) do
           decorate :author
@@ -64,7 +64,7 @@ RSpec.describe 'Part / Decorated attributes' do
       end
     end
 
-    context 'with part class specified' do
+    context 'decorating with part class specified' do
       before do
         module Test
           class AuthorPart < Dry::View::Part
@@ -86,6 +86,57 @@ RSpec.describe 'Part / Decorated attributes' do
         expect(article_part.author).to be_a Test::AuthorPart
         expect(article_part.comments[0]).to be_a Test::CommentPart
       end
+    end
+  end
+
+  context 'using custom decorator' do
+    let(:article_part_class) {
+        Class.new(Dry::View::Part) do
+          decorate :author
+          decorate :comments
+        end
+      }
+
+    subject(:article_part) {
+      article_part_class.new(
+        name: :article,
+        value: article,
+        decorator: decorator,
+      )
+    }
+
+    let(:decorator) {
+      Class.new(Dry::View::Decorator) do
+        def part_class(name, value, **options)
+          if !options.key?(:as)
+            part_name = Dry::Core::Inflector.camelize(name)
+            begin
+              Test.const_get(:"#{part_name}Part")
+            rescue NameError
+              super
+            end
+          else
+            super
+          end
+        end
+      end.new
+    }
+
+    before do
+      module Test
+        class AuthorPart < Dry::View::Part
+        end
+
+        class CommentPart < Dry::View::Part
+          decorate :author
+        end
+      end
+    end
+
+    it 'deorates exposures using the custom decorator' do
+      expect(article_part.author).to be_a Test::AuthorPart
+      expect(article_part.comments[0]).to be_a Test::CommentPart
+      expect(article_part.comments[0].author).to be_a Test::AuthorPart
     end
   end
 end
