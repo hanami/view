@@ -1,7 +1,36 @@
 RSpec.describe 'Part / Decorated attributes' do
-  let(:article_class) { Struct.new('Article', :title, :author, :comments, keyword_init: true) }
-  let(:author_class) { Struct.new('Author', :name, keyword_init: true) }
-  let(:comment_class) { Struct.new('Comment', :author, :body, keyword_init: true) }
+  let(:article_class) {
+    Class.new do
+      attr_reader :title, :author, :comments
+
+      def initialize(title:, author:, comments:)
+        @title = title
+        @author = author
+        @comments = comments
+      end
+    end
+  }
+
+  let(:author_class) {
+    Class.new do
+      attr_reader :name
+
+      def initialize(name:)
+        @name = name
+      end
+    end
+  }
+
+  let(:comment_class) {
+    Class.new do
+      attr_reader :author, :body
+
+      def initialize(author:, body:)
+        @author = author
+        @body = body
+      end
+    end
+  }
 
   let(:article_part_class) {
     Class.new(Dry::View::Part) do
