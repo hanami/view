@@ -26,8 +26,10 @@ module Dry
       attr_reader :_decorated_attributes
 
       # @api public
-      def self.decorate(name, **options)
-        decorated_attributes[name] = options
+      def self.decorate(*names, **options)
+        names.each do |name|
+          decorated_attributes[name] = options
+        end
       end
 
       # @api private
