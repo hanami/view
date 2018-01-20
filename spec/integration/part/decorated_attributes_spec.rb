@@ -58,9 +58,8 @@ RSpec.describe 'Part / Decorated attributes' do
     }
 
     it 'decorates exposures with the standard Dry::View::Part class' do
-      # byebug
       expect(article_part.author).to be_a Dry::View::Part
-      # expect(article_part.comments[0]).to be_a Dry::View::Part
+      expect(article_part.comments[0]).to be_a Dry::View::Part
     end
   end
 end
