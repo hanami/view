@@ -11,27 +11,19 @@ module Dry
         value
       ].freeze
 
-      include Dry::Equalizer(:_name, :_value, :_context, :_renderer)
+      include Dry::Equalizer(:_name, :_value, :_decorator, :_context, :_renderer)
 
       attr_reader :_name
 
       attr_reader :_value
 
-      attr_reader :_decorated_attributes
-
       attr_reader :_context
 
       attr_reader :_renderer
 
-      def new(klass = (self.class), name: (_name), value: (_value), **options)
-        klass.new(
-          name: name,
-          value: value,
-          context: _context,
-          renderer: _renderer,
-          **options,
-        )
-      end
+      attr_reader :_decorator
+
+      attr_reader :_decorated_attributes
 
       # @api public
       def self.decorate(name, **options)
@@ -49,6 +41,7 @@ module Dry
         @_value = value
         @_context = context
         @_renderer = renderer
+        @_decorator = decorator
 
         @_decorated_attributes = self.class.decorated_attributes.each_with_object({}) { |(attr_name, options), attrs|
           attrs[attr_name] = decorator.(
@@ -67,6 +60,17 @@ module Dry
 
       def to_s
         _value.to_s
+      end
+
+      def new(klass = (self.class), name: (_name), value: (_value), **options)
+        klass.new(
+          name: name,
+          value: value,
+          context: _context,
+          renderer: _renderer,
+          decorator: _decorator,
+          **options,
+        )
       end
 
       private
