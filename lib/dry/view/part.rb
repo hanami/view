@@ -44,16 +44,7 @@ module Dry
         @_context = context
         @_renderer = renderer
         @_decorator = decorator
-
-        @_decorated_attributes = self.class.decorated_attributes.each_with_object({}) { |(attr_name, options), attrs|
-          attrs[attr_name] = decorator.(
-            attr_name,
-            value.__send__(attr_name),
-            renderer: _renderer,
-            context: _context,
-            **options,
-          )
-        }
+        @_decorated_attributes = {}
       end
 
       def _render(partial_name, as: _name, **locals, &block)
@@ -78,8 +69,8 @@ module Dry
       private
 
       def method_missing(name, *args, &block)
-        if _decorated_attributes.key?(name)
-          _decorated_attributes[name]
+        if self.class.decorated_attributes.key?(name)
+          _resolve_decorated_attribute(name)
         elsif _value.respond_to?(name)
           _value.public_send(name, *args, &block)
         elsif CONVENIENCE_METHODS.include?(name)
@@ -95,6 +86,18 @@ module Dry
           context: _context,
           renderer: _renderer,
         )
+      end
+
+      def _resolve_decorated_attribute(name)
+        _decorated_attributes.fetch(name) {
+          _decorated_attributes[name] = _decorator.(
+            name,
+            _value.__send__(name),
+            renderer: _renderer,
+            context: _context,
+            **self.class.decorated_attributes[name],
+          )
+        }
       end
     end
   end
