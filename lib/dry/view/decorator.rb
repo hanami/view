@@ -18,9 +18,9 @@ module Dry
             call(singular_name, obj, renderer: renderer, context: context, **singular_options)
           }
 
-          klass.new(name: name, value: arr, renderer: renderer, context: context)
+          klass.new(name: name, value: arr, decorator: self, renderer: renderer, context: context)
         else
-          klass.new(name: name, value: value, renderer: renderer, context: context)
+          klass.new(name: name, value: value, decorator: self, renderer: renderer, context: context)
         end
       end
 

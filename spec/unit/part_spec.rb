@@ -30,39 +30,6 @@ RSpec.describe Dry::View::Part do
       end
     end
 
-    describe '#new' do
-      let(:renderer) do
-        Dry::View::Renderer.new(
-          [Dry::View::Path.new(SPEC_ROOT.join('fixtures/templates'))],
-          format: 'html'
-        )
-      end
-
-      let(:part) { described_class.new(name: name, value: value, context: context, renderer: renderer) }
-
-      context 'same renderer' do
-        it 'renders correctly' do
-          new_part = part.new(value: 'new value')
-          expect(part._render(:hello)).to eql(new_part._render(:hello))
-        end
-      end
-
-      context 'new renderer' do
-        let(:new_renderer) do
-          Dry::View::Renderer.new(
-            [Dry::View::Path.new(SPEC_ROOT.join('fixtures/templates_override'))],
-            format: 'html'
-          )
-        end
-
-        it 'renders correctly' do
-          new_part = part.new(value: 'new value', renderer: new_renderer)
-          expect(part._render(:hello)).to eql('<h1>Partial hello</h1>')
-          expect(new_part._render(:hello)).to eql('<h1>Partial new hello</h1>')
-        end
-      end
-    end
-
     describe '#to_s' do
       before do
         allow(value).to receive(:to_s).and_return 'to_s on the value'
@@ -70,6 +37,16 @@ RSpec.describe Dry::View::Part do
 
       it 'delegates to the wrapped value' do
         expect(part.to_s).to eq 'to_s on the value'
+      end
+    end
+
+    describe '#new' do
+      it 'preserves decorator, renderer, and context' do
+        new_part = part.new(value: 'new value')
+
+        expect(new_part._decorator).to eql part._decorator
+        expect(new_part._renderer).to eql part._renderer
+        expect(new_part._context).to eql part._context
       end
     end
 
