@@ -13,9 +13,6 @@ rvm:
   - 2.4.2
   - 2.3.6
   - jruby-9.1.10.0
-matrix:
-  allow_failures:
-    - rvm: jruby-9.1.10.0
 notifications:
   email: false
   webhooks:
