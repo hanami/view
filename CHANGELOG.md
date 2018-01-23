@@ -1,3 +1,12 @@
+# 0.5.0 / 2018-01-23
+
+### Added
+
+* Support for parts with decorated attributes (timriley + GustavoCaso)
+* Ability to easily create another part instance via `Part#new` (GustavoCaso)
+
+[Compare v0.4.0...v0.5.0](https://github.com/dry-rb/dry-view/compare/v0.4.0...v0.5.0)
+
 # 0.4.0 / 2017-11-01
 
 ### Added
