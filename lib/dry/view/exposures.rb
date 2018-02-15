@@ -40,6 +40,14 @@ module Dry
         }
       end
 
+      def each(&block)
+        exposures.each(&block)
+      end
+
+      def import(name, exposure)
+        exposures[name] = exposure.dup
+      end
+
       private
 
       def tsort_each_node(&block)

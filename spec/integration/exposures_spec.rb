@@ -303,4 +303,90 @@ RSpec.describe 'exposures' do
     expect(vc.locals(input)).to include(:users, :users_count)
     expect(vc.locals(input)).not_to include(:prefix)
   end
+
+  it 'inherit exposures from parent class' do
+    parent = Class.new(Dry::View::Controller) do
+      configure do |config|
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = 'app'
+        config.template = 'users_with_count_inherit'
+        config.default_format = :html
+      end
+
+      private_expose :prefix do
+        "COUNT: "
+      end
+
+      expose :users
+
+      expose :users_count do |prefix, users:|
+        "#{prefix}#{users.length} users"
+      end
+    end
+
+    child = Class.new(parent) do
+      expose :child_expose do
+        'Child expose'
+      end
+    end.new
+
+    users = [
+      {name: 'Jane', email: 'jane@doe.org'},
+      {name: 'Joe', email: 'joe@doe.org'}
+    ]
+
+    input = {users: users, context: context}
+
+    expect(child.(input)).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">COUNT: 2 users</div><div class="inherit">Child expose</div></body></html>'
+    )
+
+    expect(child.locals(input)).to include(:users, :users_count, :child_expose)
+    expect(child.locals(input)).not_to include(:prefix)
+  end
+
+  it 'inherit exposures from parent class and allow to override them' do
+    parent = Class.new(Dry::View::Controller) do
+      configure do |config|
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = 'app'
+        config.template = 'users_with_count_inherit'
+        config.default_format = :html
+      end
+
+      private_expose :prefix do
+        "COUNT: "
+      end
+
+      expose :users
+
+      expose :users_count do |prefix, users:|
+        "#{prefix}#{users.length} users"
+      end
+    end
+
+    child = Class.new(parent) do
+      expose :child_expose do
+        'Child expose'
+      end
+
+      expose :users_count do |prefix, users:|
+        "#{prefix}#{users.length} users overrided"
+      end
+    end.new
+
+    users = [
+      {name: 'Jane', email: 'jane@doe.org'},
+      {name: 'Joe', email: 'joe@doe.org'}
+    ]
+
+    input = {users: users, context: context}
+
+    expect(child.(input)).to eql(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">COUNT: 2 users overrided</div><div class="inherit">Child expose</div></body></html>'
+    )
+
+    expect(child.locals(input)).to include(:users, :users_count, :child_expose)
+    expect(child.locals(input)).not_to include(:prefix)
+  end
 end
