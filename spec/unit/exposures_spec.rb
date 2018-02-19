@@ -90,4 +90,14 @@ RSpec.describe Dry::View::Exposures do
       expect(locals).to eq(:name=>"WILLIAM")
     end
   end
+
+  describe "#import" do
+    it "imports a exposure to the exposures" do
+      exposures_b = described_class.new
+      exposures.add(:name, -> name: { name.upcase }, default: 'John')
+      exposures_b.import(:name, exposures[:name])
+
+      expect(exposures_b[:name]).to eq(exposures[:name])
+    end
+  end
 end

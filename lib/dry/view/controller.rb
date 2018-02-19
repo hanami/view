@@ -33,6 +33,14 @@ module Dry
       attr_reader :template_path
       attr_reader :exposures
 
+      # @api private
+      def self.inherited(klass)
+        super
+        exposures.each do |name, exposure|
+          klass.exposures.import(name, exposure)
+        end
+      end
+
       # @api public
       def self.paths
         Array(config.paths).map { |path| Dry::View::Path.new(path) }

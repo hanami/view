@@ -1,0 +1,6 @@
+ul
+  - users.each do |user|
+    li = "#{user[:name]} (#{user[:email]})"
+
+.count = users_count
+.inherit = child_expose
