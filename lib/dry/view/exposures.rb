@@ -20,8 +20,16 @@ module Dry
         exposures[name]
       end
 
+      def each(&block)
+        exposures.each(&block)
+      end
+
       def add(name, proc = nil, **options)
         exposures[name] = Exposure.new(name, proc, options)
+      end
+
+      def import(name, exposure)
+        exposures[name] = exposure.dup
       end
 
       def bind(obj)
@@ -38,14 +46,6 @@ module Dry
         }.each_with_object({}) { |(name, val), memo|
           memo[name] = val unless self[name].private?
         }
-      end
-
-      def each(&block)
-        exposures.each(&block)
-      end
-
-      def import(name, exposure)
-        exposures[name] = exposure.dup
       end
 
       private
