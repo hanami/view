@@ -92,7 +92,7 @@ RSpec.describe Dry::View::Exposures do
   end
 
   describe "#import" do
-    it "add a new exposure to the exposures" do
+    it "imports a exposure to the exposures" do
       exposures_b = described_class.new
       exposures.add(:name, -> name: { name.upcase }, default: 'John')
       exposures_b.import(:name, exposures[:name])
