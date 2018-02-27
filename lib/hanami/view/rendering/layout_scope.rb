@@ -1,4 +1,5 @@
 require 'hanami/view/rendering/null_local'
+require 'hanami/view/rendering/options'
 require 'hanami/utils/escape'
 
 module Hanami
@@ -125,7 +126,7 @@ module Hanami
         #
         # @since 0.1.0
         def locals
-          @locals || @scope.locals
+          Utils::Hash.deep_dup(@locals || @scope.locals)
         end
 
         # It tries to invoke a method for the view or a local for the given key.
@@ -206,6 +207,7 @@ module Hanami
         end
 
         protected
+
         # Forward all the missing methods to the view scope or to the layout.
         #
         # @api private
@@ -228,9 +230,11 @@ module Hanami
           # that we want to be frozen in the future
           #
           # See https://github.com/hanami/view/issues/130#issuecomment-319326236
-          if @scope.respond_to?(m, true)
+          if @scope.respond_to?(m, true) && @scope.locals.has_key?(m) && layout.respond_to?(m, true)
+            layout.__send__(m, *args, &blk)
+          elsif @scope.respond_to?(m, true)
             @scope.__send__(m, *args, &blk)
-          elsif layout.respond_to?(m)
+          elsif layout.respond_to?(m, true)
             layout.__send__(m, *args, &blk)
           else
             ::Hanami::View::Escape.html(super)
@@ -249,13 +253,14 @@ module Hanami
         end
 
         private
+
         # @api private
         def _options(options)
-          options.dup.tap do |opts|
-            opts.merge!(format: format)
-            opts[:locals] = locals
-            opts[:locals].merge!(options.fetch(:locals){ ::Hash.new })
+          current_locals = locals.reject do |key, _|
+            @scope.respond_to?(key, true) &&
+              (layout.respond_to?(key, true) || @scope.view.respond_to?(:name, true))
           end
+          Options.build(options, current_locals, format)
         end
 
         # @since 0.4.2

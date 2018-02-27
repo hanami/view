@@ -1,5 +1,6 @@
 require 'hanami/view/rendering/registry'
 require 'hanami/view/rendering/scope'
+require 'hanami/view/rendering/subscope'
 require 'hanami/view/rendering/null_local'
 
 module Hanami

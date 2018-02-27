@@ -52,7 +52,7 @@ module Hanami
 
         # @api private
         def scope
-          Scope.new(@view, @options[:locals])
+          Subscope.new(@view, @options[:locals])
         end
 
         # @since 0.5.0

@@ -1,8 +1,8 @@
 RSpec.describe Hanami::View::Rendering::LayoutScope do
   before do
-    layout     = LayoutForScopeTest.new
-    view_scope = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new)
-    @scope     = Hanami::View::Rendering::LayoutScope.new(layout, view_scope)
+    layout = LayoutForScopeTest.new
+    scope  = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new)
+    @scope = Hanami::View::Rendering::LayoutScope.new(layout, scope)
   end
 
   describe '#respond_to?' do
