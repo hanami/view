@@ -1,0 +1,13 @@
+<!doctype HTML>
+<html>
+  <head>
+    <title>Partial and layout</title>
+  </head>
+
+  <body>
+    <%= name %>
+    <%= render partial: 'layouts/some_partial' %>
+    <%= render partial: 'layouts/nesting_partial' %>
+    <%= yield %>
+  </body>
+</html>

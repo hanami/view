@@ -542,3 +542,88 @@ module Users
     end
   end
 end
+
+module DeepPartials
+  View = Hanami::View.duplicate(self) do
+    root __dir__ + '/templates/deep_partials/templates'
+  end
+
+  module Views
+    module Home
+      class Index
+        include DeepPartials::View
+      end
+    end
+  end
+end
+
+DeepPartials::View.load!
+
+
+module App3
+  View = Hanami::View.duplicate(self) do
+    root __dir__ + '/templates/app3/templates'
+  end
+
+  module Views
+    module Home
+      class Index
+        include App3::View
+
+        def name
+          "View #{locals[:name]}"
+        end
+      end
+    end
+  end
+end
+
+App3::View.load!
+
+
+module PartialAndLayout
+  View = Hanami::View.duplicate(self) do
+    root __dir__ + '/templates/partial_and_layout/templates'
+  end
+
+  module Views
+    class MainLayout
+      include PartialAndLayout::Layout
+    end
+
+    class SecondLayout
+      include PartialAndLayout::Layout
+
+      def name
+        "Layout Hanami"
+      end
+    end
+
+    class ThirdLayout
+      include PartialAndLayout::Layout
+    end
+
+    module Home
+      class Index
+        include PartialAndLayout::View
+        layout :main
+
+        def name
+          "Presented #{locals[:name]}"
+        end
+      end
+
+      class Show
+        include PartialAndLayout::View
+        layout :second
+      end
+
+      class New
+        include PartialAndLayout::View
+        layout :third
+      end
+    end
+  end
+end
+
+PartialAndLayout::View.load!
