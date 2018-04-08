@@ -22,7 +22,7 @@ RSpec.describe Hanami::View::Template do
       end
 
       it 'sets :disable_escape to true with non-haml templates' do
-        template = Hanami::View::Template.new("#{TEMPLATE_ROOT_DIRECTORY}/hello_world.html.erb",)
+        template = Hanami::View::Template.new("#{TEMPLATE_ROOT_DIRECTORY}/hello_world.html.slim")
         expect(template.instance_variable_get(:@_template).__send__(:options)[:disable_escape]).to eq(true)
       end
     end

@@ -7,11 +7,9 @@ module Hanami
     # @since 0.1.0
     class Template
       def initialize(template, encoding = Encoding::UTF_8)
-        default_options = {default_encoding: encoding}
+        options = {default_encoding: encoding}
 
-        options = default_options
-
-        if Tilt[template] != Tilt::HamlTemplate
+        if File.extname(template) == '.slim'
           # NOTE disable_escape: true is for Slim compatibility
           # See https://github.com/hanami/assets/issues/36
           options.merge!(disable_escape: true)
