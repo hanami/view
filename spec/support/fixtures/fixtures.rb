@@ -548,10 +548,18 @@ module DeepPartials
     root __dir__ + '/templates/deep_partials/templates'
   end
 
+  class BooksCollection
+    undef :initialize_dup
+  end
+
   module Views
     module Home
       class Index
         include DeepPartials::View
+
+        def books
+          BooksCollection.new
+        end
       end
     end
   end
