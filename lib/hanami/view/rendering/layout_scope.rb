@@ -126,7 +126,7 @@ module Hanami
         #
         # @since 0.1.0
         def locals
-          Utils::Hash.deep_dup(@locals || @scope.locals)
+          (@locals || @scope.locals).dup
         end
 
         # It tries to invoke a method for the view or a local for the given key.

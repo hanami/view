@@ -9,6 +9,10 @@ View layer for Hanami
 
 ## v1.2.0.beta1 - 2018-02-28
 
+## v1.1.2 - 2018-04-10
+### Fixed
+- [Luca Guidi] Ensure to be able to use `exposures` even when they aren't duplicable objects
+
 ## v1.1.1 - 2018-02-27
 ### Added
 - [Luca Guidi] Official support for Ruby: MRI 2.5
