@@ -66,7 +66,7 @@ module Hanami
           when Symbol, String
             # TODO Move this low level logic into a Hanami::Utils solution
             class_name = "#{ Utils::String.classify(layout) }#{ SUFFIX }"
-            namespace  = Utils::Class.load_from_pattern!(namespace)
+            namespace  = Utils::Class.load!(namespace)
             namespace.const_get(class_name)
           when Class
             layout
