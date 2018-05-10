@@ -7,9 +7,15 @@ module Hanami
     # @since 0.1.0
     class Template
       def initialize(template, encoding = Encoding::UTF_8)
-        # NOTE disable_escape: true is for Slim compatibility
-        # See https://github.com/hanami/assets/issues/36
-        @_template = Tilt.new(template, nil, default_encoding: encoding, disable_escape: true)
+        options = {default_encoding: encoding}
+
+        if File.extname(template) == '.slim'
+          # NOTE disable_escape: true is for Slim compatibility
+          # See https://github.com/hanami/assets/issues/36
+          options.merge!(disable_escape: true)
+        end
+
+        @_template = Tilt.new(template, nil, options)
       end
 
       # Returns the format that the template handles.
