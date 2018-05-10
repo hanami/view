@@ -7,12 +7,12 @@ module Hanami
     # @since 0.1.0
     class Template
       def initialize(template, encoding = Encoding::UTF_8)
-        options = {default_encoding: encoding}
+        options = { default_encoding: encoding }
 
-        if File.extname(template) == '.slim'
+        if slim?(template)
           # NOTE disable_escape: true is for Slim compatibility
           # See https://github.com/hanami/assets/issues/36
-          options.merge!(disable_escape: true)
+          options[:disable_escape] = true
         end
 
         @_template = Tilt.new(template, nil, options)
@@ -45,6 +45,12 @@ module Hanami
       # @see Hanami::View::Scope
       def render(scope, &blk)
         @_template.render(scope, {}, &blk)
+      end
+
+      private
+
+      def slim?(template)
+        File.extname(template) == ".slim".freeze
       end
     end
   end
