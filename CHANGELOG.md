@@ -1,3 +1,11 @@
+# 0.5.2 / 2018-06-13
+
+### Changed
+
+- Only truthy view part attributes are decorated (timriley)
+
+[Compare v0.5.0...v0.5.1](https://github.com/dry-rb/dry-view/compare/v0.5.1...v0.5.2)
+
 # 0.5.1 / 2018-02-20
 
 ### Added
