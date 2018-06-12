@@ -90,13 +90,18 @@ module Dry
 
       def _resolve_decorated_attribute(name)
         _decorated_attributes.fetch(name) {
-          _decorated_attributes[name] = _decorator.(
-            name,
-            _value.__send__(name),
-            renderer: _renderer,
-            context: _context,
-            **self.class.decorated_attributes[name],
-          )
+          attribute = _value.__send__(name)
+
+          _decorated_attributes[name] =
+            if attribute # Decorate truthy attributes only
+              _decorator.(
+                name,
+                attribute,
+                renderer: _renderer,
+                context: _context,
+                **self.class.decorated_attributes[name],
+              )
+            end
         }
       end
     end
