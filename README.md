@@ -16,12 +16,12 @@ Like all the other Hanami components, it can be used as a standalone framework o
 
 ## Status
 
-[![Gem Version](http://img.shields.io/gem/v/hanami-view.svg)](https://badge.fury.io/rb/hanami-view)
-[![Build Status](http://img.shields.io/travis/hanami/view/master.svg)](https://travis-ci.org/hanami/view?branch=master)
-[![Coverage](http://img.shields.io/coveralls/hanami/view/master.svg)](https://coveralls.io/r/hanami/view)
-[![Code Climate](http://img.shields.io/codeclimate/github/hanami/view.svg)](https://codeclimate.com/github/hanami/view)
-[![Dependencies](http://img.shields.io/gemnasium/hanami/view.svg)](https://gemnasium.com/hanami/view)
-[![Inline docs](http://inch-ci.org/github/hanami/view.svg?branch=master)](http://inch-ci.org/github/hanami/view)
+[![Gem Version](https://badge.fury.io/rb/hanami-view.svg)](https://badge.fury.io/rb/hanami-view)
+[![TravisCI](https://travis-ci.org/hanami/view.svg?branch=master)](https://travis-ci.org/hanami/view)
+[![CircleCI](https://circleci.com/gh/hanami/view/tree/master.svg?style=svg)](https://circleci.com/gh/hanami/view/tree/master)
+[![Test Coverage](https://codecov.io/gh/hanami/view/branch/master/graph/badge.svg)](https://codecov.io/gh/hanami/view)
+[![Depfu](https://badges.depfu.com/badges/4f5c8868d047d206f33893bc9194812d/overview.svg)](https://depfu.com/github/hanami/view?project=Bundler)
+[![Inline Docs](http://inch-ci.org/github/hanami/view.svg)](http://inch-ci.org/github/hanami/view)
 
 ## Contact
 
