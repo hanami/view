@@ -1,7 +1,9 @@
 # Hanami::View
 View layer for Hanami
 
-## v1.3.0.beta1 (unreleased)
+## v1.3.0.beta1 - 2018-08-08
+### Fixed
+- [Ferdinand Niedermann] Ensure to set `:disable_escape` option only for Slim and don't let Tilt to emit a warning for other template engines.
 
 ## v1.2.0 - 2018-04-06
 
