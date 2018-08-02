@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 gemspec
 
-unless ENV['TRAVIS']
+unless ENV['CI']
   gem 'byebug', require: false, platforms: :mri
   gem 'yard',   require: false
 end
@@ -10,5 +10,4 @@ gem 'hanami-utils', '~> 1.2', require: false, git: 'https://github.com/hanami/ut
 gem 'haml',         '~> 5.0', require: false
 gem 'slim',         '~> 3.0', require: false
 
-gem 'simplecov', require: false
-gem 'coveralls', require: false
+gem 'hanami-devtools', require: false, git: 'https://github.com/hanami/devtools.git'
