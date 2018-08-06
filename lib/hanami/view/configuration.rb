@@ -23,7 +23,7 @@ module Hanami
     # layouts to specify exceptions.
     #
     # @since 0.2.0
-    class Configuration
+    class Configuration # rubocop:disable Metrics/ClassLength
       # Default root
       #
       # @since 0.2.0
@@ -90,7 +90,7 @@ module Hanami
       #   Hanami::View::Configuration.for(MyApp::Views::Dashboard::Index)
       #     # => will return from MyApp::View
       def self.for(base)
-        # TODO this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
+        # TODO: this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
         namespace = Utils::String.namespace(base)
         framework = Utils::Class.load_from_pattern!("(#{namespace}|Hanami)::View")
         framework.configuration
@@ -373,11 +373,9 @@ module Hanami
       #     end
       #   end
       def prepare(&blk)
-        if block_given?
-          @modules.push(blk)
-        else
-          raise ArgumentError.new('Please provide a block')
-        end
+        return raise ArgumentError.new('Please provide a block') unless block_given?
+
+        @modules.push(blk)
       end
 
       # Add a view to the registry
@@ -441,7 +439,7 @@ module Hanami
       # @since 0.7.0
       # @api private
       def find_partial(relative_partial_path, template_name, format)
-        partials_for_view = partials.has_key?(relative_partial_path) ?  partials[relative_partial_path] : partials[template_name]
+        partials_for_view = partials.key?(relative_partial_path) ? partials[relative_partial_path] : partials[template_name]
         partials_for_view ? partials_for_view[format.to_sym] : nil
       end
 
@@ -461,7 +459,7 @@ module Hanami
         root             DEFAULT_ROOT
         default_encoding DEFAULT_ENCODING
 
-        @partials   = Hash.new { |h, k| h[k] = Hash.new }
+        @partials   = Hash.new { |h, k| h[k] = {} }
         @views      = Set.new
         @layouts    = Set.new
         @load_paths = Utils::LoadPaths.new(root)
@@ -484,9 +482,10 @@ module Hanami
       end
 
       # @api private
-      alias_method :unload!, :reset!
+      alias unload! reset!
 
       protected
+
       # @api private
       attr_writer :namespace
       # @api private

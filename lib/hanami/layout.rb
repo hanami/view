@@ -124,7 +124,8 @@ module Hanami
     #
     # @see Hanami::View::Rendering#render
     def initialize(scope, rendered)
-      @scope, @rendered = View::Rendering::LayoutScope.new(self, scope), rendered
+      @scope = View::Rendering::LayoutScope.new(self, scope)
+      @rendered = rendered
     end
 
     # Render the layout
@@ -136,7 +137,7 @@ module Hanami
     #
     # @see Hanami::View::Rendering#render
     def render
-      template.render(@scope, &Proc.new{@rendered})
+      template.render(@scope, &proc { @rendered })
     end
 
     # It tries to invoke a method for the view or a local for the given key.
@@ -161,12 +162,13 @@ module Hanami
     end
 
     protected
+
     # The template for the current format
     #
     # @api private
     # @since 0.1.0
     def template
-      self.class.registry.resolve({format: @scope.format})
+      self.class.registry.resolve(format: @scope.format)
     end
   end
 end

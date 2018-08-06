@@ -17,7 +17,7 @@ RSpec.describe Hanami::Layout do
 
     begin
       Hanami::View.load!
-    rescue => error
+    rescue StandardError => error
       expect(error).to be_a(Hanami::View::MissingTemplateLayoutError)
       expect(error.message).to eq("Can't find layout template 'MissingLayout'")
       expect(error.class).to be < Hanami::View::Error

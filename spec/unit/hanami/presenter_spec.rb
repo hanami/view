@@ -14,7 +14,7 @@ RSpec.describe Hanami::Presenter do
   end
 
   it 'uses super to access object implementation' do
-    expect(subject.location_names).to eq map.locations.map {|l| l.upcase }.join(', ')
+    expect(subject.location_names).to eq map.locations.map(&:upcase).join(', ')
   end
 
   it 'has a direct access to the object' do

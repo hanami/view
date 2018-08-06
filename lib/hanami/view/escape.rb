@@ -6,7 +6,7 @@ module Hanami
     #
     # @since 0.4.0
     module Escape
-      module InstanceMethods
+      module InstanceMethods # rubocop:disable Style/Documentation
         private
 
         # Mark the given string as safe to render.
@@ -117,7 +117,7 @@ module Hanami
         end
       end
 
-      module Presentable
+      module Presentable # rubocop:disable Style/Documentation
         # Inject escape logic into the given class.
         #
         # @since 0.7.0
@@ -143,9 +143,9 @@ module Hanami
         #
         # @api private
         # @since 0.7.0
-        def method_missing(m, *args, &blk)
-          if @object.respond_to?(m)
-            ::Hanami::View::Escape.html(@object.__send__(m, *args, &blk))
+        def method_missing(method, *args, &blk)
+          if @object.respond_to?(method)
+            ::Hanami::View::Escape.html(@object.__send__(method, *args, &blk))
           else
             super
           end
@@ -155,8 +155,8 @@ module Hanami
         #
         # @api private
         # @since 0.3.0
-        def respond_to_missing?(m, include_private = false)
-          @object.respond_to?(m, include_private)
+        def respond_to_missing?(method, include_private = false)
+          @object.respond_to?(method, include_private)
         end
       end
 
@@ -210,15 +210,17 @@ module Hanami
         visibility = :private if private_method_defined? method_name
         visibility = :protected if protected_method_defined? method_name
 
-        unless autoescape_methods[method_name]
-          prepend Module.new {
-            module_eval %{
-              #{ visibility } def #{ method_name }(*args, &blk); ::Hanami::View::Escape.html super; end
-            }
-          }
+        return if autoescape_methods[method_name]
 
-          autoescape_methods[method_name] = true
+        new_module = Module.new do
+          module_eval %{
+                      #{visibility} def #{method_name}(*args, &blk); ::Hanami::View::Escape.html super; end
+          }, __FILE__, __LINE__ - 2
         end
+
+        prepend new_module
+
+        autoescape_methods[method_name] = true
       end
     end
   end

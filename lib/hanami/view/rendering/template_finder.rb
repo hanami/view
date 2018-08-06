@@ -40,6 +40,7 @@ module Hanami
         end
 
         protected
+
         # @api private
         def template_name
           @options[:template]

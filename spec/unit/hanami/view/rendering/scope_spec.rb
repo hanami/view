@@ -9,14 +9,14 @@ RSpec.describe Hanami::View::Rendering::Scope do
 
     describe 'when the scope implements the method' do
       it 'returns true' do
-        scope = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new, {x: 23})
+        scope = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new, x: 23)
         expect(scope).to respond_to(:x), "Expected scope to respond to `#x'"
       end
     end
 
     describe "when both the view and the scope don't implement the method" do
       it 'returns false' do
-        scope = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new, {x: 23})
+        scope = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new, x: 23)
         expect(scope).to_not respond_to(:missing), "Expected scope to NOT respond to `#missing'"
       end
     end
@@ -31,10 +31,10 @@ RSpec.describe Hanami::View::Rendering::Scope do
 
   describe '#inspect' do
     it 'returns proper inspect String' do
-      scope = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new, {x: 23})
+      scope = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new, x: 23)
       expect(scope.inspect).to include '@view'
       expect(scope.inspect).to include '@locals'
-      expect(scope.inspect).to include '%x' % (scope.object_id << 1)
+      expect(scope.inspect).to include format('%<id>x', id: (scope.object_id << 1))
     end
   end
 end

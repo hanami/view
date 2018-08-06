@@ -19,7 +19,6 @@ module Hanami
       #
       #   # In this scenario we will use a `NullLayout`.
       class NullLayout
-
         # Initialize a layout
         #
         # @param scope [Hanami::View::Rendering::Scope] view rendering scope
@@ -30,7 +29,7 @@ module Hanami
         #
         # @see Hanami::Layout#initialize
         # @see Hanami::View::Rendering#render
-        def initialize(scope, rendered)
+        def initialize(_scope, rendered)
           @rendered = rendered
         end
 

@@ -41,7 +41,7 @@ module Hanami
         #
         # @since 0.7.0
         # @api private
-        def find
+        def find # rubocop:disable Metrics/AbcSize
           _find_partials(configuration.root).map do |template|
             partial_path, partial_base_name = Pathname(template).relative_path_from(configuration.root).split
             partial_base_parts              = partial_base_name.to_s.split(PARTIAL_PARTS_SEPARATOR)
@@ -65,7 +65,7 @@ module Hanami
         # @since 0.7.0
         # @api private
         def _find_partials(path)
-          Dir.glob("#{ [path, TemplatesFinder::RECURSIVE, PARTIAL_PATTERN].join(::File::SEPARATOR) }.#{TemplatesFinder::FORMAT}.#{TemplatesFinder::ENGINES}")
+          Dir.glob("#{[path, TemplatesFinder::RECURSIVE, PARTIAL_PATTERN].join(::File::SEPARATOR)}.#{TemplatesFinder::FORMAT}.#{TemplatesFinder::ENGINES}")
         end
       end
     end
