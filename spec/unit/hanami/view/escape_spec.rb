@@ -29,8 +29,8 @@ RSpec.describe Hanami::View::Escape do
   end
 
   it "doesn't interfer with other views" do
-    expect(Users::Show.autoescape_methods).to eq({custom: true, username: true, raw_username: true, book: true, protected_username: true, private_username: true})
-    expect(Users::Extra.autoescape_methods).to eq({username: true})
+    expect(Users::Show.autoescape_methods).to eq(custom: true, username: true, raw_username: true, book: true, protected_username: true, private_username: true)
+    expect(Users::Extra.autoescape_methods).to eq(username: true)
   end
 
   it "escapes custom rendering" do

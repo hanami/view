@@ -143,7 +143,7 @@ RSpec.describe Hanami::View::Configuration do
 
   describe '#partials' do
     before do
-      @template_stub = OpenStruct.new()
+      @template_stub = OpenStruct.new
     end
 
     it 'defaults to an empty set' do
@@ -153,7 +153,7 @@ RSpec.describe Hanami::View::Configuration do
     it 'allows to add partials' do
       @configuration.add_partial(Hanami::View::Rendering::PartialFile.new('shared/_foo', 'json', @template_stub))
       expect(@configuration.partials.keys).to include('shared/_foo')
-      expect(@configuration.partials['shared/_foo']).to eq({ json: @template_stub })
+      expect(@configuration.partials['shared/_foo']).to eq(json: @template_stub)
     end
 
     it 'eliminates duplications' do
@@ -207,7 +207,7 @@ RSpec.describe Hanami::View::Configuration do
       end
 
       PrepareView.__send__(:include, Hanami::View)
-      expect(PrepareView.render({format: :html})).to eq 'foo'
+      expect(PrepareView.render(format: :html)).to eq 'foo'
     end
 
     it 'raises error in case of missing block' do
@@ -335,7 +335,6 @@ RSpec.describe Hanami::View::Configuration do
           @loaded
         end
 
-        protected
         def self.load!
           @loaded = true
         end
@@ -388,7 +387,7 @@ RSpec.describe Hanami::View::Configuration do
 
       expect(@configuration.load_paths).to include root
       expect(@configuration.layout).to eq Hanami::View::Rendering::NullLayout
-      @configuration.default_encoding        'utf-8'
+      @configuration.default_encoding 'utf-8'
       expect(@configuration.views).to be_empty
       expect(@configuration.layouts).to be_empty
       expect(@configuration.partials).to be_empty

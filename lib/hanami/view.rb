@@ -200,13 +200,13 @@ module Hanami
     #
     #   Hanami::View.configuration.root # => #<Pathname:.>
     #   MyApp::View.configuration.root # => #<Pathname:/path/to/root>
-    def self.duplicate(mod, views = 'Views', &blk)
+    def self.duplicate(mod, views = 'Views', &blk) # rubocop:disable Metrics/MethodLength
       dupe.tap do |duplicated|
-        mod.module_eval %{ module #{ views }; end } if views
-        mod.module_eval %{
+        mod.module_eval %( module #{views}; end ), __FILE__, __LINE__ if views
+        mod.module_eval %(
           Layout = Hanami::Layout.dup
           Presenter = Hanami::Presenter.dup
-        }
+        ), __FILE__, __LINE__ - 3
 
         duplicated.configure do
           namespace [mod, views].compact.join '::'
@@ -237,8 +237,8 @@ module Hanami
     #   class IndexView
     #     include Hanami::View
     #   end
-    def self.included(base)
-      conf = self.configuration
+    def self.included(base) # rubocop:disable Metrics/MethodLength
+      conf = configuration
       conf.add_view(base)
 
       base.class_eval do

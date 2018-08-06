@@ -55,11 +55,11 @@ module Hanami
 
         # @since 0.7.0
         # @api private
-        def method_missing(m, *)
-          if m.match(/\?\z/)
+        def method_missing(method, *) # rubocop:disable Style/MethodMissingSuper
+          if method.to_s.end_with?("?")
             false
           else
-            self.class.new("#{ @local }.#{ m }")
+            self.class.new("#{@local}.#{method}")
           end
         end
 
@@ -67,14 +67,14 @@ module Hanami
 
         # @since 0.7.0
         # @api private
-        def respond_to_missing?(method_name, include_all)
+        def respond_to_missing?(_method_name, _include_all)
           true
         end
 
         # @since 0.7.0
         # @api private
         def __inspect
-          " :#{ @local }"
+          " :#{@local}"
         end
       end
     end

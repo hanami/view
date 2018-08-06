@@ -71,7 +71,6 @@ class NestedView
   root __dir__ + '/templates'
 end
 
-
 module Organisations
   class Action
     include Hanami::View
@@ -118,7 +117,7 @@ module Members
       layout :application
 
       def title
-        "#{ layout.title } articles"
+        "#{layout.title} articles"
       end
     end
   end
@@ -130,7 +129,7 @@ module Articles
     layout :application
 
     def title
-      "#{ layout.title } articles"
+      "#{layout.title} articles"
     end
   end
 
@@ -246,7 +245,7 @@ class SongWidget
   end
 
   def render
-    %(<audio src="#{ song.url }">#{ song.title }</audio>)
+    %(<audio src="#{song.url}">#{song.title}</audio>)
   end
 end
 
@@ -472,7 +471,7 @@ class UserXmlSerializer
 
   def serialize
     @user.to_h.map do |attr, value|
-      %(<#{ attr }>#{ value }</#{ attr }>)
+      %(<#{attr}>#{value}</#{attr}>)
     end.join("\n")
   end
 end
@@ -481,7 +480,7 @@ class UserLayout
   include Hanami::Layout
 
   def page_title(username)
-    "User: #{ username }"
+    "User: #{username}"
   end
 end
 
@@ -513,6 +512,7 @@ module Users
     end
 
     private
+
     def private_username
       user.username
     end
@@ -567,7 +567,6 @@ end
 
 DeepPartials::View.load!
 
-
 module App3
   View = Hanami::View.duplicate(self) do
     root __dir__ + '/templates/app3/templates'
@@ -587,7 +586,6 @@ module App3
 end
 
 App3::View.load!
-
 
 module PartialAndLayout
   View = Hanami::View.duplicate(self) do

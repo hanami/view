@@ -15,7 +15,7 @@ RSpec.describe Hanami::View do
     end
 
     it 'initializes view with keyword arguments' do
-      expect(@view.new(@template, hello: 'world').locals).to eq({hello: 'world'})
+      expect(@view.new(@template, hello: 'world').locals).to eq(hello: 'world')
     end
   end
 
@@ -100,7 +100,6 @@ RSpec.describe Hanami::View do
     #     expect(ApplicationLayout.send(:registry).frozen?).to eq true
     #   end
     # end
-
   end
 
   describe 'rendering' do
@@ -124,7 +123,9 @@ RSpec.describe Hanami::View do
           include Hanami::View
           configuration.default_encoding 'wrong'
 
-          def self.name; 'EncodingView'; end
+          def self.name
+            'EncodingView'
+          end
         end.render(format: :html)
       end.to raise_error(ArgumentError, "unknown encoding name - wrong")
     end
@@ -134,7 +135,7 @@ RSpec.describe Hanami::View do
     end
 
     it 'renders a template according to the requested format' do
-      articles = [ OpenStruct.new(title: 'Man on the Moon!') ]
+      articles = [OpenStruct.new(title: 'Man on the Moon!')]
 
       rendered = Articles::Index.render(format: :json, articles: articles)
       expect(rendered).to match %("title":"Man on the Moon!")
@@ -145,7 +146,7 @@ RSpec.describe Hanami::View do
 
     # this test was added to show that ../templates/members/articles/index.html.erb interferres with the normal behavior
     it 'renders the correct template when a subdirectory also exists' do
-      articles = [ OpenStruct.new(title: 'Man on the Moon!') ]
+      articles = [OpenStruct.new(title: 'Man on the Moon!')]
 
       rendered = Articles::Index.render(format: :html, articles: articles)
       expect(rendered).not_to match %(<h1>Wrong Article Template</h1>)
@@ -158,15 +159,15 @@ RSpec.describe Hanami::View do
 
     describe 'calling an action method from the template' do
       it 'can call with multiple arguments' do
-        expect(RenderViewMethodWithArgs.render({format: :html})).to include %(<h1>Hello, earth!</h1>)
+        expect(RenderViewMethodWithArgs.render(format: :html)).to include %(<h1>Hello, earth!</h1>)
       end
 
       it 'will override Kernel methods' do
-        expect(RenderViewMethodOverride.render({format: :html})).to include %(<h1>Hello, foo!</h1>)
+        expect(RenderViewMethodOverride.render(format: :html)).to include %(<h1>Hello, foo!</h1>)
       end
 
       it 'can call with block' do
-        expect(RenderViewMethodWithBlock.render({format: :html})).to include %(<ul><li>thing 1</li><li>thing 2</li><li>thing 3</li></ul>)
+        expect(RenderViewMethodWithBlock.render(format: :html)).to include %(<ul><li>thing 1</li><li>thing 2</li><li>thing 3</li></ul>)
       end
     end
 
@@ -200,7 +201,7 @@ RSpec.describe Hanami::View do
 
     it 'renders different template, as specified by DSL' do
       article = OpenStruct.new(title: 'Bonjour')
-      result  = OpenStruct.new(errors: {title: 'Title is required'})
+      result  = OpenStruct.new(errors: { title: 'Title is required' })
 
       rendered = Articles::Create.render(format: :html, article: article, result: result)
       expect(rendered).to match %(<h1>New Article</h1>)
@@ -223,7 +224,7 @@ RSpec.describe Hanami::View do
     end
 
     it 'decorates locals' do
-      map = Map.new(['Rome', 'Cambridge'])
+      map = Map.new(%w[Rome Cambridge])
 
       rendered = Dashboard::Index.render(format: :html, map: map)
       expect(rendered).to match %(<h1>Map</h1>)
@@ -231,14 +232,14 @@ RSpec.describe Hanami::View do
     end
 
     it 'safely ignores missing locals' do
-      map = Map.new(['Rome', 'Cambridge'])
+      map = Map.new(%w[Rome Cambridge])
 
       rendered = Dashboard::Index.render(format: :html, map: map)
       expect(rendered).not_to match %(<h3>Annotations</h3>)
     end
 
     it 'uses optional locals, if present' do
-      map         = Map.new(['Rome', 'Cambridge'])
+      map         = Map.new(%w[Rome Cambridge])
       annotations = OpenStruct.new(written?: true)
 
       rendered = Dashboard::Index.render(format: :html, annotations: annotations, map: map)
@@ -311,7 +312,7 @@ RSpec.describe Hanami::View do
 
     describe 'layout' do
       it 'renders contents from layout' do
-        articles = [ OpenStruct.new(title: 'A Wonderful Day!') ]
+        articles = [OpenStruct.new(title: 'A Wonderful Day!')]
 
         rendered = Articles::Index.render(format: :html, articles: articles)
         expect(rendered).to match %(<h1>A Wonderful Day!</h1>)
@@ -320,15 +321,15 @@ RSpec.describe Hanami::View do
       end
 
       it 'safely ignores missing locals' do
-        articles = [ OpenStruct.new(title: 'A Wonderful Day!') ]
+        articles = [OpenStruct.new(title: 'A Wonderful Day!')]
 
         rendered = Articles::Index.render(format: :html, articles: articles)
         expect(rendered).not_to match %(<h2>Your plan is overdue.</h2>)
       end
 
       it 'uses optional locals, if present' do
-        articles = [ OpenStruct.new(title: 'A Wonderful Day!') ]
-        plan     =   OpenStruct.new(overdue?: true)
+        articles = [OpenStruct.new(title: 'A Wonderful Day!')]
+        plan = OpenStruct.new(overdue?: true)
 
         rendered = Articles::Index.render(format: :html, plan: plan, articles: articles)
         expect(rendered).to match %(<h2>Your plan is overdue.</h2>)
@@ -519,15 +520,15 @@ RSpec.describe Hanami::View do
       end
 
       it 'generates a namespace for views' do
-        expect(defined?(Duplicated::Views)).to be_truthy, lambda { 'Duplicated::Views expected' }
+        expect(defined?(Duplicated::Views)).to be_truthy, -> { 'Duplicated::Views expected' }
       end
 
       it 'generates a custom namespace for views' do
-        expect(defined?(DuplicatedCustom::Viewz)).to be_truthy, lambda { 'DuplicatedCustom::Viewz expected' }
+        expect(defined?(DuplicatedCustom::Viewz)).to be_truthy, -> { 'DuplicatedCustom::Viewz expected' }
       end
 
       it 'does not create a custom namespace for views' do
-        expect(defined?(DuplicatedWithoutNamespace::Views)).to_not be_truthy, lambda { "DuplicatedWithoutNamespace::Views wasn't expected" }
+        expect(defined?(DuplicatedWithoutNamespace::Views)).to_not be_truthy, -> { "DuplicatedWithoutNamespace::Views wasn't expected" }
       end
 
       it 'assigns correct namespace to the configuration when the namespace argument is nil' do
@@ -535,11 +536,11 @@ RSpec.describe Hanami::View do
       end
 
       it 'duplicates Layout' do
-        expect(defined?(Duplicated::Layout)).to be_truthy, lambda { 'Duplicated::Layout expected' }
+        expect(defined?(Duplicated::Layout)).to be_truthy, -> { 'Duplicated::Layout expected' }
       end
 
       it 'duplicates Presenter' do
-        expect(defined?(Duplicated::Presenter)).to be_truthy, lambda { 'Duplicated::Presenter expected' }
+        expect(defined?(Duplicated::Presenter)).to be_truthy, -> { 'Duplicated::Presenter expected' }
       end
 
       it 'optionally accepts a block to configure the generated module' do
@@ -570,6 +571,4 @@ RSpec.describe Hanami::View do
       end
     end
   end
-
 end
-
