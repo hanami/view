@@ -11,7 +11,6 @@ module Hanami
         # @since 1.1.1
         # @api private
         def self.build(options, locals, format)
-          puts options
           options.dup.tap do |opts|
             opts[:format] ||= format
             opts[:locals] = locals
