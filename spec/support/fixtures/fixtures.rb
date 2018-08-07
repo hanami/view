@@ -152,6 +152,10 @@ module Articles
     end
   end
 
+  class JsNew < New
+    format :js
+  end
+
   class Create
     include Hanami::View
     template 'articles/new'
