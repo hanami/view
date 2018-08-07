@@ -24,4 +24,10 @@ RSpec.describe 'Framework configuration' do
     rendered = App3::Views::Home::Index.render(format: :html, name: 'name')
     expect(rendered).to eq("View before, View name\nimplicit partial, View name\nother partial, View name\ndeep partial, View name\nexplicit partial, View partial\nother partial, View partial\ndeep partial, View partial\nView after, View name\n")
   end
+
+  it "Articles can render html partial within js template" do
+    article  = OpenStruct.new(title: "An Article")
+    rendered = Articles::New.render(format: :js, article: article)
+    expect(rendered).to eq(%[$("form").html("<form>\n  <input type=\"hidden\" name=\"secret\" value=\"23\" />\n  <input type=\"text\" name=\"article[title]\" value=\"An Article\" />\n</form>\n");\n])
+  end
 end
