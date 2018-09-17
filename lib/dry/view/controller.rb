@@ -14,6 +14,7 @@ module Dry
 
       DEFAULT_LAYOUTS_DIR = 'layouts'.freeze
       DEFAULT_CONTEXT = Object.new.freeze
+      DEFAULT_RENDERER_OPTIONS = { default_encoding: 'utf-8'.freeze }.freeze
       EMPTY_LOCALS = {}.freeze
 
       include Dry::Equalizer(:config)
@@ -24,6 +25,9 @@ module Dry
       setting :layout, false
       setting :template
       setting :default_format, :html
+      setting :renderer_options, DEFAULT_RENDERER_OPTIONS do |v|
+        DEFAULT_RENDERER_OPTIONS.merge(v.to_h).freeze
+      end
       setting :context, DEFAULT_CONTEXT
       setting :decorator, Decorator.new
 
@@ -49,7 +53,7 @@ module Dry
       # @api private
       def self.renderer(format)
         renderers.fetch(format) {
-          renderers[format] = Renderer.new(paths, format: format)
+          renderers[format] = Renderer.new(paths, format: format, **config.renderer_options)
         }
       end
 
