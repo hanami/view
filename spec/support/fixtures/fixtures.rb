@@ -13,6 +13,14 @@ class RenderView
   include Hanami::View
 end
 
+class RenderUnknownMethod
+  include Hanami::View
+
+  def render
+    foo "bar"
+  end
+end
+
 class RenderViewMethodOverride
   include Hanami::View
 

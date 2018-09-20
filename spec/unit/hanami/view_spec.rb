@@ -112,6 +112,10 @@ RSpec.describe Hanami::View do
       expect(RenderView.render(format: :html, planet: 'Mars')).to include %(<h1>Hello, Mars!</h1>)
     end
 
+    it 'raises error if an unexisting method is referenced' do
+      expect { RenderUnknownMethod.render(format: :html) }.to raise_error(NoMethodError, /foo/)
+    end
+
     # See https://github.com/hanami/view/issues/76
     it 'renders a template with different encoding' do
       expect(EncodingView.render(format: :html)).to include %(Configuração)
