@@ -7,19 +7,20 @@ module Dry
       PARTIAL_PREFIX = "_".freeze
       PATH_DELIMITER = "/".freeze
 
-      include Dry::Equalizer(:paths, :format)
+      include Dry::Equalizer(:paths, :format, :options)
 
       TemplateNotFoundError = Class.new(StandardError)
 
-      attr_reader :paths, :format, :engine, :tilts
+      attr_reader :paths, :format, :options, :tilts
 
       def self.tilts
         @__engines__ ||= {}
       end
 
-      def initialize(paths, format:)
+      def initialize(paths, format:, **options)
         @paths = paths
         @format = format
+        @options = options
         @tilts = self.class.tilts
       end
 
@@ -61,10 +62,9 @@ module Dry
         partial_name = name_segments[0..-2].push("#{PARTIAL_PREFIX}#{name_segments[-1]}").join(PATH_DELIMITER)
       end
 
-      # TODO: make default_encoding configurable
       def tilt(path)
         tilts.fetch(path) {
-          tilts[path] = Tilt.new(path, nil, default_encoding: "utf-8")
+          tilts[path] = Tilt.new(path, nil, **options)
         }
       end
     end
