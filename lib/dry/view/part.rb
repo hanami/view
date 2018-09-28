@@ -80,6 +80,12 @@ module Dry
         end
       end
 
+      def respond_to_missing?(name, include_private = false)
+        d = self.class.decorated_attributes
+        c = CONVENIENCE_METHODS
+        d.key?(name) || c.include?(name) || _value.respond_to?(name, include_private) || super
+      end
+
       def _render_scope(name, **locals)
         Scope.new(
           locals: locals.merge(name => self),
