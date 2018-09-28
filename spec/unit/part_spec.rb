@@ -68,6 +68,20 @@ RSpec.describe Dry::View::Part do
         expect { part.farewell }.to raise_error(NoMethodError)
       end
     end
+
+    describe '#respond_to_missing?' do
+      let(:value) { double(greeting: 'hello from value') }
+
+      it 'handles convenience methods' do
+        expect(part).to respond_to(:context)
+        expect(part).to respond_to(:render)
+        expect(part).to respond_to(:value)
+      end
+
+      it 'handles value methods' do
+        expect(part).to respond_to(:greeting)
+      end
+    end
   end
 
   context 'without a renderer' do
