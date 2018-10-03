@@ -117,7 +117,12 @@ module Hanami
 
     # Initialize a layout
     #
-    # @param scope [Hanami::View::Rendering::Scope] view rendering scope
+    # @param scope [Hanami::View::Rendering::Scope,::Hash] view rendering scope.
+    #   Optionally a scope can be expressed as a Ruby `::Hash`, but it MUST contain
+    #   the `:format` key, to specify which template to render.
+    # @option scope [Symbol] :format the format to render (e.g. `:html`, `:xml`, `:json`)
+    #   This is mandatory only if a `:Hash` is passed as `scope`.
+    #
     # @param rendered [String] the output of the view rendering process
     #
     # @api private
