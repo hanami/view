@@ -112,6 +112,10 @@ class ApplicationLayout
   end
 end
 
+class LocalsLayout
+  include Hanami::Layout
+end
+
 class ContactsLayout
   include Hanami::Layout
 end

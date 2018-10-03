@@ -2,6 +2,7 @@ require 'hanami/utils/class_attribute'
 require 'hanami/view/rendering/layout_registry'
 require 'hanami/view/rendering/layout_scope'
 require 'hanami/view/rendering/null_layout'
+require 'hanami/view/rendering/null_view'
 
 module Hanami
   # Layout
@@ -124,7 +125,9 @@ module Hanami
     #
     # @see Hanami::View::Rendering#render
     def initialize(scope, rendered)
-      @scope, @rendered = View::Rendering::LayoutScope.new(self, scope), rendered
+      scope = Hanami::View::Rendering::Scope.new(Hanami::View::Rendering::NullView, scope) if scope.is_a?(::Hash)
+      @scope = View::Rendering::LayoutScope.new(self, scope)
+      @rendered = rendered
     end
 
     # Render the layout
