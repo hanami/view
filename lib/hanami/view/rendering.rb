@@ -196,7 +196,7 @@ module Hanami
         #   view     = IndexView.new(template, {article: article})
         #
         #   view.article # => #<Article:0x007fb0bbd3b6e8>
-        def method_missing(m)
+        def method_missing(m, *)
           @scope.__send__ m
         end
       end
