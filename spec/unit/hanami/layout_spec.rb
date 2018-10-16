@@ -32,6 +32,17 @@ RSpec.describe Hanami::Layout do
     expect(rendered).to include("contents")
   end
 
+  # Bug https://github.com/hanami/view/issues/153
+  # See https://github.com/hanami/view/pull/156
+  it 'can be rendered directly (legacy signature)' do
+    template = Hanami::View::Template.new("spec/support/fixtures/templates/locals.html.haml")
+    layout = LocalsLayout.new(template, {})
+    rendered = layout.render
+
+    expect(rendered).to include("Locals")
+    expect(rendered).to include("<body>\n\n</body>")
+  end
+
   it 'concrete methods are available in layout template' do
     rendered = Store::Views::Home::Index.render(format: :html)
     expect(rendered).to match %(script)

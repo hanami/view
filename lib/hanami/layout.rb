@@ -130,9 +130,19 @@ module Hanami
     #
     # @see Hanami::View::Rendering#render
     def initialize(scope, rendered)
-      scope = Hanami::View::Rendering::Scope.new(Hanami::View::Rendering::NullView, scope) if scope.is_a?(::Hash)
-      @scope = View::Rendering::LayoutScope.new(self, scope)
-      @rendered = rendered
+      # NOTE: This complex data transformation is due to a combination of a bug and the intent of maintaing backward compat (SemVer).
+      # See https://github.com/hanami/view/pull/156
+      s, r = *case scope
+              when ::Hash
+                [Hanami::View::Rendering::Scope.new(Hanami::View::Rendering::NullView, scope), rendered]
+              when Hanami::View::Template
+                [Hanami::View::Rendering::Scope.new(Hanami::View::Rendering::NullView, rendered.merge(format: scope.format)), ""]
+              else
+                [scope, rendered]
+              end
+
+      @scope = View::Rendering::LayoutScope.new(self, s)
+      @rendered = r
     end
 
     # Render the layout
