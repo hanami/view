@@ -1,6 +1,14 @@
 # Hanami::View
 View layer for Hanami
 
+## v1.2.1 - 2018-10-16
+### Added
+- [Luca Guidi] Introduced new, backward compatible, signature to render a layout for testing purposes (eg. `ApplicationLayout.new({ format: :html }, "contents").render`)
+
+### Fixed
+- [Luca Guidi] Ensure layout to be rendered when using HAML 5
+- [Luca Guidi] Ensure to raise `NoMethodError` when an unknown method is invoked by a view/template
+
 ## v1.2.0 - 2018-04-06
 
 ## v1.2.0.rc2 - 2018-04-06
