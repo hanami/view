@@ -13,6 +13,14 @@ class RenderView
   include Hanami::View
 end
 
+class RenderUnknownMethod
+  include Hanami::View
+
+  def render
+    foo "bar"
+  end
+end
+
 class RenderViewMethodOverride
   include Hanami::View
 
@@ -104,6 +112,10 @@ class ApplicationLayout
   end
 end
 
+class LocalsLayout
+  include Hanami::Layout
+end
+
 class ContactsLayout
   include Hanami::Layout
 end
@@ -150,6 +162,10 @@ module Articles
     def errors
       local(:result).errors
     end
+  end
+
+  class JsNew < New
+    format :js
   end
 
   class Create

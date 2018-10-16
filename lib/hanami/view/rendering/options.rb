@@ -12,9 +12,10 @@ module Hanami
         # @api private
         def self.build(options, locals, format)
           options.dup.tap do |opts|
-            opts[:format] = format
+            opts[:format] ||= format
             opts[:locals] = locals
-            opts[:locals].merge!(options.fetch(:locals) { ::Hash.new }).merge!(format: format)
+            opts[:locals].merge!(options.fetch(:locals) { ::Hash.new })
+            opts[:locals].merge!(format: opts.fetch(:format, format))
           end
         end
       end
