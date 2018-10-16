@@ -2,6 +2,7 @@ require 'hanami/utils/class_attribute'
 require 'hanami/view/rendering/layout_registry'
 require 'hanami/view/rendering/layout_scope'
 require 'hanami/view/rendering/null_layout'
+require 'hanami/view/rendering/null_view'
 
 module Hanami
   # Layout
@@ -116,7 +117,12 @@ module Hanami
 
     # Initialize a layout
     #
-    # @param scope [Hanami::View::Rendering::Scope] view rendering scope
+    # @param scope [Hanami::View::Rendering::Scope,::Hash] view rendering scope.
+    #   Optionally a scope can be expressed as a Ruby `::Hash`, but it MUST contain
+    #   the `:format` key, to specify which template to render.
+    # @option scope [Symbol] :format the format to render (e.g. `:html`, `:xml`, `:json`)
+    #   This is mandatory only if a `:Hash` is passed as `scope`.
+    #
     # @param rendered [String] the output of the view rendering process
     #
     # @api private
@@ -124,7 +130,19 @@ module Hanami
     #
     # @see Hanami::View::Rendering#render
     def initialize(scope, rendered)
-      @scope, @rendered = View::Rendering::LayoutScope.new(self, scope), rendered
+      # NOTE: This complex data transformation is due to a combination of a bug and the intent of maintaing backward compat (SemVer).
+      # See https://github.com/hanami/view/pull/156
+      s, r = *case scope
+              when ::Hash
+                [Hanami::View::Rendering::Scope.new(Hanami::View::Rendering::NullView, scope), rendered]
+              when Hanami::View::Template
+                [Hanami::View::Rendering::Scope.new(Hanami::View::Rendering::NullView, rendered.merge(format: scope.format)), ""]
+              else
+                [scope, rendered]
+              end
+
+      @scope = View::Rendering::LayoutScope.new(self, s)
+      @rendered = r
     end
 
     # Render the layout
