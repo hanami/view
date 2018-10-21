@@ -1,3 +1,16 @@
+# 0.5.3 / 2018-10-22
+
+### Added
+
+- `renderer_options` setting for configuring tilt-based renderer (liseki in [#62][pr62])
+
+### Changed
+
+- Part objects wrap values more transparently, via added `#respond_to_missing?` (liseki in [#63][pr63])
+
+[pr62]: https://github.com/dry-rb/dry-view/pull/62
+[pr63]: https://github.com/dry-rb/dry-view/pull/63
+
 # 0.5.2 / 2018-06-13
 
 ### Changed
