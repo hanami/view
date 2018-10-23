@@ -1,6 +1,11 @@
 # Hanami::View
 View layer for Hanami
 
+## v1.3.0.beta1 - 2018-08-08
+### Fixed
+- [Ferdinand Niedermann] Ensure to set `:disable_escape` option only for Slim and don't let Tilt to emit a warning for other template engines.
+- [glaszig] Ensure partial rendering to respect `format` overriding
+
 ## v1.2.1 - 2018-10-16
 ### Added
 - [Luca Guidi] Introduced new, backward compatible, signature to render a layout for testing purposes (eg. `ApplicationLayout.new({ format: :html }, "contents").render`)
