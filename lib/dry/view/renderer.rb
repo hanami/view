@@ -59,7 +59,7 @@ module Dry
 
       def name_for_partial(name)
         name_segments = name.to_s.split(PATH_DELIMITER)
-        partial_name = name_segments[0..-2].push("#{PARTIAL_PREFIX}#{name_segments[-1]}").join(PATH_DELIMITER)
+        name_segments[0..-2].push("#{PARTIAL_PREFIX}#{name_segments[-1]}").join(PATH_DELIMITER)
       end
 
       def tilt(path)
