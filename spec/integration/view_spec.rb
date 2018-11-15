@@ -7,6 +7,13 @@ RSpec.describe 'dry-view' do
         config.template = 'users'
         config.default_format = :html
       end
+
+      expose :users do
+        [
+          { name: 'Jane', email: 'jane@doe.org' },
+          { name: 'Joe', email: 'joe@doe.org' }
+        ]
+      end
     end
   end
 
@@ -17,12 +24,7 @@ RSpec.describe 'dry-view' do
   it 'renders within a layout and makes the provided context available everywhere' do
     vc = vc_class.new
 
-    users = [
-      { name: 'Jane', email: 'jane@doe.org' },
-      { name: 'Joe', email: 'joe@doe.org' }
-    ]
-
-    expect(vc.(context: context, locals: {users: users})).to eql(
+    expect(vc.(context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
@@ -34,37 +36,15 @@ RSpec.describe 'dry-view' do
       end
     end.new
 
-    users = [
-      { name: 'Jane', email: 'jane@doe.org' },
-      { name: 'Joe', email: 'joe@doe.org' }
-    ]
-
-    expect(vc.(context: context, locals: {users: users})).to eql(
+    expect(vc.(context: context).to_s).to eql(
       '<div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" />'
-    )
-  end
-
-  it 'renders a view without locals' do
-    vc = Class.new(vc_class) do
-      configure do |config|
-        config.template = 'empty'
-      end
-    end.new
-
-    expect(vc.(context: context, locals: {})).to eq(
-      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p>This is a view with no locals.</p></body></html>'
     )
   end
 
   it 'renders a view with an alternative format and engine' do
     vc = vc_class.new
 
-    users = [
-      { name: 'Jane', email: 'jane@doe.org' },
-      { name: 'Joe', email: 'joe@doe.org' }
-    ]
-
-    expect(vc.(context: context, locals: {users: users}, format: 'txt').strip).to eql(
+    expect(vc.(context: context, format: 'txt').to_s.strip).to eql(
       "# dry-view rocks!\n\n* Jane (jane@doe.org)\n* Joe (joe@doe.org)"
     )
   end
@@ -76,12 +56,7 @@ RSpec.describe 'dry-view' do
       end
     end.new
 
-    users = [
-      { name: 'Jane', email: 'jane@doe.org' },
-      { name: 'Joe', email: 'joe@doe.org' }
-    ]
-
-    expect(vc.(context: context, locals: {users: users})).to eq(
+    expect(vc.(context: context).to_s).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h1>OVERRIDE</h1><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
     )
   end
@@ -93,12 +68,7 @@ RSpec.describe 'dry-view' do
       end
     end.new
 
-    users = [
-      { name: 'Jane', email: 'jane@doe.org' },
-      { name: 'Joe', email: 'joe@doe.org' }
-    ]
-
-    expect(vc.(context: context, locals: {users: users})).to eq(
+    expect(vc.(context: context).to_s).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><div class="box"><h2>Nombre</h2>Jane</div><div class="box"><h2>Nombre</h2>Joe</div></div></body></html>'
     )
   end
@@ -123,9 +93,20 @@ RSpec.describe 'dry-view' do
     end
 
     it 'renders within a parent class layout using provided context' do
-      vc = child_view.new
+      vc = Class.new(vc_class) do
+        configure do |config|
+          config.template = 'tasks'
+        end
 
-      expect(vc.(context: context, locals: { tasks: [{ title: 'one' }, { title: 'two' }] })).to eql(
+        expose :tasks do
+          [
+            {title: 'one'},
+            {title: 'two'},
+          ]
+        end
+      end.new
+
+      expect(vc.(context: context).to_s).to eql(
         '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ol><li>one</li><li>two</li></ol></body></html>'
       )
     end
