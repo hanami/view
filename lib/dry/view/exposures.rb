@@ -40,11 +40,16 @@ module Dry
         self.class.new(bound_exposures)
       end
 
-      def locals(input)
+      def call(input)
         tsort.each_with_object({}) { |name, memo|
-          memo[name] = self[name].(input, memo) if exposures.key?(name)
-        }.each_with_object({}) { |(name, val), memo|
-          memo[name] = val unless self[name].private?
+          next unless exposure = self[name]
+
+          value = exposure.(input, memo)
+          value = yield(value, exposure) if block_given?
+
+          memo[name] = value
+        }.each_with_object({}) { |(name, value), memo|
+          memo[name] = value unless self[name].private?
         }
       end
 

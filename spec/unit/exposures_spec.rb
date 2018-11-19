@@ -41,58 +41,84 @@ RSpec.describe Dry::View::Exposures do
     end
   end
 
-  describe "#locals" do
-    before do
-      exposures.add(:greeting, -> greeting: { greeting.upcase })
-      exposures.add(:farewell, -> greeting { "#{greeting} and goodbye" })
+  describe "#call" do
+    describe "in general" do
+      before do
+        exposures.add(:greeting, -> greeting: { greeting.upcase })
+        exposures.add(:farewell, -> greeting { "#{greeting} and goodbye" })
+      end
+
+      subject(:locals) { exposures.(greeting: "hello") }
+
+      it "returns the values from calling the exposures" do
+        expect(locals).to eq(greeting: "HELLO", farewell: "HELLO and goodbye")
+      end
+
+      it "does not include values from private exposures" do
+        exposures.add(:hidden, -> **input { "shh" }, private: true)
+
+        expect(locals).to include(:greeting, :farewell)
+        expect(locals).not_to include(:hidden)
+      end
     end
 
-    subject(:locals) { exposures.locals(greeting: "hello") }
+    describe "with block provided" do
+      before do
+        exposures.add(:greeting, -> greeting: { greeting.upcase })
+        exposures.add(:farewell, -> greeting { "#{greeting} and goodbye" })
+      end
 
-    it "returns the values from the exposures' procs" do
-      expect(locals).to eq(greeting: "HELLO", farewell: "HELLO and goodbye")
+      subject(:locals) {
+        exposures.(greeting: "hello") do |value, exposure|
+          "#{value} from #{exposure.name}"
+        end
+      }
+
+      it "provides values determined from the block" do
+        expect(locals).to eq(
+          greeting: "HELLO from greeting",
+          farewell: "HELLO from greeting and goodbye from farewell",
+        )
+      end
     end
 
-    it "does not return any values from private exposures" do
-      exposures.add(:hidden, -> **input { "shh" }, private: true)
+    describe "with default exposure values" do
+      it "returns 'default_value' from exposure" do
+        exposures.add(:name, default: 'John')
+        locals = exposures.({})
 
-      expect(locals).to include(:greeting, :farewell)
-      expect(locals).not_to include(:hidden)
+        expect(locals).to eq(name: "John")
+      end
+
+      it "returns values from arguments" do
+        exposures.add(:name, default: 'John')
+        locals = exposures.(name: 'William')
+
+        expect(locals).to eq(name: "William")
+      end
+
+      it "returns values from arguments even when value is nil" do
+        exposures.add(:name, default: 'John')
+        locals = exposures.(name: nil)
+
+        expect(locals).to eq(name: nil)
+      end
+
+      it "returns value from proc" do
+        exposures.add(:name, -> name: { name.upcase }, default: 'John')
+        locals = exposures.(name: 'William')
+
+        expect(locals).to eq(name: "WILLIAM")
+      end
     end
   end
 
-  describe "#locals default value" do
-    it "returns 'default_value' from exposure" do
-      exposures.add(:name, default: 'John')
-      locals = exposures.locals({})
 
-      expect(locals).to eq(:name=>"John")
-    end
 
-    it "returns values from arguments" do
-      exposures.add(:name, default: 'John')
-      locals = exposures.locals(name: 'William')
 
-      expect(locals).to eq(:name=>"William")
-    end
-
-    it "returns values from arguments even when value is nil" do
-      exposures.add(:name, default: 'John')
-      locals = exposures.locals(name: nil)
-
-      expect(locals).to eq(:name=>nil)
-    end
-
-    it "returns value from proc" do
-      exposures.add(:name, -> name: { name.upcase }, default: 'John')
-      locals = exposures.locals(name: 'William')
-
-      expect(locals).to eq(:name=>"WILLIAM")
-    end
-  end
 
   describe "#import" do
-    it "imports a exposure to the exposures" do
+    it "imports an exposure to the set" do
       exposures_b = described_class.new
       exposures.add(:name, -> name: { name.upcase }, default: 'John')
       exposures_b.import(:name, exposures[:name])

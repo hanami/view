@@ -1,11 +1,12 @@
 require 'dry-configurable'
 require 'dry-equalizer'
 
-require 'dry/view/path'
-require 'dry/view/exposures'
-require 'dry/view/renderer'
-require 'dry/view/decorator'
-require 'dry/view/scope'
+require_relative 'decorator'
+require_relative 'exposures'
+require_relative 'path'
+require_relative 'rendered'
+require_relative 'renderer'
+require_relative 'scope'
 
 module Dry
   module View
@@ -98,21 +99,24 @@ module Dry
 
         renderer = self.class.renderer(format)
 
-        template_content = renderer.template(template_path, template_scope(renderer, context, input))
+        locals = locals(renderer.chdir(template_path), context, input)
 
-        return template_content unless layout?
+        output = renderer.template(template_path, template_scope(renderer, context, locals))
 
-        renderer.template(layout_path, layout_scope(renderer, context)) do
-          template_content
+        if layout?
+          output = renderer.template(layout_path, layout_scope(renderer, context)) { output }
         end
-      end
 
-      # @api public
-      def locals(locals: EMPTY_LOCALS, **input)
-        exposures.locals(input).merge(locals)
+        Rendered.new(output: output, locals: locals)
       end
 
       private
+
+      def locals(renderer, context, input)
+        exposures.(input) do |value, exposure|
+          decorate_local(renderer, context, exposure.name, value, **exposure.options)
+        end
+      end
 
       def layout?
         !!config.layout
@@ -122,37 +126,31 @@ module Dry
         scope(renderer.chdir(layout_dir), context)
       end
 
-      def template_scope(renderer, context, **input)
-        scope(renderer.chdir(template_path), context, locals(input))
+      def template_scope(renderer, context, locals)
+        scope(renderer.chdir(template_path), context, locals)
       end
 
       def scope(renderer, context, locals = EMPTY_LOCALS)
         Scope.new(
           renderer: renderer,
           context: context,
-          locals: decorated_locals(renderer, context, locals)
+          locals: locals,
         )
       end
 
-      def decorated_locals(renderer, context, locals)
-        decorator = self.class.config.decorator
-
-        locals.each_with_object({}) { |(key, val), result|
+      def decorate_local(renderer, context, name, value, **options)
+        if value
           # Decorate truthy values only
-          if val
-            options = exposures.key?(key) ? exposures[key].options : {}
-
-            val = decorator.(
-              key,
-              val,
-              renderer: renderer,
-              context: context,
-              **options
-            )
-          end
-
-          result[key] = val
-        }
+          config.decorator.(
+            name,
+            value,
+            renderer: renderer,
+            context: context,
+            **options,
+          )
+        else
+          value
+        end
       end
     end
   end

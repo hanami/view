@@ -29,7 +29,7 @@ RSpec.describe 'decorator' do
         expose :ordinary
       end.new
 
-      expect(vc.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing')).to eql(
+      expect(vc.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing').to_s).to eql(
         '<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
       )
     end
@@ -47,7 +47,7 @@ RSpec.describe 'decorator' do
         expose :ordinary
       end.new
 
-      expect(vc.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing')).to eql(
+      expect(vc.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing').to_s).to eql(
         '<p>Custom part wrapping many things</p><p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
       )
     end
@@ -72,7 +72,7 @@ RSpec.describe 'decorator' do
         expose :customs, :custom, :ordinary
       end.new
 
-      expect(vc.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing')).to eql(
+      expect(vc.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing').to_s).to eql(
         '<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
       )
     end
