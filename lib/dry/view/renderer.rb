@@ -1,5 +1,5 @@
 require 'tilt'
-require 'dry-equalizer'
+require 'dry/equalizer'
 
 module Dry
   module View
