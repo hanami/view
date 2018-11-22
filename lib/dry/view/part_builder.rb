@@ -6,10 +6,12 @@ module Dry
     class PartBuilder
       attr_reader :namespace
       attr_reader :inflector
+      attr_reader :scope_builder
 
-      def initialize(namespace: nil, inflector: Dry::Inflector.new)
+      def initialize(namespace: nil, inflector: Dry::Inflector.new, scope_builder:)
         @namespace = namespace
         @inflector = inflector
+        @scope_builder = scope_builder
       end
 
       def call(name:, value:, renderer:, context:, **options)
@@ -23,7 +25,14 @@ module Dry
       def build_part(name:, value:, renderer:, context:, **options)
         klass = part_class(name: name, **options)
 
-        klass.new(name: name, value: value, part_builder: self, renderer: renderer, context: context)
+        klass.new(
+          name: name,
+          value: value,
+          context: context,
+          renderer: renderer,
+          part_builder: self,
+          scope_builder: scope_builder,
+        )
       end
 
       def build_collection_part(name:, value:, renderer:, context:, **options)

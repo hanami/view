@@ -1,4 +1,5 @@
 require 'dry/core/inflector'
+require 'dry/view/scope_builder'
 
 RSpec.describe 'Part / Decorated attributes' do
   let(:article_class) {
@@ -53,8 +54,13 @@ RSpec.describe 'Part / Decorated attributes' do
       article_part_class.new(
         name: :article,
         value: article,
+        part_builder: part_builder,
+        scope_builder: scope_builder,
       )
     }
+
+    let(:part_builder) { Dry::View::PartBuilder.new(scope_builder: scope_builder) }
+    let(:scope_builder) { Dry::View::ScopeBuilder.new }
 
     describe 'decorating without options' do
       describe 'multiple declarations' do
@@ -147,6 +153,7 @@ RSpec.describe 'Part / Decorated attributes' do
         name: :article,
         value: article,
         part_builder: part_builder,
+        scope_builder: scope_builder,
       )
     }
 
@@ -161,8 +168,10 @@ RSpec.describe 'Part / Decorated attributes' do
             super
           end
         end
-      end.new
+      end.new(scope_builder: scope_builder)
     }
+
+    let(:scope_builder) { Dry::View::ScopeBuilder.new }
 
     before do
       module Test

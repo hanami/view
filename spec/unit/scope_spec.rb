@@ -1,9 +1,19 @@
+require 'dry/view/scope_builder'
+
 RSpec.describe Dry::View::Scope do
-  subject(:scope) { described_class.new(renderer: renderer, context: context, locals: locals) }
+  subject(:scope) {
+    described_class.new(
+      locals: locals,
+      context: context,
+      renderer: renderer,
+      scope_builder: scope_builder,
+    )
+  }
 
   let(:locals) { {} }
   let(:context) { double(:context) }
   let(:renderer) { spy(:renderer) }
+  let(:scope_builder) { Dry::View::ScopeBuilder.new }
 
   describe '#render' do
     it 'renders a partial with itself as the scope' do
@@ -12,9 +22,15 @@ RSpec.describe Dry::View::Scope do
     end
 
     it 'renders a partial with provided locals' do
-      scope_with_locals = described_class.new(renderer: renderer, context: context, locals: {foo: 'bar'})
+      scope_with_locals = described_class.new(
+        locals: {foo: 'bar'},
+        context: context,
+        renderer: renderer,
+        scope_builder: scope_builder,
+      )
 
       scope.render(:info, foo: 'bar')
+
       expect(renderer).to have_received(:partial).with(:info, scope_with_locals)
     end
   end

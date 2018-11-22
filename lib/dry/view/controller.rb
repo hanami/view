@@ -8,7 +8,7 @@ require_relative 'part_builder'
 require_relative 'path'
 require_relative 'rendered'
 require_relative 'renderer'
-require_relative 'scope'
+require_relative 'scope_builder'
 
 module Dry
   module View
@@ -33,10 +33,15 @@ module Dry
       end
       setting :default_context, DEFAULT_CONTEXT
 
+      setting :scope
+
       setting :inflector, Dry::Inflector.new
 
       setting :part_builder, PartBuilder
       setting :part_namespace
+
+      setting :scope_builder, ScopeBuilder
+      setting :scope_namespace
 
       attr_reader :config
       attr_reader :layout_dir
@@ -44,6 +49,7 @@ module Dry
       attr_reader :template_path
 
       attr_reader :part_builder
+      attr_reader :scope_builder
 
       attr_reader :exposures
 
@@ -100,9 +106,14 @@ module Dry
         @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
 
+        @scope_builder = config.scope_builder.new(
+          namespace: config.scope_namespace,
+          inflector: config.inflector,
+        )
         @part_builder = config.part_builder.new(
           namespace: config.part_namespace,
           inflector: config.inflector,
+          scope_builder: scope_builder,
         )
 
         @exposures = self.class.exposures.bind(self)
@@ -157,10 +168,11 @@ module Dry
       end
 
       def scope(renderer, context, locals = EMPTY_LOCALS)
-        Scope.new(
-          renderer: renderer,
-          context: context,
+        scope_builder.(
+          name: config.scope,
           locals: locals,
+          context: context,
+          renderer: renderer,
         )
       end
 

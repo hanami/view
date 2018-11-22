@@ -1,3 +1,5 @@
+require 'dry/view/scope_builder'
+
 RSpec::Matchers.define :template_scope do |locals|
   match do |actual|
     locals == locals.map { |k,v| [k, actual.send(k)] }.to_h
@@ -5,13 +7,24 @@ RSpec::Matchers.define :template_scope do |locals|
 end
 
 RSpec.describe Dry::View::Part do
-  context 'with a renderer' do
-    subject(:part) { described_class.new(name: name, value: value, renderer: renderer, context: context) }
+  let(:name) { :user }
+  let(:value) { double(:value) }
+  let(:context) { double(:context) }
+  let(:renderer) { spy(:renderer) }
+  let(:part_builder) { Dry::View::PartBuilder.new(scope_builder: scope_builder) }
+  let(:scope_builder) { Dry::View::ScopeBuilder.new }
 
-    let(:name) { :user }
-    let(:value) { double(:value) }
-    let(:context) { double(:context) }
-    let(:renderer) { spy(:renderer) }
+  context 'with a renderer' do
+    subject(:part) {
+      described_class.new(
+        name: name,
+        value: value,
+        context: context,
+        renderer: renderer,
+        part_builder: part_builder,
+        scope_builder: scope_builder,
+      )
+    }
 
     describe '#render' do
       it 'renders a partial with the part available in its scope' do
@@ -85,11 +98,15 @@ RSpec.describe Dry::View::Part do
   end
 
   context 'without a renderer' do
-    subject(:part) { described_class.new(name: name, value: value, context: context) }
-
-    let(:name) { :user }
-    let(:value) { double('value') }
-    let(:context) { double('context') }
+    subject(:part) {
+      described_class.new(
+        name: name,
+        value: value,
+        context: context,
+        part_builder: part_builder,
+        scope_builder: scope_builder,
+      )
+    }
 
     describe '#initialize' do
       it 'can be initialized' do

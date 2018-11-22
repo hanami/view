@@ -1,15 +1,31 @@
+require 'dry/view/scope_builder'
+
 RSpec.describe Dry::View::PartBuilder do
-  subject(:part_builder) { described_class.new(namespace: namespace) }
+  subject(:part_builder) {
+    described_class.new(
+      namespace: namespace,
+      scope_builder: scope_builder,
+    )
+  }
 
   let(:namespace) { nil }
+  let(:scope_builder) { Dry::View::ScopeBuilder.new }
 
   describe '#call' do
-    subject(:part) { part_builder.(name: name, value: value, renderer: renderer, context: context, **options) }
+    subject(:part) {
+      part_builder.(
+        name: name,
+        value: value,
+        context: context,
+        renderer: renderer,
+        **options,
+      )
+    }
 
     let(:name) { :user }
     let(:value) { double(:user) }
-    let(:renderer) { double(:renderer) }
     let(:context) { double(:context) }
+    let(:renderer) { double(:renderer) }
     let(:options) { {} }
 
     shared_examples 'a view part' do

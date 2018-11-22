@@ -1,5 +1,4 @@
 require 'dry-equalizer'
-require 'dry/view/scope'
 require 'dry/view/missing_renderer'
 
 module Dry
@@ -8,10 +7,11 @@ module Dry
       CONVENIENCE_METHODS = %i[
         context
         render
+        scope
         value
       ].freeze
 
-      include Dry::Equalizer(:_name, :_value, :_part_builder, :_context, :_renderer)
+      include Dry::Equalizer(:_name, :_value, :_context, :_renderer, :_part_builder, :_scope_builder)
 
       attr_reader :_name
 
@@ -22,6 +22,8 @@ module Dry
       attr_reader :_renderer
 
       attr_reader :_part_builder
+
+      attr_reader :_scope_builder
 
       attr_reader :_decorated_attributes
 
@@ -37,17 +39,27 @@ module Dry
         @decorated_attributes ||= {}
       end
 
-      def initialize(name:, value:, part_builder: Dry::View::PartBuilder.new, renderer: MissingRenderer.new, context: nil)
+      def initialize(name:, value:, context: nil, renderer: MissingRenderer.new, part_builder:, scope_builder:)
         @_name = name
         @_value = value
         @_context = context
         @_renderer = renderer
         @_part_builder = part_builder
+        @_scope_builder = scope_builder
         @_decorated_attributes = {}
       end
 
       def _render(partial_name, as: _name, **locals, &block)
         _renderer.partial(partial_name, _render_scope(as, locals), &block)
+      end
+
+      def _scope(name = nil, **locals)
+        _scope_builder.(
+          name: name,
+          locals: locals,
+          context: _context,
+          renderer: _renderer,
+        )
       end
 
       def to_s
@@ -61,6 +73,7 @@ module Dry
           context: _context,
           renderer: _renderer,
           part_builder: _part_builder,
+          scope_builder: _scope_builder,
           **options,
         )
       end
@@ -86,7 +99,7 @@ module Dry
       end
 
       def _render_scope(name, **locals)
-        Scope.new(
+        _scope_builder.(
           locals: locals.merge(name => self),
           context: _context,
           renderer: _renderer,

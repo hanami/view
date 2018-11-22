@@ -1,6 +1,7 @@
 require "dry/view/context"
 require "dry/view/part"
 require "dry/view/part_builder"
+require "dry/view/scope_builder"
 
 RSpec.describe Dry::View::Context do
   let(:context_class) {
@@ -18,7 +19,8 @@ RSpec.describe Dry::View::Context do
 
   let(:assets) { double(:assets) }
   let(:renderer) { double(:renderer) }
-  let(:part_builder) { Dry::View::PartBuilder.new }
+  let(:part_builder) { Dry::View::PartBuilder.new(scope_builder: scope_builder) }
+  let(:scope_builder) { Dry::View::ScopeBuilder.new }
 
   it "provides a helpful #inspect on the generated decorated attributes module" do
     expect(context_class.ancestors[0].inspect).to eq "#<Dry::View::Context::DecoratedAttributes[:assets, :invalid_attribute]>"
