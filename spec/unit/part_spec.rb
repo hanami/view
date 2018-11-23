@@ -41,12 +41,12 @@ RSpec.describe Dry::View::Part do
     end
 
     describe '#new' do
-      it 'preserves decorator, renderer, and context' do
+      it 'preserves renderer, and context, and part_builder' do
         new_part = part.new(value: 'new value')
 
-        expect(new_part._decorator).to eql part._decorator
         expect(new_part._renderer).to eql part._renderer
         expect(new_part._context).to eql part._context
+        expect(new_part._part_builder).to eql part._part_builder
       end
     end
 
