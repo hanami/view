@@ -61,12 +61,16 @@ module Dry
 
         # Give autoloaders a change to act
         begin
-          namespace.const_get(name)
+          klass = namespace.const_get(name)
         rescue NameError
         end
 
-        if namespace.const_defined?(name, false)
-          namespace.const_get(name)
+        if !klass && namespace.const_defined?(name, false)
+          klass = namespace.const_get(name)
+        end
+
+        if klass && klass < Part
+          klass
         else
           Part
         end
