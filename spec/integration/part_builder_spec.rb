@@ -1,11 +1,13 @@
-RSpec.describe 'decorator' do
+RSpec.describe 'part builder' do
   before do
     module Test
-      class CustomPart < Dry::View::Part
+      class Custom < Dry::View::Part
         def to_s
           "Custom part wrapping #{_value}"
         end
       end
+
+      CustomPart = Custom
 
       class CustomArrayPart < Dry::View::Part
         def each(&block)
@@ -16,6 +18,25 @@ RSpec.describe 'decorator' do
   end
 
   describe 'default decorator' do
+    it 'looks up classes from a part namespace' do
+      vc = Class.new(Dry::View::Controller) do
+        configure do |config|
+          config.paths = SPEC_ROOT.join('fixtures/templates')
+          config.layout = nil
+          config.template = 'decorated_parts'
+          config.part_namespace = Test
+        end
+
+        expose :customs
+        expose :custom
+        expose :ordinary
+      end.new
+
+      expect(vc.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing').to_s).to eql(
+        '<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
+      )
+    end
+
     it 'supports wrapping array memebers in custom part classes provided to exposure :as option' do
       vc = Class.new(Dry::View::Controller) do
         configure do |config|
@@ -42,7 +63,7 @@ RSpec.describe 'decorator' do
           config.template = 'decorated_parts'
         end
 
-        expose :customs, as: {Test::CustomArrayPart => Test::CustomPart}
+        expose :customs, as: [Test::CustomArrayPart, Test::CustomPart]
         expose :custom, as: Test::CustomPart
         expose :ordinary
       end.new
@@ -55,15 +76,15 @@ RSpec.describe 'decorator' do
 
   describe 'custom decorator and part classes' do
     it 'supports wrapping in custom parts based on exposure names' do
-      decorator = Class.new(Dry::View::Decorator) do
-        def part_class(name, value, **options)
+      part_builder = Class.new(Dry::View::PartBuilder) do
+        def part_class(name:, **options)
           name == :custom ? Test::CustomPart : super
         end
-      end.new
+      end
 
       vc = Class.new(Dry::View::Controller) do
         configure do |config|
-          config.decorator = decorator
+          config.part_builder = part_builder
           config.paths = SPEC_ROOT.join('fixtures/templates')
           config.layout = nil
           config.template = 'decorated_parts'

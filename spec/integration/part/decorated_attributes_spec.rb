@@ -1,3 +1,5 @@
+require 'dry/core/inflector'
+
 RSpec.describe 'Part / Decorated attributes' do
   let(:article_class) {
     Class.new do
@@ -46,7 +48,7 @@ RSpec.describe 'Part / Decorated attributes' do
     )
   }
 
-  describe 'using default decorator' do
+  describe 'using default part builder' do
     subject(:article_part) {
       article_part_class.new(
         name: :article,
@@ -132,7 +134,7 @@ RSpec.describe 'Part / Decorated attributes' do
     end
   end
 
-  describe 'using custom decorator' do
+  describe 'using custom part builder' do
     let(:article_part_class) {
         Class.new(Dry::View::Part) do
           decorate :author
@@ -144,21 +146,18 @@ RSpec.describe 'Part / Decorated attributes' do
       article_part_class.new(
         name: :article,
         value: article,
-        decorator: decorator,
+        part_builder: part_builder,
       )
     }
 
-    let(:decorator) {
-      Class.new(Dry::View::Decorator) do
-        def part_class(name, value, **options)
-          if !options.key?(:as)
-            part_name = Dry::Core::Inflector.camelize(name)
-            begin
-              Test.const_get(:"#{part_name}Part")
-            rescue NameError
-              super
-            end
-          else
+    let(:part_builder) {
+      Class.new(Dry::View::PartBuilder) do
+        def part_class(name:, **options)
+          part_name = Dry::Core::Inflector.camelize(name)
+
+          begin
+            Test.const_get(:"#{part_name}Part")
+          rescue NameError
             super
           end
         end
@@ -176,7 +175,7 @@ RSpec.describe 'Part / Decorated attributes' do
       end
     end
 
-    it 'deorates attributes using the custom decorator' do
+    it 'deorates attributes using the custom part builder' do
       expect(article_part.author).to be_a Test::AuthorPart
       expect(article_part.comments[0]).to be_a Test::CommentPart
       expect(article_part.comments[0].author).to be_a Test::AuthorPart

@@ -1,8 +1,9 @@
-require 'dry-configurable'
-require 'dry-equalizer'
+require 'dry/configurable'
+require 'dry/equalizer'
+require 'dry/inflector'
 
-require_relative 'decorator'
 require_relative 'exposures'
+require_relative 'part_builder'
 require_relative 'path'
 require_relative 'rendered'
 require_relative 'renderer'
@@ -30,12 +31,19 @@ module Dry
         DEFAULT_RENDERER_OPTIONS.merge(options.to_h).freeze
       end
       setting :context, DEFAULT_CONTEXT
-      setting :decorator, Decorator.new
+
+      setting :inflector, Dry::Inflector.new
+
+      setting :part_builder, PartBuilder
+      setting :part_namespace
 
       attr_reader :config
       attr_reader :layout_dir
       attr_reader :layout_path
       attr_reader :template_path
+
+      attr_reader :part_builder
+
       attr_reader :exposures
 
       # @api private
@@ -90,6 +98,12 @@ module Dry
         @layout_dir = DEFAULT_LAYOUTS_DIR
         @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
+
+        @part_builder = config.part_builder.new(
+          namespace: config.part_namespace,
+          inflector: config.inflector,
+        )
+
         @exposures = self.class.exposures.bind(self)
       end
 
@@ -141,11 +155,12 @@ module Dry
       def decorate_local(renderer, context, name, value, **options)
         if value
           # Decorate truthy values only
-          config.decorator.(
-            name,
-            value,
+          part_builder.(
+            name: name,
+            value: value,
             renderer: renderer,
             context: context,
+            namespace: config.part_namespace,
             **options,
           )
         else
