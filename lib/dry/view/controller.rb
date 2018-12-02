@@ -25,6 +25,7 @@ module Dry
 
       setting :paths
       setting :layout, false
+      setting :exposure_in_layout, false
       setting :template
       setting :default_format, :html
       setting :renderer_options, DEFAULT_RENDERER_OPTIONS do |options|
@@ -118,7 +119,8 @@ module Dry
         output = renderer.template(template_path, template_scope(renderer, context, locals))
 
         if layout?
-          output = renderer.template(layout_path, layout_scope(renderer, context)) { output }
+          layout_locals = config.exposure_in_layout ? locals : EMPTY_LOCALS
+          output = renderer.template(layout_path, layout_scope(renderer, context, layout_locals)) { output }
         end
 
         Rendered.new(output: output, locals: locals)
@@ -140,8 +142,8 @@ module Dry
         !!config.layout
       end
 
-      def layout_scope(renderer, context)
-        scope(renderer.chdir(layout_dir), context)
+      def layout_scope(renderer, context, locals = EMPTY_LOCALS)
+        scope(renderer.chdir(layout_dir), context, locals)
       end
 
       def template_scope(renderer, context, locals)
