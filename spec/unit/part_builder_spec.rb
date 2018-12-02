@@ -127,6 +127,9 @@ RSpec.describe Dry::View::PartBuilder do
             class AdminUser < Dry::View::Part
             end
 
+            module UserModule
+            end
+
             class Profile < Dry::View::Part
             end
           end
@@ -151,6 +154,14 @@ RSpec.describe Dry::View::PartBuilder do
 
           it_behaves_like 'a view part' do
             let(:part_class) { Test::Parts::AdminUser }
+          end
+        end
+
+        describe 'alternative name provided via :as option, when matched constant is not a class inheriting from Dry::View::Part' do
+          let(:options) { {as: :user_module} }
+
+          it_behaves_like 'a view part' do
+            let(:part_class) { Dry::View::Part }
           end
         end
 
