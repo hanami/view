@@ -9,7 +9,7 @@ group :tools do
 end
 
 group :test do
-  gem 'rack', '>= 1.0.0', '<= 2.0.0'
+  gem "rack", ">= 2.0.6"
   gem 'slim'
 
   gem 'simplecov'
