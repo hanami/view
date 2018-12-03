@@ -128,7 +128,11 @@ module Dry
 
       def locals(renderer, context, input)
         exposures.(input) do |value, exposure|
-          decorate_local(renderer, context, exposure.name, value, **exposure.options)
+          if exposure.decorate?
+            decorate_local(renderer, context, exposure.name, value, **exposure.options)
+          else
+            value
+          end
         end
       end
 

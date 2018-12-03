@@ -44,6 +44,10 @@ module Dry
         end
       end
 
+      def decorate?
+        options.fetch(:decorate) { true }
+      end
+
       def private?
         options.fetch(:private) { false }
       end

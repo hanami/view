@@ -34,6 +34,16 @@ RSpec.describe Dry::View::Exposure do
       end
     end
 
+    describe "#decorate?" do
+      it "is true by default" do
+        expect(exposure.decorate?).to eq true
+      end
+
+      it "can be set on initialization" do
+        expect(described_class.new(:hello, decorate: false).decorate?).to eq false
+      end
+    end
+
     describe "#private?" do
       it "is false by default" do
         expect(exposure).not_to be_private
