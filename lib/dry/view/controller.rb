@@ -30,7 +30,7 @@ module Dry
       setting :renderer_options, DEFAULT_RENDERER_OPTIONS do |options|
         DEFAULT_RENDERER_OPTIONS.merge(options.to_h).freeze
       end
-      setting :context, DEFAULT_CONTEXT
+      setting :default_context, DEFAULT_CONTEXT
 
       setting :inflector, Dry::Inflector.new
 
@@ -108,7 +108,7 @@ module Dry
       end
 
       # @api public
-      def call(format: config.default_format, context: config.context, **input)
+      def call(format: config.default_format, context: config.default_context, **input)
         raise UndefinedTemplateError, "no +template+ configured" unless template_path
 
         renderer = self.class.renderer(format)
