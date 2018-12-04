@@ -25,7 +25,6 @@ module Dry
 
       setting :paths
       setting :layout, false
-      setting :exposure_in_layout, false
       setting :template
       setting :default_format, :html
       setting :renderer_options, DEFAULT_RENDERER_OPTIONS do |options|
@@ -119,8 +118,7 @@ module Dry
         output = renderer.template(template_path, template_scope(renderer, context, locals))
 
         if layout?
-          layout_locals = config.exposure_in_layout ? locals : EMPTY_LOCALS
-          output = renderer.template(layout_path, layout_scope(renderer, context, layout_locals)) { output }
+          output = renderer.template(layout_path, layout_scope(renderer, context, layout_locals(locals))) { output }
         end
 
         Rendered.new(output: output, locals: locals)
@@ -135,6 +133,12 @@ module Dry
           else
             value
           end
+        end
+      end
+
+      def layout_locals(locals)
+        locals.each_with_object({}) do |(key, value), layout_locals|
+          layout_locals[key] = value if exposures[key].layout?
         end
       end
 

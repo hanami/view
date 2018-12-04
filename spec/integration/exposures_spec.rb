@@ -444,10 +444,11 @@ RSpec.describe 'exposures' do
       configure do |config|
         config.paths = SPEC_ROOT.join('fixtures/templates')
         config.layout = 'app_with_users'
-        config.exposure_in_layout = true
         config.template = 'users'
         config.default_format = :html
       end
+
+      expose :users_count, layout: true
 
       expose :users
     end.new
@@ -457,7 +458,7 @@ RSpec.describe 'exposures' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(users: users, context: context).to_s).to eql(
+    expect(vc.(users: users, users_count: users.size, context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p>2 users</p><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end

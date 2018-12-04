@@ -44,6 +44,10 @@ module Dry
         end
       end
 
+      def layout?
+        options.fetch(:layout) { false }
+      end
+
       def decorate?
         options.fetch(:decorate) { true }
       end
