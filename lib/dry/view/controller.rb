@@ -138,7 +138,7 @@ module Dry
 
       def layout_locals(locals)
         locals.each_with_object({}) do |(key, value), layout_locals|
-          layout_locals[key] = value if exposures[key].layout?
+          layout_locals[key] = value if exposures[key].for_layout?
         end
       end
 

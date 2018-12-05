@@ -44,7 +44,7 @@ module Dry
         end
       end
 
-      def layout?
+      def for_layout?
         options.fetch(:layout) { false }
       end
 
