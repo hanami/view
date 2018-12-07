@@ -18,7 +18,11 @@ RSpec.describe Dry::View::Controller do
   }
 
   let(:context) do
-    double(:page, title: 'Test')
+    Class.new(Dry::View::Context) do
+      def title
+        'Test'
+      end
+    end.new
   end
 
   describe '#call' do
@@ -52,24 +56,30 @@ RSpec.describe Dry::View::Controller do
       end.new
     }
 
-    subject(:context) {
-      Class.new do
-        def self.form(action:, &blk)
-          new(action, &blk)
-        end
+    before do
+      module Test
+        class Form
+          def initialize(action, &block)
+            @buf = eval('@__buf__', block.binding)
 
-        def initialize(action, &blk)
-          @buf = eval('@__buf__', blk.binding)
+            @buf << "<form action=\"#{action}\" method=\"post\">"
+            block.(self)
+            @buf << '</form>'
+          end
 
-          @buf << "<form action=\"#{action}\" method=\"post\">"
-          blk.(self)
-          @buf << '</form>'
-        end
-
-        def text(name)
-          "<input type=\"text\" name=\"#{name}\" />"
+          def text(name)
+            "<input type=\"text\" name=\"#{name}\" />"
+          end
         end
       end
+    end
+
+    subject(:context) {
+      Class.new(Dry::View::Context) do
+        def form(action:, &blk)
+          Test::Form.new(action, &blk)
+        end
+      end.new
     }
 
     it 'uses default encoding' do

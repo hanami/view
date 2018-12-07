@@ -2,6 +2,7 @@ require 'dry/configurable'
 require 'dry/equalizer'
 require 'dry/inflector'
 
+require_relative 'context'
 require_relative 'exposures'
 require_relative 'part_builder'
 require_relative 'path'
@@ -15,7 +16,7 @@ module Dry
       UndefinedTemplateError = Class.new(StandardError)
 
       DEFAULT_LAYOUTS_DIR = 'layouts'.freeze
-      DEFAULT_CONTEXT = Object.new.freeze
+      DEFAULT_CONTEXT = Context.new
       DEFAULT_RENDERER_OPTIONS = {default_encoding: 'utf-8'.freeze}.freeze
       EMPTY_LOCALS = {}.freeze
 
@@ -112,6 +113,7 @@ module Dry
         raise UndefinedTemplateError, "no +template+ configured" unless template_path
 
         renderer = self.class.renderer(format)
+        context = context.bind(part_builder: part_builder, renderer: renderer)
 
         locals = locals(renderer.chdir(template_path), context, input)
 

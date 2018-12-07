@@ -10,6 +10,7 @@ begin
 rescue LoadError; end
 
 SPEC_ROOT = Pathname(__FILE__).dirname
+FIXTURES_PATH = SPEC_ROOT.join("fixtures")
 
 require 'erb'
 require 'slim'

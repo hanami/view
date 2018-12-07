@@ -17,9 +17,17 @@ RSpec.describe 'dry-view' do
     end
   end
 
-  let(:context) do
-    Struct.new(:title, :assets).new('dry-view rocks!', -> input { "#{input}.jpg" })
-  end
+  let(:context) {
+    Class.new(Dry::View::Context) do
+      def title
+        'dry-view rocks!'
+      end
+
+      def assets
+        -> input { "#{input}.jpg" }
+      end
+    end.new
+  }
 
   it 'renders within a layout and makes the provided context available everywhere' do
     vc = vc_class.new
