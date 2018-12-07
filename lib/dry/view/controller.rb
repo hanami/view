@@ -118,7 +118,7 @@ module Dry
         output = renderer.template(template_path, template_scope(renderer, context, locals))
 
         if layout?
-          output = renderer.template(layout_path, layout_scope(renderer, context)) { output }
+          output = renderer.template(layout_path, layout_scope(renderer, context, layout_locals(locals))) { output }
         end
 
         Rendered.new(output: output, locals: locals)
@@ -136,12 +136,18 @@ module Dry
         end
       end
 
+      def layout_locals(locals)
+        locals.each_with_object({}) do |(key, value), layout_locals|
+          layout_locals[key] = value if exposures[key].for_layout?
+        end
+      end
+
       def layout?
         !!config.layout
       end
 
-      def layout_scope(renderer, context)
-        scope(renderer.chdir(layout_dir), context)
+      def layout_scope(renderer, context, locals = EMPTY_LOCALS)
+        scope(renderer.chdir(layout_dir), context, locals)
       end
 
       def template_scope(renderer, context, locals)
