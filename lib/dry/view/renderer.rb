@@ -46,7 +46,7 @@ module Dry
       def chdir(dirname)
         new_paths = paths.map { |path| path.chdir(dirname) }
 
-        self.class.new(new_paths, format: format)
+        self.class.new(new_paths, format: format, **options)
       end
 
       def lookup(name)
