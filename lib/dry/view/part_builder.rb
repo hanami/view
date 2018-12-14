@@ -5,45 +5,50 @@ module Dry
   module View
     class PartBuilder
       attr_reader :namespace
-      attr_reader :inflector
-      attr_reader :scope_builder
+      attr_reader :rendering
 
-      def initialize(namespace: nil, inflector: Dry::Inflector.new, scope_builder:)
+      def initialize(namespace: nil, rendering: nil)
         @namespace = namespace
-        @inflector = inflector
-        @scope_builder = scope_builder
+        @rendering = rendering
       end
 
-      def call(name:, value:, renderer:, context:, **options)
+      def for_rendering(rendering)
+        return self if rendering == self.rendering
+
+        self.class.new(namespace: namespace, rendering: rendering)
+      end
+
+      def rendering?
+        !!rendering
+      end
+
+      def call(name, value, **options)
         builder = value.respond_to?(:to_ary) ? :build_collection_part : :build_part
 
-        send(builder, name: name, value: value, renderer: renderer, context: context, **options)
+        send(builder, name, value, **options)
       end
 
       private
 
-      def build_part(name:, value:, renderer:, context:, **options)
+      def build_part(name, value, **options)
         klass = part_class(name: name, **options)
 
         klass.new(
           name: name,
           value: value,
-          context: context,
-          renderer: renderer,
-          part_builder: self,
-          scope_builder: scope_builder,
+          rendering: rendering,
         )
       end
 
-      def build_collection_part(name:, value:, renderer:, context:, **options)
+      def build_collection_part(name, value, **options)
         collection_as = collection_options(name: name, **options)[:as]
         item_name, item_as = collection_item_options(name: name, **options).values_at(:name, :as)
 
         arr = value.to_ary.map { |obj|
-          build_part(name: item_name, value: obj, renderer: renderer, context: context, **options.merge(as: item_as))
+          build_part(item_name, obj, **options.merge(as: item_as))
         }
 
-        build_part(name: name, value: arr, renderer: renderer, context: context, **options.merge(as: collection_as))
+        build_part(name, arr, **options.merge(as: collection_as))
       end
 
       def collection_options(name:, **options)
@@ -101,6 +106,10 @@ module Dry
         else
           fallback_class
         end
+      end
+
+      def inflector
+        rendering.inflector
       end
     end
   end

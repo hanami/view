@@ -18,9 +18,18 @@ RSpec.describe Dry::View::Context do
   }
 
   let(:assets) { double(:assets) }
-  let(:renderer) { double(:renderer) }
-  let(:part_builder) { Dry::View::PartBuilder.new(scope_builder: scope_builder) }
-  let(:scope_builder) { Dry::View::ScopeBuilder.new }
+
+  let(:rendering) {
+    Dry::View::Rendering.new(
+      inflector: Dry::Inflector.new,
+      renderer: double(:renderer),
+      context: Dry::View::Context.new,
+      part_builder: Dry::View::PartBuilder.new,
+      scope_builder: Dry::View::ScopeBuilder.new,
+    )
+  }
+
+  # let(:rendering) { double(:rendering) }
 
   it "provides a helpful #inspect on the generated decorated attributes module" do
     expect(context_class.ancestors[0].inspect).to eq "#<Dry::View::Context::DecoratedAttributes[:assets, :invalid_attribute]>"
@@ -29,7 +38,7 @@ RSpec.describe Dry::View::Context do
   context "unbound" do
     subject(:context) { context_class.new(assets: assets) }
 
-    it { is_expected.not_to be_bound }
+    it { is_expected.not_to be_rendering }
 
     it "returns its attributes" do
       expect(context.assets).to eql assets
@@ -40,13 +49,12 @@ RSpec.describe Dry::View::Context do
     end
   end
 
-  context "bound" do
+  context "for rendering" do
     subject(:context) {
-      context_class.new(assets: assets).
-        bind(renderer: renderer, part_builder: part_builder)
+      context_class.new(assets: assets).for_rendering(rendering)
     }
 
-    it { is_expected.to be_bound }
+    it { is_expected.to be_rendering }
 
     it "returns its assets decorated in view parts" do
       expect(context.assets).to be_a Dry::View::Part

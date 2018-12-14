@@ -1,25 +1,21 @@
 module Dry
   module View
     class Context
-      attr_reader :_options, :_part_builder, :_renderer
+      attr_reader :_rendering, :_options
 
-      def initialize(part_builder: nil, renderer: nil, **options)
-        @_part_builder = part_builder
-        @_renderer = renderer
+      def initialize(rendering: nil, **options)
+        @_rendering = rendering
         @_options = options
       end
 
-      def bind(part_builder:, renderer:)
-        self.class.new(
-          **_options.merge(
-            part_builder: part_builder,
-            renderer: renderer,
-          )
-        )
+      def for_rendering(rendering)
+        return self if rendering == self._rendering
+
+        self.class.new(**_options.merge(rendering: rendering))
       end
 
-      def bound?
-        !!(_part_builder && _renderer)
+      def rendering?
+        !!_rendering
       end
 
       def self.decorate(*names, **options)
@@ -28,15 +24,11 @@ module Dry
             define_method name do
               attribute = super()
 
-              return attribute unless bound? || !attribute
-
-              _part_builder.(
-                name: name,
-                value: attribute,
-                renderer: _renderer,
-                context: self,
-                **options,
-              )
+              if rendering? && attribute
+                _rendering.part(name, attribute, **options)
+              else
+                attribute
+              end
             end
           end
         end

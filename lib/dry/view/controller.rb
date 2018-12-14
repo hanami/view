@@ -8,6 +8,7 @@ require_relative 'part_builder'
 require_relative 'path'
 require_relative 'rendered'
 require_relative 'renderer'
+require_relative 'rendering'
 require_relative 'scope_builder'
 
 module Dry
@@ -47,9 +48,6 @@ module Dry
       attr_reader :layout_dir
       attr_reader :layout_path
       attr_reader :template_path
-
-      attr_reader :part_builder
-      attr_reader :scope_builder
 
       attr_reader :exposures
 
@@ -106,16 +104,6 @@ module Dry
         @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
 
-        @scope_builder = config.scope_builder.new(
-          namespace: config.scope_namespace,
-          inflector: config.inflector,
-        )
-        @part_builder = config.part_builder.new(
-          namespace: config.part_namespace,
-          inflector: config.inflector,
-          scope_builder: scope_builder,
-        )
-
         @exposures = self.class.exposures.bind(self)
       end
 
@@ -123,15 +111,14 @@ module Dry
       def call(format: config.default_format, context: config.default_context, **input)
         raise UndefinedTemplateError, "no +template+ configured" unless template_path
 
-        renderer = self.class.renderer(format)
-        context = context.bind(part_builder: part_builder, renderer: renderer)
+        rendering = Rendering.prepare(self.class.renderer(format), config, context).chdir(template_path)
 
-        locals = locals(renderer.chdir(template_path), context, input)
+        locals = locals(rendering, input)
 
-        output = renderer.template(template_path, template_scope(renderer, context, locals))
+        output = rendering.template(template_path, rendering.scope(config.scope, locals))
 
         if layout?
-          output = renderer.template(layout_path, layout_scope(renderer, context, layout_locals(locals))) { output }
+          output = rendering.template(layout_path, rendering.chdir(layout_dir).scope(config.scope, layout_locals(locals))) { output }
         end
 
         Rendered.new(output: output, locals: locals)
@@ -139,10 +126,10 @@ module Dry
 
       private
 
-      def locals(renderer, context, input)
+      def locals(rendering, input)
         exposures.(input) do |value, exposure|
-          if exposure.decorate?
-            decorate_local(renderer, context, exposure.name, value, **exposure.options)
+          if exposure.decorate? && value
+            rendering.part(exposure.name, value, **exposure.options)
           else
             value
           end
@@ -157,39 +144,6 @@ module Dry
 
       def layout?
         !!config.layout
-      end
-
-      def layout_scope(renderer, context, locals = EMPTY_LOCALS)
-        scope(renderer.chdir(layout_dir), context, locals)
-      end
-
-      def template_scope(renderer, context, locals)
-        scope(renderer.chdir(template_path), context, locals)
-      end
-
-      def scope(renderer, context, locals = EMPTY_LOCALS)
-        scope_builder.(
-          name: config.scope,
-          locals: locals,
-          context: context,
-          renderer: renderer,
-        )
-      end
-
-      def decorate_local(renderer, context, name, value, **options)
-        if value
-          # Decorate truthy values only
-          part_builder.(
-            name: name,
-            value: value,
-            renderer: renderer,
-            context: context,
-            namespace: config.part_namespace,
-            **options,
-          )
-        else
-          value
-        end
       end
     end
   end

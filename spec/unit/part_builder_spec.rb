@@ -1,31 +1,27 @@
 require 'dry/view/scope_builder'
 
 RSpec.describe Dry::View::PartBuilder do
-  subject(:part_builder) {
-    described_class.new(
-      namespace: namespace,
-      scope_builder: scope_builder,
+  subject(:part_builder) { rendering.part_builder }
+
+  let(:rendering) {
+    Dry::View::Rendering.new(
+      renderer: Dry::View::Renderer.new([FIXTURES_PATH], format: :html),
+      inflector: Dry::Inflector.new,
+      context: Dry::View::Context.new,
+      scope_builder: Dry::View::ScopeBuilder.new,
+      part_builder: Dry::View::PartBuilder.new(namespace: namespace)
     )
   }
 
   let(:namespace) { nil }
-  let(:scope_builder) { Dry::View::ScopeBuilder.new }
 
   describe '#call' do
     subject(:part) {
-      part_builder.(
-        name: name,
-        value: value,
-        context: context,
-        renderer: renderer,
-        **options,
-      )
+      part_builder.(name, value, **options)
     }
 
     let(:name) { :user }
     let(:value) { double(:user) }
-    let(:context) { double(:context) }
-    let(:renderer) { double(:renderer) }
     let(:options) { {} }
 
     shared_examples 'a view part' do
@@ -39,8 +35,8 @@ RSpec.describe Dry::View::PartBuilder do
         expect(part._value).to eq value
       end
 
-      it 'retains the part builder' do
-        expect(part._part_builder).to eql part_builder
+      it 'retains the rendering' do
+        expect(part._rendering).to eql rendering
       end
     end
 

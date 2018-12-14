@@ -5,20 +5,28 @@ module Dry
   module View
     class ScopeBuilder
       attr_reader :namespace
-      attr_reader :inflector
+      attr_reader :rendering
 
-      def initialize(namespace: nil, inflector: Dry::Inflector.new)
+      def initialize(namespace: nil, rendering: nil)
         @namespace = namespace
-        @inflector = inflector
+        @rendering = rendering
       end
 
-      def call(name: nil, locals:, context:, renderer:)
-        scope_class(name: name).new(
+      def for_rendering(rendering)
+        return self if rendering == self.rendering
+
+        self.class.new(namespace: namespace, rendering: rendering)
+      end
+
+      def rendering?
+        !!rendering
+      end
+
+      def call(name = nil, locals)
+        scope_class(name).new(
           name: name,
           locals: locals,
-          context: context,
-          renderer: renderer,
-          scope_builder: self,
+          rendering: rendering,
         )
       end
 
@@ -26,7 +34,7 @@ module Dry
 
       DEFAULT_SCOPE_CLASS = Scope
 
-      def scope_class(name: nil)
+      def scope_class(name = nil)
         if name.nil?
           DEFAULT_SCOPE_CLASS
         elsif name.is_a?(Class)
@@ -56,6 +64,10 @@ module Dry
         else
           DEFAULT_SCOPE_CLASS
         end
+      end
+
+      def inflector
+        rendering.inflector
       end
     end
   end
