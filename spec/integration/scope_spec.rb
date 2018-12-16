@@ -64,6 +64,28 @@ RSpec.describe "Scopes" do
     expect(vc.(text: "Hello").to_s).to eq "Greeting: HELLO!"
   end
 
+  specify "Rendering a partial implicitly via a custom named scope (provided via a class)" do
+    module Test::Scopes
+      class Greeting < Dry::View::Scope
+        def greeting
+          _locals[:greeting].upcase + "!"
+        end
+      end
+    end
+
+    vc = Class.new(base_vc) do
+      configure do |config|
+        config.scope_namespace = Test::Scopes
+        config.template = "class_named_scope_with_implicit_render"
+      end
+
+      expose :text
+    end.new
+
+    expect(vc.(text: "Hello").to_s).to eq "Greeting: HELLO!"
+  end
+
+
   specify "Rendering a partial explicitly via a custom named scope" do
     module Test::Scopes
       class Greeting < Dry::View::Scope
