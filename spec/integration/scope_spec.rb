@@ -85,6 +85,15 @@ RSpec.describe "Scopes" do
     expect(vc.(text: "Hello").to_s).to eq "Greeting: HELLO!"
   end
 
+  specify "Raising an error when an unnamed partial cannot be rendered implicitly" do
+    vc = Class.new(base_vc) do
+      configure do |config|
+        config.template = "unnamed_named_scope_with_implicit_render"
+      end
+    end.new
+
+    expect { vc.().to_s }.to raise_error ArgumentError, "+partial_name+ must be provided for unnamed scopes"
+  end
 
   specify "Rendering a partial explicitly via a custom named scope" do
     module Test::Scopes
