@@ -65,6 +65,11 @@ module Dry
       end
 
       # @api private
+      def self.rendering(format: config.default_format, context: config.default_context)
+        Rendering.prepare(renderer(format), config, context)
+      end
+
+      # @api private
       def self.renderer(format)
         renderers.fetch(format) {
           renderers[format] = Renderer.new(paths, format: format, **config.renderer_options)
@@ -111,7 +116,7 @@ module Dry
       def call(format: config.default_format, context: config.default_context, **input)
         raise UndefinedTemplateError, "no +template+ configured" unless template_path
 
-        rendering = Rendering.prepare(self.class.renderer(format), config, context).chdir(template_path)
+        rendering = self.class.rendering(format: format, context: context).chdir(template_path)
 
         locals = locals(rendering, input)
 
