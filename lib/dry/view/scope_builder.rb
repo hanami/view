@@ -47,8 +47,6 @@ module Dry
       end
 
       def resolve_scope_class(name:)
-        return fallback_class unless namespace
-
         name = inflector.camelize(name.to_s)
 
         # Give autoloaders a change to act
