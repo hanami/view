@@ -1,9 +1,11 @@
-require 'dry/inflector'
+require 'dry/equalizer'
 require_relative 'scope'
 
 module Dry
   module View
     class ScopeBuilder
+      include Dry::Equalizer(:namespace)
+
       attr_reader :namespace
       attr_reader :rendering
 

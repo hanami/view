@@ -1,6 +1,10 @@
+require "dry/equalizer"
+
 module Dry
   module View
     class Context
+      include Dry::Equalizer(:_options)
+
       attr_reader :_rendering, :_options
 
       def initialize(rendering: nil, **options)

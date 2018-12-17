@@ -1,9 +1,11 @@
-require 'dry/inflector'
+require 'dry/equalizer'
 require_relative 'part'
 
 module Dry
   module View
     class PartBuilder
+      include Dry::Equalizer(:namespace)
+
       attr_reader :namespace
       attr_reader :rendering
 

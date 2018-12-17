@@ -1,3 +1,5 @@
+require "dry/equalizer"
+
 module Dry
   module View
     class Rendering
@@ -10,6 +12,8 @@ module Dry
           part_builder: config.part_builder.new(namespace: config.part_namespace),
         )
       end
+
+      include Dry::Equalizer(:renderer, :inflector, :context, :scope_builder, :part_builder)
 
       attr_reader :renderer, :inflector, :context, :scope_builder, :part_builder
 
