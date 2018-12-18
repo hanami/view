@@ -22,6 +22,10 @@ module Dry
         !!_rendering
       end
 
+      def with(**new_options)
+        self.class.new(rendering: _rendering, **_options.merge(new_options))
+      end
+
       def self.decorate(*names, **options)
         mod = DecoratedAttributes.new(names) do
           names.each do |name|
