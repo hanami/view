@@ -8,7 +8,8 @@ require_relative 'part_builder'
 require_relative 'path'
 require_relative 'rendered'
 require_relative 'renderer'
-require_relative 'scope'
+require_relative 'rendering'
+require_relative 'scope_builder'
 
 module Dry
   module View
@@ -33,17 +34,20 @@ module Dry
       end
       setting :default_context, DEFAULT_CONTEXT
 
+      setting :scope
+
       setting :inflector, Dry::Inflector.new
 
       setting :part_builder, PartBuilder
       setting :part_namespace
 
+      setting :scope_builder, ScopeBuilder
+      setting :scope_namespace
+
       attr_reader :config
       attr_reader :layout_dir
       attr_reader :layout_path
       attr_reader :template_path
-
-      attr_reader :part_builder
 
       attr_reader :exposures
 
@@ -58,6 +62,11 @@ module Dry
       # @api public
       def self.paths
         Array(config.paths).map { |path| Dry::View::Path.new(path) }
+      end
+
+      # @api private
+      def self.rendering(format: config.default_format, context: config.default_context)
+        Rendering.prepare(renderer(format), config, context)
       end
 
       # @api private
@@ -100,11 +109,6 @@ module Dry
         @layout_path = "#{layout_dir}/#{config.layout}"
         @template_path = config.template
 
-        @part_builder = config.part_builder.new(
-          namespace: config.part_namespace,
-          inflector: config.inflector,
-        )
-
         @exposures = self.class.exposures.bind(self)
       end
 
@@ -112,15 +116,13 @@ module Dry
       def call(format: config.default_format, context: config.default_context, **input)
         raise UndefinedTemplateError, "no +template+ configured" unless template_path
 
-        renderer = self.class.renderer(format)
-        context = context.bind(part_builder: part_builder, renderer: renderer)
-
-        locals = locals(renderer.chdir(template_path), context, input)
-
-        output = renderer.template(template_path, template_scope(renderer, context, locals))
+        template_rendering = self.class.rendering(format: format, context: context).chdir(template_path)
+        locals = locals(template_rendering, input)
+        output = template_rendering.template(template_path, template_rendering.scope(config.scope, locals))
 
         if layout?
-          output = renderer.template(layout_path, layout_scope(renderer, context, layout_locals(locals))) { output }
+          layout_rendering = self.class.rendering(format: format, context: context).chdir(layout_path)
+          output = layout_rendering.template(layout_path, layout_rendering.scope(config.scope, layout_locals(locals))) { output }
         end
 
         Rendered.new(output: output, locals: locals)
@@ -128,10 +130,10 @@ module Dry
 
       private
 
-      def locals(renderer, context, input)
+      def locals(rendering, input)
         exposures.(input) do |value, exposure|
-          if exposure.decorate?
-            decorate_local(renderer, context, exposure.name, value, **exposure.options)
+          if exposure.decorate? && value
+            rendering.part(exposure.name, value, **exposure.options)
           else
             value
           end
@@ -146,38 +148,6 @@ module Dry
 
       def layout?
         !!config.layout
-      end
-
-      def layout_scope(renderer, context, locals = EMPTY_LOCALS)
-        scope(renderer.chdir(layout_dir), context, locals)
-      end
-
-      def template_scope(renderer, context, locals)
-        scope(renderer.chdir(template_path), context, locals)
-      end
-
-      def scope(renderer, context, locals = EMPTY_LOCALS)
-        Scope.new(
-          renderer: renderer,
-          context: context,
-          locals: locals,
-        )
-      end
-
-      def decorate_local(renderer, context, name, value, **options)
-        if value
-          # Decorate truthy values only
-          part_builder.(
-            name: name,
-            value: value,
-            renderer: renderer,
-            context: context,
-            namespace: config.part_namespace,
-            **options,
-          )
-        else
-          value
-        end
       end
     end
   end

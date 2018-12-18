@@ -1,4 +1,5 @@
 require 'dry/core/inflector'
+require 'dry/view/scope_builder'
 
 RSpec.describe 'Part / Decorated attributes' do
   let(:article_class) {
@@ -48,13 +49,26 @@ RSpec.describe 'Part / Decorated attributes' do
     )
   }
 
+  subject(:article_part) {
+    article_part_class.new(
+      name: :article,
+      value: article,
+      rendering: rendering,
+    )
+  }
+
+  let(:rendering) {
+    Dry::View::Rendering.new(
+      renderer: Dry::View::Renderer.new([Dry::View::Path.new(FIXTURES_PATH)], format: :html),
+      inflector: Dry::Inflector.new,
+      context: Dry::View::Context.new,
+      scope_builder: Dry::View::ScopeBuilder.new,
+      part_builder: part_builder,
+    )
+  }
+
   describe 'using default part builder' do
-    subject(:article_part) {
-      article_part_class.new(
-        name: :article,
-        value: article,
-      )
-    }
+    let(:part_builder) { Dry::View::PartBuilder.new }
 
     describe 'decorating without options' do
       describe 'multiple declarations' do
@@ -136,18 +150,10 @@ RSpec.describe 'Part / Decorated attributes' do
 
   describe 'using custom part builder' do
     let(:article_part_class) {
-        Class.new(Dry::View::Part) do
-          decorate :author
-          decorate :comments
-        end
-      }
-
-    subject(:article_part) {
-      article_part_class.new(
-        name: :article,
-        value: article,
-        part_builder: part_builder,
-      )
+      Class.new(Dry::View::Part) do
+        decorate :author
+        decorate :comments
+      end
     }
 
     let(:part_builder) {

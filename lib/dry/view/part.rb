@@ -1,6 +1,4 @@
 require 'dry-equalizer'
-require 'dry/view/scope'
-require 'dry/view/missing_renderer'
 
 module Dry
   module View
@@ -8,20 +6,17 @@ module Dry
       CONVENIENCE_METHODS = %i[
         context
         render
+        scope
         value
       ].freeze
 
-      include Dry::Equalizer(:_name, :_value, :_part_builder, :_context, :_renderer)
+      include Dry::Equalizer(:_name, :_value, :_rendering)
 
       attr_reader :_name
 
       attr_reader :_value
 
-      attr_reader :_context
-
-      attr_reader :_renderer
-
-      attr_reader :_part_builder
+      attr_reader :_rendering
 
       attr_reader :_decorated_attributes
 
@@ -37,17 +32,20 @@ module Dry
         @decorated_attributes ||= {}
       end
 
-      def initialize(name:, value:, part_builder: Dry::View::PartBuilder.new, renderer: MissingRenderer.new, context: nil)
+      def initialize(name:, value:, rendering:)
         @_name = name
         @_value = value
-        @_context = context
-        @_renderer = renderer
-        @_part_builder = part_builder
+        @_rendering = rendering
+
         @_decorated_attributes = {}
       end
 
       def _render(partial_name, as: _name, **locals, &block)
-        _renderer.partial(partial_name, _render_scope(as, locals), &block)
+        _rendering.partial(partial_name, _rendering.scope({as => self}.merge(locals)), &block)
+      end
+
+      def _scope(scope_name = nil, **locals)
+        _rendering.scope(scope_name, {_name => self}.merge(locals))
       end
 
       def to_s
@@ -58,14 +56,16 @@ module Dry
         klass.new(
           name: name,
           value: value,
-          context: _context,
-          renderer: _renderer,
-          part_builder: _part_builder,
+          rendering: _rendering,
           **options,
         )
       end
 
       private
+
+      def _context
+        _rendering.context
+      end
 
       def method_missing(name, *args, &block)
         if self.class.decorated_attributes.key?(name)
@@ -85,14 +85,6 @@ module Dry
         d.key?(name) || c.include?(name) || _value.respond_to?(name, include_private) || super
       end
 
-      def _render_scope(name, **locals)
-        Scope.new(
-          locals: locals.merge(name => self),
-          context: _context,
-          renderer: _renderer,
-        )
-      end
-
       def _resolve_decorated_attribute(name)
         _decorated_attributes.fetch(name) {
           attribute = _value.__send__(name)
@@ -100,13 +92,7 @@ module Dry
           _decorated_attributes[name] =
             if attribute
               # Decorate truthy attributes only
-              _part_builder.(
-                name: name,
-                value: attribute,
-                renderer: _renderer,
-                context: _context,
-                **self.class.decorated_attributes[name],
-              )
+              _rendering.part(name, attribute, **self.class.decorated_attributes[name])
             end
         }
       end

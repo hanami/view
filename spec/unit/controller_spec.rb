@@ -49,9 +49,7 @@ RSpec.describe Dry::View::Controller do
         configure do |config|
           config.paths = SPEC_ROOT.join('fixtures/templates')
           config.template = 'controller_renderer_options'
-          config.renderer_options = {
-            outvar: '@__buf__'
-          }
+          config.renderer_options = {outvar: '@__buf__'}
         end
       end.new
     }
@@ -82,10 +80,9 @@ RSpec.describe Dry::View::Controller do
       end.new
     }
 
-    it 'uses default encoding' do
-      klass = Class.new(Dry::View::Controller)
-      expect(klass.config.renderer_options).to be_a Hash
-      expect(klass.config.renderer_options[:default_encoding]).to eql 'utf-8'
+    it 'merges configured options with default encoding' do
+      expect(controller.class.config.renderer_options[:outvar]).to eq '@__buf__'
+      expect(controller.class.config.renderer_options[:default_encoding]).to eq 'utf-8'
     end
 
     it 'are passed to renderer' do

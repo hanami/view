@@ -1,32 +1,48 @@
-RSpec::Matchers.define :template_scope do |locals|
+require 'dry/view/scope_builder'
+
+RSpec::Matchers.define :scope do |locals|
   match do |actual|
-    locals == locals.map { |k,v| [k, actual.send(k)] }.to_h
+    locals == actual._locals
   end
 end
 
 RSpec.describe Dry::View::Part do
-  context 'with a renderer' do
-    subject(:part) { described_class.new(name: name, value: value, renderer: renderer, context: context) }
+  let(:name) { :user }
+  let(:value) { double(:value) }
+  let(:rendering) {
+    Dry::View::Rendering.new(
+      renderer: renderer,
+      inflector: Dry::Inflector.new,
+      context: Dry::View::Context.new,
+      scope_builder: Dry::View::ScopeBuilder.new,
+      part_builder: Dry::View::ScopeBuilder.new,
+    )
+  }
+  let(:renderer) { spy(:renderer) }
 
-    let(:name) { :user }
-    let(:value) { double(:value) }
-    let(:context) { double(:context) }
-    let(:renderer) { spy(:renderer) }
+  context 'with a renderer' do
+    subject(:part) {
+      described_class.new(
+        name: name,
+        value: value,
+        rendering: rendering,
+      )
+    }
 
     describe '#render' do
       it 'renders a partial with the part available in its scope' do
         part.render(:info)
-        expect(renderer).to have_received(:partial).with(:info, template_scope(user: part))
+        expect(renderer).to have_received(:partial).with(:info, scope(user: part))
       end
 
       it 'allows the part to be made available on a different name' do
         part.render(:info, as: :admin)
-        expect(renderer).to have_received(:partial).with(:info, template_scope(admin: part))
+        expect(renderer).to have_received(:partial).with(:info, scope(admin: part))
       end
 
       it 'includes extra locals in the scope' do
         part.render(:info, extra_local: "hello")
-        expect(renderer).to have_received(:partial).with(:info, template_scope(user: part, extra_local: "hello"))
+        expect(renderer).to have_received(:partial).with(:info, scope(user: part, extra_local: "hello"))
       end
     end
 
@@ -41,12 +57,9 @@ RSpec.describe Dry::View::Part do
     end
 
     describe '#new' do
-      it 'preserves renderer, and context, and part_builder' do
+      it 'preserves rendering' do
         new_part = part.new(value: 'new value')
-
-        expect(new_part._renderer).to eql part._renderer
-        expect(new_part._context).to eql part._context
-        expect(new_part._part_builder).to eql part._part_builder
+        expect(new_part._rendering).to eql part._rendering
       end
     end
 
@@ -80,24 +93,6 @@ RSpec.describe Dry::View::Part do
 
       it 'handles value methods' do
         expect(part).to respond_to(:greeting)
-      end
-    end
-  end
-
-  context 'without a renderer' do
-    subject(:part) { described_class.new(name: name, value: value, context: context) }
-
-    let(:name) { :user }
-    let(:value) { double('value') }
-    let(:context) { double('context') }
-
-    describe '#initialize' do
-      it 'can be initialized' do
-        expect(part).to be_an_instance_of(Dry::View::Part)
-      end
-
-      it 'raises an exception when render is called' do
-        expect { part.render(:info) }.to raise_error(Dry::View::MissingRendererError).with_message('No renderer provided')
       end
     end
   end

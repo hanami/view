@@ -1,28 +1,39 @@
+require 'dry/view/scope_builder'
+
 RSpec.describe Dry::View::Scope do
-  subject(:scope) { described_class.new(renderer: renderer, context: context, locals: locals) }
+  subject(:scope) {
+    described_class.new(
+      locals: locals,
+      rendering: rendering,
+    )
+  }
 
   let(:locals) { {} }
+  let(:rendering) { spy(:rendering, context: context) }
   let(:context) { double(:context) }
-  let(:renderer) { spy(:renderer) }
 
   describe '#render' do
     it 'renders a partial with itself as the scope' do
       scope.render(:info)
-      expect(renderer).to have_received(:partial).with(:info, scope)
+      expect(rendering).to have_received(:partial).with(:info, scope)
     end
 
     it 'renders a partial with provided locals' do
-      scope_with_locals = described_class.new(renderer: renderer, context: context, locals: {foo: 'bar'})
+      scope_with_locals = described_class.new(
+        locals: {foo: 'bar'},
+        rendering: rendering,
+      )
 
       scope.render(:info, foo: 'bar')
-      expect(renderer).to have_received(:partial).with(:info, scope_with_locals)
+
+      expect(rendering).to have_received(:partial).with(:info, scope_with_locals)
     end
   end
 
   describe '#method_missing' do
     context 'matching locals' do
       let(:locals) { {greeting: 'hello from locals'} }
-      let(:context) { double('context', greeting: 'hello from context') }
+      let(:context) { double(:context, greeting: 'hello from context') }
 
       it 'returns a matching value from the locals, in favour of a matching method on the context' do
         expect(scope.greeting).to eq 'hello from locals'
@@ -30,7 +41,7 @@ RSpec.describe Dry::View::Scope do
     end
 
     context 'matching context' do
-      let(:context) { double('context', greeting: 'hello from context') }
+      let(:context) { double(:context, greeting: 'hello from context') }
 
       it 'calls the matching method on the context' do
         expect(scope.greeting).to eq 'hello from context'

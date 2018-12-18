@@ -2,7 +2,6 @@ require "dry/view/controller"
 require "dry/view/part"
 
 RSpec.describe "locals" do
-
   specify "locals are decorated with parts by default" do
     vc = Class.new(Dry::View::Controller) do
       configure do |config|
