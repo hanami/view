@@ -9,21 +9,20 @@ require 'action_controller'
 
 TEMPLATES_PATHS = Pathname(__FILE__).dirname.join('templates')
 
-users = [
+TEMPLATE_LOCALS = { users: [
   OpenStruct.new(name: 'John', link: 'john@google.com`'),
   OpenStruct.new(name: 'Teresa', link: 'teresa@google.com`')
-]
+] }
 
 ActionController::Base.view_paths = TEMPLATES_PATHS
 
 class UsersController < ActionController::Base
   layout "app"
 
+  attr_reader :users
+
   def index
-    @users = [
-      OpenStruct.new(name: 'John', link: 'john@google.com`'),
-      OpenStruct.new(name: 'Teresa', link: 'teresa@google.com`')
-    ]
+    @users = TEMPLATE_LOCALS[:users]
     render_to_string :index
   end
 end
@@ -42,10 +41,18 @@ end
 action_controller = UsersController.new
 dry_view_controller = DryViewController.new
 
+if action_controller.index != dry_view_controller.(TEMPLATE_LOCALS)
+  raise "rendering does not return same output"
+end
+
 Benchmark.ips do |x|
   x.report('action_controller') do
-    action_controller.index
+    1000.times { action_controller.index }
   end
-  x.report('dry-view') { dry_view_controller.(users: users) }
+
+  x.report('dry-view') do
+    1000.times { dry_view_controller.(TEMPLATE_LOCALS) }
+  end
+
   x.compare!
 end
