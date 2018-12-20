@@ -41,7 +41,7 @@ end
 action_controller = UsersController.new
 dry_view_controller = DryViewController.new
 
-if action_controller.index != dry_view_controller.(TEMPLATE_LOCALS)
+if action_controller.index != dry_view_controller.(TEMPLATE_LOCALS).to_s
   raise "rendering does not return same output"
 end
 
@@ -51,7 +51,7 @@ Benchmark.ips do |x|
   end
 
   x.report('dry-view') do
-    1000.times { dry_view_controller.(TEMPLATE_LOCALS) }
+    1000.times { dry_view_controller.(TEMPLATE_LOCALS).to_s }
   end
 
   x.compare!
