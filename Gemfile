@@ -19,4 +19,5 @@ end
 group :benchmarks do
   gem 'benchmark-ips'
   gem 'actionview'
+  gem 'actionpack'
 end
