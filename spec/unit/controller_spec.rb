@@ -86,7 +86,7 @@ RSpec.describe Dry::View::Controller do
     end
 
     it 'are passed to renderer' do
-      expect(controller.(context: context).to_s).to eq(
+      expect(controller.(context: context).to_s.gsub(/\n\s*/m, "")).to eq(
         '<form action="/people" method="post"><input type="text" name="name" /></form>'
       )
     end
