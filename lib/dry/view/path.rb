@@ -1,8 +1,10 @@
 require "pathname"
+require "dry/core/cache"
 
 module Dry
   module View
     class Path
+      extend Dry::Core::Cache
       include Dry::Equalizer(:dir, :root)
 
       attr_reader :dir, :root
@@ -32,8 +34,10 @@ module Dry
 
       # Search for a template using a wildcard for the engine extension
       def template?(name, format)
-        glob = dir.join("#{name}.#{format}.*")
-        Dir[glob].first
+        fetch_or_store(root, dir, name, format) do
+          glob = dir.join("#{name}.#{format}.*")
+          Dir[glob].first
+        end
       end
     end
   end

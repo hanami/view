@@ -1,9 +1,11 @@
+require 'dry/core/cache'
 require 'dry/equalizer'
 require_relative 'part'
 
 module Dry
   module View
     class PartBuilder
+      extend Dry::Core::Cache
       include Dry::Equalizer(:namespace)
 
       attr_reader :namespace
@@ -84,7 +86,9 @@ module Dry
         if name.is_a?(Class)
           name
         else
-          resolve_part_class(name: name, fallback_class: fallback_class)
+          fetch_or_store(namespace, name, fallback_class) do
+            resolve_part_class(name: name, fallback_class: fallback_class)
+          end
         end
       end
 

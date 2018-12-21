@@ -1,5 +1,6 @@
-require 'tilt'
+require 'dry/core/cache'
 require 'dry/equalizer'
+require 'tilt'
 
 module Dry
   module View
@@ -7,21 +8,18 @@ module Dry
       PARTIAL_PREFIX = "_".freeze
       PATH_DELIMITER = "/".freeze
 
+      extend Dry::Core::Cache
+
       include Dry::Equalizer(:paths, :format, :options)
 
       TemplateNotFoundError = Class.new(StandardError)
 
-      attr_reader :paths, :format, :options, :tilts
-
-      def self.tilts
-        @__engines__ ||= {}
-      end
+      attr_reader :paths, :format, :options
 
       def initialize(paths, format:, **options)
         @paths = paths
         @format = format
         @options = options
-        @tilts = self.class.tilts
       end
 
       def template(name, scope, &block)
@@ -64,8 +62,8 @@ module Dry
       end
 
       def tilt(path)
-        tilts.fetch(path) {
-          tilts[path] = Tilt.new(path, nil, **options)
+        fetch_or_store(:tilt, path, options) {
+          Tilt.new(path, nil, **options)
         }
       end
     end
