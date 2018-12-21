@@ -10,8 +10,8 @@ require 'action_controller'
 TEMPLATES_PATHS = Pathname(__FILE__).dirname.join('templates')
 
 TEMPLATE_LOCALS = { users: [
-  OpenStruct.new(name: 'John', link: 'john@google.com`'),
-  OpenStruct.new(name: 'Teresa', link: 'teresa@google.com`')
+  OpenStruct.new(name: 'Jane', email: 'Jane@example.com'),
+  OpenStruct.new(name: 'Teresa', email: 'teresa@example.com')
 ] }
 
 ActionController::Base.view_paths = TEMPLATES_PATHS
@@ -41,8 +41,12 @@ end
 action_controller = UsersController.new
 dry_view_controller = DryViewController.new
 
-if action_controller.index != dry_view_controller.(TEMPLATE_LOCALS).to_s
-  raise "rendering does not return same output"
+if (action_controller_output = action_controller.index) != (dry_view_output = dry_view_controller.(TEMPLATE_LOCALS).to_s)
+  puts "Output doesn't match:"
+  puts
+  puts "ActionView:\n\n#{action_controller_output}\n"
+  puts "dry-view:\n\n#{dry_view_output}\n"
+  exit 1
 end
 
 Benchmark.ips do |x|
