@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.2.0'
 
-  spec.add_runtime_dependency "tilt", "~> 2.0"
+  spec.add_runtime_dependency "tilt", "~> 2.0", ">= 2.0.6"
   spec.add_runtime_dependency "dry-core", "~> 0.2"
   spec.add_runtime_dependency "dry-configurable", "~> 0.1"
   spec.add_runtime_dependency "dry-equalizer", "~> 0.2"
