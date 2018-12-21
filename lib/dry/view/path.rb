@@ -1,8 +1,10 @@
 require "pathname"
+require "dry/core/cache"
 
 module Dry
   module View
     class Path
+      extend Dry::Core::Cache
       include Dry::Equalizer(:dir, :root)
 
       attr_reader :dir, :root
@@ -13,7 +15,9 @@ module Dry
       end
 
       def lookup(name, format)
-        template?(name, format) || template?("shared/#{name}", format) || !root? && chdir('..').lookup(name, format)
+        fetch_or_store(dir, root, name, format) do
+          template?(name, format) || template?("shared/#{name}", format) || !root? && chdir('..').lookup(name, format)
+        end
       end
 
       def chdir(dirname)

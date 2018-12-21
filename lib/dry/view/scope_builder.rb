@@ -1,9 +1,11 @@
+require 'dry/core/cache'
 require 'dry/equalizer'
 require_relative 'scope'
 
 module Dry
   module View
     class ScopeBuilder
+      extend Dry::Core::Cache
       include Dry::Equalizer(:namespace)
 
       attr_reader :namespace
@@ -42,7 +44,9 @@ module Dry
         elsif name.is_a?(Class)
           name
         else
-          resolve_scope_class(name: name)
+          fetch_or_store(namespace, name) do
+            resolve_scope_class(name: name)
+          end
         end
       end
 
