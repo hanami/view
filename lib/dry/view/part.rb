@@ -61,6 +61,10 @@ module Dry
         )
       end
 
+      def inspect
+        %(#<#{self.class.name} name=#{_name.inspect} value=#{_value.inspect}>)
+      end
+
       private
 
       def _context

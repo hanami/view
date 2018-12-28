@@ -63,6 +63,12 @@ RSpec.describe Dry::View::Part do
       end
     end
 
+    describe "#inspect" do
+      it "includes the clsas name, name, and value only" do
+        expect(part.inspect).to eq "#<Dry::View::Part name=:user value=#<Double :value>>"
+      end
+    end
+
     describe '#method_missing' do
       let(:value) { double(greeting: 'hello from value') }
 
@@ -82,7 +88,7 @@ RSpec.describe Dry::View::Part do
       end
     end
 
-    describe '#respond_to_missing?' do
+    describe '#respond_to' do
       let(:value) { double(greeting: 'hello from value') }
 
       it 'handles convenience methods' do
