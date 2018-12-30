@@ -1,12 +1,12 @@
-require "haml"
+require "hamlit/block"
 require "dry/view/context"
 require "dry/view/controller"
 
-RSpec.describe "Template engines / haml" do
+RSpec.describe "Template engines / hamlit" do
   let(:base_vc) {
     Class.new(Dry::View::Controller) do
       configure do |config|
-        config.paths = FIXTURES_PATH.join("integration/template_engines/haml")
+        config.paths = FIXTURES_PATH.join("integration/template_engines/hamlit")
       end
     end
   }
@@ -23,8 +23,6 @@ RSpec.describe "Template engines / haml" do
 
   it "supports methods that yield" do
     context = Class.new(Dry::View::Context) do
-      include Haml::Helpers
-
       def wrapper(&block)
         "<wrapper>#{yield}</wrapper>"
       end

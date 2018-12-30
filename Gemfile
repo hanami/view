@@ -13,7 +13,8 @@ group :test do
   gem "rack", ">= 2.0.6"
 
   gem "erubi"
-  gem "haml", "~> 5.0"
+  gem "hamlit"
+  gem "hamlit-block"
   gem 'slim', "~> 4.0"
 
   gem 'simplecov'
