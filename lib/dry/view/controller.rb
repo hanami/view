@@ -116,9 +116,11 @@ module Dry
       def call(format: config.default_format, context: config.default_context, **input)
         raise UndefinedTemplateError, "no +template+ configured" unless template_path
 
+        rendering = self.class.rendering(format: format, context: context)
         template_rendering = self.class.rendering(format: format, context: context).chdir(template_path)
+
         locals = locals(template_rendering, input)
-        output = template_rendering.template(template_path, template_rendering.scope(config.scope, locals))
+        output = rendering.template(template_path, template_rendering.scope(config.scope, locals))
 
         if layout?
           layout_rendering = self.class.rendering(format: format, context: context).chdir(layout_path)
