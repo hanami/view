@@ -1,3 +1,4 @@
+# coding: utf-8
 RSpec.describe 'dry-view' do
   let(:vc_class) do
     Class.new(Dry::View::Controller) do
@@ -79,6 +80,18 @@ RSpec.describe 'dry-view' do
     expect(vc.(context: context).to_s).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><div class="box"><h2>Nombre</h2>Jane</div><div class="box"><h2>Nombre</h2>Joe</div></div></body></html>'
     )
+  end
+
+  it 'renders using utf-8 by default' do
+    vc = Class.new(vc_class) do
+      configure do |config|
+        config.template = 'utf8'
+      end
+    end.new
+
+    expect(vc.(context: context).to_s).to eq(
+      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body>ç</body></html>'
+   )
   end
 
   describe 'inheritance' do
