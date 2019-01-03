@@ -5,7 +5,8 @@ RSpec.describe Dry::View::Renderer do
   subject(:renderer) do
     Dry::View::Renderer.new(
       [Dry::View::Path.new(SPEC_ROOT.join('fixtures/templates'))],
-      format: 'html'
+      format: 'html',
+      default_encoding: 'utf-8'
     )
   end
 
@@ -52,6 +53,12 @@ RSpec.describe Dry::View::Renderer do
       expect {
         renderer.partial(:missing_partial, scope)
       }.to raise_error(Dry::View::Renderer::TemplateNotFoundError, /_missing_partial/)
+    end
+  end
+
+  describe '#chdir' do
+    it 'copies options to new renderer instance' do
+      expect(renderer.chdir('nested').options).to eq(default_encoding: 'utf-8')
     end
   end
 end
