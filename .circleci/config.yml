@@ -129,31 +129,6 @@ jobs:
           name: run tests
           command: |
             ./script/ci
-  "jruby-9.2":
-    docker:
-       - image: hanami/jruby-9.2
-    working_directory: ~/hanami-utils
-    steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "Gemfile.lock" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-      - run:
-          name: install dependencies
-          command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-      # run tests!
-      - run:
-          name: run tests
-          command: |
-            ./script/ci
 
 workflows:
   version: 2
@@ -164,4 +139,3 @@ workflows:
       - "ruby-2.5"
       - "ruby-2.6"
       - "jruby-9.1"
-      - "jruby-9.2"
