@@ -19,7 +19,6 @@ module Dry
       DEFAULT_LAYOUTS_DIR = 'layouts'.freeze
       DEFAULT_CONTEXT = Context.new
       DEFAULT_RENDERER_OPTIONS = {default_encoding: 'utf-8'.freeze}.freeze
-      EMPTY_LOCALS = {}.freeze
 
       include Dry::Equalizer(:config)
 
