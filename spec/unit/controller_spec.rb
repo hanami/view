@@ -1,3 +1,5 @@
+require "tilt/erubi"
+
 RSpec.describe Dry::View::Controller do
   subject(:controller) {
     Class.new(Dry::View::Controller) do
@@ -49,6 +51,7 @@ RSpec.describe Dry::View::Controller do
         configure do |config|
           config.paths = SPEC_ROOT.join('fixtures/templates')
           config.template = 'controller_renderer_options'
+          config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}
           config.renderer_options = {outvar: '@__buf__'}
         end
       end.new

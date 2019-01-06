@@ -1,6 +1,5 @@
 require "tilt"
 require "cell/erb/template"
-Tilt.register Cell::Erb::Template, :erb
 
 require "dry/view/context"
 require "dry/view/controller"
@@ -10,6 +9,7 @@ RSpec.describe "Template engines / erb (via erbse)" do
     Class.new(Dry::View::Controller) do
       configure do |config|
         config.paths = FIXTURES_PATH.join("integration/template_engines/erbse")
+        config.renderer_engine_mapping = {erb: Cell::Erb::Template}
       end
     end
   }

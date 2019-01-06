@@ -1,4 +1,5 @@
 require 'dry/configurable'
+require "dry/core/cache"
 require 'dry/equalizer'
 require 'dry/inflector'
 
@@ -14,6 +15,8 @@ require_relative 'scope_builder'
 module Dry
   module View
     class Controller
+      extend Dry::Core::Cache
+
       UndefinedTemplateError = Class.new(StandardError)
 
       DEFAULT_LAYOUTS_DIR = 'layouts'.freeze
@@ -28,6 +31,7 @@ module Dry
       setting :layout, false
       setting :template
       setting :default_format, :html
+      setting :renderer_engine_mapping
       setting :renderer_options, DEFAULT_RENDERER_OPTIONS do |options|
         DEFAULT_RENDERER_OPTIONS.merge(options.to_h).freeze
       end
@@ -70,14 +74,14 @@ module Dry
 
       # @api private
       def self.renderer(format)
-        renderers.fetch(format) {
-          renderers[format] = Renderer.new(paths, format: format, **config.renderer_options)
+        fetch_or_store(:renderer, config, format) {
+          Renderer.new(
+            paths,
+            format: format,
+            engine_mapping: config.renderer_engine_mapping,
+            **config.renderer_options,
+          )
         }
-      end
-
-      # @api private
-      def self.renderers
-        @renderers ||= {}
       end
 
       # @api public
