@@ -64,10 +64,7 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
         end
       end.new
 
-      expect { vc.() }.to raise_error(
-        LoadError,
-        %r{cannot load such file -- erbse.*dry-view requires erbse}m,
-      )
+      expect { vc.() }.to raise_error(LoadError, %r{dry-view requires erbse}m)
     end
 
     it "allows deregistering the adapter to avoid the load error and accept rendering via a less-compatible erb engine" do

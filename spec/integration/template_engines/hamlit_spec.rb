@@ -63,10 +63,7 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
         end
       end.new
 
-      expect { vc.() }.to raise_error(
-        LoadError,
-        %r{cannot load such file -- hamlit/block.*dry-view requires hamlit-block}m,
-      )
+      expect { vc.() }.to raise_error(LoadError, %r{dry-view requires hamlit-block}m)
     end
   end
 end
