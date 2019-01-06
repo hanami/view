@@ -1,4 +1,3 @@
-require "hamlit/block"
 require "dry/view/context"
 require "dry/view/controller"
 

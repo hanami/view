@@ -63,8 +63,8 @@ module Dry
       end
 
       def engine(path)
-        fetch_or_store(:engine, engine_mapping, path, options) {
-          Tilt.with_mapping(engine_mapping).new(path, **options)
+        fetch_or_store(:engine, path, engine_mapping, options) {
+          Tilt[path, engine_mapping, **options]
         }
       end
     end

@@ -1,13 +1,11 @@
 require "dry/view/context"
 require "dry/view/controller"
-require "dry/view/tilt/erbse"
 
 RSpec.describe "Template engines / erb (via erbse)" do
   let(:base_vc) {
     Class.new(Dry::View::Controller) do
       configure do |config|
         config.paths = FIXTURES_PATH.join("integration/template_engines/erbse")
-        config.renderer_engine_mapping = {erb: Dry::View::Tilt::ErbseTemplate}
       end
     end
   }
