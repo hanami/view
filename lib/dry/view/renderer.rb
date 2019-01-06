@@ -19,7 +19,7 @@ module Dry
       def initialize(paths, format:, engine_mapping: nil, **options)
         @paths = paths
         @format = format
-        @engine_mapping = engine_mapping
+        @engine_mapping = engine_mapping || {}
         @options = options
       end
 
@@ -64,8 +64,7 @@ module Dry
 
       def engine(path)
         fetch_or_store(:engine, engine_mapping, path, options) {
-          tilt = engine_mapping ? Tilt.with_mapping(engine_mapping) : Tilt.default
-          tilt.new(path, **options)
+          Tilt.with_mapping(engine_mapping).new(path, **options)
         }
       end
     end
