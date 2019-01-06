@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'inflecto'
-
 group :tools do
   gem 'hotch'
   gem 'pry-byebug', platform: :mri
