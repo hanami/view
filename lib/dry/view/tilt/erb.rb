@@ -10,6 +10,7 @@ module Dry
 
         def self.activate
           Tilt.default_mapping.register ErbseTemplate, 'erb'
+          self
         end
       end
 

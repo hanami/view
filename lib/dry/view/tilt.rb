@@ -29,22 +29,24 @@ module Dry
         end
 
         def activate_adapter(ext)
-          adapter = adapters[ext]
-          return unless adapter
+          fetch_or_store(:adapter, ext) {
+            adapter = adapters[ext]
+            return unless adapter
 
-          *requires, error_message = adapter.requirements
+            *requires, error_message = adapter.requirements
 
-          begin
-            requires.each(&method(:require))
-          rescue LoadError => e
-            raise e, "#{e.message}\n\n#{error_message}"
-          end
+            begin
+              requires.each(&method(:require))
+            rescue LoadError => e
+              raise e, "#{e.message}\n\n#{error_message}"
+            end
 
-          adapter.activate
+            adapter.activate
+          }
         end
 
         def with_mapping(mapping)
-          fetch_or_store(mapping) {
+          fetch_or_store(:mapping, mapping) {
             if mapping.any?
               build_mapping(mapping)
             else

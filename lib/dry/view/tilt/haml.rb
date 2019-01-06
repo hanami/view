@@ -9,7 +9,8 @@ module Dry
         end
 
         def self.activate
-          # requiring hamlit/block above registers the extension with Tilt
+          # Requiring hamlit/block will register the engine with Tilt
+          self
         end
       end
 
