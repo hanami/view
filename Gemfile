@@ -11,7 +11,6 @@ group :test do
   gem "rack", ">= 2.0.6"
 
   gem "erbse"
-  gem "cells-erb", git: "https://github.com/trailblazer/cells-erb", branch: "master"
   gem "erubi"
   gem "hamlit"
   gem "hamlit-block"
