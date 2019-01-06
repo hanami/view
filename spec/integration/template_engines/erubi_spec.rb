@@ -5,7 +5,7 @@ require "tilt/erubi"
 require "dry/view/context"
 require "dry/view/controller"
 
-RSpec.describe "Template engines / erb (via erubi)" do
+RSpec.describe "Template engines / erb (using erubi via an explict engine mapping)" do
   let(:base_vc) {
     Class.new(Dry::View::Controller) do
       configure do |config|

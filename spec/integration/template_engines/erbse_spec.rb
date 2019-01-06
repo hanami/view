@@ -1,7 +1,7 @@
 require "dry/view/context"
 require "dry/view/controller"
 
-RSpec.describe "Template engines / erb (via erbse)" do
+RSpec.describe "Template engines / erb (using erbse as default engine)" do
   let(:base_vc) {
     Class.new(Dry::View::Controller) do
       configure do |config|
@@ -10,30 +10,64 @@ RSpec.describe "Template engines / erb (via erbse)" do
     end
   }
 
-  it "supports partials that yield" do
-    vc = Class.new(base_vc) do
-      configure do |config|
-        config.template = "render_and_yield"
-      end
-    end.new
+  context "with erbse available" do
+    it "supports partials that yield" do
+      vc = Class.new(base_vc) do
+        configure do |config|
+          config.template = "render_and_yield"
+        end
+      end.new
 
-    expect(vc.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
+      expect(vc.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
+    end
+
+    it "supports context methods that yield" do
+      context = Class.new(Dry::View::Context) do
+        def wrapper
+          "<wrapper>#{yield}</wrapper>"
+        end
+      end.new
+
+      vc = Class.new(base_vc) do
+        configure do |config|
+          config.default_context = context
+          config.template = "method_with_yield"
+        end
+      end.new
+
+      expect(vc.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
+    end
   end
 
-  it "supports context methods that yield" do
-    context = Class.new(Dry::View::Context) do
-      def wrapper
-        "<wrapper>#{yield}</wrapper>"
-      end
-    end.new
+  context "with erbse not available" do
+    before do
+      @load_path = $LOAD_PATH.dup
+      @loaded_features = $LOADED_FEATURES.dup
 
-    vc = Class.new(base_vc) do
-      configure do |config|
-        config.default_context = context
-        config.template = "method_with_yield"
-      end
-    end.new
+      $LOAD_PATH.reject! { |path| path =~ %r{erbse} }
+      $LOADED_FEATURES.reject! { |path| path =~ %r{erbse|dry/view/tilt/erbse} }
 
-    expect(vc.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
+      Dry::View::Tilt.cache.clear
+      Dry::View::Renderer.cache.clear
+    end
+
+    after do
+      $LOAD_PATH.replace @load_path
+      $LOADED_FEATURES.replace @loaded_features
+    end
+
+    it "raises an error explaining the erbse requirement" do
+      vc = Class.new(base_vc) do
+        configure do |config|
+          config.template = "render_and_yield"
+        end
+      end.new
+
+      expect { vc.() }.to raise_error(
+        LoadError,
+        %r{cannot load such file -- erbse.*dry-view requires erbse for erb templates}m,
+      )
+    end
+
   end
 end
