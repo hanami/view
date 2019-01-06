@@ -1,3 +1,11 @@
+# Unreleased
+
+### Fixed
+
+- Backports fix to keep renderer options on chdir
+
+[889ac7b](https://github.com/dry-rb/dry-view/commit/889ac7b)
+
 # 0.5.3 / 2018-10-22
 
 ### Added
