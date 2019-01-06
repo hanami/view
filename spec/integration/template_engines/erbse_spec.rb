@@ -54,6 +54,7 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
     after do
       $LOAD_PATH.replace @load_path
       $LOADED_FEATURES.replace @loaded_features
+      Dry::View::Tilt.register_adapter :erb, Dry::View::Tilt::ERB
     end
 
     it "raises an error explaining the erbse requirement" do
@@ -65,9 +66,21 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
 
       expect { vc.() }.to raise_error(
         LoadError,
-        %r{cannot load such file -- erbse.*dry-view requires erbse for erb templates}m,
+        %r{cannot load such file -- erbse.*dry-view requires erbse}m,
       )
     end
 
+    it "allows deregistering the adapter to avoid the load error and accept rendering via a less-compatible erb engine" do
+      vc = Class.new(base_vc) do
+        configure do |config|
+          config.template = "plain_erb"
+        end
+      end.new
+
+      Dry::View::Tilt.deregister_adapter :erb
+
+      expect { vc.() }.not_to raise_error
+      expect(vc.().to_s.strip).to eq "Hello"
+    end
   end
 end

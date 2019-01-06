@@ -14,12 +14,16 @@ module Dry
           with_mapping(mapping).new(path, **options)
         end
 
+        def default_mapping
+          ::Tilt.default_mapping
+        end
+
         def register_adapter(ext, adapter)
           adapters[ext] = adapter
         end
 
-        def default_mapping
-          ::Tilt.default_mapping
+        def deregister_adapter(ext)
+          adapters.delete(ext)
         end
 
         private
