@@ -1,10 +1,8 @@
-# Unreleased
+# 0.5.4 / 2019-01-06
 
 ### Fixed
 
-- Backports fix to keep renderer options on chdir
-
-[889ac7b](https://github.com/dry-rb/dry-view/commit/889ac7b)
+- Preserve renderer options when chdir-ing (timriley in [889ac7b](https://github.com/dry-rb/dry-view/commit/889ac7b))
 
 # 0.5.3 / 2018-10-22
 
