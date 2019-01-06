@@ -39,7 +39,7 @@ module Dry
       end
 
       def render(path, scope, &block)
-        engine(path).render(scope, &block)
+        tilt(path).render(scope, &block)
       end
 
       def chdir(dirname)
@@ -62,7 +62,7 @@ module Dry
         name_segments[0..-2].push("#{PARTIAL_PREFIX}#{name_segments[-1]}").join(PATH_DELIMITER)
       end
 
-      def engine(path)
+      def tilt(path)
         fetch_or_store(:engine, path, engine_mapping, options) {
           Tilt[path, engine_mapping, **options]
         }
