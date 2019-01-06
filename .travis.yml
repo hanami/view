@@ -3,6 +3,7 @@ cache: bundler
 bundler_args: --without tools benchmarks
 before_install:
   - gem update --system
+  - gem install bundler
 script:
   - bundle exec rake
 after_success:
