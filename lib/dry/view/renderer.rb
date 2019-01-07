@@ -1,6 +1,6 @@
 require 'dry/core/cache'
 require 'dry/equalizer'
-require 'tilt'
+require_relative 'tilt'
 
 module Dry
   module View
@@ -10,15 +10,16 @@ module Dry
 
       extend Dry::Core::Cache
 
-      include Dry::Equalizer(:paths, :format, :options)
+      include Dry::Equalizer(:paths, :format, :engine_mapping, :options)
 
       TemplateNotFoundError = Class.new(StandardError)
 
-      attr_reader :paths, :format, :options
+      attr_reader :paths, :format, :engine_mapping, :options
 
-      def initialize(paths, format:, **options)
+      def initialize(paths, format:, engine_mapping: nil, **options)
         @paths = paths
         @format = format
+        @engine_mapping = engine_mapping || {}
         @options = options
       end
 
@@ -62,8 +63,8 @@ module Dry
       end
 
       def tilt(path)
-        fetch_or_store(:tilt, path, options) {
-          Tilt.new(path, nil, **options)
+        fetch_or_store(:engine, path, engine_mapping, options) {
+          Tilt[path, engine_mapping, **options]
         }
       end
     end

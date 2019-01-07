@@ -1,14 +1,16 @@
 require "erubi"
 require "erubi/capture_end"
+require "tilt/erubi"
 
 require "dry/view/context"
 require "dry/view/controller"
 
-RSpec.describe "Template engines / erb (via erubi)" do
+RSpec.describe "Template engines / erb (using erubi via an explict engine mapping)" do
   let(:base_vc) {
     Class.new(Dry::View::Controller) do
       configure do |config|
-        config.paths = FIXTURES_PATH.join("integration/template_engines/erb")
+        config.paths = FIXTURES_PATH.join("integration/template_engines/erubi")
+        config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}
         config.renderer_options = {engine_class: Erubi::CaptureEndEngine}
       end
     end
