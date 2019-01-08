@@ -1,4 +1,5 @@
 require 'dry-equalizer'
+require_relative "decorated_attributes"
 
 module Dry
   module View
@@ -11,6 +12,7 @@ module Dry
       ].freeze
 
       include Dry::Equalizer(:_name, :_value, :_rendering)
+      include DecoratedAttributes
 
       attr_reader :_name
 
@@ -18,26 +20,10 @@ module Dry
 
       attr_reader :_rendering
 
-      attr_reader :_decorated_attributes
-
-      # @api public
-      def self.decorate(*names, **options)
-        names.each do |name|
-          decorated_attributes[name] = options
-        end
-      end
-
-      # @api private
-      def self.decorated_attributes
-        @decorated_attributes ||= {}
-      end
-
       def initialize(name:, value:, rendering:)
         @_name = name
         @_value = value
         @_rendering = rendering
-
-        @_decorated_attributes = {}
       end
 
       def _render(partial_name, as: _name, **locals, &block)
@@ -72,9 +58,7 @@ module Dry
       end
 
       def method_missing(name, *args, &block)
-        if self.class.decorated_attributes.key?(name)
-          _resolve_decorated_attribute(name)
-        elsif _value.respond_to?(name)
+        if _value.respond_to?(name)
           _value.public_send(name, *args, &block)
         elsif CONVENIENCE_METHODS.include?(name)
           __send__(:"_#{name}", *args, &block)
@@ -84,21 +68,7 @@ module Dry
       end
 
       def respond_to_missing?(name, include_private = false)
-        d = self.class.decorated_attributes
-        c = CONVENIENCE_METHODS
-        d.key?(name) || c.include?(name) || _value.respond_to?(name, include_private) || super
-      end
-
-      def _resolve_decorated_attribute(name)
-        _decorated_attributes.fetch(name) {
-          attribute = _value.__send__(name)
-
-          _decorated_attributes[name] =
-            if attribute
-              # Decorate truthy attributes only
-              _rendering.part(name, attribute, **self.class.decorated_attributes[name])
-            end
-        }
+        CONVENIENCE_METHODS.include?(name) || _value.respond_to?(name, include_private) || super
       end
     end
   end
