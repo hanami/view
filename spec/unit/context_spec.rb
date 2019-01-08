@@ -35,15 +35,9 @@ RSpec.describe Dry::View::Context do
 
   subject(:context) { context_class.new(assets: assets, routes: routes) }
 
-  it { is_expected.not_to be_rendering }
-
   describe "attribute readers" do
     it "provides access to its attributes" do
       expect(context.assets).to eql assets
-    end
-
-    it "raises NoMethodError when an invalid attribute is accessed" do
-      expect { context.invalid_attribute }.to raise_error(NoMethodError)
     end
   end
 
@@ -52,20 +46,10 @@ RSpec.describe Dry::View::Context do
       context_class.new(assets: assets, routes: routes).for_rendering(rendering)
     }
 
-    it { is_expected.to be_rendering }
-
     describe "attribute readers" do
       it "provides attributes decorated in view parts" do
         expect(context.assets).to be_a Dry::View::Part
         expect(context.assets.value).to eql assets
-      end
-
-      it "raises NoMethodError when an invalid attribute is decorated" do
-        expect { context.invalid_attribute }.to raise_error(NoMethodError)
-      end
-
-      it "stores the decorated attribute readers in a single decorated attributes module" do
-        expect(context_class.ancestors[0].inspect).to eq "#<Dry::View::Context::DecoratedAttributes[:assets, :invalid_attribute, :routes]>"
       end
     end
   end
