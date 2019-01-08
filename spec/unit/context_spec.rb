@@ -6,18 +6,22 @@ require "dry/view/scope_builder"
 RSpec.describe Dry::View::Context do
   let(:context_class) {
     Class.new(Dry::View::Context) do
-      attr_reader :assets
+      attr_reader :assets, :routes
 
-      decorate :assets, :invalid_attribute
+      decorate :assets, :routes
+      decorate :invalid_attribute
 
-      def initialize(assets:, **options)
+
+      def initialize(assets:, routes:, **options)
         @assets = assets
+        @routes = routes
         super
       end
     end
   }
 
   let(:assets) { double(:assets) }
+  let(:routes) { double(:routes) }
 
   let(:rendering) {
     Dry::View::Rendering.new(
@@ -29,7 +33,7 @@ RSpec.describe Dry::View::Context do
     )
   }
 
-  subject(:context) { context_class.new(assets: assets) }
+  subject(:context) { context_class.new(assets: assets, routes: routes) }
 
   it { is_expected.not_to be_rendering }
 
@@ -45,7 +49,7 @@ RSpec.describe Dry::View::Context do
 
   context "for rendering" do
     subject(:context) {
-      context_class.new(assets: assets).for_rendering(rendering)
+      context_class.new(assets: assets, routes: routes).for_rendering(rendering)
     }
 
     it { is_expected.to be_rendering }
@@ -60,8 +64,8 @@ RSpec.describe Dry::View::Context do
         expect { context.invalid_attribute }.to raise_error(NoMethodError)
       end
 
-      it "provides a helpful #inspect on the decorated attributes module" do
-        expect(context_class.ancestors[0].inspect).to eq "#<Dry::View::Context::DecoratedAttributes[:assets, :invalid_attribute]>"
+      it "stores the decorated attribute readers in a single decorated attributes module" do
+        expect(context_class.ancestors[0].inspect).to eq "#<Dry::View::Context::DecoratedAttributes[:assets, :invalid_attribute, :routes]>"
       end
     end
   end
@@ -72,7 +76,7 @@ RSpec.describe Dry::View::Context do
       new_context = context.with(another_option: another_option)
 
       expect(new_context).to be_a(context.class)
-      expect(new_context._options).to eq({assets: context.assets, another_option: another_option})
+      expect(new_context._options).to eq({assets: context.assets, routes: routes, another_option: another_option})
     end
   end
 end
