@@ -3,11 +3,9 @@ require "tilt/erubi"
 RSpec.describe Dry::View::Controller do
   subject(:controller) {
     Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'user'
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'user'
 
       expose :user do
         {name: 'Jane'}
@@ -36,9 +34,7 @@ RSpec.describe Dry::View::Controller do
 
     it 'provides a meaningful error if the template name is missing' do
       controller = Class.new(Dry::View::Controller) do
-        configure do |config|
-          config.paths = SPEC_ROOT.join('fixtures/templates')
-        end
+        config.paths = SPEC_ROOT.join('fixtures/templates')
       end.new
 
       expect { controller.(context: context) }.to raise_error Dry::View::Controller::UndefinedTemplateError
@@ -48,12 +44,10 @@ RSpec.describe Dry::View::Controller do
   describe 'renderer options' do
     subject(:controller) {
       Class.new(Dry::View::Controller) do
-        configure do |config|
-          config.paths = SPEC_ROOT.join('fixtures/templates')
-          config.template = 'controller_renderer_options'
-          config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}
-          config.renderer_options = {outvar: '@__buf__'}
-        end
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.template = 'controller_renderer_options'
+        config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}
+        config.renderer_options = {outvar: '@__buf__'}
       end.new
     }
 

@@ -4,18 +4,14 @@ require "dry/view/controller"
 RSpec.describe "Template engines / erb (using erbse as default engine)" do
   let(:base_vc) {
     Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = FIXTURES_PATH.join("integration/template_engines/erbse")
-      end
+      config.paths = FIXTURES_PATH.join("integration/template_engines/erbse")
     end
   }
 
   context "with erbse available" do
     it "supports partials that yield" do
       vc = Class.new(base_vc) do
-        configure do |config|
-          config.template = "render_and_yield"
-        end
+        config.template = "render_and_yield"
       end.new
 
       expect(vc.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
@@ -29,10 +25,8 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
       end.new
 
       vc = Class.new(base_vc) do
-        configure do |config|
-          config.default_context = context
-          config.template = "method_with_yield"
-        end
+        config.default_context = context
+        config.template = "method_with_yield"
       end.new
 
       expect(vc.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
@@ -59,9 +53,7 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
 
     it "raises an error explaining the erbse requirement" do
       vc = Class.new(base_vc) do
-        configure do |config|
-          config.template = "render_and_yield"
-        end
+        config.template = "render_and_yield"
       end.new
 
       expect { vc.() }.to raise_error(LoadError, %r{dry-view requires erbse}m)
@@ -69,9 +61,7 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
 
     it "allows deregistering the adapter to avoid the load error and accept rendering via a less-compatible erb engine" do
       vc = Class.new(base_vc) do
-        configure do |config|
-          config.template = "plain_erb"
-        end
+        config.template = "plain_erb"
       end.new
 
       Dry::View::Tilt.deregister_adapter :erb

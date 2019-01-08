@@ -39,11 +39,9 @@ RSpec.describe "Context" do
     end
 
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = FIXTURES_PATH.join("integration/context")
-        config.template = "decorated_attributes"
-        config.part_namespace = Test::Parts
-      end
+      config.paths = FIXTURES_PATH.join("integration/context")
+      config.template = "decorated_attributes"
+      config.part_namespace = Test::Parts
 
       expose :user
     end.new

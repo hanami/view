@@ -17,12 +17,10 @@ RSpec.describe 'exposures' do
 
   it 'uses exposures with blocks to build view locals' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'users'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'users'
+      config.default_format = :html
 
       expose :users do |users:|
         users.map { |user|
@@ -43,12 +41,10 @@ RSpec.describe 'exposures' do
 
   it 'gives the exposure blocks access to the view controller instance' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'users'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'users'
+      config.default_format = :html
 
       attr_reader :prefix
 
@@ -76,12 +72,10 @@ RSpec.describe 'exposures' do
 
   it 'supports instance methods as exposures' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'users'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'users'
+      config.default_format = :html
 
       expose :users
 
@@ -106,12 +100,10 @@ RSpec.describe 'exposures' do
 
   it 'passes matching input data if no proc or instance method is available' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'users'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'users'
+      config.default_format = :html
 
       expose :users
     end.new
@@ -128,12 +120,10 @@ RSpec.describe 'exposures' do
 
   it 'using default values' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'users'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'users'
+      config.default_format = :html
 
       expose :users, default: [{name: 'John', email: 'john@william.org'}]
     end.new
@@ -145,12 +135,10 @@ RSpec.describe 'exposures' do
 
   it 'having default values but passing nil as value for exposure' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'greeting'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'greeting'
+      config.default_format = :html
 
       expose :greeting, default: 'Hello Dry-rb'
     end.new
@@ -162,12 +150,10 @@ RSpec.describe 'exposures' do
 
   it 'allows exposures to depend on each other' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'users_with_count'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'users_with_count'
+      config.default_format = :html
 
       expose :users
 
@@ -196,12 +182,10 @@ RSpec.describe 'exposures' do
     end
 
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'users_with_count'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'users_with_count'
+      config.default_format = :html
 
       expose :users, as: Test::UserPart
 
@@ -232,12 +216,10 @@ RSpec.describe 'exposures' do
 
   it 'allows exposures to depend on each other while still using keywords args to access input data' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'greeting'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'greeting'
+      config.default_format = :html
 
       expose :greeting do |prefix, greeting:|
         "#{prefix} #{greeting}"
@@ -257,12 +239,10 @@ RSpec.describe 'exposures' do
 
   it 'supports default values for keyword arguments' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'greeting'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'greeting'
+      config.default_format = :html
 
       expose :greeting do |prefix, greeting: 'From the defaults'|
         "#{prefix} #{greeting}"
@@ -280,12 +260,10 @@ RSpec.describe 'exposures' do
 
   it 'only passes keywords arguments that are needed in the block and allows for default values' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'edit'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'edit'
+      config.default_format = :html
 
       expose :pretty_id do |id:|
         "Beautiful #{id}"
@@ -303,12 +281,10 @@ RSpec.describe 'exposures' do
 
   it 'supports defining multiple exposures at once' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'users_with_count'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'users_with_count'
+      config.default_format = :html
 
       expose :users, :users_count
 
@@ -331,12 +307,10 @@ RSpec.describe 'exposures' do
 
   it 'allows exposures to be hidden from the view' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'users_with_count'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'users_with_count'
+      config.default_format = :html
 
       private_expose :prefix do
         "COUNT: "
@@ -366,12 +340,10 @@ RSpec.describe 'exposures' do
 
   it 'inherit exposures from parent class' do
     parent = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'users_with_count_inherit'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'users_with_count_inherit'
+      config.default_format = :html
 
       private_expose :prefix do
         "COUNT: "
@@ -407,12 +379,10 @@ RSpec.describe 'exposures' do
 
   it 'inherit exposures from parent class and allow to override them' do
     parent = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app'
-        config.template = 'users_with_count_inherit'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app'
+      config.template = 'users_with_count_inherit'
+      config.default_format = :html
 
       private_expose :prefix do
         "COUNT: "
@@ -452,12 +422,10 @@ RSpec.describe 'exposures' do
 
   it 'makes exposures available to layout' do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.layout = 'app_with_users'
-        config.template = 'users'
-        config.default_format = :html
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.layout = 'app_with_users'
+      config.template = 'users'
+      config.default_format = :html
 
       expose :users_count, layout: true
 

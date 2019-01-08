@@ -5,17 +5,13 @@ require "dry/view/controller"
 RSpec.describe "Template engines / slim" do
   let(:base_vc) {
     Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = FIXTURES_PATH.join("integration/template_engines/slim")
-      end
+      config.paths = FIXTURES_PATH.join("integration/template_engines/slim")
     end
   }
 
   it "supports partials that yield" do
     vc = Class.new(base_vc) do
-      configure do |config|
-        config.template = "render_and_yield"
-      end
+      config.template = "render_and_yield"
     end.new
 
     expect(vc.().to_s).to eq "<wrapper>Yielded</wrapper>"
@@ -29,10 +25,8 @@ RSpec.describe "Template engines / slim" do
     end.new
 
     vc = Class.new(base_vc) do
-      configure do |config|
-        config.default_context = context
-        config.template = "method_with_yield"
-      end
+      config.default_context = context
+      config.template = "method_with_yield"
     end.new
 
     expect(vc.().to_s).to eq "<wrapper>Yielded</wrapper>"

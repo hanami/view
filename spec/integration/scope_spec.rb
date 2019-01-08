@@ -4,9 +4,7 @@ require "dry/view/scope"
 RSpec.describe "Scopes" do
   let(:base_vc) {
     Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = FIXTURES_PATH.join("integration/scopes")
-      end
+      config.paths = FIXTURES_PATH.join("integration/scopes")
     end
   }
 
@@ -20,10 +18,8 @@ RSpec.describe "Scopes" do
     end
 
     vc = Class.new(base_vc) do
-      configure do |config|
-        config.template = "custom_view_controller_scope"
-        config.scope = Test::ControllerScope
-      end
+      config.template = "custom_view_controller_scope"
+      config.scope = Test::ControllerScope
 
       expose :text
     end.new
@@ -33,9 +29,7 @@ RSpec.describe "Scopes" do
 
   specify "Rendering a partial via an anonymous scope" do
     vc = Class.new(base_vc) do
-      configure do |config|
-        config.template = "anonymous_scope"
-      end
+      config.template = "anonymous_scope"
 
       expose :text
     end.new
@@ -53,10 +47,8 @@ RSpec.describe "Scopes" do
     end
 
     vc = Class.new(base_vc) do
-      configure do |config|
-        config.scope_namespace = Test::Scopes
-        config.template = "named_scope_with_implicit_render"
-      end
+      config.scope_namespace = Test::Scopes
+      config.template = "named_scope_with_implicit_render"
 
       expose :text
     end.new
@@ -74,10 +66,8 @@ RSpec.describe "Scopes" do
     end
 
     vc = Class.new(base_vc) do
-      configure do |config|
-        config.scope_namespace = Test::Scopes
-        config.template = "class_named_scope_with_implicit_render"
-      end
+      config.scope_namespace = Test::Scopes
+      config.template = "class_named_scope_with_implicit_render"
 
       expose :text
     end.new
@@ -87,9 +77,7 @@ RSpec.describe "Scopes" do
 
   specify "Raising an error when an unnamed partial cannot be rendered implicitly" do
     vc = Class.new(base_vc) do
-      configure do |config|
-        config.template = "unnamed_named_scope_with_implicit_render"
-      end
+      config.template = "unnamed_named_scope_with_implicit_render"
     end.new
 
     expect { vc.().to_s }.to raise_error ArgumentError, "+partial_name+ must be provided for unnamed scopes"
@@ -105,10 +93,8 @@ RSpec.describe "Scopes" do
     end
 
     vc = Class.new(base_vc) do
-      configure do |config|
-        config.scope_namespace = Test::Scopes
-        config.template = "named_scope_with_explicit_render"
-      end
+      config.scope_namespace = Test::Scopes
+      config.template = "named_scope_with_explicit_render"
 
       expose :text
     end.new
@@ -126,10 +112,8 @@ RSpec.describe "Scopes" do
     end
 
     vc = Class.new(base_vc) do
-      configure do |config|
-        config.scope_namespace = Test::Scopes
-        config.template = "named_scope_with_defaults"
-      end
+      config.scope_namespace = Test::Scopes
+      config.template = "named_scope_with_defaults"
 
       expose :text
     end.new
@@ -155,11 +139,9 @@ RSpec.describe "Scopes" do
     end
 
     vc = Class.new(base_vc) do
-      configure do |config|
-        config.part_namespace = Test::Parts
-        config.scope_namespace = Test::Scopes
-        config.template = "scope_from_part"
-      end
+      config.part_namespace = Test::Parts
+      config.scope_namespace = Test::Scopes
+      config.template = "scope_from_part"
 
       expose :message
     end.new

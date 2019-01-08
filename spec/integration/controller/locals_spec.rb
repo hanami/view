@@ -4,10 +4,8 @@ require "dry/view/part"
 RSpec.describe "locals" do
   specify "locals are decorated with parts by default" do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.template = "greeting"
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.template = "greeting"
 
       expose :greeting
     end.new
@@ -19,10 +17,8 @@ RSpec.describe "locals" do
 
   specify "locals are not decorated if their exposure is marked as `decorate: false`" do
     vc = Class.new(Dry::View::Controller) do
-      configure do |config|
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.template = "greeting"
-      end
+      config.paths = SPEC_ROOT.join('fixtures/templates')
+      config.template = "greeting"
 
       expose :greeting, decorate: false
     end.new
