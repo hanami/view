@@ -13,11 +13,9 @@ TEMPLATE_LOCALS = { users: [
 ] }
 
 class Controller < Dry::View::Controller
-  configure do |config|
-    config.paths = TEMPLATES_PATHS
-    config.layout = 'app'
-    config.template = 'users'
-  end
+  config.paths = TEMPLATES_PATHS
+  config.layout = 'app'
+  config.template = 'users'
 
   expose :users
 end

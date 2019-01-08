@@ -28,12 +28,10 @@ class UsersController < ActionController::Base
 end
 
 class DryViewController < Dry::View::Controller
-  configure do |config|
-    config.paths = TEMPLATES_PATHS
-    config.layout = 'app'
-    config.template = 'users'
-    config.default_format = :html
-  end
+  config.paths = TEMPLATES_PATHS
+  config.layout = 'app'
+  config.template = 'users'
+  config.default_format = :html
 
   expose :users
 end

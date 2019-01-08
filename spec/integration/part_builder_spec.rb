@@ -20,12 +20,10 @@ RSpec.describe 'part builder' do
   describe 'default decorator' do
     it 'looks up classes from a part namespace' do
       vc = Class.new(Dry::View::Controller) do
-        configure do |config|
-          config.paths = SPEC_ROOT.join('fixtures/templates')
-          config.layout = nil
-          config.template = 'decorated_parts'
-          config.part_namespace = Test
-        end
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = nil
+        config.template = 'decorated_parts'
+        config.part_namespace = Test
 
         expose :customs
         expose :custom
@@ -39,11 +37,9 @@ RSpec.describe 'part builder' do
 
     it 'supports wrapping array memebers in custom part classes provided to exposure :as option' do
       vc = Class.new(Dry::View::Controller) do
-        configure do |config|
-          config.paths = SPEC_ROOT.join('fixtures/templates')
-          config.layout = nil
-          config.template = 'decorated_parts'
-        end
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = nil
+        config.template = 'decorated_parts'
 
         expose :customs, as: Test::CustomPart
         expose :custom, as: Test::CustomPart
@@ -57,11 +53,9 @@ RSpec.describe 'part builder' do
 
     it 'supports wrapping an array and its members in custom part classes provided to exposure :as option as a hash' do
       vc = Class.new(Dry::View::Controller) do
-        configure do |config|
-          config.paths = SPEC_ROOT.join('fixtures/templates')
-          config.layout = nil
-          config.template = 'decorated_parts'
-        end
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = nil
+        config.template = 'decorated_parts'
 
         expose :customs, as: [Test::CustomArrayPart, Test::CustomPart]
         expose :custom, as: Test::CustomPart
@@ -83,12 +77,10 @@ RSpec.describe 'part builder' do
       end
 
       vc = Class.new(Dry::View::Controller) do
-        configure do |config|
-          config.part_builder = part_builder
-          config.paths = SPEC_ROOT.join('fixtures/templates')
-          config.layout = nil
-          config.template = 'decorated_parts'
-        end
+        config.part_builder = part_builder
+        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.layout = nil
+        config.template = 'decorated_parts'
 
         expose :customs, :custom, :ordinary
       end.new
