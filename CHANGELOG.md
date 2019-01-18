@@ -1,4 +1,6 @@
-# 0.5.4 / 2019-01-06
+# 0.5.4 / 2019-01-06 [YANKED 2019-01-18]
+
+This version was yanked due to the release accidentally containing a batch of breaking changes from master.
 
 ### Fixed
 
