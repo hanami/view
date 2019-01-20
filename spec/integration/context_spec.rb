@@ -1,5 +1,5 @@
+require "dry/view"
 require "dry/view/context"
-require "dry/view/controller"
 require "dry/view/part"
 
 RSpec.describe "Context" do
@@ -38,7 +38,7 @@ RSpec.describe "Context" do
       end
     end
 
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = FIXTURES_PATH.join("integration/context")
       config.template = "decorated_attributes"
       config.part_namespace = Test::Parts
@@ -48,7 +48,7 @@ RSpec.describe "Context" do
 
     context = Test::Context.new(assets: Test::Assets.new)
 
-    output = vc.(
+    output = view.(
       user: {image_url: nil},
       context: context,
     ).to_s

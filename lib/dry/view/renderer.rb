@@ -3,7 +3,7 @@ require 'dry/equalizer'
 require_relative 'tilt'
 
 module Dry
-  module View
+  class View
     class Renderer
       PARTIAL_PREFIX = "_".freeze
       PATH_DELIMITER = "/".freeze

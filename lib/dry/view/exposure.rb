@@ -1,7 +1,7 @@
 require 'dry-equalizer'
 
 module Dry
-  module View
+  class View
     class Exposure
       include Dry::Equalizer(:name, :proc, :object, :options)
 

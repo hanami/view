@@ -1,20 +1,20 @@
+require "dry/view"
 require "dry/view/context"
-require "dry/view/controller"
 
 RSpec.describe "Template engines / haml (using hamlit-block as default engine)" do
-  let(:base_vc) {
-    Class.new(Dry::View::Controller) do
+  let(:base_view) {
+    Class.new(Dry::View) do
       config.paths = FIXTURES_PATH.join("integration/template_engines/hamlit")
     end
   }
 
   context "with hamlit-block available" do
     it "supports partials that yield" do
-      vc = Class.new(base_vc) do
+      view = Class.new(base_view) do
         config.template = "render_and_yield"
       end.new
 
-      expect(vc.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
+      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
     end
 
     it "supports methods that yield" do
@@ -24,12 +24,12 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
         end
       end.new
 
-      vc = Class.new(base_vc) do
+      view = Class.new(base_view) do
         config.default_context = context
         config.template = "method_with_yield"
       end.new
 
-      expect(vc.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
+      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
     end
   end
 
@@ -51,11 +51,11 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
     end
 
     it "raises an error explaining the hamlit-block requirement" do
-      vc = Class.new(base_vc) do
+      view = Class.new(base_view) do
         config.template = "render_and_yield"
       end.new
 
-      expect { vc.() }.to raise_error(LoadError, %r{dry-view requires hamlit-block}m)
+      expect { view.() }.to raise_error(LoadError, %r{dry-view requires hamlit-block}m)
     end
   end
 end

@@ -1,8 +1,8 @@
 require "tilt/erubi"
 
-RSpec.describe Dry::View::Controller do
-  subject(:controller) {
-    Class.new(Dry::View::Controller) do
+RSpec.describe Dry::View do
+  subject(:view) {
+    Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'user'
@@ -27,25 +27,25 @@ RSpec.describe Dry::View::Controller do
 
   describe '#call' do
     it 'renders template within the layout' do
-      expect(controller.(context: context).to_s).to eql(
+      expect(view.(context: context).to_s).to eql(
         '<!DOCTYPE html><html><head><title>Test</title></head><body><h1>User</h1><p>Jane</p></body></html>'
       )
     end
 
     it 'provides a meaningful error if the template name is missing' do
-      controller = Class.new(Dry::View::Controller) do
+      view = Class.new(Dry::View) do
         config.paths = SPEC_ROOT.join('fixtures/templates')
       end.new
 
-      expect { controller.(context: context) }.to raise_error Dry::View::Controller::UndefinedTemplateError
+      expect { view.(context: context) }.to raise_error Dry::View::UndefinedTemplateError
     end
   end
 
   describe 'renderer options' do
-    subject(:controller) {
-      Class.new(Dry::View::Controller) do
+    subject(:view) {
+      Class.new(Dry::View) do
         config.paths = SPEC_ROOT.join('fixtures/templates')
-        config.template = 'controller_renderer_options'
+        config.template = 'view_renderer_options'
         config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}
         config.renderer_options = {outvar: '@__buf__'}
       end.new
@@ -78,12 +78,12 @@ RSpec.describe Dry::View::Controller do
     }
 
     it 'merges configured options with default encoding' do
-      expect(controller.class.config.renderer_options[:outvar]).to eq '@__buf__'
-      expect(controller.class.config.renderer_options[:default_encoding]).to eq 'utf-8'
+      expect(view.class.config.renderer_options[:outvar]).to eq '@__buf__'
+      expect(view.class.config.renderer_options[:default_encoding]).to eq 'utf-8'
     end
 
     it 'are passed to renderer' do
-      expect(controller.(context: context).to_s.gsub(/\n\s*/m, "")).to eq(
+      expect(view.(context: context).to_s.gsub(/\n\s*/m, "")).to eq(
         '<form action="/people" method="post"><input type="text" name="name" /></form>'
       )
     end

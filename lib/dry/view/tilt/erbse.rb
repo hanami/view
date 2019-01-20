@@ -2,7 +2,7 @@ require "tilt/template"
 require "erbse"
 
 module Dry
-  module View
+  class View
     module Tilt
       # Tilt template class copied from cells-erb gem
       class ErbseTemplate < ::Tilt::Template

@@ -2,7 +2,7 @@ require "dry/equalizer"
 require_relative "decorated_attributes"
 
 module Dry
-  module View
+  class View
     class Context
       include Dry::Equalizer(:_options)
       include DecoratedAttributes

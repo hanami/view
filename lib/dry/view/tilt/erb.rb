@@ -1,5 +1,5 @@
 module Dry
-  module View
+  class View
     module Tilt
       module ERB
         def self.requirements

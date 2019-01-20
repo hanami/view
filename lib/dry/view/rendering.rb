@@ -1,7 +1,7 @@
 require "dry/equalizer"
 
 module Dry
-  module View
+  class View
     class Rendering
       def self.prepare(renderer, config, context)
         new(

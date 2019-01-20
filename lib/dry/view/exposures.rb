@@ -2,7 +2,7 @@ require "tsort"
 require "dry/view/exposure"
 
 module Dry
-  module View
+  class View
     class Exposures
       include TSort
 

@@ -1,7 +1,7 @@
 require "set"
 
 module Dry
-  module View
+  class View
     module DecoratedAttributes
       def self.included(klass)
         klass.extend ClassInterface

@@ -2,7 +2,7 @@ require "dry/core/cache"
 require "tilt"
 
 module Dry
-  module View
+  class View
     module Tilt
       extend Dry::Core::Cache
 

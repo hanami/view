@@ -1,7 +1,7 @@
 # coding: utf-8
 RSpec.describe 'dry-view' do
-  let(:vc_class) do
-    Class.new(Dry::View::Controller) do
+  let(:view_class) do
+    Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users'
@@ -29,65 +29,65 @@ RSpec.describe 'dry-view' do
   }
 
   it 'renders within a layout and makes the provided context available everywhere' do
-    vc = vc_class.new
+    view = view_class.new
 
-    expect(vc.(context: context).to_s).to eql(
+    expect(view.(context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
 
   it 'renders without a layout' do
-    vc = Class.new(vc_class) do
+    view = Class.new(view_class) do
       config.layout = false
     end.new
 
-    expect(vc.(context: context).to_s).to eql(
+    expect(view.(context: context).to_s).to eql(
       '<div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" />'
     )
   end
 
   it 'renders a view with an alternative format and engine' do
-    vc = vc_class.new
+    view = view_class.new
 
     # FIXME: there should be a "\n\n" before "* Jane", but this is missing due to https://github.com/apotonick/erbse/issues/10
-    expect(vc.(context: context, format: 'txt').to_s.strip).to eql(
+    expect(view.(context: context, format: 'txt').to_s.strip).to eql(
       "# dry-view rocks!* Jane (jane@doe.org)\n* Joe (joe@doe.org)"
     )
   end
 
   it 'renders a view with a template on another view path' do
-    vc = Class.new(vc_class) do
+    view = Class.new(view_class) do
       config.paths = [SPEC_ROOT.join('fixtures/templates_override')] + Array(config.paths)
     end.new
 
-    expect(vc.(context: context).to_s).to eq(
+    expect(view.(context: context).to_s).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h1>OVERRIDE</h1><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
     )
   end
 
   it 'renders a view that passes arguments to partials' do
-    vc = Class.new(vc_class) do
+    view = Class.new(view_class) do
       config.template = 'parts_with_args'
     end.new
 
-    expect(vc.(context: context).to_s).to eq(
+    expect(view.(context: context).to_s).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><div class="box"><h2>Nombre</h2>Jane</div><div class="box"><h2>Nombre</h2>Joe</div></div></body></html>'
     )
   end
 
   it 'renders using utf-8 by default' do
-    vc = Class.new(vc_class) do
+    view = Class.new(view_class) do
       config.template = 'utf8'
     end.new
 
-    expect(vc.(context: context).to_s).to eq(
+    expect(view.(context: context).to_s).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body>ç</body></html>'
    )
   end
 
   describe 'inheritance' do
     let(:parent_view) do
-      klass = Class.new(Dry::View::Controller)
+      klass = Class.new(Dry::View)
 
       klass.setting :paths, SPEC_ROOT.join('fixtures/templates')
       klass.setting :layout, 'app'
@@ -103,7 +103,7 @@ RSpec.describe 'dry-view' do
     end
 
     it 'renders within a parent class layout using provided context' do
-      vc = Class.new(vc_class) do
+      view = Class.new(view_class) do
         config.template = 'tasks'
 
         expose :tasks do
@@ -114,7 +114,7 @@ RSpec.describe 'dry-view' do
         end
       end.new
 
-      expect(vc.(context: context).to_s).to eql(
+      expect(view.(context: context).to_s).to eql(
         '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ol><li>one</li><li>two</li></ol></body></html>'
       )
     end
