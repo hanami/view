@@ -1,20 +1,20 @@
+require "dry/view"
 require "dry/view/context"
-require "dry/view/controller"
 
 RSpec.describe "Template engines / erb (using erbse as default engine)" do
-  let(:base_vc) {
-    Class.new(Dry::View::Controller) do
+  let(:base_view) {
+    Class.new(Dry::View) do
       config.paths = FIXTURES_PATH.join("integration/template_engines/erbse")
     end
   }
 
   context "with erbse available" do
     it "supports partials that yield" do
-      vc = Class.new(base_vc) do
+      view = Class.new(base_view) do
         config.template = "render_and_yield"
       end.new
 
-      expect(vc.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
+      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
     end
 
     it "supports context methods that yield" do
@@ -24,12 +24,12 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
         end
       end.new
 
-      vc = Class.new(base_vc) do
+      view = Class.new(base_view) do
         config.default_context = context
         config.template = "method_with_yield"
       end.new
 
-      expect(vc.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
+      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
     end
   end
 
@@ -52,22 +52,22 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
     end
 
     it "raises an error explaining the erbse requirement" do
-      vc = Class.new(base_vc) do
+      view = Class.new(base_view) do
         config.template = "render_and_yield"
       end.new
 
-      expect { vc.() }.to raise_error(LoadError, %r{dry-view requires erbse}m)
+      expect { view.() }.to raise_error(LoadError, %r{dry-view requires erbse}m)
     end
 
     it "allows deregistering the adapter to avoid the load error and accept rendering via a less-compatible erb engine" do
-      vc = Class.new(base_vc) do
+      view = Class.new(base_view) do
         config.template = "plain_erb"
       end.new
 
       Dry::View::Tilt.deregister_adapter :erb
 
-      expect { vc.() }.not_to raise_error
-      expect(vc.().to_s.strip).to eq "Hello"
+      expect { view.() }.not_to raise_error
+      expect(view.().to_s.strip).to eq "Hello"
     end
   end
 end

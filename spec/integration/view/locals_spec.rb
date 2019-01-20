@@ -1,29 +1,29 @@
-require "dry/view/controller"
+require "dry/view"
 require "dry/view/part"
 
 RSpec.describe "locals" do
   specify "locals are decorated with parts by default" do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.template = "greeting"
 
       expose :greeting
     end.new
 
-    local = vc.(greeting: "Hello").locals[:greeting]
+    local = view.(greeting: "Hello").locals[:greeting]
 
     expect(local).to be_a(Dry::View::Part)
   end
 
   specify "locals are not decorated if their exposure is marked as `decorate: false`" do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.template = "greeting"
 
       expose :greeting, decorate: false
     end.new
 
-    local = vc.(greeting: "Hello").locals[:greeting]
+    local = view.(greeting: "Hello").locals[:greeting]
 
     expect(local).to eq "Hello"
   end

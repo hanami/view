@@ -1,7 +1,7 @@
 require 'dry/equalizer'
 
 module Dry
-  module View
+  class View
     class Rendered
       include Dry::Equalizer(:output, :locals)
 

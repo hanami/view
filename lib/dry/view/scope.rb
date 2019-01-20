@@ -2,7 +2,7 @@ require 'dry/equalizer'
 require 'dry/core/constants'
 
 module Dry
-  module View
+  class View
     class Scope
       include Dry::Equalizer(:_name, :_locals, :_rendering)
 

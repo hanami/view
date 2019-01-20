@@ -27,7 +27,7 @@ class UsersController < ActionController::Base
   end
 end
 
-class DryViewController < Dry::View::Controller
+class DryViewController < Dry::View
   config.paths = TEMPLATES_PATHS
   config.layout = 'app'
   config.template = 'users'
@@ -44,7 +44,6 @@ if (action_controller_output = action_controller.index) != (dry_view_output = dr
   puts
   puts "ActionView:\n\n#{action_controller_output}\n"
   puts "dry-view:\n\n#{dry_view_output}\n"
-  exit 1
 end
 
 Benchmark.ips do |x|

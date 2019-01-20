@@ -3,7 +3,7 @@ require 'dry/equalizer'
 require_relative 'part'
 
 module Dry
-  module View
+  class View
     class PartBuilder
       extend Dry::Core::Cache
       include Dry::Equalizer(:namespace)

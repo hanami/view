@@ -3,7 +3,7 @@ require 'dry/equalizer'
 require_relative 'scope'
 
 module Dry
-  module View
+  class View
     class ScopeBuilder
       extend Dry::Core::Cache
       include Dry::Equalizer(:namespace)

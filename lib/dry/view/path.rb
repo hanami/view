@@ -2,7 +2,7 @@ require "pathname"
 require "dry/core/cache"
 
 module Dry
-  module View
+  class View
     class Path
       extend Dry::Core::Cache
       include Dry::Equalizer(:dir, :root)

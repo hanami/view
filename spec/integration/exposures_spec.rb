@@ -1,5 +1,5 @@
+require 'dry/view'
 require 'dry/view/context'
-require 'dry/view/controller'
 require 'dry/view/part'
 
 RSpec.describe 'exposures' do
@@ -16,7 +16,7 @@ RSpec.describe 'exposures' do
   }
 
   it 'uses exposures with blocks to build view locals' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users'
@@ -34,13 +34,13 @@ RSpec.describe 'exposures' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(users: users, context: context).to_s).to eql(
+    expect(view.(users: users, context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>JANE</td><td>jane@doe.org</td></tr><tr><td>JOE</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
 
-  it 'gives the exposure blocks access to the view controller instance' do
-    vc = Class.new(Dry::View::Controller) do
+  it 'gives the exposure blocks access to the view instance' do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users'
@@ -65,13 +65,13 @@ RSpec.describe 'exposures' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(users: users, context: context).to_s).to eql(
+    expect(view.(users: users, context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>My friend Jane</td><td>jane@doe.org</td></tr><tr><td>My friend Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
 
   it 'supports instance methods as exposures' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users'
@@ -93,13 +93,13 @@ RSpec.describe 'exposures' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(users: users, context: context).to_s).to eql(
+    expect(view.(users: users, context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>JANE</td><td>jane@doe.org</td></tr><tr><td>JOE</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
 
   it 'passes matching input data if no proc or instance method is available' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users'
@@ -113,13 +113,13 @@ RSpec.describe 'exposures' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(users: users, context: context).to_s).to eql(
+    expect(view.(users: users, context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
 
   it 'using default values' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users'
@@ -128,13 +128,13 @@ RSpec.describe 'exposures' do
       expose :users, default: [{name: 'John', email: 'john@william.org'}]
     end.new
 
-    expect(vc.(context: context).to_s).to eql(
+    expect(view.(context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>John</td><td>john@william.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
 
   it 'having default values but passing nil as value for exposure' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'greeting'
@@ -143,13 +143,13 @@ RSpec.describe 'exposures' do
       expose :greeting, default: 'Hello Dry-rb'
     end.new
 
-    expect(vc.(greeting: nil, context: context).to_s).to eql(
+    expect(view.(greeting: nil, context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p></p></body></html>'
     )
   end
 
   it 'allows exposures to depend on each other' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users_with_count'
@@ -167,7 +167,7 @@ RSpec.describe 'exposures' do
       {name: 'Joe', email: 'joe@doe.org'}
     ]
 
-    expect(vc.(users: users, context: context).to_s).to eql(
+    expect(view.(users: users, context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">2 users</div></body></html>'
     )
   end
@@ -181,7 +181,7 @@ RSpec.describe 'exposures' do
       end
     end
 
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users_with_count'
@@ -203,7 +203,7 @@ RSpec.describe 'exposures' do
       {name: 'Joe', email: 'joe@doe.org'}
     ]
 
-    rendered = vc.(users: users, context: context)
+    rendered = view.(users: users, context: context)
 
     expect(rendered[:users]).to be_a(Dry::View::Part)
 
@@ -215,7 +215,7 @@ RSpec.describe 'exposures' do
   end
 
   it 'allows exposures to depend on each other while still using keywords args to access input data' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'greeting'
@@ -230,7 +230,7 @@ RSpec.describe 'exposures' do
       end
     end.new
 
-    expect(vc.(greeting: 'From dry-view internals', context: context).to_s).to eql(
+    expect(view.(greeting: 'From dry-view internals', context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p>Hello From dry-view internals</p></body></html>'
     )
   end
@@ -238,7 +238,7 @@ RSpec.describe 'exposures' do
 
 
   it 'supports default values for keyword arguments' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'greeting'
@@ -253,13 +253,13 @@ RSpec.describe 'exposures' do
       end
     end.new
 
-    expect(vc.(context: context).to_s).to eql(
+    expect(view.(context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p>Hello From the defaults</p></body></html>'
     )
   end
 
   it 'only passes keywords arguments that are needed in the block and allows for default values' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'edit'
@@ -274,13 +274,13 @@ RSpec.describe 'exposures' do
       end
     end.new
 
-    expect(vc.(id: 1, context: context).to_s).to eql(
+    expect(view.(id: 1, context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h1>Edit</h1><p>No Errors</p><p>Beautiful 1</p></body></html>'
     )
   end
 
   it 'supports defining multiple exposures at once' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users_with_count'
@@ -300,13 +300,13 @@ RSpec.describe 'exposures' do
       {name: 'Joe', email: 'joe@doe.org'}
     ]
 
-    expect(vc.(users: users, context: context).to_s).to eql(
+    expect(view.(users: users, context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">2 users</div></body></html>'
     )
   end
 
   it 'allows exposures to be hidden from the view' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users_with_count'
@@ -330,16 +330,16 @@ RSpec.describe 'exposures' do
 
     input = {users: users, context: context}
 
-    expect(vc.(input).to_s).to eql(
+    expect(view.(input).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">COUNT: 2 users</div></body></html>'
     )
 
-    expect(vc.(input).locals).to include(:users, :users_count)
-    expect(vc.(input).locals).not_to include(:prefix)
+    expect(view.(input).locals).to include(:users, :users_count)
+    expect(view.(input).locals).not_to include(:prefix)
   end
 
   it 'inherit exposures from parent class' do
-    parent = Class.new(Dry::View::Controller) do
+    parent = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users_with_count_inherit'
@@ -378,7 +378,7 @@ RSpec.describe 'exposures' do
   end
 
   it 'inherit exposures from parent class and allow to override them' do
-    parent = Class.new(Dry::View::Controller) do
+    parent = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app'
       config.template = 'users_with_count_inherit'
@@ -421,7 +421,7 @@ RSpec.describe 'exposures' do
   end
 
   it 'makes exposures available to layout' do
-    vc = Class.new(Dry::View::Controller) do
+    view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
       config.layout = 'app_with_users'
       config.template = 'users'
@@ -437,7 +437,7 @@ RSpec.describe 'exposures' do
       { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    expect(vc.(users: users, users_count: users.size, context: context).to_s).to eql(
+    expect(view.(users: users, users_count: users.size, context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><p>2 users</p><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end

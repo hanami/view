@@ -12,7 +12,7 @@ TEMPLATE_LOCALS = { users: [
   OpenStruct.new(name: 'Teresa', email: 'teresa@example.com')
 ] }
 
-class Controller < Dry::View::Controller
+class Controller < Dry::View
   config.paths = TEMPLATES_PATHS
   config.layout = 'app'
   config.template = 'users'
