@@ -4,7 +4,7 @@ require 'dry/core/constants'
 module Dry
   class View
     class Scope
-      CONVENIENCE_METHODS = %i[locals].freeze
+      CONVENIENCE_METHODS = %i[context locals].freeze
 
       include Dry::Equalizer(:_name, :_locals, :_rendering)
 
@@ -28,6 +28,10 @@ module Dry
 
       def scope(name = nil, **locals)
         _rendering.scope(name, locals)
+      end
+
+      def _context
+        _rendering.context
       end
 
       private
