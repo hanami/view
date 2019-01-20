@@ -31,7 +31,7 @@ RSpec.describe Dry::View::Scope do
   end
 
   describe '#method_missing' do
-    context 'matching locals' do
+    describe 'matching locals' do
       let(:locals) { {greeting: 'hello from locals'} }
       let(:context) { double(:context, greeting: 'hello from context') }
 
@@ -40,7 +40,7 @@ RSpec.describe Dry::View::Scope do
       end
     end
 
-    context 'matching context' do
+    describe 'matching context' do
       let(:context) { double(:context, greeting: 'hello from context') }
 
       it 'calls the matching method on the context' do
@@ -52,6 +52,12 @@ RSpec.describe Dry::View::Scope do
         scope.greeting 'args', &blk
 
         expect(context).to have_received(:greeting).with('args', &blk)
+      end
+    end
+
+    describe 'matching convenience methods' do
+      it 'provides #locals' do
+        expect(scope.locals).to eq locals
       end
     end
 

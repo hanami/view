@@ -4,6 +4,8 @@ require 'dry/core/constants'
 module Dry
   class View
     class Scope
+      CONVENIENCE_METHODS = %i[locals].freeze
+
       include Dry::Equalizer(:_name, :_locals, :_rendering)
 
       attr_reader :_name
@@ -35,9 +37,15 @@ module Dry
           _locals[name]
         elsif _rendering.context.respond_to?(name)
           _rendering.context.public_send(name, *args, &block)
+        elsif CONVENIENCE_METHODS.include?(name)
+          __send__(:"_#{name}", *args, &block)
         else
           super
         end
+      end
+
+      def respond_to_missing?(name, include_private = false)
+        _locals.key?(name) || _rendering.context.respond_to?(name) || CONVENIENCE_METHODS.include?(name) || super
       end
 
       def _render_scope(**locals)
