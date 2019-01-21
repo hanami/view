@@ -1,5 +1,6 @@
-require 'dry-equalizer'
+require 'dry/equalizer'
 require_relative "decorated_attributes"
+require_relative "rendering_missing"
 
 module Dry
   class View
@@ -20,7 +21,11 @@ module Dry
 
       attr_reader :_rendering
 
-      def initialize(name:, value:, rendering:)
+      def self.part_name(inflector)
+        name ? inflector.underscore(inflector.demodulize(name)) : "part"
+      end
+
+      def initialize(rendering: RenderingMissing.new, name: self.class.part_name(rendering.inflector), value:)
         @_name = name
         @_value = value
         @_rendering = rendering

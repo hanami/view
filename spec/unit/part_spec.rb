@@ -1,4 +1,5 @@
 require 'dry/view/scope_builder'
+require 'dry/view/rendering_missing'
 
 RSpec::Matchers.define :scope do |locals|
   match do |actual|
@@ -20,7 +21,7 @@ RSpec.describe Dry::View::Part do
   }
   let(:renderer) { spy(:renderer) }
 
-  context 'with a renderer' do
+  context 'with a rendering provided' do
     subject(:part) {
       described_class.new(
         name: name,
@@ -99,6 +100,55 @@ RSpec.describe Dry::View::Part do
 
       it 'handles value methods' do
         expect(part).to respond_to(:greeting)
+      end
+    end
+  end
+
+  context 'without a rendering provided' do
+    subject(:part) {
+      described_class.new(
+        name: name,
+        value: value,
+      )
+    }
+
+    describe '#render' do
+      it 'raises an error' do
+        expect { part.render(:info) }.to raise_error(Dry::View::RenderingMissing::MissingRenderingError)
+      end
+    end
+
+    describe '#scope' do
+      it 'raises an error' do
+        expect { part.scope(:info) }.to raise_error(Dry::View::RenderingMissing::MissingRenderingError)
+      end
+    end
+  end
+
+  context 'without a name provided' do
+    describe "#_name" do
+      context "when class has a name" do
+        before do
+          Test::MyPart = Class.new(Dry::View::Part)
+        end
+
+        subject(:part) {
+          Test::MyPart.new(value: value)
+        }
+
+        it "is inferred from the class name" do
+          expect(part._name).to eq "my_part"
+        end
+      end
+
+      context "when class is anonymous" do
+        subject(:part) {
+          Class.new(Dry::View::Part).new(value: value)
+        }
+
+        it "defaults to 'part'" do
+          expect(part._name).to eq "part"
+        end
       end
     end
   end
