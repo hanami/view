@@ -3,7 +3,7 @@
 require 'pathname'
 require 'ostruct'
 require 'benchmark/ips'
-require 'dry/view/controller'
+require 'dry/view'
 require 'action_view'
 require 'action_controller'
 
@@ -27,7 +27,7 @@ class UsersController < ActionController::Base
   end
 end
 
-class DryViewController < Dry::View
+class DryView < Dry::View
   config.paths = TEMPLATES_PATHS
   config.layout = 'app'
   config.template = 'users'
@@ -37,9 +37,9 @@ class DryViewController < Dry::View
 end
 
 action_controller = UsersController.new
-dry_view_controller = DryViewController.new
+dry_view = DryView.new
 
-if (action_controller_output = action_controller.index) != (dry_view_output = dry_view_controller.(TEMPLATE_LOCALS).to_s)
+if (action_controller_output = action_controller.index) != (dry_view_output = dry_view.(TEMPLATE_LOCALS).to_s)
   puts "Output doesn't match:"
   puts
   puts "ActionView:\n\n#{action_controller_output}\n"
@@ -52,7 +52,7 @@ Benchmark.ips do |x|
   end
 
   x.report('dry-view') do
-    1000.times { dry_view_controller.(TEMPLATE_LOCALS).to_s }
+    1000.times { dry_view.(TEMPLATE_LOCALS).to_s }
   end
 
   x.compare!

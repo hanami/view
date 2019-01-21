@@ -3,7 +3,7 @@
 require 'hotch'
 require 'pathname'
 require 'ostruct'
-require 'dry/view/controller'
+require 'dry/view'
 
 TEMPLATES_PATHS = Pathname(__FILE__).dirname.join('templates')
 
@@ -12,7 +12,7 @@ TEMPLATE_LOCALS = { users: [
   OpenStruct.new(name: 'Teresa', email: 'teresa@example.com')
 ] }
 
-class Controller < Dry::View
+class View < Dry::View
   config.paths = TEMPLATES_PATHS
   config.layout = 'app'
   config.template = 'users'
@@ -20,8 +20,8 @@ class Controller < Dry::View
   expose :users
 end
 
-controller = Controller.new
+view = View.new
 
 Hotch(filter: /View/) do
-  100.times { controller.(TEMPLATE_LOCALS).to_s }
+  100.times { view.(TEMPLATE_LOCALS).to_s }
 end
