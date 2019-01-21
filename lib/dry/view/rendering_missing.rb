@@ -1,3 +1,5 @@
+require "dry/inflector"
+
 module Dry
   class View
     class RenderingMissing
@@ -25,6 +27,10 @@ module Dry
 
       def partial(name, scope, &block)
         raise MissingRenderingError
+      end
+
+      def inflector
+        @inflector ||= Dry::Inflector.new
       end
     end
   end

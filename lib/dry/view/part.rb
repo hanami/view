@@ -1,5 +1,4 @@
 require 'dry/equalizer'
-require 'dry/inflector'
 require_relative "decorated_attributes"
 require_relative "rendering_missing"
 
@@ -22,12 +21,11 @@ module Dry
 
       attr_reader :_rendering
 
-      def self.part_name
-        i = Dry::Inflector.new
-        name ? i.underscore(i.demodulize(name)) : "part"
+      def self.part_name(inflector)
+        name ? inflector.underscore(inflector.demodulize(name)) : "part"
       end
 
-      def initialize(name: self.class.part_name, value:, rendering: RenderingMissing.new)
+      def initialize(rendering: RenderingMissing.new, name: self.class.part_name(rendering.inflector), value:)
         @_name = name
         @_value = value
         @_rendering = rendering
