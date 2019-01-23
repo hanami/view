@@ -5,7 +5,7 @@ require_relative "rendering_missing"
 module Dry
   class View
     class Scope
-      CONVENIENCE_METHODS = %i[context locals].freeze
+      CONVENIENCE_METHODS = %i[format context locals].freeze
 
       include Dry::Equalizer(:_name, :_locals, :_rendering)
 
@@ -29,6 +29,10 @@ module Dry
 
       def scope(name = nil, **locals)
         _rendering.scope(name, locals)
+      end
+
+      def _format
+        _rendering.format
       end
 
       def _context

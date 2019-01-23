@@ -6,6 +6,7 @@ module Dry
   class View
     class Part
       CONVENIENCE_METHODS = %i[
+        format
         context
         render
         scope
@@ -29,6 +30,14 @@ module Dry
         @_name = name
         @_value = value
         @_rendering = rendering
+      end
+
+      def _format
+        _rendering.format
+      end
+
+      def _context
+        _rendering.context
       end
 
       def _render(partial_name, as: _name, **locals, &block)
@@ -57,10 +66,6 @@ module Dry
       end
 
       private
-
-      def _context
-        _rendering.context
-      end
 
       def method_missing(name, *args, &block)
         if _value.respond_to?(name)

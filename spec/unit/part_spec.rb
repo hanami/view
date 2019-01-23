@@ -19,7 +19,7 @@ RSpec.describe Dry::View::Part do
       part_builder: Dry::View::ScopeBuilder.new,
     )
   }
-  let(:renderer) { spy(:renderer) }
+  let(:renderer) { spy(:renderer, format: :xml) }
 
   context 'with a rendering provided' do
     subject(:part) {
@@ -60,13 +60,19 @@ RSpec.describe Dry::View::Part do
     describe '#new' do
       it 'preserves rendering' do
         new_part = part.new(value: 'new value')
-        expect(new_part._rendering).to eql part._rendering
+        expect(new_part._rendering).to be part._rendering
       end
     end
 
     describe "#inspect" do
       it "includes the clsas name, name, and value only" do
         expect(part.inspect).to eq "#<Dry::View::Part name=:user value=#<Double :value>>"
+      end
+    end
+
+    describe "#_format" do
+      it "returns the rendering's format" do
+        expect(part._format).to eq :xml
       end
     end
 
@@ -84,17 +90,19 @@ RSpec.describe Dry::View::Part do
         expect(value).to have_received(:greeting).with('args', &blk)
       end
 
-      it 'raises an error if no metho matches' do
+      it 'raises an error if no method matches' do
         expect { part.farewell }.to raise_error(NoMethodError)
       end
     end
 
-    describe '#respond_to' do
+    describe '#respond_to?' do
       let(:value) { double(greeting: 'hello from value') }
 
       it 'handles convenience methods' do
+        expect(part).to respond_to(:format)
         expect(part).to respond_to(:context)
         expect(part).to respond_to(:render)
+        expect(part).to respond_to(:scope)
         expect(part).to respond_to(:value)
       end
 
@@ -111,6 +119,12 @@ RSpec.describe Dry::View::Part do
         value: value,
       )
     }
+
+    describe "#format" do
+      it "raises an error" do
+        expect { part.render(:info) }.to raise_error(Dry::View::RenderingMissing::MissingRenderingError)
+      end
+    end
 
     describe '#render' do
       it 'raises an error' do

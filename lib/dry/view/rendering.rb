@@ -25,6 +25,10 @@ module Dry
         @part_builder = part_builder.for_rendering(self)
       end
 
+      def format
+        renderer.format
+      end
+
       def part(name, value, **options)
         part_builder.(name, value, **options)
       end
