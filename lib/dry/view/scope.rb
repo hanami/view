@@ -1,5 +1,6 @@
 require 'dry/equalizer'
 require 'dry/core/constants'
+require_relative "rendering_missing"
 
 module Dry
   class View
@@ -12,7 +13,7 @@ module Dry
       attr_reader :_locals
       attr_reader :_rendering
 
-      def initialize(name: nil, locals: Dry::Core::Constants::EMPTY_HASH, rendering:)
+      def initialize(name: nil, locals: Dry::Core::Constants::EMPTY_HASH, rendering: RenderingMissing.new)
         @_name = name
         @_locals = locals
         @_rendering = rendering
