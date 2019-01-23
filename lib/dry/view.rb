@@ -133,7 +133,7 @@ module Dry
     private
 
     def locals(rendering, input)
-      exposures.(input) do |value, exposure|
+      exposures.(context: rendering.context, **input) do |value, exposure|
         if exposure.decorate? && value
           rendering.part(exposure.name, value, **exposure.options)
         else

@@ -1,7 +1,7 @@
 require "dry/view"
 require "dry/view/part"
 
-RSpec.describe "locals" do
+RSpec.describe "View / locals" do
   specify "locals are decorated with parts by default" do
     view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
