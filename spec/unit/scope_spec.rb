@@ -11,7 +11,7 @@ RSpec.describe Dry::View::Scope do
       )
     }
 
-    let(:rendering) { spy(:rendering, context: context) }
+    let(:rendering) { spy(:rendering, format: :xml, context: context) }
     let(:context) { double(:context) }
 
     describe '#render' do
@@ -29,6 +29,12 @@ RSpec.describe Dry::View::Scope do
         scope.render(:info, foo: 'bar')
 
         expect(rendering).to have_received(:partial).with(:info, scope_with_locals)
+      end
+    end
+
+    describe "#_format" do
+      it "returns the rendering's format" do
+        expect(scope._format).to eq :xml
       end
     end
 

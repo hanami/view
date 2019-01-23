@@ -18,6 +18,12 @@ RSpec.describe Dry::View::Rendering do
     }
   }
 
+  describe "#format" do
+    it "returns the renderer's format" do
+      expect(rendering.format).to eq :html
+    end
+  end
+
   describe "#==" do
     it "is equal when its options are equal" do
       expect(rendering).to eq described_class.new(**rendering_options)
