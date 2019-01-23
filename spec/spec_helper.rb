@@ -13,7 +13,7 @@ SPEC_ROOT = Pathname(__FILE__).dirname
 FIXTURES_PATH = SPEC_ROOT.join("fixtures")
 
 require 'slim'
-require 'dry-view'
+require 'dry/view'
 
 module Test
   def self.remove_constants
