@@ -18,7 +18,7 @@ module Dry
 
     UndefinedTemplateError = Class.new(StandardError)
 
-    DEFAULT_LAYOUTS_DIR = 'layouts'.freeze
+    DEFAULT_LAYOUTS_DIR = "layouts".freeze
     DEFAULT_CONTEXT = Context.new
     DEFAULT_RENDERER_OPTIONS = {default_encoding: 'utf-8'.freeze}.freeze
 
@@ -28,12 +28,15 @@ module Dry
 
     setting :paths
     setting :layout, false
+    setting :layouts_dir, DEFAULT_LAYOUTS_DIR
     setting :template
+
     setting :default_format, :html
     setting :renderer_engine_mapping
     setting :renderer_options, DEFAULT_RENDERER_OPTIONS do |options|
       DEFAULT_RENDERER_OPTIONS.merge(options.to_h).freeze
     end
+
     setting :default_context, DEFAULT_CONTEXT
 
     setting :scope
@@ -45,11 +48,6 @@ module Dry
 
     setting :scope_builder, ScopeBuilder
     setting :scope_namespace
-
-    attr_reader :config
-    attr_reader :layout_dir
-    attr_reader :layout_path
-    attr_reader :template_path
 
     attr_reader :exposures
 
@@ -63,7 +61,7 @@ module Dry
 
     # @api public
     def self.paths
-      Array(config.paths).map { |path| Dry::View::Path.new(path) }
+      Array(config.paths).map { |path| Path.new(path) }
     end
 
     # @api private
@@ -106,23 +104,23 @@ module Dry
 
     # @api public
     def initialize
-      @config = self.class.config
-      @layout_dir = DEFAULT_LAYOUTS_DIR
-      @layout_path = "#{layout_dir}/#{config.layout}"
-      @template_path = config.template
-
       @exposures = self.class.exposures.bind(self)
     end
 
     # @api public
+    def config
+      self.class.config
+    end
+
+    # @api public
     def call(format: config.default_format, context: config.default_context, **input)
-      raise UndefinedTemplateError, "no +template+ configured" unless template_path
+      raise UndefinedTemplateError, "no +template+ configured" unless config.template
 
       rendering = self.class.rendering(format: format, context: context)
-      template_rendering = self.class.rendering(format: format, context: context).chdir(template_path)
+      template_rendering = self.class.rendering(format: format, context: context).chdir(config.template)
 
       locals = locals(template_rendering, input)
-      output = rendering.template(template_path, template_rendering.scope(config.scope, locals))
+      output = rendering.template(config.template, template_rendering.scope(config.scope, locals))
 
       if layout?
         layout_rendering = self.class.rendering(format: format, context: context).chdir(layout_path)
@@ -152,6 +150,10 @@ module Dry
 
     def layout?
       !!config.layout
+    end
+
+    def layout_path
+      File.join(config.layouts_dir, config.layout)
     end
   end
 end
