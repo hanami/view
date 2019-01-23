@@ -13,6 +13,10 @@ module Dry
         raise MissingRenderingError
       end
 
+      def context
+        raise MissingRenderingError
+      end
+
       def part(name, value, **options)
         raise MissingRenderingError
       end
