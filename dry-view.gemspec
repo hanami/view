@@ -1,4 +1,3 @@
-# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'dry/view/version'
@@ -6,8 +5,8 @@ require 'dry/view/version'
 Gem::Specification.new do |spec|
   spec.name          = "dry-view"
   spec.version       = Dry::View::VERSION
-  spec.authors       = ["Piotr Solnica", "Tim Riley"]
-  spec.email         = ["piotr.solnica@gmail.com", "tim@icelab.com.au"]
+  spec.authors       = ["Tim Riley", "Piotr Solnica"]
+  spec.email         = ["tim@icelab.com.au", "piotr.solnica@gmail.com"]
   spec.summary       = "Functional view rendering system"
   spec.description   = spec.summary
   spec.homepage      = "https://github.com/dry-rb/dry-view"
