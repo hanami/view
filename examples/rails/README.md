@@ -24,4 +24,8 @@ The following files/folders are specific to the dry-view integration:
 - `app/views/`
 - `app/templates/`
 
-This is the minimum viable integration. There is much more that can be done to improve ergonomics and integrate dry-view with the Rails development experience.
+n.b. this is a minimal integration to demonstrate how dry-view can work with Rails; there's plenty more that could be done to deepen the integration, flesh out the view-related features, and improve the overall experience.
+
+The ideal integration would come via a dry-view-rails integration gem. See [this open issue][issue] for more details.
+
+[issue]: https://github.com/dry-rb/dry-view/issues/114
