@@ -65,8 +65,23 @@ module Dry
     end
 
     # @api private
+    def self.layout_path
+      File.join(config.layouts_dir, config.layout)
+    end
+
+    # @api public
     def self.rendering(format: config.default_format, context: config.default_context)
       Rendering.prepare(renderer(format), config, context)
+    end
+
+    # @api public
+    def self.template_rendering(**args)
+      rendering(**args).chdir(config.template)
+    end
+
+    # @api public
+    def self.layout_rendering(**args)
+      rendering(**args).chdir(layout_path)
     end
 
     # @api private
@@ -117,14 +132,14 @@ module Dry
       raise UndefinedTemplateError, "no +template+ configured" unless config.template
 
       rendering = self.class.rendering(format: format, context: context)
-      template_rendering = self.class.rendering(format: format, context: context).chdir(config.template)
+      template_rendering = self.class.template_rendering(format: format, context: context)
 
       locals = locals(template_rendering, input)
       output = rendering.template(config.template, template_rendering.scope(config.scope, locals))
 
       if layout?
-        layout_rendering = self.class.rendering(format: format, context: context).chdir(layout_path)
-        output = layout_rendering.template(layout_path, layout_rendering.scope(config.scope, layout_locals(locals))) { output }
+        layout_rendering = self.class.layout_rendering(format: format, context: context)
+        output = layout_rendering.template(self.class.layout_path, layout_rendering.scope(config.scope, layout_locals(locals))) { output }
       end
 
       Rendered.new(output: output, locals: locals)
@@ -150,10 +165,6 @@ module Dry
 
     def layout?
       !!config.layout
-    end
-
-    def layout_path
-      File.join(config.layouts_dir, config.layout)
     end
   end
 end
