@@ -6,9 +6,12 @@ before_install:
   - gem install bundler
 script:
   - bundle exec rake
-after_success:
-  # Send coverage report from the job #1 == current MRI release
-  - '[ "${TRAVIS_JOB_NUMBER#*.}" = "1" ] && [ "$TRAVIS_BRANCH" = "master" ] && bundle exec codeclimate-test-reporter'
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+after_script:
+  - "[ -d coverage ] && ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
 rvm:
   - 2.6.0
   - 2.5.3

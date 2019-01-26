@@ -17,7 +17,6 @@ group :test do
   gem 'slim', "~> 4.0"
 
   gem 'simplecov'
-  gem 'codeclimate-test-reporter'
 end
 
 group :benchmarks do
