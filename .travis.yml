@@ -7,18 +7,19 @@ before_install:
 script:
   - bundle exec rake
 after_success:
-    # Send coverage report from the job #1 == current MRI release
+  # Send coverage report from the job #1 == current MRI release
   - '[ "${TRAVIS_JOB_NUMBER#*.}" = "1" ] && [ "$TRAVIS_BRANCH" = "master" ] && bundle exec codeclimate-test-reporter'
 rvm:
-  - 2.5.0
-  - 2.4.2
-  - 2.3.6
-  - jruby-9.1.10.0
+  - 2.6.0
+  - 2.5.3
+  - 2.4.5
+  - 2.3.8
+  - jruby-9.2.5.0
 notifications:
   email: false
   webhooks:
     urls:
       - https://webhooks.gitter.im/e/19098b4253a72c9796db
-    on_success: change  # options: [always|never|change] default: always
-    on_failure: always  # options: [always|never|change] default: always
-    on_start: false     # default: false
+    on_success: change # options: [always|never|change] default: always
+    on_failure: always # options: [always|never|change] default: always
+    on_start: false # default: false
