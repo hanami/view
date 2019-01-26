@@ -1,3 +1,52 @@
+# 0.6.0 / Unreleased
+
+### Added
+
+- [BREAKING] `Dry::View#call` now returns a `Dry::View::Rendered` instance, which carries both the rendered output (accessible via `#to_s` or `#to_str`) as well as all of the view's locals, wrapped in their view parts (accessible via `#locals` or individually via `#[]`) (timriley in [#72][pr72])
+- [BREAKING] Added `Dry::View::PartBuilder` (renamed from `Dry::View::Decorator`), which resolves part classes from a namespace configured via View's `part_namespace` setting. A custom part builder can be specified via a View's `part_builder` setting. (timriley in [#80][pr80])
+- [BREAKING] Context classes can now declare decorated attributes just like part classes, via `.decorate` class-level API. Context classes are now required to inherit from `Dry::View::Context`. `Dry::View::Context` provides a `#with` method for creating copies of itself while preserving the rendering details needed for decorated attributes to work (timriley in [#89][pr89] and [#91][pr91])
+- Customizable _scope_ objects, which work like view parts, but instead of encapsulating a single value, they encapsulate a whole template or partial and all of its locals. Scopes can be created via `#scope` method in templates, parts, as well as scope classes themselves. Scope classes are resolved via a View's `scope_builder` setting, which defaults to an instance of `Dry::View::ScopeBuilder`.
+- Added `inflector` setting to View, which is used by the part and scope builders to resolve classes for a given part or scope name. Defaults to `Dry::Inflector.new` (timriley in [#80][pr80] and [#90][pr90])
+- Exposures can be sent to the layout template when defined with `layout: true` option (GustavoCaso in [#87][pr87])
+- Exposures can be left undecorated by a part when defined with `decorate: false` option (timriley in [#88][pr88])
+- Part classes have access to the current template format via a private `#_format` method (timriley in [#118][pr118])
+- Added "Tilt adapter" layer, to ensure a rendering engine compatible with dry-view's features is being used. Added adapters for "haml" and "erb" templates to ensure that "hamlit-block" and "erbse" are required and used as engines (unlike their more common counterparts, both of these engines support the implicit block capturing that is a central part of dry-view rendering behaviour) (timriley in [#106][pr106])
+- Added `renderer_engine_mapping` setting to View, which allows an explicit engine class to be provided for the rendering of a given type of template (e.g. `config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}`) (timriley in [#106][pr106])
+
+### Changed
+
+- [BREAKING] `Dry::View::Controller` renamed to `Dry::View` (timriley in [#115][pr115])
+- [BREAKING] `Dry::View` `context` setting renamed to `default_context` (GustavoCaso in [#86][pr86])
+- Exposure values are wrapped in their view parts before being made available as exposure dependencies (timriley in [#80][pr80])
+- Exposures can access current context object through `context:` block or method parameter (timriley in [#119][pr119])
+- Improved performance due to caching various lookups (timriley and GustavoCaso in [#97][pr97])
+- `Part#inspect` output simplified to include only name and value (timriley in [#98][pr98])
+- Attribute decoration in `Part` now achieved via a prepended module, which means it is possible to decorate an attribute provided by an instance method directly on the part class, which wasn't possible with the previous `method_missing`-based approach (timriley in [#110][pr110])
+- `Part` classes can be initialized with missing `name:` and `rendering:` values, which can be useful for unit testing Part methods that don't use any rendering facilities (timriley in [#116][pr116])
+
+### Fixed
+
+- Preserve renderer options when chdir-ing (timriley in [889ac7b](https://github.com/dry-rb/dry-view/commit/889ac7b))
+
+[Compare v0.5.3...v0.6.0](https://github.com/dry-rb/dry-view/compare/v0.5.3...v0.6.0)
+
+[pr72]: https://github.com/dry-rb/dry-view/pull/72
+[pr80]: https://github.com/dry-rb/dry-view/pull/80
+[pr86]: https://github.com/dry-rb/dry-view/pull/86
+[pr87]: https://github.com/dry-rb/dry-view/pull/87
+[pr88]: https://github.com/dry-rb/dry-view/pull/88
+[pr89]: https://github.com/dry-rb/dry-view/pull/89
+[pr90]: https://github.com/dry-rb/dry-view/pull/90
+[pr91]: https://github.com/dry-rb/dry-view/pull/91
+[pr97]: https://github.com/dry-rb/dry-view/pull/97
+[pr98]: https://github.com/dry-rb/dry-view/pull/98
+[pr106]: https://github.com/dry-rb/dry-view/pull/106
+[pr110]: https://github.com/dry-rb/dry-view/pull/110
+[pr115]: https://github.com/dry-rb/dry-view/pull/115
+[pr116]: https://github.com/dry-rb/dry-view/pull/116
+[pr118]: https://github.com/dry-rb/dry-view/pull/118
+[pr119]: https://github.com/dry-rb/dry-view/pull/119
+
 # 0.5.4 / 2019-01-06 [YANKED 2019-01-18]
 
 This version was yanked due to the release accidentally containing a batch of breaking changes from master.
@@ -16,6 +65,8 @@ This version was yanked due to the release accidentally containing a batch of br
 
 - Part objects wrap values more transparently, via added `#respond_to_missing?` (liseki in [#63][pr63])
 
+[Compare v0.5.2...v0.5.3](https://github.com/dry-rb/dry-view/compare/v0.5.2...v0.5.3)
+
 [pr62]: https://github.com/dry-rb/dry-view/pull/62
 [pr63]: https://github.com/dry-rb/dry-view/pull/63
 
@@ -25,7 +76,7 @@ This version was yanked due to the release accidentally containing a batch of br
 
 - Only truthy view part attributes are decorated (timriley)
 
-[Compare v0.5.0...v0.5.1](https://github.com/dry-rb/dry-view/compare/v0.5.1...v0.5.2)
+[Compare v0.5.1...v0.5.2](https://github.com/dry-rb/dry-view/compare/v0.5.1...v0.5.2)
 
 # 0.5.1 / 2018-02-20
 
