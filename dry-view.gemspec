@@ -13,10 +13,9 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/dry-rb/dry-view"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files -z`.split("\x0")
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(benchmarks|examples|spec)/}) }
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = '>= 2.2.0'
