@@ -1,0 +1,18 @@
+version: "2"
+plugins:
+  rubocop:
+    enabled: true
+    checks:
+      Rubocop/AllCops:
+        TargetRubyVersion: 2.2
+      Rubocop/Metrics/ClassLength:
+        Max: 150
+      Rubocop/Metrics/LineLength:
+        Max: 100
+      Rubocop/Metrics/MethodLength:
+        Max: 20
+exclude_patterns:
+  - "benchmarks/"
+  - "bin/"
+  - "examples/"
+  - "spec/"
