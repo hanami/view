@@ -22,10 +22,6 @@ module Dry
         self.class.new(namespace: namespace, rendering: rendering)
       end
 
-      def rendering?
-        !!rendering
-      end
-
       def call(name, value, **options)
         builder = value.respond_to?(:to_ary) ? :build_collection_part : :build_part
 

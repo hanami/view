@@ -22,10 +22,6 @@ module Dry
         self.class.new(namespace: namespace, rendering: rendering)
       end
 
-      def rendering?
-        !!rendering
-      end
-
       def call(name = nil, locals)
         scope_class(name).new(
           name: name,
