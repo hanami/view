@@ -41,8 +41,8 @@ module Dry
               define_method name do
                 attribute = super()
 
-                if _rendering && attribute
-                  _rendering.part(name, attribute, **options)
+                if _render_env && attribute
+                  _render_env.part(name, attribute, **options)
                 else
                   attribute
                 end

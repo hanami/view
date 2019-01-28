@@ -1,22 +1,22 @@
 require 'dry/equalizer'
 require 'dry/core/constants'
-require_relative "rendering_missing"
+require_relative "render_environment_missing"
 
 module Dry
   class View
     class Scope
       CONVENIENCE_METHODS = %i[format context locals].freeze
 
-      include Dry::Equalizer(:_name, :_locals, :_rendering)
+      include Dry::Equalizer(:_name, :_locals, :_render_env)
 
       attr_reader :_name
       attr_reader :_locals
-      attr_reader :_rendering
+      attr_reader :_render_env
 
-      def initialize(name: nil, locals: Dry::Core::Constants::EMPTY_HASH, rendering: RenderingMissing.new)
+      def initialize(name: nil, locals: Dry::Core::Constants::EMPTY_HASH, render_env: RenderEnvironmentMissing.new)
         @_name = name
         @_locals = locals
-        @_rendering = rendering
+        @_render_env = render_env
       end
 
       def render(partial_name = nil, **locals, &block)
@@ -24,19 +24,19 @@ module Dry
         raise ArgumentError, "+partial_name+ must be provided for unnamed scopes" unless partial_name
         partial_name = _inflector.underscore(_inflector.demodulize(partial_name.to_s)) if partial_name.is_a?(Class)
 
-        _rendering.partial(partial_name, _render_scope(locals), &block)
+        _render_env.partial(partial_name, _render_scope(locals), &block)
       end
 
       def scope(name = nil, **locals)
-        _rendering.scope(name, locals)
+        _render_env.scope(name, locals)
       end
 
       def _format
-        _rendering.format
+        _render_env.format
       end
 
       def _context
-        _rendering.context
+        _render_env.context
       end
 
       private
@@ -44,8 +44,8 @@ module Dry
       def method_missing(name, *args, &block)
         if _locals.key?(name)
           _locals[name]
-        elsif _rendering.context.respond_to?(name)
-          _rendering.context.public_send(name, *args, &block)
+        elsif _context.respond_to?(name)
+          _context.public_send(name, *args, &block)
         elsif CONVENIENCE_METHODS.include?(name)
           __send__(:"_#{name}", *args, &block)
         else
@@ -54,7 +54,7 @@ module Dry
       end
 
       def respond_to_missing?(name, include_private = false)
-        _locals.key?(name) || _rendering.context.respond_to?(name) || CONVENIENCE_METHODS.include?(name) || super
+        _locals.key?(name) || _render_env.context.respond_to?(name) || CONVENIENCE_METHODS.include?(name) || super
       end
 
       def _render_scope(**locals)
@@ -64,13 +64,13 @@ module Dry
           self.class.new(
             # FIXME: what about `name`?
             locals: locals,
-            rendering: _rendering,
+            render_env: _render_env,
           )
         end
       end
 
       def _inflector
-        _rendering.inflector
+        _render_env.inflector
       end
     end
   end

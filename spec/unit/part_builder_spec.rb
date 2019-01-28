@@ -1,10 +1,10 @@
 require 'dry/view/scope_builder'
 
 RSpec.describe Dry::View::PartBuilder do
-  subject(:part_builder) { rendering.part_builder }
+  subject(:part_builder) { render_env.part_builder }
 
-  let(:rendering) {
-    Dry::View::Rendering.new(
+  let(:render_env) {
+    Dry::View::RenderEnvironment.new(
       renderer: Dry::View::Renderer.new([FIXTURES_PATH], format: :html),
       inflector: Dry::Inflector.new,
       context: Dry::View::Context.new,
@@ -35,8 +35,8 @@ RSpec.describe Dry::View::PartBuilder do
         expect(part._value).to eq value
       end
 
-      it 'retains the rendering' do
-        expect(part._rendering).to eql rendering
+      it 'retains the render environment' do
+        expect(part._render_env).to eql render_env
       end
     end
 

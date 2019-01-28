@@ -23,8 +23,8 @@ RSpec.describe Dry::View::Context do
   let(:assets) { double(:assets) }
   let(:routes) { double(:routes) }
 
-  let(:rendering) {
-    Dry::View::Rendering.new(
+  let(:render_env) {
+    Dry::View::RenderEnvironment.new(
       inflector: Dry::Inflector.new,
       renderer: double(:renderer),
       context: Dry::View::Context.new,
@@ -41,9 +41,9 @@ RSpec.describe Dry::View::Context do
     end
   end
 
-  context "for rendering" do
+  context "with render environment" do
     subject(:context) {
-      context_class.new(assets: assets, routes: routes).for_rendering(rendering)
+      context_class.new(assets: assets, routes: routes).for_render_env(render_env)
     }
 
     describe "attribute readers" do

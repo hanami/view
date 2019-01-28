@@ -7,9 +7,9 @@ require_relative 'view/context'
 require_relative 'view/exposures'
 require_relative 'view/part_builder'
 require_relative 'view/path'
+require_relative 'view/render_environment'
 require_relative 'view/rendered'
 require_relative 'view/renderer'
-require_relative 'view/rendering'
 require_relative 'view/scope_builder'
 
 module Dry
@@ -70,18 +70,18 @@ module Dry
     end
 
     # @api public
-    def self.rendering(format: config.default_format, context: config.default_context)
-      Rendering.prepare(renderer(format), config, context)
+    def self.render_env(format: config.default_format, context: config.default_context)
+      RenderEnvironment.prepare(renderer(format), config, context)
     end
 
     # @api public
-    def self.template_rendering(**args)
-      rendering(**args).chdir(config.template)
+    def self.template_env(**args)
+      render_env(**args).chdir(config.template)
     end
 
     # @api public
-    def self.layout_rendering(**args)
-      rendering(**args).chdir(layout_path)
+    def self.layout_env(**args)
+      render_env(**args).chdir(layout_path)
     end
 
     # @api private
@@ -131,15 +131,15 @@ module Dry
     def call(format: config.default_format, context: config.default_context, **input)
       raise UndefinedTemplateError, "no +template+ configured" unless config.template
 
-      rendering = self.class.rendering(format: format, context: context)
-      template_rendering = self.class.template_rendering(format: format, context: context)
+      env = self.class.render_env(format: format, context: context)
+      template_env = self.class.template_env(format: format, context: context)
 
-      locals = locals(template_rendering, input)
-      output = rendering.template(config.template, template_rendering.scope(config.scope, locals))
+      locals = locals(template_env, input)
+      output = env.template(config.template, template_env.scope(config.scope, locals))
 
       if layout?
-        layout_rendering = self.class.layout_rendering(format: format, context: context)
-        output = layout_rendering.template(self.class.layout_path, layout_rendering.scope(config.scope, layout_locals(locals))) { output }
+        layout_env = self.class.layout_env(format: format, context: context)
+        output = layout_env.template(self.class.layout_path, layout_env.scope(config.scope, layout_locals(locals))) { output }
       end
 
       Rendered.new(output: output, locals: locals)
@@ -147,10 +147,10 @@ module Dry
 
     private
 
-    def locals(rendering, input)
-      exposures.(context: rendering.context, **input) do |value, exposure|
+    def locals(render_env, input)
+      exposures.(context: render_env.context, **input) do |value, exposure|
         if exposure.decorate? && value
-          rendering.part(exposure.name, value, **exposure.options)
+          render_env.part(exposure.name, value, **exposure.options)
         else
           value
         end
