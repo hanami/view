@@ -7,9 +7,9 @@ Gem::Specification.new do |spec|
   spec.version       = Dry::View::VERSION
   spec.authors       = ["Tim Riley", "Piotr Solnica"]
   spec.email         = ["tim@icelab.com.au", "piotr.solnica@gmail.com"]
-  spec.summary       = "Functional view rendering system"
+  spec.summary       = "A complete, standalone view rendering system that gives you everything you need to write well-factored view code"
   spec.description   = spec.summary
-  spec.homepage      = "https://github.com/dry-rb/dry-view"
+  spec.homepage      = "https://dry-rb.org/gems/dry-view"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(benchmarks|examples|spec)/}) }
