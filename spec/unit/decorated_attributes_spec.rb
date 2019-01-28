@@ -2,7 +2,7 @@ require "dry/view/decorated_attributes"
 
 RSpec.describe Dry::View::DecoratedAttributes do
   subject(:decoratable) {
-    Test::Decoratable = Struct.new(:attr_1, :attr_2, :_rendering) do
+    Test::Decoratable = Struct.new(:attr_1, :attr_2, :_render_env) do
       include Dry::View::DecoratedAttributes
 
       decorate :attr_1, as: :my_value
@@ -10,20 +10,20 @@ RSpec.describe Dry::View::DecoratedAttributes do
       decorate :invalid_attr
     end
 
-    Test::Decoratable.new(attr_1, attr_2, rendering)
+    Test::Decoratable.new(attr_1, attr_2, render_env)
   }
 
   let(:attr_1) { double(:attr_1) }
   let(:attr_2) { double(:attr_2) }
-  let(:rendering) { spy(:rendering) }
+  let(:render_env) { spy(:render_env) }
 
-  context "with rendering" do
+  context "with render environment" do
     it "returns decorated attributes as parts" do
       decoratable.attr_1
-      expect(rendering).to have_received(:part).with(:attr_1, attr_1, as: :my_value)
+      expect(render_env).to have_received(:part).with(:attr_1, attr_1, as: :my_value)
 
       decoratable.attr_2
-      expect(rendering).to have_received(:part).with(:attr_2, attr_2, {})
+      expect(render_env).to have_received(:part).with(:attr_2, attr_2, {})
     end
 
     it "raises NoMethodError when an invalid attribute is accessed" do
@@ -31,8 +31,8 @@ RSpec.describe Dry::View::DecoratedAttributes do
     end
   end
 
-  context "without rendering" do
-    let(:rendering) { nil }
+  context "without render environment" do
+    let(:render_env) { nil }
 
     it "returns attributes without decoration" do
       expect(decoratable.attr_1).to be attr_1

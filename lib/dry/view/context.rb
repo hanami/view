@@ -7,21 +7,24 @@ module Dry
       include Dry::Equalizer(:_options)
       include DecoratedAttributes
 
-      attr_reader :_rendering, :_options
+      attr_reader :_render_env, :_options
 
-      def initialize(rendering: nil, **options)
-        @_rendering = rendering
+      def initialize(render_env: nil, **options)
+        @_render_env = render_env
         @_options = options
       end
 
-      def for_rendering(rendering)
-        return self if rendering == self._rendering
+      def for_render_env(render_env)
+        return self if render_env == self._render_env
 
-        self.class.new(**_options.merge(rendering: rendering))
+        self.class.new(**_options.merge(render_env: render_env))
       end
 
       def with(**new_options)
-        self.class.new(rendering: _rendering, **_options.merge(new_options))
+        self.class.new(
+          render_env: _render_env,
+          **_options.merge(new_options),
+        )
       end
     end
   end

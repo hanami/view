@@ -1,6 +1,6 @@
 require 'dry/equalizer'
 require_relative "decorated_attributes"
-require_relative "rendering_missing"
+require_relative "render_environment_missing"
 
 module Dry
   class View
@@ -13,39 +13,39 @@ module Dry
         value
       ].freeze
 
-      include Dry::Equalizer(:_name, :_value, :_rendering)
+      include Dry::Equalizer(:_name, :_value, :_render_env)
       include DecoratedAttributes
 
       attr_reader :_name
 
       attr_reader :_value
 
-      attr_reader :_rendering
+      attr_reader :_render_env
 
       def self.part_name(inflector)
         name ? inflector.underscore(inflector.demodulize(name)) : "part"
       end
 
-      def initialize(rendering: RenderingMissing.new, name: self.class.part_name(rendering.inflector), value:)
+      def initialize(render_env: RenderEnvironmentMissing.new, name: self.class.part_name(render_env.inflector), value:)
         @_name = name
         @_value = value
-        @_rendering = rendering
+        @_render_env = render_env
       end
 
       def _format
-        _rendering.format
+        _render_env.format
       end
 
       def _context
-        _rendering.context
+        _render_env.context
       end
 
       def _render(partial_name, as: _name, **locals, &block)
-        _rendering.partial(partial_name, _rendering.scope({as => self}.merge(locals)), &block)
+        _render_env.partial(partial_name, _render_env.scope({as => self}.merge(locals)), &block)
       end
 
       def _scope(scope_name = nil, **locals)
-        _rendering.scope(scope_name, {_name => self}.merge(locals))
+        _render_env.scope(scope_name, {_name => self}.merge(locals))
       end
 
       def to_s
@@ -56,7 +56,7 @@ module Dry
         klass.new(
           name: name,
           value: value,
-          rendering: _rendering,
+          render_env: _render_env,
           **options,
         )
       end

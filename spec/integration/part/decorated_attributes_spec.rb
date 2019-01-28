@@ -53,12 +53,12 @@ RSpec.describe 'Part / Decorated attributes' do
     article_part_class.new(
       name: :article,
       value: article,
-      rendering: rendering,
+      render_env: render_env,
     )
   }
 
-  let(:rendering) {
-    Dry::View::Rendering.new(
+  let(:render_env) {
+    Dry::View::RenderEnvironment.new(
       renderer: Dry::View::Renderer.new([Dry::View::Path.new(FIXTURES_PATH)], format: :html),
       inflector: Dry::Inflector.new,
       context: Dry::View::Context.new,

@@ -35,7 +35,7 @@ RSpec.describe "Testing / parts" do
     article_part = part_class.new(
       name: :article,
       value: article,
-      rendering: view_class.template_rendering
+      render_env: view_class.template_env,
     )
 
     expect(article_part.feature_box).to eq %(

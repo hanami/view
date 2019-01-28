@@ -3,43 +3,43 @@ require 'dry/view/scope_builder'
 RSpec.describe Dry::View::Scope do
   let(:locals) { {} }
 
-  context "with a rendering provided" do
+  context "with a render environment" do
     subject(:scope) {
       described_class.new(
         locals: locals,
-        rendering: rendering,
+        render_env: render_env,
       )
     }
 
-    let(:rendering) { spy(:rendering, format: :xml, context: context) }
+    let(:render_env) { spy(:render_env, format: :xml, context: context) }
     let(:context) { double(:context) }
 
     describe '#render' do
       it 'renders a partial with itself as the scope' do
         scope.render(:info)
-        expect(rendering).to have_received(:partial).with(:info, scope)
+        expect(render_env).to have_received(:partial).with(:info, scope)
       end
 
       it 'renders a partial with provided locals' do
         scope_with_locals = described_class.new(
           locals: {foo: 'bar'},
-          rendering: rendering,
+          render_env: render_env,
         )
 
         scope.render(:info, foo: 'bar')
 
-        expect(rendering).to have_received(:partial).with(:info, scope_with_locals)
+        expect(render_env).to have_received(:partial).with(:info, scope_with_locals)
       end
     end
 
     describe "#_format" do
-      it "returns the rendering's format" do
+      it "returns the render environments's format" do
         expect(scope._format).to eq :xml
       end
     end
 
     describe "#_context" do
-      it "returns the rendering's context" do
+      it "returns the render environment's context" do
         expect(scope._context).to be context
       end
     end
@@ -87,26 +87,26 @@ RSpec.describe Dry::View::Scope do
     end
   end
 
-  context "without a rendering provided" do
+  context "without a render environment" do
     subject(:scope) {
       described_class.new(locals: locals)
     }
 
     describe "#render" do
       it "raises an error" do
-        expect { scope.render(:info) }.to raise_error(Dry::View::RenderingMissing::MissingRenderingError)
+        expect { scope.render(:info) }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
 
     describe "#scope" do
       it "raises an error" do
-        expect { scope.scope(:info) }.to raise_error(Dry::View::RenderingMissing::MissingRenderingError)
+        expect { scope.scope(:info) }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
 
     describe "#_context" do
       it "raises an error" do
-        expect { scope._context }.to raise_error(Dry::View::RenderingMissing::MissingRenderingError)
+        expect { scope._context }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
   end

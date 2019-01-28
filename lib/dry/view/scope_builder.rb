@@ -9,24 +9,24 @@ module Dry
       include Dry::Equalizer(:namespace)
 
       attr_reader :namespace
-      attr_reader :rendering
+      attr_reader :render_env
 
-      def initialize(namespace: nil, rendering: nil)
+      def initialize(namespace: nil, render_env: nil)
         @namespace = namespace
-        @rendering = rendering
+        @render_env = render_env
       end
 
-      def for_rendering(rendering)
-        return self if rendering == self.rendering
+      def for_render_env(render_env)
+        return self if render_env == self.render_env
 
-        self.class.new(namespace: namespace, rendering: rendering)
+        self.class.new(namespace: namespace, render_env: render_env)
       end
 
       def call(name = nil, locals)
         scope_class(name).new(
           name: name,
           locals: locals,
-          rendering: rendering,
+          render_env: render_env,
         )
       end
 
@@ -67,7 +67,7 @@ module Dry
       end
 
       def inflector
-        rendering.inflector
+        render_env.inflector
       end
     end
   end
