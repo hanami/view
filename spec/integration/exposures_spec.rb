@@ -235,8 +235,6 @@ RSpec.describe 'exposures' do
     )
   end
 
-
-
   it 'supports default values for keyword arguments' do
     view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
