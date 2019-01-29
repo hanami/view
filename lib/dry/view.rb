@@ -18,8 +18,6 @@ module Dry
 
     UndefinedTemplateError = Class.new(StandardError)
 
-    DEFAULT_LAYOUTS_DIR = "layouts".freeze
-    DEFAULT_CONTEXT = Context.new
     DEFAULT_RENDERER_OPTIONS = {default_encoding: 'utf-8'.freeze}.freeze
 
     include Dry::Equalizer(:config)
@@ -28,7 +26,7 @@ module Dry
 
     setting :paths
     setting :layout, false
-    setting :layouts_dir, DEFAULT_LAYOUTS_DIR
+    setting :layouts_dir, "layouts".freeze
     setting :template
 
     setting :default_format, :html
@@ -37,7 +35,7 @@ module Dry
       DEFAULT_RENDERER_OPTIONS.merge(options.to_h).freeze
     end
 
-    setting :default_context, DEFAULT_CONTEXT
+    setting :default_context, Context.new.freeze
 
     setting :scope
 
