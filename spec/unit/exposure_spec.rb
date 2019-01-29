@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::View::Exposure do
   subject(:exposure) { described_class.new(:hello, proc, object, **options) }
 

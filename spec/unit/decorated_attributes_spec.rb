@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "dry/view/decorated_attributes"
 
 RSpec.describe Dry::View::DecoratedAttributes do

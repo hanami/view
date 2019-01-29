@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/view/scope_builder'
 
 RSpec.describe Dry::View::Scope do

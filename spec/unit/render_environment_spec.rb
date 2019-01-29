@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "dry/view/render_environment"
 
 require "dry/inflector"

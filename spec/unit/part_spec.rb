@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/view/scope_builder'
 require 'dry/view/render_environment_missing'
 

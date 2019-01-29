@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "erubi"
 require "erubi/capture_end"
 require "tilt/erubi"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "Testing / parts" do
   let(:part_class) {
     Class.new(Dry::View::Part) do

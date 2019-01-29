@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # coding: utf-8
 RSpec.describe 'dry-view' do
   let(:view_class) do
