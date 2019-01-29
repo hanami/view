@@ -9,14 +9,16 @@ module Dry
 
       attr_reader :dir, :root
 
-      def initialize(dir, options = {})
+      def initialize(dir, root: dir)
         @dir = Pathname(dir)
-        @root = Pathname(options.fetch(:root, dir))
+        @root = root
       end
 
-      def lookup(name, format)
+      def lookup(name, format, include_shared: true)
         fetch_or_store(dir, root, name, format) do
-          template?(name, format) || template?("shared/#{name}", format) || !root? && chdir('..').lookup(name, format)
+          template?(name, format) ||
+            (include_shared && template?("shared/#{name}", format)) ||
+            !root? && chdir('..').lookup(name, format)
         end
       end
 

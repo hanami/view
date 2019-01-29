@@ -30,6 +30,19 @@ RSpec.configure do |config|
   config.after do
     Test.remove_constants
   end
+
+  config.after do
+    [
+      Dry::View,
+      Dry::View::PartBuilder,
+      Dry::View::Path,
+      Dry::View::Renderer,
+      Dry::View::ScopeBuilder,
+      Dry::View::Tilt,
+    ].each do |klass|
+      klass.cache.clear
+    end
+  end
 end
 
 RSpec::Matchers.define :part_including do |data|
