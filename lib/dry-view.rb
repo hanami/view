@@ -1,1 +1,1 @@
-require 'dry/view'
+require "dry/view"

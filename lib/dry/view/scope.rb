@@ -1,5 +1,5 @@
-require 'dry/equalizer'
-require 'dry/core/constants'
+require "dry/equalizer"
+require "dry/core/constants"
 require_relative "render_environment_missing"
 
 module Dry

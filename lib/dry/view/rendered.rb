@@ -1,4 +1,4 @@
-require 'dry/equalizer'
+require "dry/equalizer"
 
 module Dry
   class View

@@ -1,4 +1,4 @@
-require 'dry/equalizer'
+require "dry/equalizer"
 require_relative "decorated_attributes"
 require_relative "render_environment_missing"
 

@@ -1,16 +1,16 @@
-require 'dry/configurable'
+require "dry/configurable"
 require "dry/core/cache"
-require 'dry/equalizer'
-require 'dry/inflector'
+require "dry/equalizer"
+require "dry/inflector"
 
-require_relative 'view/context'
-require_relative 'view/exposures'
-require_relative 'view/part_builder'
-require_relative 'view/path'
-require_relative 'view/render_environment'
-require_relative 'view/rendered'
-require_relative 'view/renderer'
-require_relative 'view/scope_builder'
+require_relative "view/context"
+require_relative "view/exposures"
+require_relative "view/part_builder"
+require_relative "view/path"
+require_relative "view/render_environment"
+require_relative "view/rendered"
+require_relative "view/renderer"
+require_relative "view/scope_builder"
 
 # A collection of next-generation Ruby libraries, helping you to write clear,
 # flexible, and more maintainable Ruby code. Each dry-rb gem fulfils a common

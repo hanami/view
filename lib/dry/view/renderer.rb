@@ -1,6 +1,6 @@
-require 'dry/core/cache'
-require 'dry/equalizer'
-require_relative 'tilt'
+require "dry/core/cache"
+require "dry/equalizer"
+require_relative "tilt"
 
 module Dry
   class View

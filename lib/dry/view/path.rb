@@ -27,7 +27,7 @@ module Dry
         fetch_or_store(dir, root, name, format) do
           template?(name, format) ||
             (include_shared && template?("shared/#{name}", format)) ||
-            !root? && chdir('..').lookup(name, format)
+            !root? && chdir("..").lookup(name, format)
         end
       end
 
