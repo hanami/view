@@ -24,7 +24,9 @@ module Dry
 
     extend Dry::Configurable
 
-    setting :paths
+    setting :paths do |paths|
+      Array(paths).map { |path| Path[path] }
+    end
     setting :layout, false
     setting :layouts_dir, "layouts".freeze
     setting :template
@@ -55,11 +57,6 @@ module Dry
       end
     end
 
-    # @api public
-    def self.paths
-      Array(config.paths).map { |path| Path.new(path) }
-    end
-
     # @api private
     def self.layout_path
       File.join(config.layouts_dir, config.layout)
@@ -84,7 +81,7 @@ module Dry
     def self.renderer(format)
       fetch_or_store(:renderer, config, format) {
         Renderer.new(
-          paths,
+          config.paths,
           format: format,
           engine_mapping: config.renderer_engine_mapping,
           **config.renderer_options,

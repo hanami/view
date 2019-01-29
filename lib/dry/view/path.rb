@@ -9,6 +9,14 @@ module Dry
 
       attr_reader :dir, :root
 
+      def self.[](path)
+        if path.is_a?(self)
+          path
+        else
+          new(path)
+        end
+      end
+
       def initialize(dir, root: dir)
         @dir = Pathname(dir)
         @root = root
