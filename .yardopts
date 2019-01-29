@@ -1,0 +1,5 @@
+--query '@api.text != "private"'
+--markup-provider=redcarpet
+--markup=markdown
+--plugin junk
+lib/**/*.rb

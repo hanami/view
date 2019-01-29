@@ -2,6 +2,7 @@ require "dry/inflector"
 
 module Dry
   class View
+    # @api private
     class RenderEnvironmentMissing
       class MissingEnvironmentError < StandardError
         def message

@@ -4,24 +4,46 @@ require_relative 'scope'
 
 module Dry
   class View
+    # Builds scope objects via matching classes
+    #
+    # @api private
     class ScopeBuilder
       extend Dry::Core::Cache
       include Dry::Equalizer(:namespace)
 
+      # The view's configured `scope_namespace`
+      #
+      # @api private
       attr_reader :namespace
+
+      # @return [RenderEnvironment]
+      #
+      # @api private
       attr_reader :render_env
 
+      # Returns a new instance of ScopeBuilder
+      #
+      # @api private
       def initialize(namespace: nil, render_env: nil)
         @namespace = namespace
         @render_env = render_env
       end
 
+      # @api private
       def for_render_env(render_env)
         return self if render_env == self.render_env
 
         self.class.new(namespace: namespace, render_env: render_env)
       end
 
+      # Returns a new scope using a class matching the name
+      #
+      # @param name [Symbol, Class] scope name
+      # @param locals [Hash<Symbol, Object>] locals hash
+      #
+      # @return [Dry::View::Scope]
+      #
+      # @api private
       def call(name = nil, locals)
         scope_class(name).new(
           name: name,
@@ -49,7 +71,7 @@ module Dry
       def resolve_scope_class(name:)
         name = inflector.camelize(name.to_s)
 
-        # Give autoloaders a change to act
+        # Give autoloaders a chance to act
         begin
           klass = namespace.const_get(name)
         rescue NameError
