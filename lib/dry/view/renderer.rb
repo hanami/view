@@ -8,8 +8,8 @@ module Dry
   class View
     # @api private
     class Renderer
-      PARTIAL_PREFIX = "_".freeze
-      PATH_DELIMITER = "/".freeze
+      PARTIAL_PREFIX = "_"
+      PATH_DELIMITER = "/"
 
       extend Dry::Core::Cache
 
