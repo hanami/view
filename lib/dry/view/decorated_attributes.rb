@@ -2,14 +2,32 @@ require "set"
 
 module Dry
   class View
+    # Decorates attributes in Parts.
     module DecoratedAttributes
+      # @api private
       def self.included(klass)
         klass.extend ClassInterface
       end
 
+      # Decorated attributes class-level interface.
       module ClassInterface
+        # @api private
         MODULE_NAME = :DecoratedAttributes
 
+        # Decorates the provided attributes, wrapping them in Parts using the
+        # current render environment.
+        #
+        # @example
+        #   class Article < Dry::View::Part
+        #     decorate :feature_image
+        #     decorate :author as: :person
+        #   end
+        #
+        # @param names [Array<Symbol>] the attribute names
+        # @param options [Hash] the options to pass to the Part Builder
+        # @option options [Symbol, Class] :as an alternative name or class to use when finding a matching Part
+        #
+        # @api public
         def decorate(*names, **options)
           decorated_attributes.decorate(*names, **options)
         end
@@ -27,6 +45,7 @@ module Dry
         end
       end
 
+      # @api private
       class Attributes < Module
         def initialize(*)
           @names = Set.new

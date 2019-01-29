@@ -24,3 +24,9 @@ group :benchmarks do
   gem 'actionview'
   gem 'actionpack'
 end
+
+group :docs do
+  gem 'yard'
+  gem 'yard-junk'
+  gem 'redcarpet', platforms: :mri
+end

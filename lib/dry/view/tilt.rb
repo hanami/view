@@ -3,6 +3,7 @@ require "tilt"
 
 module Dry
   class View
+    # @api private
     module Tilt
       extend Dry::Core::Cache
 

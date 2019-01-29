@@ -4,6 +4,7 @@ require "dry/view/exposure"
 
 module Dry
   class View
+    # @api private
     class Exposures
       include Dry::Equalizer(:exposures)
       include TSort

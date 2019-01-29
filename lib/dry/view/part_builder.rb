@@ -4,6 +4,9 @@ require_relative 'part'
 
 module Dry
   class View
+    # Decorates exposure values with matching parts
+    #
+    # @api private
     class PartBuilder
       extend Dry::Core::Cache
       include Dry::Equalizer(:namespace)
@@ -11,17 +14,30 @@ module Dry
       attr_reader :namespace
       attr_reader :render_env
 
+      # Returns a new instance of PartBuilder
+      #
+      # @api private
       def initialize(namespace: nil, render_env: nil)
         @namespace = namespace
         @render_env = render_env
       end
 
+      # @api private
       def for_render_env(render_env)
         return self if render_env == self.render_env
 
         self.class.new(namespace: namespace, render_env: render_env)
       end
 
+      # Decorates an exposure value
+      #
+      # @param name [Symbol] exposure name
+      # @param value [Object] exposure value
+      # @param options [Hash] exposure options
+      #
+      # @return [Dry::View::Part] decorated value
+      #
+      # @api private
       def call(name, value, **options)
         builder = value.respond_to?(:to_ary) ? :build_collection_part : :build_part
 
@@ -93,7 +109,7 @@ module Dry
 
         name = inflector.camelize(name.to_s)
 
-        # Give autoloaders a change to act
+        # Give autoloaders a chance to act
         begin
           klass = namespace.const_get(name)
         rescue NameError

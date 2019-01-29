@@ -3,6 +3,7 @@ require "dry/core/cache"
 
 module Dry
   class View
+    # @api private
     class Path
       extend Dry::Core::Cache
       include Dry::Equalizer(:dir, :root)

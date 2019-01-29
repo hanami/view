@@ -2,6 +2,9 @@ require 'dry-equalizer'
 
 module Dry
   class View
+    # An exposure defined on a view
+    #
+    # @api private
     class Exposure
       include Dry::Equalizer(:name, :proc, :object, :options)
 

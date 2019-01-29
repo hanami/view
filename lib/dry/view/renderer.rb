@@ -4,6 +4,7 @@ require_relative 'tilt'
 
 module Dry
   class View
+    # @api private
     class Renderer
       PARTIAL_PREFIX = "_".freeze
       PATH_DELIMITER = "/".freeze
