@@ -50,7 +50,7 @@ module Dry
 
       def lookup(name)
         paths.inject(false) { |_, path|
-          result = path.lookup(name, format)
+          result = path.lookup(name, format, include_shared: false)
           break result if result
         }
       end
