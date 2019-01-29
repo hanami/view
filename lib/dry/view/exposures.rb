@@ -1,9 +1,11 @@
 require "tsort"
+require "dry/equalizer"
 require "dry/view/exposure"
 
 module Dry
   class View
     class Exposures
+      include Dry::Equalizer(:exposures)
       include TSort
 
       attr_reader :exposures

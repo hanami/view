@@ -20,7 +20,7 @@ module Dry
 
     DEFAULT_RENDERER_OPTIONS = {default_encoding: 'utf-8'.freeze}.freeze
 
-    include Dry::Equalizer(:config)
+    include Dry::Equalizer(:config, :exposures)
 
     extend Dry::Configurable
 
@@ -46,8 +46,6 @@ module Dry
 
     setting :scope_builder, ScopeBuilder
     setting :scope_namespace
-
-    attr_reader :exposures
 
     # @api private
     def self.inherited(klass)
@@ -114,6 +112,8 @@ module Dry
     def self.exposures
       @exposures ||= Exposures.new
     end
+
+    attr_reader :exposures
 
     # @api public
     def initialize
