@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "dry/view/context"
 require "dry/view/part"
 require "dry/view/part_builder"

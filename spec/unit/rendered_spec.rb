@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/view/rendered'
 
 RSpec.describe Dry::View::Rendered do

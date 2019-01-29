@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "dry/core/cache"
 require "dry/equalizer"
 require_relative "tilt"
@@ -6,8 +8,8 @@ module Dry
   class View
     # @api private
     class Renderer
-      PARTIAL_PREFIX = "_".freeze
-      PATH_DELIMITER = "/".freeze
+      PARTIAL_PREFIX = "_"
+      PATH_DELIMITER = "/"
 
       extend Dry::Core::Cache
 

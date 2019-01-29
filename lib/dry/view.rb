@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "dry/configurable"
 require "dry/core/cache"
 require "dry/equalizer"
@@ -35,7 +37,7 @@ module Dry
     UndefinedTemplateError = Class.new(StandardError)
 
     # @api private
-    DEFAULT_RENDERER_OPTIONS = {default_encoding: 'utf-8'.freeze}.freeze
+    DEFAULT_RENDERER_OPTIONS = {default_encoding: "utf-8"}.freeze
 
     include Dry::Equalizer(:config, :exposures)
 
@@ -92,7 +94,7 @@ module Dry
     #   @param dir [String] directory name
     #   @api public
     # @!scope class
-    setting :layouts_dir, "layouts".freeze
+    setting :layouts_dir, "layouts"
 
     # @overload config.scope=(scope_class)
     #   Set the scope class to use when rendering the view's template.
