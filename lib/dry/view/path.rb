@@ -9,9 +9,9 @@ module Dry
 
       attr_reader :dir, :root
 
-      def initialize(dir, options = {})
+      def initialize(dir, root: dir)
         @dir = Pathname(dir)
-        @root = Pathname(options.fetch(:root, dir))
+        @root = root
       end
 
       def lookup(name, format, include_shared: true)
