@@ -129,7 +129,9 @@ RSpec.describe Hanami::View do
           include Hanami::View
           configuration.default_encoding "wrong"
 
-          def self.name; "EncodingView"; end
+          def self.name
+            "EncodingView"
+          end
         end.render(format: :html)
       end.to raise_error(ArgumentError, "unknown encoding name - wrong")
     end
