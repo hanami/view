@@ -13,7 +13,7 @@ module Hanami
       #
       # @since 1.1.0
       # @api private
-      KNOWN_RENDER_TYPES = [:partial, :template].freeze
+      KNOWN_RENDER_TYPES = %i[partial template].freeze
 
       # Scope for layout rendering
       #
