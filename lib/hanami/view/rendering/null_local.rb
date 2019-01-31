@@ -13,7 +13,7 @@ module Hanami
       class NullLocal < Utils::BasicObject
         # @since 0.7.0
         # @api private
-        TO_STR = "".freeze
+        TO_STR = ""
 
         # @since 0.7.0
         # @api private

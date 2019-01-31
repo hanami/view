@@ -22,7 +22,7 @@ module Hanami
         #
         # @example
         #   "_sidebar.html.erb"
-        PREFIX = "_".freeze
+        PREFIX = "_"
 
         # Find a template for a partial. Initially it will look for the
         # partial template in the framework configuration where it may

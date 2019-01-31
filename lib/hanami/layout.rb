@@ -52,7 +52,7 @@ module Hanami
       #
       # @see Hanami::Layout::ClassMethods#suffix
       # @see Hanami::Layout::ClassMethods#template
-      SUFFIX = "_layout".freeze
+      SUFFIX = "_layout"
 
       # A registry that holds all the registered layouts.
       #

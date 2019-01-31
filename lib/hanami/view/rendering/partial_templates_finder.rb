@@ -17,11 +17,11 @@ module Hanami
         #
         # @api private
         # @since 0.7.0
-        PARTIAL_PATTERN = "_*".freeze
+        PARTIAL_PATTERN = "_*"
 
         # @api private
         # @since 0.7.0
-        PARTIAL_PARTS_SEPARATOR = ".".freeze
+        PARTIAL_PARTS_SEPARATOR = "."
 
         # @api private
         # @since 0.7.0

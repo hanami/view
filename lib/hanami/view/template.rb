@@ -52,7 +52,7 @@ module Hanami
       private
 
       def slim?(template)
-        File.extname(template) == ".slim".freeze
+        File.extname(template) == ".slim"
       end
     end
   end

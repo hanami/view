@@ -18,7 +18,7 @@ module Hanami
         #
         # @api private
         # @since 0.1.0
-        SUFFIX = "Layout".freeze
+        SUFFIX = "Layout"
 
         # Find a layout from the given name.
         #

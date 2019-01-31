@@ -10,7 +10,7 @@ module Hanami
       class TemplateName
         # @since 0.2.0
         # @api private
-        NAMESPACE_SEPARATOR = "::".freeze
+        NAMESPACE_SEPARATOR = "::"
 
         # @since 0.2.0
         # @api private

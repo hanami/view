@@ -30,7 +30,7 @@ module Hanami
       #
       # @since 0.2.0
       # @api private
-      DEFAULT_ROOT = ".".freeze
+      DEFAULT_ROOT = "."
 
       # Default encoding
       #
