@@ -92,7 +92,7 @@ module Hanami
       #   Hanami::View::Configuration.for(MyApp::Views::Dashboard::Index)
       #     # => will return from MyApp::View
       def self.for(base)
-        # TODO this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
+        # TODO: this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
         namespace = Utils::String.namespace(base)
         framework = Utils::Class.load("#{namespace}::View") || Utils::Class.load!("Hanami::View")
         framework.configuration

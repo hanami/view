@@ -40,7 +40,7 @@ RSpec.describe "Framework configuration" do
   end
 
   it "allow views to specify a layout"
-  # TODO move all the values into the configuration:
+  # TODO: move all the values into the configuration:
   #
   #   * format
   #   * layout
