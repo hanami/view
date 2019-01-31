@@ -156,7 +156,7 @@ module Hanami
     #
     # @see Hanami::View::Rendering#render
     def render
-      template.render(@scope, &proc{ @rendered })
+      template.render(@scope, &proc { @rendered })
     end
 
     # It tries to invoke a method for the view or a local for the given key.

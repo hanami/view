@@ -59,8 +59,8 @@ module Hanami
       # @since 1.1.0
       # @api private
       def initialize(known_types, supplied_options)
-        known_types_list = known_types.map{ |t| "':#{t}'" }.join(", ")
-        supplied_options_list = supplied_options.keys.map{ |t| "':#{t}'" }.join(", ")
+        known_types_list = known_types.map { |t| "':#{t}'" }.join(", ")
+        supplied_options_list = supplied_options.keys.map { |t| "':#{t}'" }.join(", ")
         super("Calls to `render` in a layout must include one of #{known_types_list}. Found #{supplied_options_list}.")
       end
     end
