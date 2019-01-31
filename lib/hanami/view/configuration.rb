@@ -486,7 +486,7 @@ module Hanami
       end
 
       # @api private
-      alias_method :unload!, :reset!
+      alias unload! reset!
 
       protected
 
