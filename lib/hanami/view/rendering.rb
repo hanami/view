@@ -202,7 +202,7 @@ module Hanami
         #   view     = IndexView.new(template, {article: article})
         #
         #   view.article # => #<Article:0x007fb0bbd3b6e8>
-        def method_missing(method_name, *)
+        def method_missing(method_name, *) # rubocop:disable Style/MethodMissingSuper
           @scope.__send__(method_name)
         end
       end
