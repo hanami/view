@@ -463,7 +463,7 @@ module Hanami
         root             DEFAULT_ROOT
         default_encoding DEFAULT_ENCODING
 
-        @partials   = Hash.new { |h, k| h[k] = Hash.new }
+        @partials   = Hash.new { |h, k| h[k] = {} }
         @views      = Set.new
         @layouts    = Set.new
         @load_paths = Utils::LoadPaths.new(root)
