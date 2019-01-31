@@ -58,7 +58,7 @@ module Hanami
         # @since 0.7.0
         # @api private
         def method_missing(method_name, *) # rubocop:disable Style/MethodMissingSuper
-          if method_name.match(/\?\z/)
+          if method_name.match?(/\?\z/) # rubocop:disable Performance/EndWith
             false
           else
             self.class.new("#{@local}.#{method_name}")
