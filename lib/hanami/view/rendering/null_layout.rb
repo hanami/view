@@ -31,7 +31,7 @@ module Hanami
         #
         # @see Hanami::Layout#initialize
         # @see Hanami::View::Rendering#render
-        def initialize(scope, rendered)
+        def initialize(_scope, rendered)
           @rendered = rendered
         end
 

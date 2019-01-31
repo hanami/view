@@ -76,7 +76,7 @@ module Hanami
         #
         # @see Hanami::Layout#render
         # @see Hanami::View::Rendering#render
-        def render(scope, locals = {})
+        def render(_scope, _locals = {})
           yield
         end
       end

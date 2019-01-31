@@ -69,7 +69,7 @@ module Hanami
 
         # @since 0.7.0
         # @api private
-        def respond_to_missing?(method_name, include_all)
+        def respond_to_missing?(_method_name, _include_all)
           true
         end
 
