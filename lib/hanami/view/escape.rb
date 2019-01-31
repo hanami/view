@@ -8,6 +8,9 @@ module Hanami
     #
     # @since 0.4.0
     module Escape
+      # Escape public interface
+      #
+      # @since 0.4.0
       module InstanceMethods
         private
 
@@ -119,6 +122,10 @@ module Hanami
         end
       end
 
+      # Escape logic wrapper
+      #
+      # @since 0.7.0
+      # @api private
       module Presentable
         # Inject escape logic into the given class.
         #

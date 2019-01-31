@@ -21,6 +21,9 @@ module Hanami
         end
       end
 
+      # Instance level view interface
+      #
+      # @since 0.1.0
       module InstanceMethods
         # Initialize a view
         #
