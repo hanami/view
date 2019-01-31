@@ -34,9 +34,9 @@ RSpec.describe Hanami::View::Rendering::Scope do
   describe "#inspect" do
     it "returns proper inspect String" do
       scope = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new, x: 23)
-      expect(scope.inspect).to include "@view"
-      expect(scope.inspect).to include "@locals"
-      expect(scope.inspect).to include "%x" % (scope.object_id << 1)
+      expect(scope.inspect).to include("@view")
+      expect(scope.inspect).to include("@locals")
+      expect(scope.inspect).to include("%<id>x" % { id: scope.object_id << 1 })
     end
   end
 end

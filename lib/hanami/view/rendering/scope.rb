@@ -35,7 +35,7 @@ module Hanami
         #
         # @since 0.3.0
         def inspect
-          base = "#<#{self.class}: #{'%x' % (self.object_id << 1)}"
+          base = "#<#{self.class}: #{'%<id>x' % { id: self.object_id << 1 }}"
           base += " @view=\"#{@view}\"" if @view
           base += " @locals=\"#{@locals}\"" if @locals
           base + ">"

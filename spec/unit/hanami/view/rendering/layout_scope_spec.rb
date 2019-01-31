@@ -35,9 +35,9 @@ RSpec.describe Hanami::View::Rendering::LayoutScope do
 
   describe "#inspect" do
     it "returns proper inspect String" do
-      expect(@scope.inspect).to include "@layout"
-      expect(@scope.inspect).to include "@scope"
-      expect(@scope.inspect).to include "%x" % (@scope.object_id << 1)
+      expect(@scope.inspect).to include("@layout")
+      expect(@scope.inspect).to include("@scope")
+      expect(@scope.inspect).to include("%<id>x" % { id: @scope.object_id << 1 })
     end
   end
 
