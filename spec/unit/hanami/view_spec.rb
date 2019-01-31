@@ -139,7 +139,7 @@ RSpec.describe Hanami::View do
     end
 
     it "renders a template according to the requested format" do
-      articles = [ OpenStruct.new(title: "Man on the Moon!") ]
+      articles = [OpenStruct.new(title: "Man on the Moon!")]
 
       rendered = Articles::Index.render(format: :json, articles: articles)
       expect(rendered).to match %("title":"Man on the Moon!")
@@ -150,7 +150,7 @@ RSpec.describe Hanami::View do
 
     # this test was added to show that ../templates/members/articles/index.html.erb interferres with the normal behavior
     it "renders the correct template when a subdirectory also exists" do
-      articles = [ OpenStruct.new(title: "Man on the Moon!") ]
+      articles = [OpenStruct.new(title: "Man on the Moon!")]
 
       rendered = Articles::Index.render(format: :html, articles: articles)
       expect(rendered).not_to match %(<h1>Wrong Article Template</h1>)
@@ -316,7 +316,7 @@ RSpec.describe Hanami::View do
 
     describe "layout" do
       it "renders contents from layout" do
-        articles = [ OpenStruct.new(title: "A Wonderful Day!") ]
+        articles = [OpenStruct.new(title: "A Wonderful Day!")]
 
         rendered = Articles::Index.render(format: :html, articles: articles)
         expect(rendered).to match %(<h1>A Wonderful Day!</h1>)
@@ -325,14 +325,14 @@ RSpec.describe Hanami::View do
       end
 
       it "safely ignores missing locals" do
-        articles = [ OpenStruct.new(title: "A Wonderful Day!") ]
+        articles = [OpenStruct.new(title: "A Wonderful Day!")]
 
         rendered = Articles::Index.render(format: :html, articles: articles)
         expect(rendered).not_to match %(<h2>Your plan is overdue.</h2>)
       end
 
       it "uses optional locals, if present" do
-        articles = [ OpenStruct.new(title: "A Wonderful Day!") ]
+        articles = [OpenStruct.new(title: "A Wonderful Day!")]
         plan     =   OpenStruct.new(overdue?: true)
 
         rendered = Articles::Index.render(format: :html, plan: plan, articles: articles)

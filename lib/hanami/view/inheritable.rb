@@ -49,7 +49,7 @@ module Hanami
       # @api private
       # @since 0.1.0
       def views
-        @views ||= [ self ] + subclasses.to_a
+        @views ||= [self] + subclasses.to_a
       end
     end
   end
