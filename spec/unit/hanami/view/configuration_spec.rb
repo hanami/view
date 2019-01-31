@@ -390,7 +390,7 @@ RSpec.describe Hanami::View::Configuration do
 
       expect(@configuration.load_paths).to include root
       expect(@configuration.layout).to eq Hanami::View::Rendering::NullLayout
-      @configuration.default_encoding        "utf-8"
+      @configuration.default_encoding "utf-8"
       expect(@configuration.views).to be_empty
       expect(@configuration.layouts).to be_empty
       expect(@configuration.partials).to be_empty

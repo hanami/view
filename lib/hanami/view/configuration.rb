@@ -443,7 +443,7 @@ module Hanami
       # @since 0.7.0
       # @api private
       def find_partial(relative_partial_path, template_name, format)
-        partials_for_view = partials.has_key?(relative_partial_path) ?  partials[relative_partial_path] : partials[template_name]
+        partials_for_view = partials.has_key?(relative_partial_path) ? partials[relative_partial_path] : partials[template_name]
         partials_for_view ? partials_for_view[format.to_sym] : nil
       end
 

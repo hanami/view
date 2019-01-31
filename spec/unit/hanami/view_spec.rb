@@ -333,7 +333,7 @@ RSpec.describe Hanami::View do
 
       it "uses optional locals, if present" do
         articles = [OpenStruct.new(title: "A Wonderful Day!")]
-        plan     =   OpenStruct.new(overdue?: true)
+        plan     = OpenStruct.new(overdue?: true)
 
         rendered = Articles::Index.render(format: :html, plan: plan, articles: articles)
         expect(rendered).to match %(<h2>Your plan is overdue.</h2>)
