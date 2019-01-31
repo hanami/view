@@ -1,5 +1,5 @@
-require 'hanami/view/rendering/layout_registry'
-require 'hanami/view/rendering/view_finder'
+require "hanami/view/rendering/layout_registry"
+require "hanami/view/rendering/view_finder"
 
 module Hanami
   module View

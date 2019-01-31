@@ -1,8 +1,8 @@
 RSpec.describe Hanami::Layout do
-  include_context 'reload configuration'
+  include_context "reload configuration"
 
-  describe 'rendering from layout' do
-    it 'renders partial' do
+  describe "rendering from layout" do
+    it "renders partial" do
       rendered = IndexView.render(format: :html)
       expect(rendered).to match %(<div id="sidebar"></div>)
     end
@@ -25,7 +25,7 @@ RSpec.describe Hanami::Layout do
   end
 
   # Bug https://github.com/hanami/view/issues/153
-  it 'can be rendered directly' do
+  it "can be rendered directly" do
     rendered = LocalsLayout.new({ format: :html }, "contents").render
 
     expect(rendered).to include("Locals")
@@ -34,7 +34,7 @@ RSpec.describe Hanami::Layout do
 
   # Bug https://github.com/hanami/view/issues/153
   # See https://github.com/hanami/view/pull/156
-  it 'can be rendered directly (legacy signature)' do
+  it "can be rendered directly (legacy signature)" do
     template = Hanami::View::Template.new("spec/support/fixtures/templates/locals.html.haml")
     layout = LocalsLayout.new(template, {})
     rendered = layout.render
@@ -43,36 +43,36 @@ RSpec.describe Hanami::Layout do
     expect(rendered).to include("<body>\n\n</body>")
   end
 
-  it 'concrete methods are available in layout template' do
+  it "concrete methods are available in layout template" do
     rendered = Store::Views::Home::Index.render(format: :html)
     expect(rendered).to match %(script)
     expect(rendered).to match %(yeah)
   end
 
-  it 'methods defined in layout are available from the view' do
+  it "methods defined in layout are available from the view" do
     rendered = Store::Views::Home::Index.render(format: :html)
     expect(rendered).to match %(Joe Blogs)
   end
 
-  it 'renders content to return value from view' do
+  it "renders content to return value from view" do
     rendered = Store::Views::Products::Show.render(format: :html)
     expect(rendered).to match %(Product)
     expect(rendered).to match %(<script src="/javascripts/product-tracking.js"></script>)
   end
 
-  it 'renders content to return value from layout' do
+  it "renders content to return value from layout" do
     rendered = Store::Views::Products::Show.render(format: :html)
     expect(rendered).to match %(Product)
     expect(rendered).to match %(<meta name="hanamirb-version" content="0.3.1">)
   end
 
-  it 'renders optional content from layout' do
+  it "renders optional content from layout" do
     rendered = Store::Views::Products::Show.render(format: :html, flash: { notice: "Product successfully updated" })
     expect(rendered).to match %(<div class="flash-notice">Product successfully updated</div>)
   end
 
-  describe 'disable layout in view' do
-    it 'return NullLayout' do
+  describe "disable layout in view" do
+    it "return NullLayout" do
       expect(DisabledLayoutView.layout).to eq Hanami::View::Rendering::NullLayout
     end
   end

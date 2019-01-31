@@ -1,4 +1,4 @@
-require 'hanami/view/rendering/template_finder'
+require "hanami/view/rendering/template_finder"
 
 module Hanami
   module View

@@ -1,4 +1,4 @@
-require 'tilt'
+require "tilt"
 
 module Hanami
   module View

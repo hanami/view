@@ -1,4 +1,4 @@
-require 'hanami/utils/escape'
+require "hanami/utils/escape"
 
 module Hanami
   module View

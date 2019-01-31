@@ -1,5 +1,5 @@
-require 'hanami/view/template'
-require 'hanami/view/rendering/partial_file'
+require "hanami/view/template"
+require "hanami/view/rendering/partial_file"
 
 module Hanami
   module View
@@ -15,11 +15,11 @@ module Hanami
         #
         # @api private
         # @since 0.7.0
-        PARTIAL_PATTERN = '_*'.freeze
+        PARTIAL_PATTERN = "_*".freeze
 
         # @api private
         # @since 0.7.0
-        PARTIAL_PARTS_SEPARATOR = '.'.freeze
+        PARTIAL_PARTS_SEPARATOR = ".".freeze
 
         # @api private
         # @since 0.7.0

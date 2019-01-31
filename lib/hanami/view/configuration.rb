@@ -1,10 +1,10 @@
-require 'set'
-require 'hanami/utils/class'
-require 'hanami/utils/kernel'
-require 'hanami/utils/string'
-require 'hanami/utils/load_paths'
-require 'hanami/view/rendering/layout_finder'
-require 'hanami/view/rendering/partial_templates_finder'
+require "set"
+require "hanami/utils/class"
+require "hanami/utils/kernel"
+require "hanami/utils/string"
+require "hanami/utils/load_paths"
+require "hanami/view/rendering/layout_finder"
+require "hanami/view/rendering/partial_templates_finder"
 
 module Hanami
   module View
@@ -28,7 +28,7 @@ module Hanami
       #
       # @since 0.2.0
       # @api private
-      DEFAULT_ROOT = '.'.freeze
+      DEFAULT_ROOT = ".".freeze
 
       # Default encoding
       #
@@ -92,7 +92,7 @@ module Hanami
       def self.for(base)
         # TODO this implementation is similar to Hanami::Controller::Configuration consider to extract it into Hanami::Utils
         namespace = Utils::String.namespace(base)
-        framework = Utils::Class.load("#{namespace}::View") || Utils::Class.load!('Hanami::View')
+        framework = Utils::Class.load("#{namespace}::View") || Utils::Class.load!("Hanami::View")
         framework.configuration
       end
 
@@ -376,7 +376,7 @@ module Hanami
         if block_given?
           @modules.push(blk)
         else
-          raise ArgumentError.new('Please provide a block')
+          raise ArgumentError.new("Please provide a block")
         end
       end
 

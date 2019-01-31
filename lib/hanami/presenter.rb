@@ -1,4 +1,4 @@
-require 'hanami/view/escape'
+require "hanami/view/escape"
 
 module Hanami
   # Presenter pattern implementation

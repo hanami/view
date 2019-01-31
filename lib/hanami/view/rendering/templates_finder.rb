@@ -1,4 +1,4 @@
-require 'hanami/view/template'
+require "hanami/view/template"
 
 module Hanami
   module View
@@ -14,19 +14,19 @@ module Hanami
         #
         # @api private
         # @since 0.1.0
-        FORMAT    = '*'.freeze
+        FORMAT    = "*".freeze
 
         # Default template engines
         #
         # @api private
         # @since 0.1.0
-        ENGINES   = '*'.freeze
+        ENGINES   = "*".freeze
 
         # Recursive pattern
         #
         # @api private
         # @since 0.2.0
-        RECURSIVE = '**'.freeze
+        RECURSIVE = "**".freeze
 
         # Initialize a finder
         #

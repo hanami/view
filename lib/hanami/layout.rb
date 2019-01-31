@@ -1,8 +1,8 @@
-require 'hanami/utils/class_attribute'
-require 'hanami/view/rendering/layout_registry'
-require 'hanami/view/rendering/layout_scope'
-require 'hanami/view/rendering/null_layout'
-require 'hanami/view/rendering/null_view'
+require "hanami/utils/class_attribute"
+require "hanami/view/rendering/layout_registry"
+require "hanami/view/rendering/layout_scope"
+require "hanami/view/rendering/null_layout"
+require "hanami/view/rendering/null_view"
 
 module Hanami
   # Layout
@@ -50,7 +50,7 @@ module Hanami
       #
       # @see Hanami::Layout::ClassMethods#suffix
       # @see Hanami::Layout::ClassMethods#template
-      SUFFIX = '_layout'.freeze
+      SUFFIX = "_layout".freeze
 
       # A registry that holds all the registered layouts.
       #
@@ -79,7 +79,7 @@ module Hanami
       #
       # ApplicationLayout.template # => 'application'
       def template
-        super.sub(suffix, '')
+        super.sub(suffix, "")
       end
 
       # Template name suffix

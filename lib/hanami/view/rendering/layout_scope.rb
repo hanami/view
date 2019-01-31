@@ -1,6 +1,6 @@
-require 'hanami/view/rendering/null_local'
-require 'hanami/view/rendering/options'
-require 'hanami/utils/escape'
+require "hanami/view/rendering/null_local"
+require "hanami/view/rendering/options"
+require "hanami/utils/escape"
 
 module Hanami
   module View

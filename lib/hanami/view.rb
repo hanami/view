@@ -1,15 +1,15 @@
-require 'set'
-require 'pathname'
-require 'hanami/utils/class_attribute'
-require 'hanami/view/version'
-require 'hanami/view/configuration'
-require 'hanami/view/inheritable'
-require 'hanami/view/rendering'
-require 'hanami/view/escape'
-require 'hanami/view/dsl'
-require 'hanami/view/errors'
-require 'hanami/layout'
-require 'hanami/presenter'
+require "set"
+require "pathname"
+require "hanami/utils/class_attribute"
+require "hanami/view/version"
+require "hanami/view/configuration"
+require "hanami/view/inheritable"
+require "hanami/view/rendering"
+require "hanami/view/escape"
+require "hanami/view/dsl"
+require "hanami/view/errors"
+require "hanami/layout"
+require "hanami/presenter"
 
 # Hanami
 #
@@ -200,7 +200,7 @@ module Hanami
     #
     #   Hanami::View.configuration.root # => #<Pathname:.>
     #   MyApp::View.configuration.root # => #<Pathname:/path/to/root>
-    def self.duplicate(mod, views = 'Views', &blk)
+    def self.duplicate(mod, views = "Views", &blk)
       dupe.tap do |duplicated|
         mod.module_eval %{ module #{ views }; end } if views
         mod.module_eval %{
@@ -209,7 +209,7 @@ module Hanami
         }
 
         duplicated.configure do
-          namespace [mod, views].compact.join '::'
+          namespace [mod, views].compact.join "::"
         end
 
         duplicated.configure(&blk) if block_given?

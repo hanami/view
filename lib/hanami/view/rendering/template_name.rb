@@ -1,4 +1,4 @@
-require 'hanami/utils/string'
+require "hanami/utils/string"
 
 module Hanami
   module View
@@ -8,7 +8,7 @@ module Hanami
       class TemplateName
         # @since 0.2.0
         # @api private
-        NAMESPACE_SEPARATOR = '::'.freeze
+        NAMESPACE_SEPARATOR = "::".freeze
 
         # @since 0.2.0
         # @api private
@@ -42,7 +42,7 @@ module Hanami
         # @since 0.2.0
         # @api private
         def replace!(token)
-          @name.gsub!(%r{\A#{ token }#{ NAMESPACE_SEPARATOR }}, '')
+          @name.gsub!(%r{\A#{ token }#{ NAMESPACE_SEPARATOR }}, "")
         end
       end
     end

@@ -1,5 +1,5 @@
-require 'hanami/view/rendering/template_name'
-require 'hanami/view/rendering/layout_finder'
+require "hanami/view/rendering/template_name"
+require "hanami/view/rendering/layout_finder"
 
 module Hanami
   module View

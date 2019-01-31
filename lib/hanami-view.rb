@@ -1,1 +1,1 @@
-require 'hanami/view'
+require "hanami/view"

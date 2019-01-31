@@ -1,4 +1,4 @@
-require 'hanami/view/rendering/partial_finder'
+require "hanami/view/rendering/partial_finder"
 
 module Hanami
   module View

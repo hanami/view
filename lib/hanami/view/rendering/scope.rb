@@ -1,7 +1,7 @@
-require 'hanami/utils/escape'
-require 'hanami/view/rendering/layout_scope'
-require 'hanami/view/rendering/template'
-require 'hanami/view/rendering/partial'
+require "hanami/utils/escape"
+require "hanami/view/rendering/layout_scope"
+require "hanami/view/rendering/template"
+require "hanami/view/rendering/partial"
 
 module Hanami
   module View

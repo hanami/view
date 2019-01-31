@@ -1,6 +1,6 @@
-require 'hanami/utils/string'
-require 'hanami/utils/class'
-require 'hanami/view/rendering/null_layout'
+require "hanami/utils/string"
+require "hanami/utils/class"
+require "hanami/view/rendering/null_layout"
 
 module Hanami
   module View
@@ -16,7 +16,7 @@ module Hanami
         #
         # @api private
         # @since 0.1.0
-        SUFFIX = 'Layout'.freeze
+        SUFFIX = "Layout".freeze
 
         # Find a layout from the given name.
         #
