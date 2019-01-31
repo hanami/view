@@ -228,7 +228,7 @@ RSpec.describe Hanami::View do
     end
 
     it "decorates locals" do
-      map = Map.new(["Rome", "Cambridge"])
+      map = Map.new(%w[Rome Cambridge])
 
       rendered = Dashboard::Index.render(format: :html, map: map)
       expect(rendered).to match %(<h1>Map</h1>)
@@ -236,14 +236,14 @@ RSpec.describe Hanami::View do
     end
 
     it "safely ignores missing locals" do
-      map = Map.new(["Rome", "Cambridge"])
+      map = Map.new(%w[Rome Cambridge])
 
       rendered = Dashboard::Index.render(format: :html, map: map)
       expect(rendered).not_to match %(<h3>Annotations</h3>)
     end
 
     it "uses optional locals, if present" do
-      map         = Map.new(["Rome", "Cambridge"])
+      map         = Map.new(%w[Rome Cambridge])
       annotations = OpenStruct.new(written?: true)
 
       rendered = Dashboard::Index.render(format: :html, annotations: annotations, map: map)
