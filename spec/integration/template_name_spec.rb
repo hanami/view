@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "Template name" do
   before do
     ##

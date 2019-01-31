@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Hanami::View::Rendering::LayoutScope do
   before do
     layout = LayoutForScopeTest.new

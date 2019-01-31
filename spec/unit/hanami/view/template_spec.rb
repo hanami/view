@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Hanami::View::Template do
   describe "#initialize" do
     it "accepts one argument" do

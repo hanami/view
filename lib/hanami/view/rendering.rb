@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "hanami/view/rendering/registry"
 require "hanami/view/rendering/scope"
 require "hanami/view/rendering/subscope"

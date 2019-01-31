@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Hanami::View::Rendering::NullView do
   subject { described_class.new }
 

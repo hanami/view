@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hanami
   module View
     # Inheriting mechanisms

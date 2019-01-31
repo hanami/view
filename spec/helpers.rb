@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Helpers
   module AssetTagHelpers
     def javascript_tag(source)

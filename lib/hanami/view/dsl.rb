@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "hanami/view/rendering/template_name"
 require "hanami/view/rendering/layout_finder"
 

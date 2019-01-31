@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "hanami/utils/escape"
 require "hanami/view/rendering/layout_scope"
 require "hanami/view/rendering/template"
@@ -34,9 +36,9 @@ module Hanami
         # @since 0.3.0
         def inspect
           base = "#<#{ self.class }: #{'%x' % (self.object_id << 1)}"
-          base << " @view=\"#{@view}\"" if @view
-          base << " @locals=\"#{@locals}\"" if @locals
-          base << ">"
+          base += " @view=\"#{@view}\"" if @view
+          base += " @locals=\"#{@locals}\"" if @locals
+          base += ">"
         end
 
         # Returns the requested format.

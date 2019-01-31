@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Hanami::Presenter do
   subject do
     MapPresenter.new(map)

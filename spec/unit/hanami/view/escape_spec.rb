@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Hanami::View::Escape do
   before do
     path     = Pathname.new("#{TEMPLATE_ROOT_DIRECTORY}/users/show.html.erb")

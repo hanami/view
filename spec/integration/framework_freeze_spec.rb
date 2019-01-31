@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "Framework freeze" do
   describe "Hanami::View" do
     before do

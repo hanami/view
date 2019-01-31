@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "hanami/view/rendering/null_local"
 require "hanami/view/rendering/options"
 require "hanami/utils/escape"
@@ -48,9 +50,9 @@ module Hanami
         # @since 0.3.0
         def inspect
           base = "#<#{ self.class }:#{'%x' % (self.object_id << 1)}"
-          base << " @layout=\"#{@layout.inspect}\"" if @layout
-          base << " @scope=\"#{@scope.inspect}\"" if @scope
-          base << ">"
+          base += " @layout=\"#{@layout.inspect}\"" if @layout
+          base += " @scope=\"#{@scope.inspect}\"" if @scope
+          base += ">"
         end
 
         # Render a partial or a template within a layout template.

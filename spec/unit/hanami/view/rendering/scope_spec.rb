@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Hanami::View::Rendering::Scope do
   describe "#respond_to?" do
     describe "when the view implements the method" do

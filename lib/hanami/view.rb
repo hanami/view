@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "set"
 require "pathname"
 require "hanami/utils/class_attribute"

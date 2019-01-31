@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "hanami/view/rendering/null_template"
 require "hanami/view/rendering/templates_finder"
 

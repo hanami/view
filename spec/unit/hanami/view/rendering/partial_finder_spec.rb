@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Hanami::View::Rendering::PartialFinder do
   include_context "reload configuration"
 

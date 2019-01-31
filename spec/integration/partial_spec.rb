@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "Framework configuration" do
   it "App1 can render a view containing one of its own partials" do
     rendered = App1::Views::Home::Index.render(format: :html)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "hanami/view/template"
 
 module Hanami

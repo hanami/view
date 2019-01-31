@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Hanami::View::Configuration do
   before do
     Hanami::View.unload!

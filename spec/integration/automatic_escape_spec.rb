@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe "Automatic escape" do
   before do
     @user     = User.new(%(<script>alert('username')</script>))

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_context "reload configuration" do
   before do
     Hanami::View.unload!

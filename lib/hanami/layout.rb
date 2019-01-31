@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "hanami/utils/class_attribute"
 require "hanami/view/rendering/layout_registry"
 require "hanami/view/rendering/layout_scope"

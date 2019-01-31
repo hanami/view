@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Hanami::View::Rendering::NullLocal do
   before do
     @null = Hanami::View::Rendering::NullLocal.new(:result)

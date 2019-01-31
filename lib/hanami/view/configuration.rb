@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "set"
 require "hanami/utils/class"
 require "hanami/utils/kernel"
