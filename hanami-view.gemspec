@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.version       = Hanami::View::VERSION
   spec.authors       = ["Luca Guidi"]
   spec.email         = ["me@lucaguidi.com"]
-  spec.description   = %q(View layer for Hanami)
-  spec.summary       = %q(View layer for Hanami, with a separation between views and templates)
+  spec.description   = "View layer for Hanami"
+  spec.summary       = "View layer for Hanami, with a separation between views and templates"
   spec.homepage      = "http://hanamirb.org"
   spec.license       = "MIT"
 
