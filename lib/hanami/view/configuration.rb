@@ -25,6 +25,8 @@ module Hanami
     # layouts to specify exceptions.
     #
     # @since 0.2.0
+    #
+    # rubocop:disable Metrics/ClassLength
     class Configuration
       # Default root
       #
@@ -503,5 +505,6 @@ module Hanami
       # @api private
       attr_writer :modules
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
