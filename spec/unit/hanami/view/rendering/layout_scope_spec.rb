@@ -90,5 +90,4 @@ RSpec.describe Hanami::View::Rendering::LayoutScope do
       end
     end
   end
-
 end

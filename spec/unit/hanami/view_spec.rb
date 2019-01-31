@@ -102,7 +102,6 @@ RSpec.describe Hanami::View do
     #     expect(ApplicationLayout.send(:registry).frozen?).to eq true
     #   end
     # end
-
   end
 
   describe "rendering" do
@@ -576,5 +575,4 @@ RSpec.describe Hanami::View do
       end
     end
   end
-
 end
