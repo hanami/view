@@ -20,6 +20,8 @@ module Hanami
   # View
   #
   # @since 0.1.0
+  #
+  # rubocop:disable Metrics/MethodLength
   module View
     include Utils::ClassAttribute
     # Framework configuration
@@ -266,4 +268,5 @@ module Hanami
       configuration.load!
     end
   end
+  # rubocop:enable Metrics/MethodLength
 end
