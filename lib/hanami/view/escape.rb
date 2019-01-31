@@ -1,4 +1,6 @@
-require 'hanami/utils/escape'
+# frozen_string_literal: true
+
+require "hanami/utils/escape"
 
 module Hanami
   module View
@@ -6,6 +8,9 @@ module Hanami
     #
     # @since 0.4.0
     module Escape
+      # Escape public interface
+      #
+      # @since 0.4.0
       module InstanceMethods
         private
 
@@ -117,6 +122,10 @@ module Hanami
         end
       end
 
+      # Escape logic wrapper
+      #
+      # @since 0.7.0
+      # @api private
       module Presentable
         # Inject escape logic into the given class.
         #
@@ -143,9 +152,9 @@ module Hanami
         #
         # @api private
         # @since 0.7.0
-        def method_missing(m, *args, &blk)
-          if @object.respond_to?(m)
-            ::Hanami::View::Escape.html(@object.__send__(m, *args, &blk))
+        def method_missing(method_name, *args, &blk)
+          if @object.respond_to?(method_name)
+            ::Hanami::View::Escape.html(@object.__send__(method_name, *args, &blk))
           else
             super
           end
@@ -155,8 +164,8 @@ module Hanami
         #
         # @api private
         # @since 0.3.0
-        def respond_to_missing?(m, include_private = false)
-          @object.respond_to?(m, include_private)
+        def respond_to_missing?(method_name, include_private = false)
+          @object.respond_to?(method_name, include_private)
         end
       end
 
@@ -210,15 +219,15 @@ module Hanami
         visibility = :private if private_method_defined? method_name
         visibility = :protected if protected_method_defined? method_name
 
-        unless autoescape_methods[method_name]
-          prepend Module.new {
-            module_eval %{
-              #{ visibility } def #{ method_name }(*args, &blk); ::Hanami::View::Escape.html super; end
-            }
-          }
+        return if autoescape_methods[method_name]
 
-          autoescape_methods[method_name] = true
-        end
+        prepend(Module.new do
+          module_eval %{
+              #{visibility} def #{method_name}(*args, &blk); ::Hanami::View::Escape.html super; end
+          }, __FILE__, __LINE__ - 2
+        end)
+
+        autoescape_methods[method_name] = true
       end
     end
   end

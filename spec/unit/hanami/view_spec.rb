@@ -1,31 +1,33 @@
-RSpec.describe Hanami::View do
-  include_context 'reload configuration'
+# frozen_string_literal: true
 
-  describe 'initializing' do
+RSpec.describe Hanami::View do
+  include_context "reload configuration"
+
+  describe "initializing" do
     before do
       @view = Class.new do
         include Hanami::View
       end
 
-      @template = Hanami::View::Template.new(__dir__ + '/../../support/fixtures/templates/hello_world.html.erb')
+      @template = Hanami::View::Template.new(__dir__ + "/../../support/fixtures/templates/hello_world.html.erb")
     end
 
-    it 'initializes view without keyword arguments' do
+    it "initializes view without keyword arguments" do
       expect(@view.new(@template).locals).to eq Hash[]
     end
 
-    it 'initializes view with keyword arguments' do
-      expect(@view.new(@template, hello: 'world').locals).to eq({hello: 'world'})
+    it "initializes view with keyword arguments" do
+      expect(@view.new(@template, hello: "world").locals).to eq(hello: "world")
     end
   end
 
-  describe '.load!' do
-    it 'partials must be included in the framework configuration registry but not copied to individual view configurations' do
-      expect(Hanami::View.configuration.partials.keys).to include('shared/_sidebar')
-      expect(Articles::Show.configuration.partials.keys).to_not include('shared/_sidebar')
+  describe ".load!" do
+    it "partials must be included in the framework configuration registry but not copied to individual view configurations" do
+      expect(Hanami::View.configuration.partials.keys).to include("shared/_sidebar")
+      expect(Articles::Show.configuration.partials.keys).to_not include("shared/_sidebar")
     end
 
-    it 'ensures to reload view registry each time load is invoked' do
+    it "ensures to reload view registry each time load is invoked" do
       CardDeck::View.load!
       old = CardDeck::Views::Home::Index.__send__(:registry).object_id
       CardDeck::View.load!
@@ -34,7 +36,7 @@ RSpec.describe Hanami::View do
       expect(current).to_not eq old
     end
 
-    it 'ensures to reload layout registry each time load is invoked' do
+    it "ensures to reload layout registry each time load is invoked" do
       CardDeck::View.load!
       old = CardDeck::ApplicationLayout.__send__(:registry).object_id
       CardDeck::View.load!
@@ -100,45 +102,46 @@ RSpec.describe Hanami::View do
     #     expect(ApplicationLayout.send(:registry).frozen?).to eq true
     #   end
     # end
-
   end
 
-  describe 'rendering' do
-    it 'renders a template' do
+  describe "rendering" do
+    it "renders a template" do
       expect(HelloWorldView.render(format: :html)).to include %(<h1>Hello, World!</h1>)
     end
 
-    it 'renders a template with context binding' do
-      expect(RenderView.render(format: :html, planet: 'Mars')).to include %(<h1>Hello, Mars!</h1>)
+    it "renders a template with context binding" do
+      expect(RenderView.render(format: :html, planet: "Mars")).to include %(<h1>Hello, Mars!</h1>)
     end
 
-    it 'raises error if an unexisting method is referenced' do
+    it "raises error if an unexisting method is referenced" do
       expect { RenderUnknownMethod.render(format: :html) }.to raise_error(NoMethodError, /foo/)
     end
 
     # See https://github.com/hanami/view/issues/76
-    it 'renders a template with different encoding' do
+    it "renders a template with different encoding" do
       expect(EncodingView.render(format: :html)).to include %(Configuração)
     end
 
     # See https://github.com/hanami/view/issues/76
-    it 'raises error when given encoding is not correct' do
+    it "raises error when given encoding is not correct" do
       expect do
         Class.new do
           include Hanami::View
-          configuration.default_encoding 'wrong'
+          configuration.default_encoding "wrong"
 
-          def self.name; 'EncodingView'; end
+          def self.name
+            "EncodingView"
+          end
         end.render(format: :html)
       end.to raise_error(ArgumentError, "unknown encoding name - wrong")
     end
 
-    it 'renders a template according to the declared format' do
-      expect(JsonRenderView.render(format: :json, planet: 'Moon')).to include %("greet":"Hello, Moon!")
+    it "renders a template according to the declared format" do
+      expect(JsonRenderView.render(format: :json, planet: "Moon")).to include %("greet":"Hello, Moon!")
     end
 
-    it 'renders a template according to the requested format' do
-      articles = [ OpenStruct.new(title: 'Man on the Moon!') ]
+    it "renders a template according to the requested format" do
+      articles = [OpenStruct.new(title: "Man on the Moon!")]
 
       rendered = Articles::Index.render(format: :json, articles: articles)
       expect(rendered).to match %("title":"Man on the Moon!")
@@ -148,8 +151,8 @@ RSpec.describe Hanami::View do
     end
 
     # this test was added to show that ../templates/members/articles/index.html.erb interferres with the normal behavior
-    it 'renders the correct template when a subdirectory also exists' do
-      articles = [ OpenStruct.new(title: 'Man on the Moon!') ]
+    it "renders the correct template when a subdirectory also exists" do
+      articles = [OpenStruct.new(title: "Man on the Moon!")]
 
       rendered = Articles::Index.render(format: :html, articles: articles)
       expect(rendered).not_to match %(<h1>Wrong Article Template</h1>)
@@ -160,63 +163,63 @@ RSpec.describe Hanami::View do
       expect(rendered).not_to match %(<h1>Man on the Moon!</h1>)
     end
 
-    describe 'calling an action method from the template' do
-      it 'can call with multiple arguments' do
-        expect(RenderViewMethodWithArgs.render({format: :html})).to include %(<h1>Hello, earth!</h1>)
+    describe "calling an action method from the template" do
+      it "can call with multiple arguments" do
+        expect(RenderViewMethodWithArgs.render(format: :html)).to include %(<h1>Hello, earth!</h1>)
       end
 
-      it 'will override Kernel methods' do
-        expect(RenderViewMethodOverride.render({format: :html})).to include %(<h1>Hello, foo!</h1>)
+      it "will override Kernel methods" do
+        expect(RenderViewMethodOverride.render(format: :html)).to include %(<h1>Hello, foo!</h1>)
       end
 
-      it 'can call with block' do
-        expect(RenderViewMethodWithBlock.render({format: :html})).to include %(<ul><li>thing 1</li><li>thing 2</li><li>thing 3</li></ul>)
+      it "can call with block" do
+        expect(RenderViewMethodWithBlock.render(format: :html)).to include %(<ul><li>thing 1</li><li>thing 2</li><li>thing 3</li></ul>)
       end
     end
 
-    it 'binds given locals to the rendering context' do
-      article = OpenStruct.new(title: 'Hello')
+    it "binds given locals to the rendering context" do
+      article = OpenStruct.new(title: "Hello")
 
       rendered = Articles::Show.render(format: :html, article: article)
       expect(rendered).to match %(<h1>HELLO</h1>)
     end
 
-    it 'renders a template from a subclass, if it is able to handle the requested format' do
-      article = OpenStruct.new(title: 'Hello')
+    it "renders a template from a subclass, if it is able to handle the requested format" do
+      article = OpenStruct.new(title: "Hello")
 
       rendered = Articles::Show.render(format: :json, article: article)
       expect(rendered).to match %("title":"olleh")
     end
 
-    it 'raises an error when the template is missing' do
-      article = OpenStruct.new(title: 'Ciao')
+    it "raises an error when the template is missing" do
+      article = OpenStruct.new(title: "Ciao")
 
       expect do
         Articles::Show.render(format: :png, article: article)
       end.to raise_error(Hanami::View::MissingTemplateError)
     end
 
-    it 'raises an error when the format is missing' do
+    it "raises an error when the format is missing" do
       expect do
         HelloWorldView.render({})
       end.to raise_error(Hanami::View::MissingFormatError)
     end
 
-    it 'renders different template, as specified by DSL' do
-      article = OpenStruct.new(title: 'Bonjour')
-      result  = OpenStruct.new(errors: {title: 'Title is required'})
+    it "renders different template, as specified by DSL" do
+      article = OpenStruct.new(title: "Bonjour")
+      result  = OpenStruct.new(errors: { title: "Title is required" })
 
       rendered = Articles::Create.render(format: :html, article: article, result: result)
       expect(rendered).to match %(<h1>New Article</h1>)
       expect(rendered).to match %(<h2>Errors</h2>)
     end
 
-    it 'finds and renders template in nested directories' do
+    it "finds and renders template in nested directories" do
       rendered = NestedView.render(format: :html)
       expect(rendered).to match %(<h1>Nested</h1>)
     end
 
-    it 'finds and renders partials in the directory of the view template parent directory' do
+    it "finds and renders partials in the directory of the view template parent directory" do
       rendered = Organisations::OrderTemplates::Action.render(format: :html)
       expect(rendered).to match %(Order Template Partial)
       expect(rendered).to match %(<div id="sidebar"></div>)
@@ -226,30 +229,30 @@ RSpec.describe Hanami::View do
       expect(rendered).to match %(<div id="sidebar"></div>)
     end
 
-    it 'decorates locals' do
-      map = Map.new(['Rome', 'Cambridge'])
+    it "decorates locals" do
+      map = Map.new(%w[Rome Cambridge])
 
       rendered = Dashboard::Index.render(format: :html, map: map)
       expect(rendered).to match %(<h1>Map</h1>)
       expect(rendered).to match %(<h2>2 locations</h2>)
     end
 
-    it 'safely ignores missing locals' do
-      map = Map.new(['Rome', 'Cambridge'])
+    it "safely ignores missing locals" do
+      map = Map.new(%w[Rome Cambridge])
 
       rendered = Dashboard::Index.render(format: :html, map: map)
       expect(rendered).not_to match %(<h3>Annotations</h3>)
     end
 
-    it 'uses optional locals, if present' do
-      map         = Map.new(['Rome', 'Cambridge'])
+    it "uses optional locals, if present" do
+      map         = Map.new(%w[Rome Cambridge])
       annotations = OpenStruct.new(written?: true)
 
       rendered = Dashboard::Index.render(format: :html, annotations: annotations, map: map)
       expect(rendered).to match %(<h3>Annotations</h3>)
     end
 
-    it 'renders a partial' do
+    it "renders a partial" do
       article = OpenStruct.new(title: nil)
 
       rendered = Articles::New.render(format: :html, article: article)
@@ -258,17 +261,17 @@ RSpec.describe Hanami::View do
       expect(rendered).to match %(<input type="hidden" name="secret" value="23" />)
     end
 
-    it 'raises an error when the partial template is missing' do
+    it "raises an error when the partial template is missing" do
       expect do
         RenderViewWithMissingPartialTemplate.render(format: :html)
       end.to raise_error(Hanami::View::MissingTemplateError, "Can't find template 'shared/missing_template' for 'html' format.")
     end
 
     # @issue https://github.com/hanami/view/issues/3
-    it 'renders a template within another template' do
-      parent = OpenStruct.new(children: [], name: 'parent')
-      child1 = OpenStruct.new(children: [], name: 'child1')
-      child2 = OpenStruct.new(children: [], name: 'child2')
+    it "renders a template within another template" do
+      parent = OpenStruct.new(children: [], name: "parent")
+      child1 = OpenStruct.new(children: [], name: "child1")
+      child2 = OpenStruct.new(children: [], name: "child2")
 
       parent.children.push(child1)
       parent.children.push(child2)
@@ -280,31 +283,31 @@ RSpec.describe Hanami::View do
       expect(rendered).to match %(<li>child2</li>)
     end
 
-    it 'uses HAML engine' do
-      person = OpenStruct.new(name: 'Luca')
+    it "uses HAML engine" do
+      person = OpenStruct.new(name: "Luca")
 
       rendered = Contacts::Show.render(format: :html, person: person)
       expect(rendered).to match %(<h1>Luca</h1>)
       expect(rendered).to match %(<script type="text/javascript" src="/javascripts/contacts.js"></script>)
     end
 
-    it 'uses Slim engine' do
-      desk = OpenStruct.new(type: 'Standing')
+    it "uses Slim engine" do
+      desk = OpenStruct.new(type: "Standing")
 
       rendered = Desks::Show.render(format: :html, desk: desk)
       expect(rendered).to match %(<h1>Standing</h1>)
       expect(rendered).to match %(<script type="text/javascript" src="/javascripts/desks.js"></script>)
     end
 
-    describe 'when without a template' do
-      it 'renders from the custom rendering method' do
-        song = OpenStruct.new(title: 'Song Two', url: '/song2.mp3')
+    describe "when without a template" do
+      it "renders from the custom rendering method" do
+        song = OpenStruct.new(title: "Song Two", url: "/song2.mp3")
 
         rendered = Songs::Show.render(format: :html, song: song)
         expect(rendered).to eq %(<audio src="/song2.mp3">Song Two</audio>)
       end
 
-      it 'respond to all the formats' do
+      it "respond to all the formats" do
         rendered = Metrics::Index.render(format: :html)
         expect(rendered).to eq %(metrics)
 
@@ -313,9 +316,9 @@ RSpec.describe Hanami::View do
       end
     end
 
-    describe 'layout' do
-      it 'renders contents from layout' do
-        articles = [ OpenStruct.new(title: 'A Wonderful Day!') ]
+    describe "layout" do
+      it "renders contents from layout" do
+        articles = [OpenStruct.new(title: "A Wonderful Day!")]
 
         rendered = Articles::Index.render(format: :html, articles: articles)
         expect(rendered).to match %(<h1>A Wonderful Day!</h1>)
@@ -323,16 +326,16 @@ RSpec.describe Hanami::View do
         expect(rendered).to match %(<title>Title: articles</title>)
       end
 
-      it 'safely ignores missing locals' do
-        articles = [ OpenStruct.new(title: 'A Wonderful Day!') ]
+      it "safely ignores missing locals" do
+        articles = [OpenStruct.new(title: "A Wonderful Day!")]
 
         rendered = Articles::Index.render(format: :html, articles: articles)
         expect(rendered).not_to match %(<h2>Your plan is overdue.</h2>)
       end
 
-      it 'uses optional locals, if present' do
-        articles = [ OpenStruct.new(title: 'A Wonderful Day!') ]
-        plan     =   OpenStruct.new(overdue?: true)
+      it "uses optional locals, if present" do
+        articles = [OpenStruct.new(title: "A Wonderful Day!")]
+        plan     = OpenStruct.new(overdue?: true)
 
         rendered = Articles::Index.render(format: :html, plan: plan, articles: articles)
         expect(rendered).to match %(<h2>Your plan is overdue.</h2>)
@@ -340,12 +343,12 @@ RSpec.describe Hanami::View do
     end
   end
 
-  context 'unload' do
+  context "unload" do
     before do
       Hanami::View.unload!
     end
 
-    describe '.configuration' do
+    describe ".configuration" do
       before do
         class ConfigurationView
           include Hanami::View
@@ -365,22 +368,22 @@ RSpec.describe Hanami::View do
         Object.send(:remove_const, :ConfigurationLayout)
       end
 
-      it 'exposes class configuration' do
+      it "exposes class configuration" do
         expect(Hanami::View.configuration).to be_kind_of(Hanami::View::Configuration)
       end
 
-      it 'defaults root to the current dir' do
-        expect(Hanami::View.configuration.root).to eq(Pathname.new('.').realpath)
+      it "defaults root to the current dir" do
+        expect(Hanami::View.configuration.root).to eq(Pathname.new(".").realpath)
       end
 
-      it 'a view inherits the configuration from the framework' do
+      it "a view inherits the configuration from the framework" do
         expected = Hanami::View.configuration
         actual   = ConfigurationView.configuration
 
         expect(actual.root).to eq(expected.root)
       end
 
-      it 'a view inherits the parent' do
+      it "a view inherits the parent" do
         parent = ConfigurationView.configuration
         child  = ConfigurationChildView.configuration
 
@@ -398,27 +401,27 @@ RSpec.describe Hanami::View do
         expect(child).to_not be(parent)
       end
 
-      it 'a view must be included in the framework configuration registry' do
+      it "a view must be included in the framework configuration registry" do
         expect(Hanami::View.configuration.views).to include(ConfigurationView)
         expect(ConfigurationView.configuration.views).to_not include(ConfigurationView)
       end
 
-      it 'a layout inheriths the configuration from the framework' do
+      it "a layout inheriths the configuration from the framework" do
         expected = Hanami::View.configuration
         actual   = ConfigurationLayout.configuration
 
         expect(actual.root).to eq(expected.root)
       end
 
-      it 'a layout must be included in the framework configuration registry' do
+      it "a layout must be included in the framework configuration registry" do
         expect(Hanami::View.configuration.layouts).to include(ConfigurationLayout)
         expect(ConfigurationLayout.configuration.layouts).to_not include(ConfigurationView)
       end
     end
 
-    describe '.configure' do
-      it 'allows to configure the framework' do
-        path = Pathname.new('.').join('spec/support/fixtures').realpath
+    describe ".configure" do
+      it "allows to configure the framework" do
+        path = Pathname.new(".").join("spec/support/fixtures").realpath
 
         Hanami::View.class_eval do
           configure do
@@ -429,29 +432,29 @@ RSpec.describe Hanami::View do
         expect(Hanami::View.configuration.root).to eq(path)
       end
 
-      it 'allows to override one value' do
+      it "allows to override one value" do
         Hanami::View.class_eval do
           configure do
-            load_paths << 'spec/fixtures'
+            load_paths << "spec/fixtures"
           end
 
           configure do
-            load_paths << 'spec/fixtures/templates'
+            load_paths << "spec/fixtures/templates"
           end
         end
 
         configuration = Hanami::View.configuration
 
-        expect(configuration.load_paths.send(:paths)).to include('spec/fixtures')
-        expect(configuration.load_paths.send(:paths)).to include('spec/fixtures/templates')
+        expect(configuration.load_paths.send(:paths)).to include("spec/fixtures")
+        expect(configuration.load_paths.send(:paths)).to include("spec/fixtures/templates")
       end
     end
 
-    describe '.dupe' do
+    describe ".dupe" do
       before do
         Hanami::View.class_eval do
           configure do
-            root '..'
+            root ".."
           end
         end
 
@@ -465,19 +468,19 @@ RSpec.describe Hanami::View do
         Object.send(:remove_const, :DuplicatedView)
       end
 
-      it 'creates a copy of self' do
+      it "creates a copy of self" do
         expect(@duplicated_config.root).to eq @framework_config.root
       end
 
-      it 'creates a copy of self' do
-        @duplicated_config.root('.')
+      it "creates a copy of self" do
+        @duplicated_config.root(".")
 
-        expect(@duplicated_config.root).to eq Pathname.new('.').realpath
-        expect(@framework_config.root).to eq Pathname.new('..').realpath
+        expect(@duplicated_config.root).to eq Pathname.new(".").realpath
+        expect(@framework_config.root).to eq Pathname.new("..").realpath
       end
     end
 
-    describe '.duplicate' do
+    describe ".duplicate" do
       before do
         Hanami::View.configure { layout :application }
 
@@ -486,7 +489,7 @@ RSpec.describe Hanami::View do
         end
 
         module DuplicatedCustom
-          View = Hanami::View.duplicate(self, 'Viewz')
+          View = Hanami::View.duplicate(self, "Viewz")
         end
 
         module DuplicatedWithoutNamespace
@@ -515,44 +518,44 @@ RSpec.describe Hanami::View do
         Object.send(:remove_const, :DuplicatedConfigure)
       end
 
-      it 'duplicates the configuration of the framework' do
+      it "duplicates the configuration of the framework" do
         actual   = Duplicated::View.configuration
         expected = Hanami::View.configuration
 
         expect(actual.layout).to eq(expected.layout)
       end
 
-      it 'generates a namespace for views' do
-        expect(defined?(Duplicated::Views)).to be_truthy, lambda { 'Duplicated::Views expected' }
+      it "generates a namespace for views" do
+        expect(defined?(Duplicated::Views)).to be_truthy, -> { "Duplicated::Views expected" }
       end
 
-      it 'generates a custom namespace for views' do
-        expect(defined?(DuplicatedCustom::Viewz)).to be_truthy, lambda { 'DuplicatedCustom::Viewz expected' }
+      it "generates a custom namespace for views" do
+        expect(defined?(DuplicatedCustom::Viewz)).to be_truthy, -> { "DuplicatedCustom::Viewz expected" }
       end
 
-      it 'does not create a custom namespace for views' do
-        expect(defined?(DuplicatedWithoutNamespace::Views)).to_not be_truthy, lambda { "DuplicatedWithoutNamespace::Views wasn't expected" }
+      it "does not create a custom namespace for views" do
+        expect(defined?(DuplicatedWithoutNamespace::Views)).to_not be_truthy, -> { "DuplicatedWithoutNamespace::Views wasn't expected" }
       end
 
-      it 'assigns correct namespace to the configuration when the namespace argument is nil' do
-        expect(DuplicatedWithoutNamespace::View.configuration.namespace).to eq 'DuplicatedWithoutNamespace'
+      it "assigns correct namespace to the configuration when the namespace argument is nil" do
+        expect(DuplicatedWithoutNamespace::View.configuration.namespace).to eq "DuplicatedWithoutNamespace"
       end
 
-      it 'duplicates Layout' do
-        expect(defined?(Duplicated::Layout)).to be_truthy, lambda { 'Duplicated::Layout expected' }
+      it "duplicates Layout" do
+        expect(defined?(Duplicated::Layout)).to be_truthy, -> { "Duplicated::Layout expected" }
       end
 
-      it 'duplicates Presenter' do
-        expect(defined?(Duplicated::Presenter)).to be_truthy, lambda { 'Duplicated::Presenter expected' }
+      it "duplicates Presenter" do
+        expect(defined?(Duplicated::Presenter)).to be_truthy, -> { "Duplicated::Presenter expected" }
       end
 
-      it 'optionally accepts a block to configure the generated module' do
+      it "optionally accepts a block to configure the generated module" do
         expected = DuplicatedConfigure::Views::AppLayout
         expect(DuplicatedConfigure::View.configuration.layout).to eq expected
       end
     end
 
-    describe 'global layout' do
+    describe "global layout" do
       before do
         Hanami::View.class_eval do
           configure do
@@ -569,11 +572,9 @@ RSpec.describe Hanami::View do
         Object.send(:remove_const, :ViewWithInheritedLayout)
       end
 
-      it 'sets global layout' do
+      it "sets global layout" do
         expect(ViewWithInheritedLayout.layout).to eq ApplicationLayout
       end
     end
   end
-
 end
-

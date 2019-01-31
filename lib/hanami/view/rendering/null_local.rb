@@ -1,4 +1,6 @@
-require 'hanami/utils/basic_object'
+# frozen_string_literal: true
+
+require "hanami/utils/basic_object"
 
 module Hanami
   module View
@@ -11,7 +13,7 @@ module Hanami
       class NullLocal < Utils::BasicObject
         # @since 0.7.0
         # @api private
-        TO_STR = "".freeze
+        TO_STR = ""
 
         # @since 0.7.0
         # @api private
@@ -55,11 +57,11 @@ module Hanami
 
         # @since 0.7.0
         # @api private
-        def method_missing(m, *)
-          if m.match(/\?\z/)
+        def method_missing(method_name, *) # rubocop:disable Style/MethodMissingSuper
+          if method_name.match?(/\?\z/) # rubocop:disable Performance/EndWith
             false
           else
-            self.class.new("#{ @local }.#{ m }")
+            self.class.new("#{@local}.#{method_name}")
           end
         end
 
@@ -67,14 +69,14 @@ module Hanami
 
         # @since 0.7.0
         # @api private
-        def respond_to_missing?(method_name, include_all)
+        def respond_to_missing?(_method_name, _include_all)
           true
         end
 
         # @since 0.7.0
         # @api private
         def __inspect
-          " :#{ @local }"
+          " :#{@local}"
         end
       end
     end

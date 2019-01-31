@@ -1,5 +1,7 @@
-require 'hanami/view/rendering/layout_registry'
-require 'hanami/view/rendering/view_finder'
+# frozen_string_literal: true
+
+require "hanami/view/rendering/layout_registry"
+require "hanami/view/rendering/view_finder"
 
 module Hanami
   module View
@@ -94,6 +96,7 @@ module Hanami
         end
 
         private
+
         # @api private
         def prepare!
           prepare_views!
@@ -103,20 +106,20 @@ module Hanami
         # @api private
         def prepare_views!
           views.each do |view|
-            @registry.merge! view.format || DEFAULT_FORMAT => [ view, template_for(view) ]
+            @registry.merge! view.format || DEFAULT_FORMAT => [view, template_for(view)]
           end
         end
 
         # @api private
         def prepare_templates!
           templates.each do |template|
-            @registry.merge! template.format => [ view_for(template), template ]
+            @registry.merge! template.format => [view_for(template), template]
           end
         end
 
         # @api private
         def views
-          @view.subclasses + [ @view ]
+          @view.subclasses + [@view]
         end
 
         # @api private
@@ -126,7 +129,7 @@ module Hanami
 
         # @api private
         def template_for(view)
-          templates.find {|template| template.format == view.format }
+          templates.find { |template| template.format == view.format }
         end
       end
     end

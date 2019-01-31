@@ -1,4 +1,6 @@
-require 'hanami/view/rendering/partial_finder'
+# frozen_string_literal: true
+
+require "hanami/view/rendering/partial_finder"
 
 module Hanami
   module View
@@ -20,6 +22,7 @@ module Hanami
       #   <%= render partial: 'shared/sidebar' %>
       class Partial < Template
         protected
+
         # @api private
         # @since 0.1.0
         def template

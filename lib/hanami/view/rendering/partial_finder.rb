@@ -1,4 +1,6 @@
-require 'hanami/view/rendering/template_finder'
+# frozen_string_literal: true
+
+require "hanami/view/rendering/template_finder"
 
 module Hanami
   module View
@@ -20,7 +22,7 @@ module Hanami
         #
         # @example
         #   "_sidebar.html.erb"
-        PREFIX = '_'.freeze
+        PREFIX = "_"
 
         # Find a template for a partial. Initially it will look for the
         # partial template in the framework configuration where it may
@@ -35,8 +37,8 @@ module Hanami
         # @since 0.4.3
         # @api private
         def find
-          Hanami::View::Configuration.for(@view).
-            find_partial(relative_partial_path, template_name, format)
+          Hanami::View::Configuration.for(@view)
+                                     .find_partial(relative_partial_path, template_name, format)
         end
 
         protected
@@ -57,7 +59,7 @@ module Hanami
         # @api private
         def template_name
           *all, last = partial_name.split(separator)
-          all.push( last.prepend(prefix) ).join(separator)
+          all.push(last.prepend(prefix)).join(separator)
         end
 
         # @api private

@@ -1,5 +1,7 @@
-require 'hanami/view/rendering/template_name'
-require 'hanami/view/rendering/layout_finder'
+# frozen_string_literal: true
+
+require "hanami/view/rendering/template_name"
+require "hanami/view/rendering/layout_finder"
 
 module Hanami
   module View
@@ -92,7 +94,7 @@ module Hanami
       #
       # @since 0.1.0
       #
-      # @example Default usage
+      # @example Default usage
       #   require 'hanami/view'
       #
       #   module Articles
@@ -108,7 +110,7 @@ module Hanami
       #   Articles::Show.template     # => 'articles/show'
       #   Articles::JsonShow.template # => 'articles/show'
       #
-      # @example Custom template
+      # @example Custom template
       #   require 'hanami/view'
       #
       #   module Articles
@@ -338,7 +340,7 @@ module Hanami
           v.root.freeze
           v.format.freeze
           v.template.freeze
-          v.layout#.freeze
+          v.layout # .freeze
           v.configuration.freeze
         end
       end

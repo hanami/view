@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hanami
   module View
     module Rendering
@@ -29,7 +31,7 @@ module Hanami
         # @api private
         # @since 0.1.0
         def find(template)
-          @view.subclasses.find {|v| v.format == template.format } || @view
+          @view.subclasses.find { |v| v.format == template.format } || @view
         end
       end
     end

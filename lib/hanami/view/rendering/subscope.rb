@@ -21,22 +21,22 @@ module Hanami
         # @api private
         #
         # @see http://ruby-doc.org/core/Object.html#method-i-respond_to_missing-3F
-        def respond_to_missing?(m, _include_all)
-          @locals.key?(m)
+        def respond_to_missing?(method_name, _include_all)
+          @locals.key?(method_name)
         end
 
         protected
 
         # @since 1.1.1
         # @api private
-        def method_missing(m, *args, &block)
+        def method_missing(method_name, *args, &block)
           ::Hanami::View::Escape.html(
             # FIXME: this isn't compatible with Hanami 2.0, as it extends a view
             # that we want to be frozen in the future
             #
             # See https://github.com/hanami/view/issues/130#issuecomment-319326236
-            if @locals.key?(m)
-              @locals[m]
+            if @locals.key?(method_name)
+              @locals[method_name]
             else
               super
             end

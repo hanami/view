@@ -1,5 +1,7 @@
-require 'hanami/view/rendering/null_template'
-require 'hanami/view/rendering/templates_finder'
+# frozen_string_literal: true
+
+require "hanami/view/rendering/null_template"
+require "hanami/view/rendering/templates_finder"
 
 module Hanami
   module View
@@ -43,6 +45,7 @@ module Hanami
         end
 
         protected
+
         # @api private
         # @since 0.1.0
         def prepare!

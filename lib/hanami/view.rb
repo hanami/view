@@ -1,15 +1,17 @@
-require 'set'
-require 'pathname'
-require 'hanami/utils/class_attribute'
-require 'hanami/view/version'
-require 'hanami/view/configuration'
-require 'hanami/view/inheritable'
-require 'hanami/view/rendering'
-require 'hanami/view/escape'
-require 'hanami/view/dsl'
-require 'hanami/view/errors'
-require 'hanami/layout'
-require 'hanami/presenter'
+# frozen_string_literal: true
+
+require "set"
+require "pathname"
+require "hanami/utils/class_attribute"
+require "hanami/view/version"
+require "hanami/view/configuration"
+require "hanami/view/inheritable"
+require "hanami/view/rendering"
+require "hanami/view/escape"
+require "hanami/view/dsl"
+require "hanami/view/errors"
+require "hanami/layout"
+require "hanami/presenter"
 
 # Hanami
 #
@@ -18,6 +20,8 @@ module Hanami
   # View
   #
   # @since 0.1.0
+  #
+  # rubocop:disable Metrics/MethodLength
   module View
     include Utils::ClassAttribute
     # Framework configuration
@@ -200,16 +204,16 @@ module Hanami
     #
     #   Hanami::View.configuration.root # => #<Pathname:.>
     #   MyApp::View.configuration.root # => #<Pathname:/path/to/root>
-    def self.duplicate(mod, views = 'Views', &blk)
+    def self.duplicate(mod, views = "Views", &blk)
       dupe.tap do |duplicated|
-        mod.module_eval %{ module #{ views }; end } if views
-        mod.module_eval %{
+        mod.module_eval %( module #{views}; end ), __FILE__, __LINE__ if views
+        mod.module_eval %(
           Layout = Hanami::Layout.dup
           Presenter = Hanami::Presenter.dup
-        }
+        ), __FILE__, __LINE__ - 3
 
         duplicated.configure do
-          namespace [mod, views].compact.join '::'
+          namespace [mod, views].compact.join "::"
         end
 
         duplicated.configure(&blk) if block_given?
@@ -238,7 +242,7 @@ module Hanami
     #     include Hanami::View
     #   end
     def self.included(base)
-      conf = self.configuration
+      conf = configuration
       conf.add_view(base)
 
       base.class_eval do
@@ -264,4 +268,5 @@ module Hanami
       configuration.load!
     end
   end
+  # rubocop:enable Metrics/MethodLength
 end

@@ -1,4 +1,6 @@
-require 'hanami/view/escape'
+# frozen_string_literal: true
+
+require "hanami/view/escape"
 
 module Hanami
   # Presenter pattern implementation

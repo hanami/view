@@ -1,6 +1,8 @@
-require 'hanami/utils/string'
-require 'hanami/utils/class'
-require 'hanami/view/rendering/null_layout'
+# frozen_string_literal: true
+
+require "hanami/utils/string"
+require "hanami/utils/class"
+require "hanami/view/rendering/null_layout"
 
 module Hanami
   module View
@@ -16,7 +18,7 @@ module Hanami
         #
         # @api private
         # @since 0.1.0
-        SUFFIX = 'Layout'.freeze
+        SUFFIX = "Layout"
 
         # Find a layout from the given name.
         #
@@ -64,8 +66,8 @@ module Hanami
         def self.find(layout, namespace = Object)
           case layout
           when Symbol, String
-            # TODO Move this low level logic into a Hanami::Utils solution
-            class_name = "#{ Utils::String.classify(layout) }#{ SUFFIX }"
+            # TODO: Move this low level logic into a Hanami::Utils solution
+            class_name = "#{Utils::String.classify(layout)}#{SUFFIX}"
             namespace  = Utils::Class.load!(namespace)
             namespace.const_get(class_name)
           when Class

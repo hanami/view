@@ -1,4 +1,6 @@
-require 'hanami/view/template'
+# frozen_string_literal: true
+
+require "hanami/view/template"
 
 module Hanami
   module View
@@ -14,19 +16,19 @@ module Hanami
         #
         # @api private
         # @since 0.1.0
-        FORMAT    = '*'.freeze
+        FORMAT    = "*"
 
         # Default template engines
         #
         # @api private
         # @since 0.1.0
-        ENGINES   = '*'.freeze
+        ENGINES   = "*"
 
         # Recursive pattern
         #
         # @api private
         # @since 0.2.0
-        RECURSIVE = '**'.freeze
+        RECURSIVE = "**"
 
         # Initialize a finder
         #
@@ -94,7 +96,7 @@ module Hanami
         # @api private
         # @since 0.7.0
         def templates_path(*parts)
-          Dir.glob("#{ parts.join(separator) }.#{ format }.#{ engines }")
+          Dir.glob("#{parts.join(separator)}.#{format}.#{engines}")
         end
 
         # @api private

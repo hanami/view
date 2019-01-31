@@ -1,4 +1,6 @@
-require 'hanami/view/rendering/template_finder'
+# frozen_string_literal: true
+
+require "hanami/view/rendering/template_finder"
 
 module Hanami
   module View
@@ -29,7 +31,8 @@ module Hanami
         # @api private
         # @since 0.1.0
         def initialize(view, options)
-          @view, @options = view, options
+          @view = view
+          @options = options
         end
 
         # Render the template.
@@ -45,6 +48,7 @@ module Hanami
         end
 
         protected
+
         # @api private
         def template
           TemplateFinder.new(@view.class, @options).find

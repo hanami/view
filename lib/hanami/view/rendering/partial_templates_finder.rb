@@ -1,5 +1,7 @@
-require 'hanami/view/template'
-require 'hanami/view/rendering/partial_file'
+# frozen_string_literal: true
+
+require "hanami/view/template"
+require "hanami/view/rendering/partial_file"
 
 module Hanami
   module View
@@ -15,11 +17,11 @@ module Hanami
         #
         # @api private
         # @since 0.7.0
-        PARTIAL_PATTERN = '_*'.freeze
+        PARTIAL_PATTERN = "_*"
 
         # @api private
         # @since 0.7.0
-        PARTIAL_PARTS_SEPARATOR = '.'.freeze
+        PARTIAL_PARTS_SEPARATOR = "."
 
         # @api private
         # @since 0.7.0
@@ -41,6 +43,8 @@ module Hanami
         #
         # @since 0.7.0
         # @api private
+        #
+        # rubocop:disable Metrics/AbcSize
         def find
           _find_partials(configuration.root).map do |template|
             partial_path, partial_base_name = Pathname(template).relative_path_from(configuration.root).split
@@ -53,6 +57,7 @@ module Hanami
             )
           end
         end
+        # rubocop:enable Metrics/AbcSize
 
         private
 
@@ -65,7 +70,7 @@ module Hanami
         # @since 0.7.0
         # @api private
         def _find_partials(path)
-          Dir.glob("#{ [path, TemplatesFinder::RECURSIVE, PARTIAL_PATTERN].join(::File::SEPARATOR) }.#{TemplatesFinder::FORMAT}.#{TemplatesFinder::ENGINES}")
+          Dir.glob("#{[path, TemplatesFinder::RECURSIVE, PARTIAL_PATTERN].join(::File::SEPARATOR)}.#{TemplatesFinder::FORMAT}.#{TemplatesFinder::ENGINES}")
         end
       end
     end

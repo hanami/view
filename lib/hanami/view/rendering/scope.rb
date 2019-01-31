@@ -1,7 +1,9 @@
-require 'hanami/utils/escape'
-require 'hanami/view/rendering/layout_scope'
-require 'hanami/view/rendering/template'
-require 'hanami/view/rendering/partial'
+# frozen_string_literal: true
+
+require "hanami/utils/escape"
+require "hanami/view/rendering/layout_scope"
+require "hanami/view/rendering/template"
+require "hanami/view/rendering/partial"
 
 module Hanami
   module View
@@ -33,10 +35,10 @@ module Hanami
         #
         # @since 0.3.0
         def inspect
-          base = "#<#{ self.class }: #{'%x' % (self.object_id << 1)}"
-          base << " @view=\"#{@view}\"" if @view
-          base << " @locals=\"#{@locals}\"" if @locals
-          base << ">"
+          base = "#<#{self.class}: #{'%<id>x' % { id: object_id << 1 }}"
+          base += " @view=\"#{@view}\"" if @view
+          base += " @locals=\"#{@locals}\"" if @locals
+          base + ">"
         end
 
         # Returns the requested format.
@@ -56,28 +58,28 @@ module Hanami
         # @api private
         #
         # @see http://ruby-doc.org/core/Object.html#method-i-respond_to_missing-3F
-        def respond_to_missing?(m, include_all)
+        def respond_to_missing?(method_name, include_all)
           # FIXME: this isn't compatible with Hanami 2.0, as it extends a view
           # that we want to be frozen in the future
           #
           # See https://github.com/hanami/view/issues/130#issuecomment-319326236
-          @view.respond_to?(m, include_all) ||
-            @locals.key?(m)
+          @view.respond_to?(method_name, include_all) ||
+            @locals.key?(method_name)
         end
 
         protected
 
         # @api private
-        def method_missing(m, *args, &block)
+        def method_missing(method_name, *args, &block)
           ::Hanami::View::Escape.html(
             # FIXME: this isn't compatible with Hanami 2.0, as it extends a view
             # that we want to be frozen in the future
             #
             # See https://github.com/hanami/view/issues/130#issuecomment-319326236
-            if @view.respond_to?(m, true)
-              @view.__send__ m, *args, &block
-            elsif @locals.key?(m)
-              @locals[m]
+            if @view.respond_to?(method_name, true)
+              @view.__send__(method_name, *args, &block)
+            elsif @locals.key?(method_name)
+              @locals[method_name]
             else
               super
             end
@@ -96,11 +98,9 @@ module Hanami
         # @since 0.4.2
         # @api private
         def layout
-          if @view.class.respond_to?(:layout)
-            @view.class.layout.new(self, "")
-          else
-            nil
-          end
+          return unless @view.class.respond_to?(:layout)
+
+          @view.class.layout.new(self, "")
         end
       end
     end

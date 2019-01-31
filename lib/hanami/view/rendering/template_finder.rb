@@ -1,4 +1,6 @@
-require 'hanami/view/rendering/templates_finder'
+# frozen_string_literal: true
+
+require "hanami/view/rendering/templates_finder"
 
 module Hanami
   module View
@@ -40,6 +42,7 @@ module Hanami
         end
 
         protected
+
         # @api private
         def template_name
           @options[:template]

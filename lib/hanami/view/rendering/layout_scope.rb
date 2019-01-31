@@ -1,6 +1,8 @@
-require 'hanami/view/rendering/null_local'
-require 'hanami/view/rendering/options'
-require 'hanami/utils/escape'
+# frozen_string_literal: true
+
+require "hanami/view/rendering/null_local"
+require "hanami/view/rendering/options"
+require "hanami/utils/escape"
 
 module Hanami
   module View
@@ -11,7 +13,7 @@ module Hanami
       #
       # @since 1.1.0
       # @api private
-      KNOWN_RENDER_TYPES = [:partial, :template].freeze
+      KNOWN_RENDER_TYPES = %i[partial template].freeze
 
       # Scope for layout rendering
       #
@@ -47,10 +49,10 @@ module Hanami
         #
         # @since 0.3.0
         def inspect
-          base = "#<#{ self.class }:#{'%x' % (self.object_id << 1)}"
-          base << " @layout=\"#{@layout.inspect}\"" if @layout
-          base << " @scope=\"#{@scope.inspect}\"" if @scope
-          base << ">"
+          base = "#<#{self.class}:#{'%<id>x' % { id: object_id << 1 }}"
+          base += " @layout=\"#{@layout.inspect}\"" if @layout
+          base += " @scope=\"#{@scope.inspect}\"" if @scope
+          base + ">"
         end
 
         # Render a partial or a template within a layout template.
@@ -189,8 +191,8 @@ module Hanami
         # @api private
         #
         # @see http://ruby-doc.org/core/Object.html#method-i-respond_to-3F
-        def respond_to?(m, include_all = false)
-          respond_to_missing?(m, include_all)
+        def respond_to?(method_name, include_all = false)
+          respond_to_missing?(method_name, include_all)
         end
 
         # Implements "respond to" logic
@@ -201,9 +203,9 @@ module Hanami
         # @api private
         #
         # @see http://ruby-doc.org/core/Object.html#method-i-respond_to_missing-3F
-        def respond_to_missing?(m, include_all)
-          @layout.respond_to?(m, include_all) ||
-            @scope.respond_to?(m, include_all)
+        def respond_to_missing?(method_name, include_all)
+          @layout.respond_to?(method_name, include_all) ||
+            @scope.respond_to?(method_name, include_all)
         end
 
         protected
@@ -225,17 +227,17 @@ module Hanami
         #
         #   # `article` will be looked up in the view scope first.
         #   # If not found, it will be searched within the layout.
-        def method_missing(m, *args, &blk)
+        def method_missing(method_name, *args, &blk)
           # FIXME: this isn't compatible with Hanami 2.0, as it extends a view
           # that we want to be frozen in the future
           #
           # See https://github.com/hanami/view/issues/130#issuecomment-319326236
-          if @scope.respond_to?(m, true) && @scope.locals.has_key?(m) && layout.respond_to?(m, true)
-            layout.__send__(m, *args, &blk)
-          elsif @scope.respond_to?(m, true)
-            @scope.__send__(m, *args, &blk)
-          elsif layout.respond_to?(m, true)
-            layout.__send__(m, *args, &blk)
+          if @scope.respond_to?(method_name, true) && @scope.locals.key?(method_name) && layout.respond_to?(method_name, true)
+            layout.__send__(method_name, *args, &blk)
+          elsif @scope.respond_to?(method_name, true)
+            @scope.__send__(method_name, *args, &blk)
+          elsif layout.respond_to?(method_name, true)
+            layout.__send__(method_name, *args, &blk)
           else
             ::Hanami::View::Escape.html(super)
           end

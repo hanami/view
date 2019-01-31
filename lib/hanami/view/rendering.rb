@@ -1,7 +1,9 @@
-require 'hanami/view/rendering/registry'
-require 'hanami/view/rendering/scope'
-require 'hanami/view/rendering/subscope'
-require 'hanami/view/rendering/null_local'
+# frozen_string_literal: true
+
+require "hanami/view/rendering/registry"
+require "hanami/view/rendering/scope"
+require "hanami/view/rendering/subscope"
+require "hanami/view/rendering/null_local"
 
 module Hanami
   module View
@@ -19,6 +21,9 @@ module Hanami
         end
       end
 
+      # Instance level view interface
+      #
+      # @since 0.1.0
       module InstanceMethods
         # Initialize a view
         #
@@ -128,6 +133,7 @@ module Hanami
         end
 
         protected
+
         # The output of the template rendering process.
         #
         # @return [String] the rendering output
@@ -196,9 +202,14 @@ module Hanami
         #   view     = IndexView.new(template, {article: article})
         #
         #   view.article # => #<Article:0x007fb0bbd3b6e8>
-        def method_missing(m, *)
-          @scope.__send__ m
+        #
+        # rubocop:disable Style/MethodMissingSuper
+        # rubocop:disable Style/MissingRespondToMissing
+        def method_missing(method_name, *)
+          @scope.__send__(method_name)
         end
+        # rubocop:enable Style/MissingRespondToMissing
+        # rubocop:enable Style/MethodMissingSuper
       end
 
       # Render the given context and locals with the appropriate template.

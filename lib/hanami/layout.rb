@@ -1,8 +1,10 @@
-require 'hanami/utils/class_attribute'
-require 'hanami/view/rendering/layout_registry'
-require 'hanami/view/rendering/layout_scope'
-require 'hanami/view/rendering/null_layout'
-require 'hanami/view/rendering/null_view'
+# frozen_string_literal: true
+
+require "hanami/utils/class_attribute"
+require "hanami/view/rendering/layout_registry"
+require "hanami/view/rendering/layout_scope"
+require "hanami/view/rendering/null_layout"
+require "hanami/view/rendering/null_view"
 
 module Hanami
   # Layout
@@ -50,7 +52,7 @@ module Hanami
       #
       # @see Hanami::Layout::ClassMethods#suffix
       # @see Hanami::Layout::ClassMethods#template
-      SUFFIX = '_layout'.freeze
+      SUFFIX = "_layout"
 
       # A registry that holds all the registered layouts.
       #
@@ -79,7 +81,7 @@ module Hanami
       #
       # ApplicationLayout.template # => 'application'
       def template
-        super.sub(suffix, '')
+        super.sub(suffix, "")
       end
 
       # Template name suffix
@@ -154,7 +156,7 @@ module Hanami
     #
     # @see Hanami::View::Rendering#render
     def render
-      template.render(@scope, &Proc.new{@rendered})
+      template.render(@scope, &proc { @rendered })
     end
 
     # It tries to invoke a method for the view or a local for the given key.
@@ -179,12 +181,13 @@ module Hanami
     end
 
     protected
+
     # The template for the current format
     #
     # @api private
     # @since 0.1.0
     def template
-      self.class.registry.resolve({format: @scope.format})
+      self.class.registry.resolve(format: @scope.format)
     end
   end
 end

@@ -1,4 +1,6 @@
-require 'hanami/utils/string'
+# frozen_string_literal: true
+
+require "hanami/utils/string"
 
 module Hanami
   module View
@@ -8,7 +10,7 @@ module Hanami
       class TemplateName
         # @since 0.2.0
         # @api private
-        NAMESPACE_SEPARATOR = '::'.freeze
+        NAMESPACE_SEPARATOR = "::"
 
         # @since 0.2.0
         # @api private
@@ -24,10 +26,11 @@ module Hanami
         end
 
         private
+
         # @since 0.2.0
         # @api private
         def compile!(namespace)
-          tokens(namespace) {|token| replace!(token) }
+          tokens(namespace) { |token| replace!(token) }
           @name = Utils::String.underscore(@name)
         end
 
@@ -42,7 +45,7 @@ module Hanami
         # @since 0.2.0
         # @api private
         def replace!(token)
-          @name.gsub!(%r{\A#{ token }#{ NAMESPACE_SEPARATOR }}, '')
+          @name.gsub!(%r{\A#{ token }#{ NAMESPACE_SEPARATOR }}, "")
         end
       end
     end

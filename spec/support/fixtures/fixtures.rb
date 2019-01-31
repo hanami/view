@@ -1,4 +1,6 @@
-require 'json'
+# frozen_string_literal: true
+
+require "json"
 
 class HelloWorldView
   include Hanami::View
@@ -25,7 +27,7 @@ class RenderViewMethodOverride
   include Hanami::View
 
   def select
-    'foo'
+    "foo"
   end
 end
 
@@ -41,9 +43,9 @@ class RenderViewMethodWithBlock
   include Hanami::View
 
   def each_thing
-    yield 'thing 1'
-    yield 'thing 2'
-    yield 'thing 3'
+    yield "thing 1"
+    yield "thing 2"
+    yield "thing 3"
   end
 end
 
@@ -62,7 +64,7 @@ end
 
 class AppView
   include Hanami::View
-  root __dir__ + '/templates/app'
+  root __dir__ + "/templates/app"
   layout :application
 end
 
@@ -71,25 +73,24 @@ class AppViewLayout < AppView
 end
 
 class AppViewRoot < AppView
-  root '.'
+  root "."
 end
 
 class NestedView
   include Hanami::View
-  root __dir__ + '/templates'
+  root __dir__ + "/templates"
 end
-
 
 module Organisations
   class Action
     include Hanami::View
-    root __dir__ + '/templates'
+    root __dir__ + "/templates"
   end
 
   module OrderTemplates
     class Action
       include Hanami::View
-      root __dir__ + '/templates'
+      root __dir__ + "/templates"
     end
   end
 end
@@ -108,7 +109,7 @@ class ApplicationLayout
   include Hanami::Layout
 
   def title
-    'Title:'
+    "Title:"
   end
 end
 
@@ -130,7 +131,7 @@ module Members
       layout :application
 
       def title
-        "#{ layout.title } articles"
+        "#{layout.title} articles"
       end
     end
   end
@@ -142,7 +143,7 @@ module Articles
     layout :application
 
     def title
-      "#{ layout.title } articles"
+      "#{layout.title} articles"
     end
   end
 
@@ -170,7 +171,7 @@ module Articles
 
   class Create
     include Hanami::View
-    template 'articles/new'
+    template "articles/new"
 
     def errors
       result.errors
@@ -206,7 +207,7 @@ class Map
   end
 
   def location_names
-    @locations.join(', ')
+    @locations.join(", ")
   end
 
   def names
@@ -262,7 +263,7 @@ class SongWidget
   end
 
   def render
-    %(<audio src="#{ song.url }">#{ song.title }</audio>)
+    %(<audio src="#{song.url}">#{song.title}</audio>)
   end
 end
 
@@ -318,7 +319,7 @@ end
 module CardDeck
   View = Hanami::View.duplicate(self) do
     namespace CardDeck
-    root __dir__ + '/templates/card_deck/app/templates'
+    root __dir__ + "/templates/card_deck/app/templates"
     layout :application
     prepare do
       include MyCustomModule
@@ -359,19 +360,19 @@ end
 
 class BrokenLogic
   def run
-    raise ArgumentError.new('nope')
+    raise ArgumentError.new("nope")
   end
 end
 
 class LayoutForScopeTest
   def foo
-    'x'
+    "x"
   end
 end
 
 class ViewForScopeTest
   def bar
-    'y'
+    "y"
   end
 
   def wrong_reference
@@ -389,7 +390,7 @@ end
 
 module App1
   View = Hanami::View.duplicate(self) do
-    root __dir__ + '/templates/app1/templates'
+    root __dir__ + "/templates/app1/templates"
   end
 
   module Views
@@ -405,7 +406,7 @@ App1::View.load!
 
 module App2
   View = Hanami::View.duplicate(self) do
-    root __dir__ + '/templates/app2/templates'
+    root __dir__ + "/templates/app2/templates"
   end
 
   module Views
@@ -454,7 +455,7 @@ module Store
     module Home
       class Index
         include Store::View
-        template 'store/templates/home/index'
+        template "store/templates/home/index"
         layout :store
       end
 
@@ -488,7 +489,7 @@ class UserXmlSerializer
 
   def serialize
     @user.to_h.map do |attr, value|
-      %(<#{ attr }>#{ value }</#{ attr }>)
+      %(<#{attr}>#{value}</#{attr}>)
     end.join("\n")
   end
 end
@@ -497,7 +498,7 @@ class UserLayout
   include Hanami::Layout
 
   def page_title(username)
-    "User: #{ username }"
+    "User: #{username}"
   end
 end
 
@@ -529,6 +530,7 @@ module Users
     end
 
     private
+
     def private_username
       user.username
     end
@@ -561,7 +563,7 @@ end
 
 module DeepPartials
   View = Hanami::View.duplicate(self) do
-    root __dir__ + '/templates/deep_partials/templates'
+    root __dir__ + "/templates/deep_partials/templates"
   end
 
   class BooksCollection
@@ -583,10 +585,9 @@ end
 
 DeepPartials::View.load!
 
-
 module App3
   View = Hanami::View.duplicate(self) do
-    root __dir__ + '/templates/app3/templates'
+    root __dir__ + "/templates/app3/templates"
   end
 
   module Views
@@ -604,10 +605,9 @@ end
 
 App3::View.load!
 
-
 module PartialAndLayout
   View = Hanami::View.duplicate(self) do
-    root __dir__ + '/templates/partial_and_layout/templates'
+    root __dir__ + "/templates/partial_and_layout/templates"
   end
 
   module Views

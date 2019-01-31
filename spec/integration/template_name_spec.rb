@@ -1,4 +1,6 @@
-RSpec.describe 'Template name' do
+# frozen_string_literal: true
+
+RSpec.describe "Template name" do
   before do
     ##
     # Reset the configuration
@@ -234,37 +236,37 @@ RSpec.describe 'Template name' do
   #
   # Standalone application
   #
-  it 'uses class name to compose it' do
-    expect(Display.template).to eq 'display'
+  it "uses class name to compose it" do
+    expect(Display.template).to eq "display"
   end
 
-  it 'include modules' do
-    expect(HardwareView::Display.template).to eq 'hardware_view/display'
+  it "include modules" do
+    expect(HardwareView::Display.template).to eq "hardware_view/display"
   end
 
   #
   # Modulized application
   #
-  it 'ignores configured namespace' do
-    expect(Furnitures::Standalone.template).to eq     'standalone'
-    expect(Furnitures::Catalog::Index.template).to eq 'catalog/index'
+  it "ignores configured namespace" do
+    expect(Furnitures::Standalone.template).to eq     "standalone"
+    expect(Furnitures::Catalog::Index.template).to eq "catalog/index"
   end
 
-  it 'allows to use a name equal to the namespace' do
-    expect(Furnitures::Furnitures::Index.template).to eq 'furnitures/index'
+  it "allows to use a name equal to the namespace" do
+    expect(Furnitures::Furnitures::Index.template).to eq "furnitures/index"
   end
 
   #
   # Microservice application
   #
-  it 'ignores nested namespace' do
-    expect(Frontend::StandaloneView.template).to eq       'standalone_view'
-    expect(Frontend::Views::Standalone.template).to eq    'standalone'
-    expect(Frontend::Views::Sessions::New.template).to eq 'sessions/new'
+  it "ignores nested namespace" do
+    expect(Frontend::StandaloneView.template).to eq       "standalone_view"
+    expect(Frontend::Views::Standalone.template).to eq    "standalone"
+    expect(Frontend::Views::Sessions::New.template).to eq "sessions/new"
   end
 
-  it 'ignores deeply nested namespace' do
-    expect(Bookshelf::Web::Views::Books::Show.template).to eq 'books/show'
-    expect(Bookshelf::Api::Views::Books::Show.template).to eq 'books/show'
+  it "ignores deeply nested namespace" do
+    expect(Bookshelf::Web::Views::Books::Show.template).to eq "books/show"
+    expect(Bookshelf::Api::Views::Books::Show.template).to eq "books/show"
   end
 end
