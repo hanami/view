@@ -337,8 +337,6 @@ RSpec.describe Hanami::View::Configuration do
           @loaded
         end
 
-        protected
-
         def self.load!
           @loaded = true
         end
