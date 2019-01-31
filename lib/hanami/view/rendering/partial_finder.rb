@@ -59,7 +59,7 @@ module Hanami
         # @api private
         def template_name
           *all, last = partial_name.split(separator)
-          all.push( last.prepend(prefix) ).join(separator)
+          all.push(last.prepend(prefix)).join(separator)
         end
 
         # @api private
