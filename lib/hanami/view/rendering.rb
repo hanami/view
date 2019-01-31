@@ -130,6 +130,7 @@ module Hanami
         end
 
         protected
+
         # The output of the template rendering process.
         #
         # @return [String] the rendering output

@@ -45,6 +45,7 @@ module Hanami
         end
 
         protected
+
         # @api private
         # @since 0.1.0
         def prepare!

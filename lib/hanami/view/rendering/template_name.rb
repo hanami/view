@@ -26,6 +26,7 @@ module Hanami
         end
 
         private
+
         # @since 0.2.0
         # @api private
         def compile!(namespace)

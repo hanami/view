@@ -96,6 +96,7 @@ module Hanami
         end
 
         private
+
         # @api private
         def prepare!
           prepare_views!

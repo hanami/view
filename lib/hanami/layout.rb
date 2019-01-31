@@ -181,6 +181,7 @@ module Hanami
     end
 
     protected
+
     # The template for the current format
     #
     # @api private

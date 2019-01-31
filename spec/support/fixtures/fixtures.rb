@@ -531,6 +531,7 @@ module Users
     end
 
     private
+
     def private_username
       user.username
     end

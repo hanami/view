@@ -47,6 +47,7 @@ module Hanami
         end
 
         protected
+
         # @api private
         def template
           TemplateFinder.new(@view.class, @options).find

@@ -33,6 +33,7 @@ module Hanami
       end
 
       protected
+
       # Loading mechanism hook.
       #
       # @api private

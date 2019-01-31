@@ -489,6 +489,7 @@ module Hanami
       alias_method :unload!, :reset!
 
       protected
+
       # @api private
       attr_writer :namespace
       # @api private
