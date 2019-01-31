@@ -578,4 +578,3 @@ RSpec.describe Hanami::View do
   end
 
 end
-
