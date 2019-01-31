@@ -38,7 +38,7 @@ module Hanami
           base = "#<#{self.class}: #{'%x' % (self.object_id << 1)}"
           base += " @view=\"#{@view}\"" if @view
           base += " @locals=\"#{@locals}\"" if @locals
-          base += ">"
+          base + ">"
         end
 
         # Returns the requested format.

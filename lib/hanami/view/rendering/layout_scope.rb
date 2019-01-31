@@ -52,7 +52,7 @@ module Hanami
           base = "#<#{self.class}:#{'%x' % (self.object_id << 1)}"
           base += " @layout=\"#{@layout.inspect}\"" if @layout
           base += " @scope=\"#{@scope.inspect}\"" if @scope
-          base += ">"
+          base + ">"
         end
 
         # Render a partial or a template within a layout template.
