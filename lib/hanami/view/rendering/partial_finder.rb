@@ -37,8 +37,8 @@ module Hanami
         # @since 0.4.3
         # @api private
         def find
-          Hanami::View::Configuration.for(@view).
-            find_partial(relative_partial_path, template_name, format)
+          Hanami::View::Configuration.for(@view)
+            .find_partial(relative_partial_path, template_name, format)
         end
 
         protected
