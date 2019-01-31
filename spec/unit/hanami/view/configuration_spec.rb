@@ -155,7 +155,7 @@ RSpec.describe Hanami::View::Configuration do
     it "allows to add partials" do
       @configuration.add_partial(Hanami::View::Rendering::PartialFile.new("shared/_foo", "json", @template_stub))
       expect(@configuration.partials.keys).to include("shared/_foo")
-      expect(@configuration.partials["shared/_foo"]).to eq({ json: @template_stub })
+      expect(@configuration.partials["shared/_foo"]).to eq(json: @template_stub)
     end
 
     it "eliminates duplications" do
@@ -209,7 +209,7 @@ RSpec.describe Hanami::View::Configuration do
       end
 
       PrepareView.__send__(:include, Hanami::View)
-      expect(PrepareView.render({format: :html})).to eq "foo"
+      expect(PrepareView.render(format: :html)).to eq "foo"
     end
 
     it "raises error in case of missing block" do

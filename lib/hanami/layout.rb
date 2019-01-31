@@ -186,7 +186,7 @@ module Hanami
     # @api private
     # @since 0.1.0
     def template
-      self.class.registry.resolve({format: @scope.format})
+      self.class.registry.resolve(format: @scope.format)
     end
   end
 end

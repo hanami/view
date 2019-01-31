@@ -17,7 +17,7 @@ RSpec.describe Hanami::View do
     end
 
     it "initializes view with keyword arguments" do
-      expect(@view.new(@template, hello: "world").locals).to eq({hello: "world"})
+      expect(@view.new(@template, hello: "world").locals).to eq(hello: "world")
     end
   end
 
@@ -163,15 +163,15 @@ RSpec.describe Hanami::View do
 
     describe "calling an action method from the template" do
       it "can call with multiple arguments" do
-        expect(RenderViewMethodWithArgs.render({format: :html})).to include %(<h1>Hello, earth!</h1>)
+        expect(RenderViewMethodWithArgs.render(format: :html)).to include %(<h1>Hello, earth!</h1>)
       end
 
       it "will override Kernel methods" do
-        expect(RenderViewMethodOverride.render({format: :html})).to include %(<h1>Hello, foo!</h1>)
+        expect(RenderViewMethodOverride.render(format: :html)).to include %(<h1>Hello, foo!</h1>)
       end
 
       it "can call with block" do
-        expect(RenderViewMethodWithBlock.render({format: :html})).to include %(<ul><li>thing 1</li><li>thing 2</li><li>thing 3</li></ul>)
+        expect(RenderViewMethodWithBlock.render(format: :html)).to include %(<ul><li>thing 1</li><li>thing 2</li><li>thing 3</li></ul>)
       end
     end
 
