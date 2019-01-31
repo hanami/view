@@ -98,9 +98,9 @@ module Hanami
         # @since 0.4.2
         # @api private
         def layout
-          if @view.class.respond_to?(:layout)
-            @view.class.layout.new(self, "")
-          end
+          return unless @view.class.respond_to?(:layout)
+
+          @view.class.layout.new(self, "")
         end
       end
     end
