@@ -128,7 +128,7 @@ module Hanami
 
         # @api private
         def template_for(view)
-          templates.find {|template| template.format == view.format }
+          templates.find { |template| template.format == view.format }
         end
       end
     end
