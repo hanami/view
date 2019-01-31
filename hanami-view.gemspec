@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "http://hanamirb.org"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files -- lib/* CHANGELOG.md LICENSE.md README.md hanami-view.gemspec`.split($/)
+  spec.files         = `git ls-files -- lib/* CHANGELOG.md LICENSE.md README.md hanami-view.gemspec`.split($INPUT_RECORD_SEPARATOR)
   spec.executables   = []
   spec.test_files    = spec.files.grep(%r{^(test)/})
   spec.require_paths = ["lib"]
