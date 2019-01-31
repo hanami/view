@@ -152,9 +152,9 @@ module Hanami
         #
         # @api private
         # @since 0.7.0
-        def method_missing(m, *args, &blk)
-          if @object.respond_to?(m)
-            ::Hanami::View::Escape.html(@object.__send__(m, *args, &blk))
+        def method_missing(method_name, *args, &blk)
+          if @object.respond_to?(method_name)
+            ::Hanami::View::Escape.html(@object.__send__(method_name, *args, &blk))
           else
             super
           end
@@ -164,8 +164,8 @@ module Hanami
         #
         # @api private
         # @since 0.3.0
-        def respond_to_missing?(m, include_private = false)
-          @object.respond_to?(m, include_private)
+        def respond_to_missing?(method_name, include_private = false)
+          @object.respond_to?(method_name, include_private)
         end
       end
 

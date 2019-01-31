@@ -57,11 +57,11 @@ module Hanami
 
         # @since 0.7.0
         # @api private
-        def method_missing(m, *)
-          if m.match(/\?\z/)
+        def method_missing(method_name, *)
+          if method_name.match(/\?\z/)
             false
           else
-            self.class.new("#{@local}.#{m}")
+            self.class.new("#{@local}.#{method_name}")
           end
         end
 
