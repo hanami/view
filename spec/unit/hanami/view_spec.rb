@@ -524,15 +524,15 @@ RSpec.describe Hanami::View do
       end
 
       it "generates a namespace for views" do
-        expect(defined?(Duplicated::Views)).to be_truthy, lambda { "Duplicated::Views expected" }
+        expect(defined?(Duplicated::Views)).to be_truthy, -> { "Duplicated::Views expected" }
       end
 
       it "generates a custom namespace for views" do
-        expect(defined?(DuplicatedCustom::Viewz)).to be_truthy, lambda { "DuplicatedCustom::Viewz expected" }
+        expect(defined?(DuplicatedCustom::Viewz)).to be_truthy, -> { "DuplicatedCustom::Viewz expected" }
       end
 
       it "does not create a custom namespace for views" do
-        expect(defined?(DuplicatedWithoutNamespace::Views)).to_not be_truthy, lambda { "DuplicatedWithoutNamespace::Views wasn't expected" }
+        expect(defined?(DuplicatedWithoutNamespace::Views)).to_not be_truthy, -> { "DuplicatedWithoutNamespace::Views wasn't expected" }
       end
 
       it "assigns correct namespace to the configuration when the namespace argument is nil" do
@@ -540,11 +540,11 @@ RSpec.describe Hanami::View do
       end
 
       it "duplicates Layout" do
-        expect(defined?(Duplicated::Layout)).to be_truthy, lambda { "Duplicated::Layout expected" }
+        expect(defined?(Duplicated::Layout)).to be_truthy, -> { "Duplicated::Layout expected" }
       end
 
       it "duplicates Presenter" do
-        expect(defined?(Duplicated::Presenter)).to be_truthy, lambda { "Duplicated::Presenter expected" }
+        expect(defined?(Duplicated::Presenter)).to be_truthy, -> { "Duplicated::Presenter expected" }
       end
 
       it "optionally accepts a block to configure the generated module" do
