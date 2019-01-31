@@ -21,7 +21,6 @@ module Hanami
       #
       #   # In this scenario we will use a `NullLayout`.
       class NullLayout
-
         # Initialize a layout
         #
         # @param scope [Hanami::View::Rendering::Scope] view rendering scope
