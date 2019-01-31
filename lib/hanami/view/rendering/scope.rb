@@ -100,8 +100,6 @@ module Hanami
         def layout
           if @view.class.respond_to?(:layout)
             @view.class.layout.new(self, "")
-          else
-            nil
           end
         end
       end
