@@ -96,7 +96,7 @@ module Hanami
         # @api private
         # @since 0.7.0
         def templates_path(*parts)
-          Dir.glob("#{ parts.join(separator) }.#{ format }.#{ engines }")
+          Dir.glob("#{parts.join(separator)}.#{format}.#{engines}")
         end
 
         # @api private

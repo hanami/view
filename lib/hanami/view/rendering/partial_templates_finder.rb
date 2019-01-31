@@ -67,7 +67,7 @@ module Hanami
         # @since 0.7.0
         # @api private
         def _find_partials(path)
-          Dir.glob("#{ [path, TemplatesFinder::RECURSIVE, PARTIAL_PATTERN].join(::File::SEPARATOR) }.#{TemplatesFinder::FORMAT}.#{TemplatesFinder::ENGINES}")
+          Dir.glob("#{[path, TemplatesFinder::RECURSIVE, PARTIAL_PATTERN].join(::File::SEPARATOR)}.#{TemplatesFinder::FORMAT}.#{TemplatesFinder::ENGINES}")
         end
       end
     end

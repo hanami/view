@@ -204,7 +204,7 @@ module Hanami
     #   MyApp::View.configuration.root # => #<Pathname:/path/to/root>
     def self.duplicate(mod, views = "Views", &blk)
       dupe.tap do |duplicated|
-        mod.module_eval %{ module #{ views }; end } if views
+        mod.module_eval %{ module #{views}; end } if views
         mod.module_eval %{
           Layout = Hanami::Layout.dup
           Presenter = Hanami::Presenter.dup

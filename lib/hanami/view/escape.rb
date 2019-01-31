@@ -215,7 +215,7 @@ module Hanami
         unless autoescape_methods[method_name]
           prepend Module.new {
             module_eval %{
-              #{ visibility } def #{ method_name }(*args, &blk); ::Hanami::View::Escape.html super; end
+              #{visibility} def #{method_name}(*args, &blk); ::Hanami::View::Escape.html super; end
             }
           }
 

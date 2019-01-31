@@ -132,7 +132,7 @@ module Members
       layout :application
 
       def title
-        "#{ layout.title } articles"
+        "#{layout.title} articles"
       end
     end
   end
@@ -144,7 +144,7 @@ module Articles
     layout :application
 
     def title
-      "#{ layout.title } articles"
+      "#{layout.title} articles"
     end
   end
 
@@ -264,7 +264,7 @@ class SongWidget
   end
 
   def render
-    %(<audio src="#{ song.url }">#{ song.title }</audio>)
+    %(<audio src="#{song.url}">#{song.title}</audio>)
   end
 end
 
@@ -490,7 +490,7 @@ class UserXmlSerializer
 
   def serialize
     @user.to_h.map do |attr, value|
-      %(<#{ attr }>#{ value }</#{ attr }>)
+      %(<#{attr}>#{value}</#{attr}>)
     end.join("\n")
   end
 end
@@ -499,7 +499,7 @@ class UserLayout
   include Hanami::Layout
 
   def page_title(username)
-    "User: #{ username }"
+    "User: #{username}"
   end
 end
 

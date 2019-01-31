@@ -61,7 +61,7 @@ module Hanami
           if m.match(/\?\z/)
             false
           else
-            self.class.new("#{ @local }.#{ m }")
+            self.class.new("#{@local}.#{m}")
           end
         end
 
@@ -76,7 +76,7 @@ module Hanami
         # @since 0.7.0
         # @api private
         def __inspect
-          " :#{ @local }"
+          " :#{@local}"
         end
       end
     end
