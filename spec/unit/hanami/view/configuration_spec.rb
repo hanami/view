@@ -145,7 +145,7 @@ RSpec.describe Hanami::View::Configuration do
 
   describe "#partials" do
     before do
-      @template_stub = OpenStruct.new()
+      @template_stub = OpenStruct.new
     end
 
     it "defaults to an empty set" do
