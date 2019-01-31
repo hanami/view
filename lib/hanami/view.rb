@@ -240,7 +240,7 @@ module Hanami
     #     include Hanami::View
     #   end
     def self.included(base)
-      conf = self.configuration
+      conf = configuration
       conf.add_view(base)
 
       base.class_eval do
