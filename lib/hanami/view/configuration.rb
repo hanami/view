@@ -377,11 +377,9 @@ module Hanami
       #     end
       #   end
       def prepare(&blk)
-        if block_given?
-          @modules.push(blk)
-        else
-          raise ArgumentError.new("Please provide a block")
-        end
+        raise ArgumentError.new("Please provide a block") unless block_given?
+
+        @modules.push(blk)
       end
 
       # Add a view to the registry
