@@ -43,6 +43,8 @@ module Hanami
         #
         # @since 0.7.0
         # @api private
+        #
+        # rubocop:disable Metrics/AbcSize
         def find
           _find_partials(configuration.root).map do |template|
             partial_path, partial_base_name = Pathname(template).relative_path_from(configuration.root).split
@@ -55,6 +57,7 @@ module Hanami
             )
           end
         end
+        # rubocop:enable Metrics/AbcSize
 
         private
 
