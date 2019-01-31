@@ -219,15 +219,15 @@ module Hanami
         visibility = :private if private_method_defined? method_name
         visibility = :protected if protected_method_defined? method_name
 
-        unless autoescape_methods[method_name]
-          prepend Module.new {
-            module_eval %{
-              #{visibility} def #{method_name}(*args, &blk); ::Hanami::View::Escape.html super; end
-            }
-          }
+        return if autoescape_methods[method_name]
 
-          autoescape_methods[method_name] = true
-        end
+        prepend Module.new {
+          module_eval %{
+              #{visibility} def #{method_name}(*args, &blk); ::Hanami::View::Escape.html super; end
+          }
+        }
+
+        autoescape_methods[method_name] = true
       end
     end
   end
