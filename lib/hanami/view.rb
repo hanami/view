@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "dry/view"
 require "hanami/utils/string"
 
 # Hanami
@@ -11,12 +12,13 @@ module Hanami
   # View
   #
   # @since 2.0.0
-  class View
+  class View < Dry::View
     MODULE_SEPARATOR_TRANSFORMER = [:gsub, "::", "."].freeze
 
     attr_reader :name
 
-    def initialize
+    def initialize(**)
+      super()
       @name = Utils::String.transform(self.class.name, MODULE_SEPARATOR_TRANSFORMER, :underscore).freeze unless self.class.name.nil?
       freeze
     end

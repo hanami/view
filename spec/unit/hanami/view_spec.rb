@@ -30,4 +30,15 @@ RSpec.describe Hanami::View do
       expect(subject.name.frozen?).to be(true)
     end
   end
+
+  describe "#call" do
+    subject { Web::Views::Home::Index.new }
+
+    it "renders template" do
+      output = subject.call({}).to_s
+
+      expect(output).to include(%(<title>Web app</title>))
+      expect(output).to include(%(hello))
+    end
+  end
 end
