@@ -1,5 +1,7 @@
 module Dry
   class View
+    # Error raised when template could not be found within a view's configured
+    # paths
     class TemplateNotFoundError < StandardError
       def initialize(template_name, lookup_paths)
         msg = [
