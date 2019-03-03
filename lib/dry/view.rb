@@ -7,6 +7,7 @@ require "dry/inflector"
 
 require_relative "view/context"
 require_relative "view/exposures"
+require_relative "view/errors"
 require_relative "view/part_builder"
 require_relative "view/path"
 require_relative "view/render_environment"
@@ -33,9 +34,6 @@ module Dry
   #
   # @api public
   class View
-    # @api private
-    UndefinedTemplateError = Class.new(StandardError)
-
     # @api private
     DEFAULT_RENDERER_OPTIONS = {default_encoding: "utf-8"}.freeze
 
@@ -459,7 +457,7 @@ module Dry
     # @return [Rendered] rendered view object
     # @api public
     def call(format: config.default_format, context: config.default_context, **input)
-      raise UndefinedTemplateError, "no +template+ configured" unless config.template
+      ensure_config
 
       env = self.class.render_env(format: format, context: context)
       template_env = self.class.template_env(format: format, context: context)
@@ -476,6 +474,12 @@ module Dry
     end
 
     private
+
+    # @api private
+    def ensure_config
+      raise UndefinedPathsError.new unless Array(config.paths).any?
+      raise UndefinedTemplateError.new unless config.template
+    end
 
     # @api private
     def locals(render_env, input)

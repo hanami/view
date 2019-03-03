@@ -1,7 +1,27 @@
 module Dry
   class View
+    # Error raised with paths are not configured
+    #
+    # @api private
+    class UndefinedPathsError < StandardError
+      def initialize(*)
+        super("no +paths+ configured")
+      end
+    end
+
+    # Error raised when template name is not configured
+    #
+    # @api private
+    class UndefinedTemplateError < StandardError
+      def initialize(*)
+        super("no +template+ configured")
+      end
+    end
+
     # Error raised when template could not be found within a view's configured
     # paths
+    #
+    # @api private
     class TemplateNotFoundError < StandardError
       def initialize(template_name, lookup_paths)
         msg = [
