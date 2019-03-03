@@ -22,7 +22,7 @@ module Dry
 
       def initialize(dir, root: dir)
         @dir = Pathname(dir)
-        @root = root
+        @root = Pathname(root)
       end
 
       def lookup(name, format, include_shared: true)
