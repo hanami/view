@@ -2,6 +2,7 @@
 
 require "dry/core/cache"
 require "dry/equalizer"
+require_relative "errors"
 require_relative "tilt"
 
 module Dry
@@ -14,8 +15,6 @@ module Dry
       extend Dry::Core::Cache
 
       include Dry::Equalizer(:paths, :format, :engine_mapping, :options)
-
-      TemplateNotFoundError = Class.new(StandardError)
 
       attr_reader :paths, :format, :engine_mapping, :options
 
@@ -32,8 +31,7 @@ module Dry
         if path
           render(path, scope, &block)
         else
-          msg = "Template #{name.inspect} could not be found in paths:\n#{paths.map { |pa| "- #{pa.to_s}" }.join("\n")}"
-          raise TemplateNotFoundError, msg
+          raise TemplateNotFoundError.new(name, paths)
         end
       end
 

@@ -22,7 +22,7 @@ RSpec.describe Dry::View::Renderer do
     it 'does not include `shared/` subdirectory under root when looking up templates' do
       expect {
         renderer.template(:_shared_hello, scope)
-      }.to raise_error(Dry::View::Renderer::TemplateNotFoundError, /_shared_hello/)
+      }.to raise_error(Dry::View::TemplateNotFoundError, /_shared_hello/)
     end
 
     it 'renders template in shared/ when descending from an upper directory' do
@@ -32,7 +32,7 @@ RSpec.describe Dry::View::Renderer do
     it 'raises error when template cannot be found' do
       expect {
         renderer.template(:missing_template, scope)
-      }.to raise_error(Dry::View::Renderer::TemplateNotFoundError, /missing_template/)
+      }.to raise_error(Dry::View::TemplateNotFoundError, /missing_template/)
     end
   end
 
@@ -44,7 +44,7 @@ RSpec.describe Dry::View::Renderer do
     it 'does not include `shared/` subdirectory under root when looking up partials' do
       expect {
         renderer.partial(:shared_hello, scope)
-      }.to raise_error(Dry::View::Renderer::TemplateNotFoundError, /_shared_hello/)
+      }.to raise_error(Dry::View::TemplateNotFoundError, /_shared_hello/)
     end
 
     it 'renders partial in shared/ subdirectory when descending from an upper directory' do
@@ -62,7 +62,7 @@ RSpec.describe Dry::View::Renderer do
     it 'raises error when partial cannot be found' do
       expect {
         renderer.partial(:missing_partial, scope)
-      }.to raise_error(Dry::View::Renderer::TemplateNotFoundError, /_missing_partial/)
+      }.to raise_error(Dry::View::TemplateNotFoundError, /_missing_partial/)
     end
   end
 
