@@ -25,10 +25,6 @@ RSpec.describe Dry::View::Renderer do
       }.to raise_error(Dry::View::TemplateNotFoundError, /_shared_hello/)
     end
 
-    it 'renders template in shared/ when descending from an upper directory' do
-      expect(renderer.chdir('nested').template(:_shared_hello, scope)).to eql('<h1>Hello</h1>')
-    end
-
     it 'raises error when template cannot be found' do
       expect {
         renderer.template(:missing_template, scope)
@@ -41,10 +37,8 @@ RSpec.describe Dry::View::Renderer do
       expect(renderer.partial(:hello, scope)).to eql('<h1>Partial hello</h1>')
     end
 
-    it 'does not include `shared/` subdirectory under root when looking up partials' do
-      expect {
-        renderer.partial(:shared_hello, scope)
-      }.to raise_error(Dry::View::TemplateNotFoundError, /_shared_hello/)
+    it 'renders partial in shared/ subdirectory under root' do
+      expect(renderer.chdir('hello').partial(:shared_hello, scope)).to eql('<h1>Hello</h1>')
     end
 
     it 'renders partial in shared/ subdirectory when descending from an upper directory' do

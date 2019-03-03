@@ -469,7 +469,7 @@ module Dry
 
       if layout?
         layout_env = self.class.layout_env(format: format, context: context)
-        output = layout_env.template(self.class.layout_path, layout_env.scope(config.scope, layout_locals(locals))) { output }
+        output = env.template(self.class.layout_path, layout_env.scope(config.scope, layout_locals(locals))) { output }
       end
 
       Rendered.new(output: output, locals: locals)

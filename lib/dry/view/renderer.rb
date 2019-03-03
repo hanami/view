@@ -25,8 +25,8 @@ module Dry
         @options = options
       end
 
-      def template(name, scope, &block)
-        path = lookup(name)
+      def template(name, scope, **lookup_options, &block)
+        path = lookup(name, **lookup_options)
 
         if path
           render(path, scope, &block)
@@ -36,7 +36,13 @@ module Dry
       end
 
       def partial(name, scope, &block)
-        template(name_for_partial(name), scope, &block)
+        template(
+          name_for_partial(name),
+          scope,
+          child_dirs: %w[shared],
+          parent_dir: true,
+          &block
+        )
       end
 
       def render(path, scope, &block)
@@ -49,14 +55,14 @@ module Dry
         self.class.new(new_paths, format: format, **options)
       end
 
-      def lookup(name)
-        paths.inject(false) { |_, path|
-          result = path.lookup(name, format, include_shared: false)
+      private
+
+      def lookup(name, **options)
+        paths.inject(nil) { |_, path|
+          result = path.lookup(name, format, **options)
           break result if result
         }
       end
-
-      private
 
       def name_for_partial(name)
         name_segments = name.to_s.split(PATH_DELIMITER)
