@@ -477,8 +477,8 @@ module Dry
 
     # @api private
     def ensure_config
-      raise UndefinedPathsError.new unless Array(config.paths).any?
-      raise UndefinedTemplateError.new unless config.template
+      raise UndefinedConfigError.new(:paths) unless Array(config.paths).any?
+      raise UndefinedConfigError.new(:template) unless config.template
     end
 
     # @api private

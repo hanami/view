@@ -9,7 +9,7 @@ RSpec.describe "View / errors" do
       config.template = "hello"
     end.new
 
-    expect { view.() }.to raise_error(Dry::View::UndefinedPathsError)
+    expect { view.() }.to raise_error(Dry::View::UndefinedConfigError, "no +paths+ configured")
   end
 
   specify "Raising an error when template is not configured" do
@@ -17,6 +17,6 @@ RSpec.describe "View / errors" do
       config.paths = FIXTURES_PATH.join("integration/errors")
     end.new
 
-    expect { view.() }.to raise_error(Dry::View::UndefinedTemplateError)
+    expect { view.() }.to raise_error(Dry::View::UndefinedConfigError, "no +template+ configured")
   end
 end

@@ -1,20 +1,11 @@
 module Dry
   class View
-    # Error raised with paths are not configured
+    # Error raised when critical settings are not configured
     #
     # @api private
-    class UndefinedPathsError < StandardError
-      def initialize(*)
-        super("no +paths+ configured")
-      end
-    end
-
-    # Error raised when template name is not configured
-    #
-    # @api private
-    class UndefinedTemplateError < StandardError
-      def initialize(*)
-        super("no +template+ configured")
+    class UndefinedConfigError < StandardError
+      def initialize(key)
+        super("no +#{key}+ configured")
       end
     end
 
