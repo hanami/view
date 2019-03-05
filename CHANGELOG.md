@@ -1,3 +1,27 @@
+# 0.7.0 / 2019-03-06
+
+### Added
+
+- Raise a `Dry::View::UndefinedConfigError` when a view is called but no paths have been configured (timriley in [#130][pr130])
+
+### Changed
+
+- [BREAKING] Move `Dry::View::Renderer::TemplateNotFoundError` to `Dry::View::TemplateNotFoundError` (timriley in [#130][pr130])
+- [BREAKING] `Dry::View::UndefinedConfigError` is raised instead of `Dry::View::UndefinedTemplateError` when a view is called but no template has been configured (timriley in [#130][pr130])
+- Stop searching upwards through parent directories when rendering a view's template (as opposed to partials) (timriley in [#130][pr130])
+- Stop searching in `shared/` subdirectories when rendering a view's template (as opposed to partials) (timriley in [#130][pr130])
+- Adjust template lookup cache keys to ensure no false hits (timriley in [#130][pr130])
+
+### Fixed
+
+- Avoid a `SystemStackError` when a view is configured with a template that cannot be found on the filesystem (timriley in [#129][pr129])
+
+[Compare v0.6.0...v0.7.0](https://github.com/dry-rb/dry-view/compare/v0.6.0...v0.7.0)
+
+
+[pr129]: https://github.com/dry-rb/dry-view/pull/129
+[pr130]: https://github.com/dry-rb/dry-view/pull/130
+
 # 0.6.0 / 2019-01-30
 
 ### Added
