@@ -33,14 +33,6 @@ RSpec.describe Dry::View do
         '<!DOCTYPE html><html><head><title>Test</title></head><body><h1>User</h1><p>Jane</p></body></html>'
       )
     end
-
-    it 'provides a meaningful error if the template name is missing' do
-      view = Class.new(Dry::View) do
-        config.paths = SPEC_ROOT.join('fixtures/templates')
-      end.new
-
-      expect { view.(context: context) }.to raise_error Dry::View::UndefinedTemplateError
-    end
   end
 
   describe 'renderer options' do

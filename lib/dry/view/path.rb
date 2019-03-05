@@ -25,11 +25,11 @@ module Dry
         @root = Pathname(root)
       end
 
-      def lookup(name, format, include_shared: true)
-        fetch_or_store(dir, root, name, format) do
-          template?(name, format) ||
-            (include_shared && template?("shared/#{name}", format)) ||
-            !root? && chdir("..").lookup(name, format)
+      def lookup(name, format, child_dirs: [], parent_dir: false)
+        fetch_or_store(dir, root, name, format, child_dirs, parent_dir) do
+          lookup_template(name, format) ||
+            lookup_in_child_dirs(name, format, child_dirs: child_dirs) ||
+            parent_dir && lookup_in_parent_dir(name, format, child_dirs: child_dirs)
         end
       end
 
@@ -48,9 +48,20 @@ module Dry
       end
 
       # Search for a template using a wildcard for the engine extension
-      def template?(name, format)
+      def lookup_template(name, format)
         glob = dir.join("#{name}.#{format}.*")
         Dir[glob].first
+      end
+
+      def lookup_in_child_dirs(name, format, child_dirs:)
+        child_dirs.reduce(nil) { |_, dir|
+          template = chdir(dir).lookup(name, format)
+          break template if template
+        }
+      end
+
+      def lookup_in_parent_dir(name, format, child_dirs:)
+        !root? && chdir("..").lookup(name, format, child_dirs: child_dirs, parent_dir: true)
       end
     end
   end

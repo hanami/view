@@ -2,6 +2,7 @@
 
 require "dry/core/cache"
 require "dry/equalizer"
+require_relative "errors"
 require_relative "tilt"
 
 module Dry
@@ -15,8 +16,6 @@ module Dry
 
       include Dry::Equalizer(:paths, :format, :engine_mapping, :options)
 
-      TemplateNotFoundError = Class.new(StandardError)
-
       attr_reader :paths, :format, :engine_mapping, :options
 
       def initialize(paths, format:, engine_mapping: nil, **options)
@@ -26,19 +25,24 @@ module Dry
         @options = options
       end
 
-      def template(name, scope, &block)
-        path = lookup(name)
+      def template(name, scope, **lookup_options, &block)
+        path = lookup(name, **lookup_options)
 
         if path
           render(path, scope, &block)
         else
-          msg = "Template #{name.inspect} could not be found in paths:\n#{paths.map { |pa| "- #{pa.to_s}" }.join("\n")}"
-          raise TemplateNotFoundError, msg
+          raise TemplateNotFoundError.new(name, paths)
         end
       end
 
       def partial(name, scope, &block)
-        template(name_for_partial(name), scope, &block)
+        template(
+          name_for_partial(name),
+          scope,
+          child_dirs: %w[shared],
+          parent_dir: true,
+          &block
+        )
       end
 
       def render(path, scope, &block)
@@ -51,14 +55,14 @@ module Dry
         self.class.new(new_paths, format: format, **options)
       end
 
-      def lookup(name)
-        paths.inject(false) { |_, path|
-          result = path.lookup(name, format, include_shared: false)
+      private
+
+      def lookup(name, **options)
+        paths.inject(nil) { |_, path|
+          result = path.lookup(name, format, **options)
           break result if result
         }
       end
-
-      private
 
       def name_for_partial(name)
         name_segments = name.to_s.split(PATH_DELIMITER)
