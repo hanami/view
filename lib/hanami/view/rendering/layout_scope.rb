@@ -227,7 +227,7 @@ module Hanami
         #
         #   # `article` will be looked up in the view scope first.
         #   # If not found, it will be searched within the layout.
-        def method_missing(method_name, *args, &blk)
+        def method_missing(method_name, *args, &blk) # rubocop:disable Metrics/AbcSize
           # FIXME: this isn't compatible with Hanami 2.0, as it extends a view
           # that we want to be frozen in the future
           #
