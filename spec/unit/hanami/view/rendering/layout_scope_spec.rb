@@ -79,6 +79,28 @@ RSpec.describe Hanami::View::Rendering::LayoutScope do
     end
   end
 
+  describe '#is_a?' do
+    it 'returns true if checked against ::BasicObject' do
+      expect(@scope.is_a?(BasicObject)).to be(true)
+    end
+
+    it 'returns true if checked against Hanami::Utils::BasicObject' do
+      expect(@scope.is_a?(Hanami::Utils::BasicObject)).to be(true)
+    end
+
+    it "returns true if checked against #{described_class}" do
+      expect(@scope.is_a?(described_class)).to be(true)
+    end
+
+    it 'returns false if checked against ::Object' do
+      expect(@scope.is_a?(Object)).to be(false)
+    end
+
+    it 'returns false if checked against ::Module' do
+      expect(@scope.is_a?(Module)).to be(false)
+    end
+  end
+
   describe '#render' do
     describe 'render with no known render type' do
       it 'raises UnknownRenderTypeError' do

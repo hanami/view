@@ -1,6 +1,7 @@
 require 'hanami/view/rendering/null_local'
 require 'hanami/view/rendering/options'
 require 'hanami/utils/escape'
+require 'hanami/utils/basic_object'
 
 module Hanami
   module View
@@ -16,7 +17,7 @@ module Hanami
       # Scope for layout rendering
       #
       # @since 0.1.0
-      class LayoutScope < BasicObject
+      class LayoutScope < Utils::BasicObject
         # Initialize the scope
         #
         # @param layout [Hanami::Layout] the layout to render
