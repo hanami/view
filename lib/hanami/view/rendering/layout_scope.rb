@@ -1,6 +1,7 @@
 require 'hanami/view/rendering/null_local'
 require 'hanami/view/rendering/options'
 require 'hanami/utils/escape'
+require 'hanami/utils/basic_object'
 
 module Hanami
   module View
@@ -16,7 +17,7 @@ module Hanami
       # Scope for layout rendering
       #
       # @since 0.1.0
-      class LayoutScope < BasicObject
+      class LayoutScope < Utils::BasicObject
         # Initialize the scope
         #
         # @param layout [Hanami::Layout] the layout to render
@@ -30,27 +31,6 @@ module Hanami
           @scope  = scope
           @view   = nil
           @locals = nil
-        end
-
-        # Returns the classname as string
-        #
-        # @return classname
-        #
-        # @since 0.3.0
-        def class
-          (class << self; self end).superclass
-        end
-
-        # Returns an inspect String
-        #
-        # @return [String] inspect String (contains classname, objectid in hex, available ivars)
-        #
-        # @since 0.3.0
-        def inspect
-          base = "#<#{ self.class }:#{'%x' % (self.object_id << 1)}"
-          base << " @layout=\"#{@layout.inspect}\"" if @layout
-          base << " @scope=\"#{@scope.inspect}\"" if @scope
-          base << ">"
         end
 
         # Render a partial or a template within a layout template.
@@ -253,6 +233,19 @@ module Hanami
         end
 
         private
+
+        # Returns an inspect String
+        #
+        # @return [String] inspect String (contains classname, objectid in hex, available ivars)
+        #
+        # @since x.x.x
+        # @api private
+        def __inspect
+          result = ""
+          result += %( @layout="#{@layout.inspect}") if @layout
+          result += %( @scope="#{@scope.inspect}") if @scope
+          result
+        end
 
         # @api private
         def _options(options)
