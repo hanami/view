@@ -33,15 +33,6 @@ module Hanami
           @locals = nil
         end
 
-        # Returns the classname as string
-        #
-        # @return classname
-        #
-        # @since 0.3.0
-        def class
-          (class << self; self end).superclass
-        end
-
         # Returns an inspect String
         #
         # @return [String] inspect String (contains classname, objectid in hex, available ivars)
