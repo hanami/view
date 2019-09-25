@@ -74,7 +74,7 @@ module Hanami
         #   #   templates/application.html.erb
         #   #
         #   # Use like this:
-        #   <%= render partial: 'shared/sidebar', { user: current_user } %>
+        #   <%= render partial: 'shared/sidebar', locals: { user: current_user } %>
         #
         #   #
         #   # `user` will be available in the scope of the sidebar rendering
