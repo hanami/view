@@ -33,18 +33,6 @@ module Hanami
           @locals = nil
         end
 
-        # Returns an inspect String
-        #
-        # @return [String] inspect String (contains classname, objectid in hex, available ivars)
-        #
-        # @since 0.3.0
-        def inspect
-          base = "#<#{ self.class }:#{'%x' % (self.object_id << 1)}"
-          base << " @layout=\"#{@layout.inspect}\"" if @layout
-          base << " @scope=\"#{@scope.inspect}\"" if @scope
-          base << ">"
-        end
-
         # Render a partial or a template within a layout template.
         #
         # @param options [Hash]
@@ -245,6 +233,19 @@ module Hanami
         end
 
         private
+
+        # Returns an inspect String
+        #
+        # @return [String] inspect String (contains classname, objectid in hex, available ivars)
+        #
+        # @since x.x.x
+        # @api private
+        def __inspect
+          result = ""
+          result += %( @layout="#{@layout.inspect}") if @layout
+          result += %( @scope="#{@scope.inspect}") if @scope
+          result
+        end
 
         # @api private
         def _options(options)
