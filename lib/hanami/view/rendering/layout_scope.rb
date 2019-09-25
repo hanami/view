@@ -78,8 +78,22 @@ module Hanami
         #
         #   #
         #   # `user` will be available in the scope of the sidebar rendering
-        def render(options)
-          renderer(options).render
+        #
+        # @example Rendering partial, passing a block
+        #   # Given a partial under:
+        #   #   templates/shared/_sidebar.html.erb
+        #   #
+        #   # In the layout template:
+        #   #   templates/application.html.erb
+        #   #
+        #   # Use like this:
+        #   <%= render(partial: 'shared/sidebar') { ... } %>
+        #
+        #   #
+        #   # Then if you call `yield` inside the partial, it will call the
+        #   # passed block.
+        def render(options, &block)
+          renderer(options).render(&block)
         end
 
         # Returns the requested format.

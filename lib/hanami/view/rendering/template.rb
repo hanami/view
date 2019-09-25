@@ -40,8 +40,8 @@ module Hanami
         #
         # @api private
         # @since 0.1.0
-        def render
-          (template or raise_missing_template_error).render(scope)
+        def render(&block)
+          (template or raise_missing_template_error).render(scope, &block)
         end
 
         protected
