@@ -238,7 +238,7 @@ module Hanami
         #
         # @return [String] inspect String (contains classname, objectid in hex, available ivars)
         #
-        # @since x.x.x
+        # @since 1.3.2
         # @api private
         def __inspect
           result = ""

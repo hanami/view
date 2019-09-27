@@ -1,6 +1,11 @@
 # Hanami::View
 View layer for Hanami
 
+## v1.3.2 - 2019-09-27
+### Fixed
+- [Luca Guidi] Ensure rendering scope to work with latest `tilt` changes (`2.0.10`)
+- [Luca Guidi] Ensure `Hanami::View::Rendering::LayoutScope#is_a?` to return consistent results
+
 ## v1.3.1 - 2019-01-18
 ### Added
 - [Luca Guidi] Official support for Ruby: MRI 2.6
