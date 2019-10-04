@@ -651,3 +651,10 @@ module PartialAndLayout
 end
 
 PartialAndLayout::View.load!
+
+module Blocky
+  class Action
+    include Hanami::View
+    root __dir__ + '/templates'
+  end
+end
