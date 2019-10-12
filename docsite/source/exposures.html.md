@@ -4,7 +4,7 @@ layout: gem-single
 name: dry-view
 ---
 
-Define _exposures_ within your view to declare and prepare the values to be passed to the template, decorated as [parts](/gems/dry-view/parts/).
+Define _exposures_ within your view to declare and prepare the values to be passed to the template, decorated as [parts](docs::parts).
 
 An exposure can take a block:
 
@@ -90,7 +90,7 @@ end
 
 ## Accessing the context
 
-To access the [context object](/gems/dry-view/context) from an exposure, include a `context:` keyword parameter:
+To access the [context object](docs::context) from an exposure, include a `context:` keyword parameter:
 
 ```ruby
 expose :articles do |context:|
@@ -114,7 +114,7 @@ class MyView < Dry::View::Controller
 end
 ```
 
-In this example, the `user_count` exposure has access to the value of the `users` value since it named the exposure as a positional argument. The `users` value is at this point will already be decorated by its [part object](/gems/dry-view/parts).
+In this example, the `user_count` exposure has access to the value of the `users` value since it named the exposure as a positional argument. The `users` value is at this point will already be decorated by its [part object](docs::parts).
 
 Exposure dependencies (positional arguments) and input data (keyword arguments) can also be provided together:
 

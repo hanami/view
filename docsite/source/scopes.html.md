@@ -4,13 +4,13 @@ layout: gem-single
 name: dry-view
 ---
 
-A scope is the object that determines which methods are available to use from within the template. The [standard scope](/gems/dry-view/templates/) provides access to template locals (exposed values), partial rendering, as well as the building of custom scopes.
+A scope is the object that determines which methods are available to use from within the template. The [standard scope](docs::templates) provides access to template locals (exposed values), partial rendering, as well as the building of custom scopes.
 
-With a custom scope, you can add your own behavior around a template and its particular set of locals. These, along with [parts](/gems/dry-view/parts/), allow for most view logic to move away from templates and into classes you can reuse, refactor according to typical object oriented approaches, as well as test in isolation.
+With a custom scope, you can add your own behavior around a template and its particular set of locals. These, along with [parts](docs::parts), allow for most view logic to move away from templates and into classes you can reuse, refactor according to typical object oriented approaches, as well as test in isolation.
 
 ## Defining a scope class
 
-To provide custom scope behavior, define your own scope classes in a common namespace (e.g. `Scopes`) and [configure that](/gems/dry-view/configuration/) as your view's `scope_namespace`:
+To provide custom scope behavior, define your own scope classes in a common namespace (e.g. `Scopes`) and [configure that](docs::configuration) as your view's `scope_namespace`:
 
 ```ruby
 class MyView < Dry::View
@@ -29,7 +29,7 @@ end
 
 ## Building scopes
 
-Build a scope by using the `#scope` method from within a template, or on a [part](/gems/dry-rb/parts/) or scope object.
+Build a scope by using the `#scope` method from within a template, or on a [part](docs::parts) or scope object.
 
 ```ruby
 scope(:media_player)
@@ -113,7 +113,7 @@ end
 
 ## Accessing the context
 
-In your scope classes, you can access the [context object](/gems/dry-view/context) as `#_context` (or `#context` as a convenience, provided there is no local named `context`).
+In your scope classes, you can access the [context object](docs::context) as `#_context` (or `#context` as a convenience, provided there is no local named `context`).
 
 Scopes also delegate missing methods to the context object (provided there is no local with that name).
 

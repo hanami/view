@@ -8,7 +8,7 @@ dry-view is designed to encourage better testing of your views, with every compo
 
 ## Testing views
 
-To test a view object in full, initialize it, passing in any [dependencies](/gems/dry-view/injecting-dependencies/) it requires. Provide test doubles for these if you want to simulate certain conditions. Then you can call the view and express the behavior you desire for its rendered output string.
+To test a view object in full, initialize it, passing in any [dependencies](docs::injecting-dependencies) it requires. Provide test doubles for these if you want to simulate certain conditions. Then you can call the view and express the behavior you desire for its rendered output string.
 
 Given this view:
 
@@ -53,7 +53,7 @@ end
 
 ## Testing exposures
 
-If you'd like to test a view's [exposures](/gems/dry-view/exposures/) directly, you can access them after calling the view:
+If you'd like to test a view's [exposures](docs::exposures) directly, you can access them after calling the view:
 
 ```ruby
 RSpec.describe ArticleView do
@@ -78,7 +78,7 @@ end
 
 ## Testing simple part behavior
 
-To test simple [part](/gems/dry-view/parts/) behavior, initialize a part and make your expectations against its methods:
+To test simple [part](docs::parts) behavior, initialize a part and make your expectations against its methods:
 
 ```ruby
 module Parts
@@ -103,7 +103,7 @@ end
 
 ## Testing part behavior requiring a render environment
 
-To test [part](/gems/dry-view/parts/) behavior that [renders partials](/gems/dry-view/templates/) or accesses the [context](/gems/dry-view/context/), the part will need to be initialized with a name and _render environment_. You can get a render environment from a related view class via its `.template_env`:
+To test [part](docs::parts) behavior that [renders partials](docs::templates) or accesses the [context](docs::context), the part will need to be initialized with a name and _render environment_. You can get a render environment from a related view class via its `.template_env`:
 
 ```ruby
 class ArticleView < Dry::View
