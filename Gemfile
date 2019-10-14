@@ -2,9 +2,12 @@ source 'https://rubygems.org'
 
 gemspec
 
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+
 group :tools do
   gem 'hotch'
   gem 'pry-byebug', platform: :mri
+  gem 'ossy', github: 'solnic/ossy', branch: 'master'
 end
 
 group :test do
