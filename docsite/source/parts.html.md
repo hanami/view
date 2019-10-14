@@ -4,7 +4,7 @@ layout: gem-single
 name: dry-view
 ---
 
-All values [exposed](/gems/dry-view/exposures/) by your view are decorated and passed to your templates as _parts_, which allow encapsulation of view-specific behavior alongside your application's domain objects.
+All values [exposed](docs::exposures) by your view are decorated and passed to your templates as _parts_, which allow encapsulation of view-specific behavior alongside your application's domain objects.
 
 Unlike many third-party approaches to view object decoration, dry-view's parts are fully integrated and have access to the full rendering environment, which means that anything you can do from a template, you can also do from a part. This includes accessing the context object as well as rendering partials and building scopes.
 
@@ -12,7 +12,7 @@ This means that much more view logic can move out of template and into parts, wh
 
 ## Defining a part class
 
-To provide custom part behavior, define your own part classes in a common namespace (e.g. `Parts`) and [configure that](/gems/dry-view/configuration/) as your view's `part_namespace` Each part class must inherit from `Dry::View::Part`.
+To provide custom part behavior, define your own part classes in a common namespace (e.g. `Parts`) and [configure that](docs::configuration) as your view's `part_namespace` Each part class must inherit from `Dry::View::Part`.
 
 ```ruby
 module Parts
@@ -85,7 +85,7 @@ class User < Dry::View::Part
 end
 ```
 
-This will render an `_info_box` partial template (via the standard [partial lookup rules](/gems/dry-view/templates/)) with the part still available as `user`.
+This will render an `_info_box` partial template (via the standard [partial lookup rules](docs::templates)) with the part still available as `user`.
 
 You can also render such partials directly within templates:
 
@@ -107,7 +107,7 @@ You can also provide additional locals for the partial:
 
 ## Building scopes
 
-You may [build custom scopes](/gems/dry-view/scopes/) from within a part using `#_scope` (or `#scope` as a convenience, as long as the decorated value doesn't respond to `#scope`):
+You may [build custom scopes](docs::scopes) from within a part using `#_scope` (or `#scope` as a convenience, as long as the decorated value doesn't respond to `#scope`):
 
 ```ruby
 class User < Dry::View::Part
@@ -119,7 +119,7 @@ end
 
 ## Accessing the context
 
-In your part classes, you can access the [context object](/gems/dry-view/context) as `#_context` (or `#context` as a convenience, as long the decorated value itself doesn't respond to `#context`). Parts also delegate missing methods to the context object (provided the decorated value itself doesn't respond to the method).
+In your part classes, you can access the [context object](docs::context) as `#_context` (or `#context` as a convenience, as long the decorated value itself doesn't respond to `#context`). Parts also delegate missing methods to the context object (provided the decorated value itself doesn't respond to the method).
 
 For example:
 
@@ -143,7 +143,7 @@ class UserPart < Dry::View::Part
 end
 ```
 
-You can pass the same options to `decorate` as you do to [exposures](/gems/dry-view/exposures/), for example:
+You can pass the same options to `decorate` as you do to [exposures](docs::exposures), for example:
 
 ```ruby
 class UserPart < Dry::View::Part

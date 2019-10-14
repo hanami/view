@@ -78,7 +78,7 @@ When providing a context at render time, you may wish to provide a version of yo
 
 ## Decorating context attributes
 
-Your context may have attribute that you want decorated as [parts](/gems/dry-view/parts/). Declare these using `decorate` in your context class:
+Your context may have attribute that you want decorated as [parts](docs::parts). Declare these using `decorate` in your context class:
 
 ```ruby
 class MyContext < Dry::View::Context
@@ -93,7 +93,7 @@ class MyContext < Dry::View::Context
 end
 ```
 
-You can pass the same options to `decorate` as you do to [exposures](/gems/dry-view/exposures/), for example:
+You can pass the same options to `decorate` as you do to [exposures](docs::exposures), for example:
 
 ```ruby
 class MyContext < Dry::View::Context

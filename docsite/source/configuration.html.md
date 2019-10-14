@@ -26,8 +26,8 @@ end
 
 ### Rendering environment
 
-- **scope**: a [scope class](/gems/dry-view/scopes) to use when rendering the view's template
-- **default_context**: a [context object](/gems/dry-view/context) to during rendering (if none is provided via the `context:` option when `#call`-ing the view)
+- **scope**: a [scope class](docs::scopes) to use when rendering the view's template
+- **default_context**: a [context object](docs::context) to during rendering (if none is provided via the `context:` option when `#call`-ing the view)
 
 ### Template engine
 
@@ -64,4 +64,4 @@ end
 Some configuration-related options can also be passed at render-time, to `Dry::View#call`.
 
 - **format**: Specify another format for rendering the view. This overrides the `default_format` setting.
-- **context**: Provide an alternative [context object](/gems/dry-view/context) for the [template scope](/gems/dry-view/templates/). This is helpful for providing a context object that has, for example, data specific to the current HTTP request.
+- **context**: Provide an alternative [context object](docs::context) for the [template scope](docs::templates). This is helpful for providing a context object that has, for example, data specific to the current HTTP request.

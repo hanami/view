@@ -4,13 +4,13 @@ layout: gem-single
 name: dry-view
 ---
 
-Every view has a template, which is passed the values from the view’s [exposures](/gems/dry-view/exposures) and then used to render the view output.
+Every view has a template, which is passed the values from the view’s [exposures](docs::exposures) and then used to render the view output.
 
-Save your template in one of the `paths` [configured](/gems/dry-view/configuration) in your view.
+Save your template in one of the `paths` [configured](docs::configuration) in your view.
 
 Templates follow a 3-part naming scheme: `<name>.<format>.<engine>`:
 
-- `name` matches the view’s `template` [setting](/gems/dry-view/configuration)
+- `name` matches the view’s `template` [setting](docs::configuration)
 - `format` is for matching the template with the view’s format
 - `engine` is the rendering engine to use with the template
 
@@ -31,9 +31,9 @@ The currently known problematic engines are:
 
 Each template is rendered with its own _scope_, which determines the methods available within the template. The scope behavior is established by 3 things:
 
-1. The scope’s class, which is `Dry::View::Scope` by default, but can be changed for a template by specifying a class for the view’s [`scope` setting](/gems/dry-view/configuration/), or for a partial rendering by using [`#scope`](/gems/dry-view/scopes) from within a part or scope method, or within the template itself
-2. The template’s _locals_, the [exposure values](/gems/dry-view/exposures/) decorated by their [parts](/gems/dry-view/parts/)
-3. The [context object](/gems/dry-view/context/)
+1. The scope’s class, which is `Dry::View::Scope` by default, but can be changed for a template by specifying a class for the view’s [`scope` setting](docs::configuration), or for a partial rendering by using [`#scope`](docs::scopes) from within a part or scope method, or within the template itself
+2. The template’s _locals_, the [exposure values](docs::exposures) decorated by their [parts](docs::parts)
+3. The [context object](docs::context)
 
 The template scope evaluates methods sent to it in this order:
 
