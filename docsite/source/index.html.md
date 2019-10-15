@@ -98,4 +98,4 @@ view.call(slug: "cheeseburger-backpack").to_s
 # => "<html><body><h1>Cheeseburger Backpack</h1><p>Rebecca Sugar, Ian Jones-Quartey</p></body></html>
 ```
 
-`Dry::View::#call` expects keyword arguments for input data. These arguments are handled by your [exposures](docs::exposures), which prepare [view parts](docs::view-parts) that are passed to your [template](docs::templates) for rendering.
+`Dry::View::#call` expects keyword arguments for input data. These arguments are handled by your [exposures](docs::exposures), which prepare [view parts](docs::parts) that are passed to your [template](docs::templates) for rendering.
