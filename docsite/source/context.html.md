@@ -8,7 +8,7 @@ Use a context object to provide shared facilities to every template, partial, sc
 
 A context object is helpful in holding any behaviour or data you don't want to pass around explicitly. For example:
 
-- Data speicifc to the current HTTP request, like the request path and CSRF tags
+- Data specific to the current HTTP request, like the request path and CSRF tags
 - A "current user" or similar session-based object needed across multiple disparate places
 - Application static assets helpers
 - `content_for`-style helpers
