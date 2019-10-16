@@ -26,4 +26,4 @@ Other requirements:
 
 # Asking for help
 
-If these guidelines aren't helpful, and you're stuck, please post a message on [discourse.dry-rb.org](https://discourse.dry-rb.org).
+If these guidelines aren't helpful, and you're stuck, please post a message on [discourse.dry-rb.org](https://discourse.dry-rb.org) or join [our chat](https://dry-rb.zulipchat.com).
