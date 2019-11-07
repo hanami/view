@@ -25,7 +25,11 @@ RSpec.describe Dry::View::DecoratedAttributes do
       expect(render_env).to have_received(:part).with(:attr_1, attr_1, as: :my_value)
 
       decoratable.attr_2
-      expect(render_env).to have_received(:part).with(:attr_2, attr_2, {})
+      if RUBY_VERSION >= '2.7'
+        expect(render_env).to have_received(:part).with(:attr_2, attr_2)
+      else
+        expect(render_env).to have_received(:part).with(:attr_2, attr_2, {})
+      end
     end
 
     it "raises NoMethodError when an invalid attribute is accessed" do
