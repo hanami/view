@@ -30,7 +30,7 @@ module Dry
       end
 
       def add(name, proc = nil, **options)
-        exposures[name] = Exposure.new(name, proc, options)
+        exposures[name] = Exposure.new(name, proc, **options)
       end
 
       def import(name, exposure)

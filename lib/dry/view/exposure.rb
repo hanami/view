@@ -26,7 +26,7 @@ module Dry
       end
 
       def bind(obj)
-        self.class.new(name, proc, obj, options)
+        self.class.new(name, proc, obj, **options)
       end
 
       def dependency_names
@@ -76,23 +76,31 @@ module Dry
       private
 
       def call_proc(input, locals)
-        args = proc_args(input, locals)
+        args, keywords = proc_args(input, locals)
 
-        if proc.is_a?(Method)
-          proc.(*args)
+        if keywords.empty?
+          if proc.is_a?(Method)
+            proc.(*args)
+          else
+            object.instance_exec(*args, &proc)
+          end
         else
-          object.instance_exec(*args, &proc)
+          if proc.is_a?(Method)
+            proc.(*args, **keywords)
+          else
+            object.instance_exec(*args, **keywords, &proc)
+          end
         end
       end
 
       def proc_args(input, locals)
         dependency_args = proc_dependency_args(locals)
-        input_args = proc_input_args(input)
+        keywords = proc_input_args(input)
 
-        if input_args.any?
-          dependency_args << input_args
+        if keywords.empty?
+          [dependency_args, {}]
         else
-          dependency_args
+          [dependency_args, keywords]
         end
       end
 

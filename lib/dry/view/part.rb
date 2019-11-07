@@ -207,6 +207,7 @@ module Dry
           super
         end
       end
+      ruby2_keywords(:method_missing) if respond_to?(:ruby2_keywords, true)
 
       def respond_to_missing?(name, include_private = false)
         CONVENIENCE_METHODS.include?(name) || _value.respond_to?(name, include_private) || super

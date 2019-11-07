@@ -96,7 +96,7 @@ module Dry
           partial_name = _inflector.underscore(_inflector.demodulize(partial_name.to_s))
         end
 
-        _render_env.partial(partial_name, _render_scope(locals), &block)
+        _render_env.partial(partial_name, _render_scope(**locals), &block)
       end
 
       # Build a new scope using a scope class matching the provided name
@@ -160,6 +160,7 @@ module Dry
           super
         end
       end
+      ruby2_keywords(:method_missing) if respond_to?(:ruby2_keywords, true)
 
       def respond_to_missing?(name, include_private = false)
         _locals.key?(name) ||

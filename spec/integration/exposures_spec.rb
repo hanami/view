@@ -330,12 +330,12 @@ RSpec.describe "exposures" do
 
     input = {users: users, context: context}
 
-    expect(view.(input).to_s).to eql(
+    expect(view.(**input).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">COUNT: 2 users</div></body></html>'
     )
 
-    expect(view.(input).locals).to include(:users, :users_count)
-    expect(view.(input).locals).not_to include(:prefix)
+    expect(view.(**input).locals).to include(:users, :users_count)
+    expect(view.(**input).locals).not_to include(:prefix)
   end
 
   it "inherit exposures from parent class" do
@@ -369,12 +369,12 @@ RSpec.describe "exposures" do
 
     input = {users: users, context: context}
 
-    expect(child.(input).to_s).to eql(
+    expect(child.(**input).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">COUNT: 2 users</div><div class="inherit">Child expose</div></body></html>'
     )
 
-    expect(child.(input).locals).to include(:users, :users_count, :child_expose)
-    expect(child.(input).locals).not_to include(:prefix)
+    expect(child.(**input).locals).to include(:users, :users_count, :child_expose)
+    expect(child.(**input).locals).not_to include(:prefix)
   end
 
   it "inherit exposures from parent class and allow to override them" do
@@ -412,12 +412,12 @@ RSpec.describe "exposures" do
 
     input = {users: users, context: context}
 
-    expect(child.(input).to_s).to eql(
+    expect(child.(**input).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">COUNT: 2 users overrided</div><div class="inherit">Child expose</div></body></html>'
     )
 
-    expect(child.(input).locals).to include(:users, :users_count, :child_expose)
-    expect(child.(input).locals).not_to include(:prefix)
+    expect(child.(**input).locals).to include(:users, :users_count, :child_expose)
+    expect(child.(**input).locals).not_to include(:prefix)
   end
 
   it "makes exposures available to layout" do
