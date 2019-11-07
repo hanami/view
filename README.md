@@ -1,7 +1,7 @@
 # dry-view
 
 [![Gem Version](https://img.shields.io/gem/v/dry-view.svg)][gem]
-[![Build Status](https://img.shields.io/travis/dry-rb/dry-view.svg)][travis]
+[![Build Status](https://github.com/dry-rb/dry-monads/workflows/ci/badge.svg)][ci]
 [![Maintainability](https://api.codeclimate.com/v1/badges/de81a8026a2e7f64e4df/maintainability)][maint]
 [![Test Coverage](https://api.codeclimate.com/v1/badges/de81a8026a2e7f64e4df/test_coverage)][cov]
 [![API Documentation Coverage](http://inch-ci.org/github/dry-rb/dry-view.svg)][inch]
@@ -40,7 +40,7 @@ beginning your work.
 <!-- Badge links -->
 [gitter]: https://gitter.im/dry-rb/chat
 [gem]: https://rubygems.org/gems/dry-view
-[travis]: https://travis-ci.org/dry-rb/dry-view
+[ci]: https://github.com/dry-rb/dry-monads/actions?query=workflow%3Aci
 [maint]: https://codeclimate.com/github/dry-rb/dry-view/maintainability
 [cov]: https://codeclimate.com/github/dry-rb/dry-view/test_coverage
 [inch]: http://inch-ci.org/github/dry-rb/dry-view
