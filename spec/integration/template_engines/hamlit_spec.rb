@@ -12,7 +12,6 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
 
   context "with hamlit-block available" do
     it "supports partials that yield" do
-      pending 'https://github.com/k0kubun/hamlit/issues/149'
       view = Class.new(base_view) do
         config.template = "render_and_yield"
       end.new
@@ -21,7 +20,6 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
     end
 
     it "supports methods that yield" do
-      pending 'https://github.com/k0kubun/hamlit/issues/149'
       context = Class.new(Dry::View::Context) do
         def wrapper(&block)
           "<wrapper>#{yield}</wrapper>"
