@@ -42,7 +42,7 @@ module Hanami
         # @since 0.2.0
         # @api private
         def replace!(token)
-          @name.gsub!(%r{\A#{ token }#{ NAMESPACE_SEPARATOR }}, '')
+          @name = @name.gsub(%r{\A#{ token }#{ NAMESPACE_SEPARATOR }}, '')
         end
       end
     end
