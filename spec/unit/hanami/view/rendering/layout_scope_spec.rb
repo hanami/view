@@ -1,4 +1,6 @@
 RSpec.describe Hanami::View::Rendering::LayoutScope do
+  include_context 'reload configuration'
+
   before do
     layout = LayoutForScopeTest.new
     scope  = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new)
