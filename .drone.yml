@@ -273,7 +273,7 @@ volumes:
 
 ---
 kind: pipeline
-name: hanami/jruby-9.1
+name: jruby-9-1
 group: build
 
 steps:
