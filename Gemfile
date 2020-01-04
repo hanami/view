@@ -1,13 +1,12 @@
 source 'https://rubygems.org'
 
-gemspec
+eval_gemfile 'Gemfile.devtools'
 
-git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+gemspec
 
 group :tools do
   gem 'hotch'
   gem 'pry-byebug', platform: :mri
-  gem 'ossy', github: 'solnic/ossy', branch: 'master'
 end
 
 group :test do
@@ -18,8 +17,6 @@ group :test do
   gem "hamlit"
   gem "hamlit-block"
   gem 'slim', "~> 4.0"
-
-  gem 'simplecov'
 end
 
 group :benchmarks do
