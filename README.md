@@ -1,46 +1,29 @@
-# dry-view
+[gem]: https://rubygems.org/gems/dry-view
+[actions]: https://github.com/dry-rb/dry-view/actions
+[codacy]: https://www.codacy.com/gh/dry-rb/dry-view
+[chat]: https://dry-rb.zulipchat.com
+[inchpages]: http://inch-ci.org/github/dry-rb/dry-view
 
-[![Gem Version](https://img.shields.io/gem/v/dry-view.svg)][gem]
-[![Build Status](https://github.com/dry-rb/dry-monads/workflows/ci/badge.svg)][ci]
-[![Maintainability](https://api.codeclimate.com/v1/badges/de81a8026a2e7f64e4df/maintainability)][maint]
-[![Test Coverage](https://api.codeclimate.com/v1/badges/de81a8026a2e7f64e4df/test_coverage)][cov]
-[![API Documentation Coverage](http://inch-ci.org/github/dry-rb/dry-view.svg)][inch]
+# dry-view [![Join the chat at https://dry-rb.zulipchat.com](https://img.shields.io/badge/dry--rb-join%20chat-%23346b7a.svg)][chat]
 
-dry-view is a complete, standalone view rendering system that gives you
-everything you need to write well-factored view code.
+[![Gem Version](https://badge.fury.io/rb/dry-view.svg)][gem]
+[![CI Status](https://github.com/dry-rb/dry-view/workflows/ci/badge.svg)][actions]
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/22edf59617be4aef97cfbe4e1c99f1ce)][codacy]
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/22edf59617be4aef97cfbe4e1c99f1ce)][codacy]
+[![Inline docs](http://inch-ci.org/github/dry-rb/dry-view.svg?branch=master)][inchpages]
 
 ## Links
 
-* [Documentation][docs]
-* [API documentation][api]
-* [dry-rb website][website]
-* [Support forum][support]
+* [User documentation](http://dry-rb.org/gems/dry-view)
+* [API documentation](http://rubydoc.info/gems/dry-view)
 
-## Development
+## Supported Ruby versions
 
-After checking out this repo, run `bin/setup` to setup the project.
+This library officially supports the following Ruby versions:
 
-Then, run `rake spec` to run the tests.
+* MRI >= `2.4`
+* jruby >= `9.2`
 
-You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+## License
 
-## Contributing
-
-Bug reports and pull requests are welcome [on GitHub][repo]. For new feature
-development, we recommend having a discussion [in the forum][support] before
-beginning your work.
-
-<!-- Links -->
-[docs]: https://dry-rb.org/gems/dry-view
-[api]: https://www.rubydoc.info/github/dry-rb/dry-view
-[website]: https://dry-rb.org/
-[support]: https://discourse.dry-rb.org/
-[repo]: https://github.com/dry-rb/dry-view
-
-<!-- Badge links -->
-[gitter]: https://gitter.im/dry-rb/chat
-[gem]: https://rubygems.org/gems/dry-view
-[ci]: https://github.com/dry-rb/dry-monads/actions?query=workflow%3Aci
-[maint]: https://codeclimate.com/github/dry-rb/dry-view/maintainability
-[cov]: https://codeclimate.com/github/dry-rb/dry-view/test_coverage
-[inch]: http://inch-ci.org/github/dry-rb/dry-view
+See `LICENSE` file.
