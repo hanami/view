@@ -148,6 +148,6 @@ RSpec.describe "Scopes" do
       expose :message
     end.new
 
-    expect(view.(message: {text: "Hello from a part"}).to_s).to eq "Greeting: Hello from a part!"
+    expect(view.(message: { text: "Hello from a part" }).to_s).to eq "Greeting: Hello from a part!"
   end
 end

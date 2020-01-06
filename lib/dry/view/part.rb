@@ -122,7 +122,7 @@ module Dry
       #
       # @api public
       def _render(partial_name, as: _name, **locals, &block)
-        _render_env.partial(partial_name, _render_env.scope({as => self}.merge(locals)), &block)
+        _render_env.partial(partial_name, _render_env.scope({ as => self }.merge(locals)), &block)
       end
 
       # Builds a new scope with the part included in its locals.
@@ -140,7 +140,7 @@ module Dry
       #
       # @api public
       def _scope(scope_name = nil, **locals)
-        _render_env.scope(scope_name, {_name => self}.merge(locals))
+        _render_env.scope(scope_name, { _name => self }.merge(locals))
       end
 
       # Returns a string representation of the value

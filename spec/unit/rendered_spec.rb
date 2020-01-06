@@ -7,7 +7,7 @@ RSpec.describe Dry::View::Rendered do
     described_class.new(
       output: "rendered template output",
       locals: {
-        user: {name: "Jane"},
+        user: { name: "Jane" },
       },
     )
   }
@@ -26,7 +26,7 @@ RSpec.describe Dry::View::Rendered do
 
   describe "#locals" do
     it "returns the locals hash" do
-      expect(rendered.locals).to eql({user: {name: "Jane"}})
+      expect(rendered.locals).to eql({ user: { name: "Jane" } })
     end
   end
 

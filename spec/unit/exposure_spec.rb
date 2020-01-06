@@ -149,7 +149,7 @@ RSpec.describe Dry::View::Exposure do
   end
 
   describe "#call" do
-    let(:input) { {name: "Jane"} }
+    let(:input) { { name: "Jane" } }
 
     context "proc expects input only" do
       let(:proc) { -> name: { name } }
@@ -161,7 +161,7 @@ RSpec.describe Dry::View::Exposure do
 
     context "proc expects input and dependencies" do
       let(:proc) { -> greeting, name: { "#{greeting}, #{name}" } }
-      let(:locals) { {greeting: "Hola"} }
+      let(:locals) { { greeting: "Hola" } }
 
       it "sends the input and dependency values to the proc" do
         expect(exposure.(input, locals)).to eq "Hola, Jane"
@@ -183,7 +183,7 @@ RSpec.describe Dry::View::Exposure do
         let(:proc) { nil }
 
         it "use the default value" do
-          expect(exposure.({hello: "Jane"})).to eq "Jane"
+          expect(exposure.({ hello: "Jane" })).to eq "Jane"
         end
       end
 
@@ -191,14 +191,14 @@ RSpec.describe Dry::View::Exposure do
         let(:proc) { nil }
 
         it "use the default value" do
-          expect(exposure.({hello: nil})).to eq nil
+          expect(exposure.({ hello: nil })).to eq nil
         end
       end
     end
 
     context "proc expects dependencies only" do
       let(:proc) { -> greeting, farewell { "#{greeting}, #{farewell}" } }
-      let(:locals) { {greeting: "Hola", farewell: "Adios"} }
+      let(:locals) { { greeting: "Hola", farewell: "Adios" } }
 
       it "sends the dependency values to the proc" do
         expect(exposure.(input, locals)).to eq "Hola, Adios"
@@ -225,7 +225,7 @@ RSpec.describe Dry::View::Exposure do
 
     context "no proc" do
       let(:proc) { nil }
-      let(:input) { {hello: "hi there"} }
+      let(:input) { { hello: "hi there" } }
 
       it "returns a matching key from the input" do
         expect(exposure.(input)).to eq "hi there"

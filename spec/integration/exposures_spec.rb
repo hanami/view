@@ -127,7 +127,7 @@ RSpec.describe 'exposures' do
       config.template = 'users'
       config.default_format = :html
 
-      expose :users, default: [{name: 'John', email: 'john@william.org'}]
+      expose :users, default: [{ name: 'John', email: 'john@william.org' }]
     end.new
 
     expect(view.(context: context).to_s).to eql(
@@ -165,8 +165,8 @@ RSpec.describe 'exposures' do
     end.new
 
     users = [
-      {name: 'Jane', email: 'jane@doe.org'},
-      {name: 'Joe', email: 'joe@doe.org'}
+      { name: 'Jane', email: 'jane@doe.org' },
+      { name: 'Joe', email: 'joe@doe.org' }
     ]
 
     expect(view.(users: users, context: context).to_s).to eql(
@@ -201,8 +201,8 @@ RSpec.describe 'exposures' do
     end.new
 
     users = [
-      {name: 'Jane', email: 'jane@doe.org'},
-      {name: 'Joe', email: 'joe@doe.org'}
+      { name: 'Jane', email: 'jane@doe.org' },
+      { name: 'Joe', email: 'joe@doe.org' }
     ]
 
     rendered = view.(users: users, context: context)
@@ -296,8 +296,8 @@ RSpec.describe 'exposures' do
     end.new
 
     users = [
-      {name: 'Jane', email: 'jane@doe.org'},
-      {name: 'Joe', email: 'joe@doe.org'}
+      { name: 'Jane', email: 'jane@doe.org' },
+      { name: 'Joe', email: 'joe@doe.org' }
     ]
 
     expect(view.(users: users, context: context).to_s).to eql(
@@ -324,11 +324,11 @@ RSpec.describe 'exposures' do
     end.new
 
     users = [
-      {name: 'Jane', email: 'jane@doe.org'},
-      {name: 'Joe', email: 'joe@doe.org'}
+      { name: 'Jane', email: 'jane@doe.org' },
+      { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    input = {users: users, context: context}
+    input = { users: users, context: context }
 
     expect(view.(input).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">COUNT: 2 users</div></body></html>'
@@ -363,11 +363,11 @@ RSpec.describe 'exposures' do
     end.new
 
     users = [
-      {name: 'Jane', email: 'jane@doe.org'},
-      {name: 'Joe', email: 'joe@doe.org'}
+      { name: 'Jane', email: 'jane@doe.org' },
+      { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    input = {users: users, context: context}
+    input = { users: users, context: context }
 
     expect(child.(input).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">COUNT: 2 users</div><div class="inherit">Child expose</div></body></html>'
@@ -406,11 +406,11 @@ RSpec.describe 'exposures' do
     end.new
 
     users = [
-      {name: 'Jane', email: 'jane@doe.org'},
-      {name: 'Joe', email: 'joe@doe.org'}
+      { name: 'Jane', email: 'jane@doe.org' },
+      { name: 'Joe', email: 'joe@doe.org' }
     ]
 
-    input = {users: users, context: context}
+    input = { users: users, context: context }
 
     expect(child.(input).to_s).to eql(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ul><li>Jane (jane@doe.org)</li><li>Joe (joe@doe.org)</li></ul><div class="count">COUNT: 2 users overrided</div><div class="inherit">Child expose</div></body></html>'

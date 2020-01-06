@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # coding: utf-8
+
 RSpec.describe 'dry-view' do
   let(:view_class) do
     Class.new(Dry::View) do
@@ -84,7 +85,7 @@ RSpec.describe 'dry-view' do
 
     expect(view.(context: context).to_s).to eq(
       '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body>ç</body></html>'
-   )
+    )
   end
 
   describe 'inheritance' do
@@ -93,7 +94,7 @@ RSpec.describe 'dry-view' do
 
       klass.setting :paths, SPEC_ROOT.join('fixtures/templates')
       klass.setting :layout, 'app'
-      klass.setting :formats, {html: :slim}
+      klass.setting :formats, { html: :slim }
 
       klass
     end
@@ -110,8 +111,8 @@ RSpec.describe 'dry-view' do
 
         expose :tasks do
           [
-            {title: 'one'},
-            {title: 'two'},
+            { title: 'one' },
+            { title: 'two' },
           ]
         end
       end.new

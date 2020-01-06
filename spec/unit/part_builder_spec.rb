@@ -68,7 +68,7 @@ RSpec.describe Dry::View::PartBuilder do
         it_behaves_like 'a view part'
 
         describe 'alternative name provided via :as option' do
-          let(:options) { {as: :admin_user} }
+          let(:options) { { as: :admin_user } }
 
           it_behaves_like 'a view part'
         end
@@ -78,7 +78,7 @@ RSpec.describe Dry::View::PartBuilder do
             Test::UserPart = Class.new(Dry::View::Part)
           end
 
-          let(:options) { {as: Test::UserPart} }
+          let(:options) { { as: Test::UserPart } }
 
           it_behaves_like 'a view part' do
             let(:part_class) { Test::UserPart }
@@ -93,7 +93,7 @@ RSpec.describe Dry::View::PartBuilder do
         it_behaves_like 'a view part collection'
 
         describe 'alternative name provided via :as option' do
-          let(:options) { {as: :admin_user} }
+          let(:options) { { as: :admin_user } }
 
           it_behaves_like 'a view part collection'
         end
@@ -103,7 +103,7 @@ RSpec.describe Dry::View::PartBuilder do
             Test::UserPart = Class.new(Dry::View::Part)
           end
 
-          let(:options) { {as: Test::UserPart} }
+          let(:options) { { as: Test::UserPart } }
 
           it_behaves_like 'a view part collection' do
             let(:item_part_class) { Test::UserPart }
@@ -115,7 +115,7 @@ RSpec.describe Dry::View::PartBuilder do
             Test::UserCollectionPart = Class.new(Dry::View::Part)
           end
 
-          let(:options) { {as: [Test::UserCollectionPart]} }
+          let(:options) { { as: [Test::UserCollectionPart] } }
 
           it_behaves_like 'a view part collection' do
             let(:collection_part_class) { Test::UserCollectionPart }
@@ -164,7 +164,7 @@ RSpec.describe Dry::View::PartBuilder do
         end
 
         describe 'alternative name provided via :as option' do
-          let(:options) { {as: :admin_user} }
+          let(:options) { { as: :admin_user } }
 
           it_behaves_like 'a view part' do
             let(:part_class) { Test::Parts::AdminUser }
@@ -172,7 +172,7 @@ RSpec.describe Dry::View::PartBuilder do
         end
 
         describe 'alternative name provided via :as option, when matched constant is not a class inheriting from Dry::View::Part' do
-          let(:options) { {as: :user_module} }
+          let(:options) { { as: :user_module } }
 
           it_behaves_like 'a view part' do
             let(:part_class) { Dry::View::Part }
@@ -180,7 +180,7 @@ RSpec.describe Dry::View::PartBuilder do
         end
 
         describe 'explicit part class provided via as: option' do
-          let(:options) { {as: Test::Parts::AdminUser} }
+          let(:options) { { as: Test::Parts::AdminUser } }
 
           it_behaves_like 'a view part' do
             let(:part_class) { Test::Parts::AdminUser }
@@ -198,7 +198,7 @@ RSpec.describe Dry::View::PartBuilder do
         end
 
         describe 'alternative element name provided via :as option' do
-          let(:options) { {as: :admin_user} }
+          let(:options) { { as: :admin_user } }
 
           it_behaves_like 'a view part collection' do
             let(:collection_part_class) { Test::Parts::Users }
@@ -207,7 +207,7 @@ RSpec.describe Dry::View::PartBuilder do
         end
 
         describe 'alternative collection name provided via :as option' do
-          let(:options) { {as: [:user_collection]} }
+          let(:options) { { as: [:user_collection] } }
 
           it_behaves_like 'a view part collection' do
             let(:collection_part_class) { Test::Parts::UserCollection }
@@ -216,7 +216,7 @@ RSpec.describe Dry::View::PartBuilder do
         end
 
         describe 'alternative collection and element names provided via :as option' do
-          let(:options) { {as: [:user_collection, :admin_user]} }
+          let(:options) { { as: [:user_collection, :admin_user] } }
 
           it_behaves_like 'a view part collection' do
             let(:collection_part_class) { Test::Parts::UserCollection }
@@ -225,7 +225,7 @@ RSpec.describe Dry::View::PartBuilder do
         end
 
         describe 'explicit part class provided via as: option' do
-          let(:options) { {as: Test::Parts::AdminUser} }
+          let(:options) { { as: Test::Parts::AdminUser } }
 
           it_behaves_like 'a view part collection' do
             let(:collection_part_class) { Test::Parts::Users }
@@ -234,7 +234,7 @@ RSpec.describe Dry::View::PartBuilder do
         end
 
         describe 'explicit collection part class provided via as: option' do
-          let(:options) { {as: [Test::Parts::UserCollection]} }
+          let(:options) { { as: [Test::Parts::UserCollection] } }
 
           it_behaves_like 'a view part collection' do
             let(:collection_part_class) { Test::Parts::UserCollection }
@@ -243,7 +243,7 @@ RSpec.describe Dry::View::PartBuilder do
         end
 
         describe 'explicit collection and element part classes provided via :as option' do
-          let(:options) { {as: [Test::Parts::UserCollection, Test::Parts::AdminUser]} }
+          let(:options) { { as: [Test::Parts::UserCollection, Test::Parts::AdminUser] } }
 
           it_behaves_like 'a view part collection' do
             let(:collection_part_class) { Test::Parts::UserCollection }

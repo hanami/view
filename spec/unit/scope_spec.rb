@@ -24,7 +24,7 @@ RSpec.describe Dry::View::Scope do
 
       it 'renders a partial with provided locals' do
         scope_with_locals = described_class.new(
-          locals: {foo: 'bar'},
+          locals: { foo: 'bar' },
           render_env: render_env,
         )
 
@@ -48,7 +48,7 @@ RSpec.describe Dry::View::Scope do
 
     describe '#method_missing' do
       describe 'matching locals' do
-        let(:locals) { {greeting: 'hello from locals'} }
+        let(:locals) { { greeting: 'hello from locals' } }
         let(:context) { double(:context, greeting: 'hello from context') }
 
         it 'returns a matching value from the locals, in favour of a matching method on the context' do
@@ -64,7 +64,7 @@ RSpec.describe Dry::View::Scope do
         end
 
         it 'forwards all arguments to the method' do
-          blk = -> { }
+          blk = -> {}
           scope.greeting 'args', &blk
 
           expect(context).to have_received(:greeting).with('args', &blk)

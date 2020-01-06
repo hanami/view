@@ -115,10 +115,6 @@ RSpec.describe Dry::View::Exposures do
     end
   end
 
-
-
-
-
   describe "#import" do
     it "imports an exposure to the set" do
       exposures_b = described_class.new

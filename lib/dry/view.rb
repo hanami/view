@@ -35,7 +35,7 @@ module Dry
   # @api public
   class View
     # @api private
-    DEFAULT_RENDERER_OPTIONS = {default_encoding: "utf-8"}.freeze
+    DEFAULT_RENDERER_OPTIONS = { default_encoding: "utf-8" }.freeze
 
     include Dry::Equalizer(:config, :exposures)
 

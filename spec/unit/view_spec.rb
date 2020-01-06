@@ -10,11 +10,11 @@ RSpec.describe Dry::View do
       config.template = 'user'
 
       expose :user do
-        {name: 'Jane'}
+        { name: 'Jane' }
       end
 
       expose :header do
-        {title: 'User'}
+        { title: 'User' }
       end
     end.new
   }
@@ -40,8 +40,8 @@ RSpec.describe Dry::View do
       Class.new(Dry::View) do
         config.paths = SPEC_ROOT.join('fixtures/templates')
         config.template = 'view_renderer_options'
-        config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}
-        config.renderer_options = {outvar: '@__buf__'}
+        config.renderer_engine_mapping = { erb: Tilt::ErubiTemplate }
+        config.renderer_options = { outvar: '@__buf__' }
       end.new
     }
 

@@ -13,7 +13,6 @@ RSpec.describe Dry::View::Context do
       decorate :assets, :routes
       decorate :invalid_attribute
 
-
       def initialize(assets:, routes:, **options)
         @assets = assets
         @routes = routes
@@ -62,7 +61,7 @@ RSpec.describe Dry::View::Context do
       new_context = context.with(another_option: another_option)
 
       expect(new_context).to be_a(context.class)
-      expect(new_context._options).to eq({assets: context.assets, routes: routes, another_option: another_option})
+      expect(new_context._options).to eq({ assets: context.assets, routes: routes, another_option: another_option })
     end
   end
 end

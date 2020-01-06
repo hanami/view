@@ -51,7 +51,7 @@ RSpec.describe "Context" do
     context = Test::Context.new(assets: Test::Assets.new)
 
     output = view.(
-      user: {image_url: nil},
+      user: { image_url: nil },
       context: context,
     ).to_s
 

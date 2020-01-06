@@ -84,6 +84,7 @@ module Dry
       def render(partial_name = nil, **locals, &block)
         partial_name ||= _name
         raise ArgumentError, "+partial_name+ must be provided for unnamed scopes" unless partial_name
+
         partial_name = _inflector.underscore(_inflector.demodulize(partial_name.to_s)) if partial_name.is_a?(Class)
 
         _render_env.partial(partial_name, _render_scope(locals), &block)

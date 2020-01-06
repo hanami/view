@@ -11,8 +11,8 @@ RSpec.describe "Template engines / erb (using erubi via an explict engine mappin
   let(:base_view) {
     Class.new(Dry::View) do
       config.paths = FIXTURES_PATH.join("integration/template_engines/erubi")
-      config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}
-      config.renderer_options = {engine_class: Erubi::CaptureEndEngine}
+      config.renderer_engine_mapping = { erb: Tilt::ErubiTemplate }
+      config.renderer_options = { engine_class: Erubi::CaptureEndEngine }
     end
   }
 

@@ -86,7 +86,7 @@ RSpec.describe Dry::View::Part do
       end
 
       it 'forwards all arguments to the method' do
-        blk = -> { }
+        blk = -> {}
         part.greeting 'args', &blk
 
         expect(value).to have_received(:greeting).with('args', &blk)
