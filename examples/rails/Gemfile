@@ -8,8 +8,8 @@ gem 'rails', '~> 5.2.2'
 gem 'sqlite3'
 gem 'puma', '~> 3.11'
 
-gem "dry-view", path: "../.."
-gem "slim"
+gem 'dry-view', path: '../..'
+gem 'slim'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

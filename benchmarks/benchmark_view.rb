@@ -17,7 +17,7 @@ TEMPLATE_LOCALS = { users: [
 ActionController::Base.view_paths = TEMPLATES_PATHS
 
 class UsersController < ActionController::Base
-  layout "app"
+  layout 'app'
 
   attr_reader :users
 

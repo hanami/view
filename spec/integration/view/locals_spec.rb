@@ -1,32 +1,32 @@
 # frozen_string_literal: true
 
-require "dry/view"
-require "dry/view/part"
+require 'dry/view'
+require 'dry/view/part'
 
-RSpec.describe "View / locals" do
-  specify "locals are decorated with parts by default" do
+RSpec.describe 'View / locals' do
+  specify 'locals are decorated with parts by default' do
     view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
-      config.template = "greeting"
+      config.template = 'greeting'
 
       expose :greeting
     end.new
 
-    local = view.(greeting: "Hello").locals[:greeting]
+    local = view.(greeting: 'Hello').locals[:greeting]
 
     expect(local).to be_a(Dry::View::Part)
   end
 
-  specify "locals are not decorated if their exposure is marked as `decorate: false`" do
+  specify 'locals are not decorated if their exposure is marked as `decorate: false`' do
     view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
-      config.template = "greeting"
+      config.template = 'greeting'
 
       expose :greeting, decorate: false
     end.new
 
-    local = view.(greeting: "Hello").locals[:greeting]
+    local = view.(greeting: 'Hello').locals[:greeting]
 
-    expect(local).to eq "Hello"
+    expect(local).to eq 'Hello'
   end
 end

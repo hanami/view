@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require "dry/configurable"
-require "dry/core/cache"
-require "dry/equalizer"
-require "dry/inflector"
+require 'dry/configurable'
+require 'dry/core/cache'
+require 'dry/equalizer'
+require 'dry/inflector'
 
-require_relative "view/context"
-require_relative "view/exposures"
-require_relative "view/errors"
-require_relative "view/part_builder"
-require_relative "view/path"
-require_relative "view/render_environment"
-require_relative "view/rendered"
-require_relative "view/renderer"
-require_relative "view/scope_builder"
+require_relative 'view/context'
+require_relative 'view/exposures'
+require_relative 'view/errors'
+require_relative 'view/part_builder'
+require_relative 'view/path'
+require_relative 'view/render_environment'
+require_relative 'view/rendered'
+require_relative 'view/renderer'
+require_relative 'view/scope_builder'
 
 # A collection of next-generation Ruby libraries, helping you to write clear,
 # flexible, and more maintainable Ruby code. Each dry-rb gem fulfils a common
@@ -35,7 +35,7 @@ module Dry
   # @api public
   class View
     # @api private
-    DEFAULT_RENDERER_OPTIONS = { default_encoding: "utf-8" }.freeze
+    DEFAULT_RENDERER_OPTIONS = { default_encoding: 'utf-8' }.freeze
 
     include Dry::Equalizer(:config, :exposures)
 
@@ -92,7 +92,7 @@ module Dry
     #   @param dir [String] directory name
     #   @api public
     # @!scope class
-    setting :layouts_dir, "layouts"
+    setting :layouts_dir, 'layouts'
 
     # @overload config.scope=(scope_class)
     #   Set the scope class to use when rendering the view's template.

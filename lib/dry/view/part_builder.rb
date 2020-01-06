@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "dry/core/cache"
-require "dry/equalizer"
-require_relative "part"
+require 'dry/core/cache'
+require 'dry/equalizer'
+require_relative 'part'
 
 module Dry
   class View

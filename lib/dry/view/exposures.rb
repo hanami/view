@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "tsort"
-require "dry/equalizer"
-require "dry/view/exposure"
+require 'tsort'
+require 'dry/equalizer'
+require 'dry/view/exposure'
 
 module Dry
   class View

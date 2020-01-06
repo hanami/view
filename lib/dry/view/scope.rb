@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "dry/equalizer"
-require "dry/core/constants"
-require_relative "render_environment_missing"
+require 'dry/equalizer'
+require 'dry/core/constants'
+require_relative 'render_environment_missing'
 
 module Dry
   class View
@@ -83,7 +83,7 @@ module Dry
       # @api public
       def render(partial_name = nil, **locals, &block)
         partial_name ||= _name
-        raise ArgumentError, "+partial_name+ must be provided for unnamed scopes" unless partial_name
+        raise ArgumentError, '+partial_name+ must be provided for unnamed scopes' unless partial_name
 
         partial_name = _inflector.underscore(_inflector.demodulize(partial_name.to_s)) if partial_name.is_a?(Class)
 

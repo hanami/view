@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "tilt/template"
-require "erbse"
+require 'tilt/template'
+require 'erbse'
 
 module Dry
   class View

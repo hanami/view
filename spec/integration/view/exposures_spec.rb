@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "dry/view"
-require "dry/view/context"
+require 'dry/view'
+require 'dry/view/context'
 
-RSpec.describe "View / exposures" do
-  specify "exposures have access to context" do
+RSpec.describe 'View / exposures' do
+  specify 'exposures have access to context' do
     view = Class.new(Dry::View) do
       config.paths = SPEC_ROOT.join('fixtures/templates')
-      config.template = "greeting"
+      config.template = 'greeting'
 
       expose :greeting do |greeting:, context:|
         "#{greeting}, #{context.name}"
@@ -16,12 +16,12 @@ RSpec.describe "View / exposures" do
 
     context = Class.new(Dry::View::Context) do
       def name
-        "Jane"
+        'Jane'
       end
     end.new
 
-    local = view.(greeting: "Hello", context: context).locals[:greeting]
+    local = view.(greeting: 'Hello', context: context).locals[:greeting]
 
-    expect(local.value).to eq "Hello, Jane"
+    expect(local.value).to eq 'Hello, Jane'
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "dry/inflector"
+require 'dry/inflector'
 
 module Dry
   class View
@@ -8,7 +8,7 @@ module Dry
     class RenderEnvironmentMissing
       class MissingEnvironmentError < StandardError
         def message
-          "a +render_env+ must be provided"
+          'a +render_env+ must be provided'
         end
       end
 

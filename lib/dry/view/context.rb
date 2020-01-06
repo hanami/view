@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "dry/equalizer"
-require_relative "decorated_attributes"
+require 'dry/equalizer'
+require_relative 'decorated_attributes'
 
 module Dry
   class View

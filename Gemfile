@@ -12,13 +12,13 @@ group :tools do
 end
 
 group :test do
-  gem "rack", ">= 2.0.6"
+  gem 'rack', '>= 2.0.6'
 
-  gem "erbse"
-  gem "erubi"
-  gem "hamlit"
-  gem "hamlit-block"
-  gem 'slim', "~> 4.0"
+  gem 'erbse'
+  gem 'erubi'
+  gem 'hamlit'
+  gem 'hamlit-block'
+  gem 'slim', '~> 4.0'
 end
 
 group :benchmarks do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "dry/core/cache"
-require "tilt"
+require 'dry/core/cache'
+require 'tilt'
 
 module Dry
   class View
@@ -11,7 +11,7 @@ module Dry
 
       class << self
         def [](path, mapping, **options)
-          ext = File.extname(path).sub(%r{^.}, "").to_sym
+          ext = File.extname(path).sub(%r{^.}, '').to_sym
           activate_adapter ext
 
           with_mapping(mapping).new(path, **options)
@@ -74,5 +74,5 @@ module Dry
   end
 end
 
-require_relative "tilt/erb"
-require_relative "tilt/haml"
+require_relative 'tilt/erb'
+require_relative 'tilt/haml'

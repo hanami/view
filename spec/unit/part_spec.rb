@@ -44,8 +44,8 @@ RSpec.describe Dry::View::Part do
       end
 
       it 'includes extra locals in the scope' do
-        part.render(:info, extra_local: "hello")
-        expect(renderer).to have_received(:partial).with(:info, scope(user: part, extra_local: "hello"))
+        part.render(:info, extra_local: 'hello')
+        expect(renderer).to have_received(:partial).with(:info, scope(user: part, extra_local: 'hello'))
       end
     end
 
@@ -66,13 +66,13 @@ RSpec.describe Dry::View::Part do
       end
     end
 
-    describe "#inspect" do
-      it "includes the clsas name, name, and value only" do
-        expect(part.inspect).to eq "#<Dry::View::Part name=:user value=#<Double :value>>"
+    describe '#inspect' do
+      it 'includes the clsas name, name, and value only' do
+        expect(part.inspect).to eq '#<Dry::View::Part name=:user value=#<Double :value>>'
       end
     end
 
-    describe "#_format" do
+    describe '#_format' do
       it "returns the render environment's format" do
         expect(part._format).to eq :xml
       end
@@ -122,8 +122,8 @@ RSpec.describe Dry::View::Part do
       )
     }
 
-    describe "#format" do
-      it "raises an error" do
+    describe '#format' do
+      it 'raises an error' do
         expect { part.render(:info) }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
@@ -142,8 +142,8 @@ RSpec.describe Dry::View::Part do
   end
 
   context 'without a name provided' do
-    describe "#_name" do
-      context "when class has a name" do
+    describe '#_name' do
+      context 'when class has a name' do
         before do
           Test::MyPart = Class.new(Dry::View::Part)
         end
@@ -152,18 +152,18 @@ RSpec.describe Dry::View::Part do
           Test::MyPart.new(value: value)
         }
 
-        it "is inferred from the class name" do
-          expect(part._name).to eq "my_part"
+        it 'is inferred from the class name' do
+          expect(part._name).to eq 'my_part'
         end
       end
 
-      context "when class is anonymous" do
+      context 'when class is anonymous' do
         subject(:part) {
           Class.new(Dry::View::Part).new(value: value)
         }
 
         it "defaults to 'part'" do
-          expect(part._name).to eq "part"
+          expect(part._name).to eq 'part'
         end
       end
     end

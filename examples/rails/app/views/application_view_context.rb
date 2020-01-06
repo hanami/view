@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "dry/view/context"
+require 'dry/view/context'
 
 class ApplicationViewContext < Dry::View::Context
   def method_missing(name, *args, &block)

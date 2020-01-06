@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require "ostruct"
+require 'ostruct'
 
 module ExampleApp
   Article = Struct.new(:slug, :title)
 
   class ArticleRepo
     ARTICLES = [
-      {slug: "together-breakfast", title: "Together Breakfast"},
-      {slug: "cat-fingers", title: "Cat Fingers"},
+      {slug: 'together-breakfast', title: 'Together Breakfast'},
+      {slug: 'cat-fingers', title: 'Cat Fingers'},
     ].freeze
 
     def by_slug!(slug)

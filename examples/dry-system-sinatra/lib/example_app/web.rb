@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require "sinatra/base"
-require "byebug"
+require 'sinatra/base'
+require 'byebug'
 
 module ExampleApp
   class Web < Sinatra::Base
-    get "/" do
-      redirect "/articles"
+    get '/' do
+      redirect '/articles'
     end
 
-    get "/articles" do
-      render_view "articles.index"
+    get '/articles' do
+      render_view 'articles.index'
     end
 
-    get "/articles/:slug" do |slug|
-      render_view "articles.show", slug: slug
+    get '/articles/:slug' do |slug|
+      render_view 'articles.show', slug: slug
     end
 
     helpers do
@@ -26,7 +26,7 @@ module ExampleApp
       end
 
       def view_context(**options)
-        container["view.context"].with(view_context_options(**options))
+        container['view.context'].with(view_context_options(**options))
       end
 
       def view_context_options(**overrides)

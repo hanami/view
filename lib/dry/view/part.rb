@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "dry/equalizer"
-require_relative "decorated_attributes"
-require_relative "render_environment_missing"
+require 'dry/equalizer'
+require_relative 'decorated_attributes'
+require_relative 'render_environment_missing'
 
 module Dry
   class View
@@ -60,7 +60,7 @@ module Dry
       #
       # @api private
       def self.part_name(inflector)
-        name ? inflector.underscore(inflector.demodulize(name)) : "part"
+        name ? inflector.underscore(inflector.demodulize(name)) : 'part'
       end
 
       # Returns a new Part instance

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "dry/view"
-require "dry/view/context"
-require "dry/view/part"
+require 'dry/view'
+require 'dry/view/context'
+require 'dry/view/part'
 
-RSpec.describe "Context" do
-  it "Provides decorated attributes for use in templates and parts" do
+RSpec.describe 'Context' do
+  it 'Provides decorated attributes for use in templates and parts' do
     module Test
       class Assets
         def [](path)
@@ -34,15 +34,15 @@ RSpec.describe "Context" do
 
         class User < Dry::View::Part
           def image_tag
-            value[:image_url] || context.assets.image_tag("default.png")
+            value[:image_url] || context.assets.image_tag('default.png')
           end
         end
       end
     end
 
     view = Class.new(Dry::View) do
-      config.paths = FIXTURES_PATH.join("integration/context")
-      config.template = "decorated_attributes"
+      config.paths = FIXTURES_PATH.join('integration/context')
+      config.template = 'decorated_attributes'
       config.part_namespace = Test::Parts
 
       expose :user
@@ -55,7 +55,7 @@ RSpec.describe "Context" do
       context: context,
     ).to_s
 
-    expect(output.gsub("\n", "")).to eq <<~HTML.gsub("\n", "")
+    expect(output.gsub("\n", '')).to eq <<~HTML.gsub("\n", '')
       <img src="hashed/path/to/hello.png">
       <div class="user">
       <img src="hashed/path/to/default.png">

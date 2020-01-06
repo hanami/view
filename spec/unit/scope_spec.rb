@@ -5,7 +5,7 @@ require 'dry/view/scope_builder'
 RSpec.describe Dry::View::Scope do
   let(:locals) { {} }
 
-  context "with a render environment" do
+  context 'with a render environment' do
     subject(:scope) {
       described_class.new(
         locals: locals,
@@ -34,13 +34,13 @@ RSpec.describe Dry::View::Scope do
       end
     end
 
-    describe "#_format" do
+    describe '#_format' do
       it "returns the render environments's format" do
         expect(scope._format).to eq :xml
       end
     end
 
-    describe "#_context" do
+    describe '#_context' do
       it "returns the render environment's context" do
         expect(scope._context).to be context
       end
@@ -89,25 +89,25 @@ RSpec.describe Dry::View::Scope do
     end
   end
 
-  context "without a render environment" do
+  context 'without a render environment' do
     subject(:scope) {
       described_class.new(locals: locals)
     }
 
-    describe "#render" do
-      it "raises an error" do
+    describe '#render' do
+      it 'raises an error' do
         expect { scope.render(:info) }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
 
-    describe "#scope" do
-      it "raises an error" do
+    describe '#scope' do
+      it 'raises an error' do
         expect { scope.scope(:info) }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
 
-    describe "#_context" do
-      it "raises an error" do
+    describe '#_context' do
+      it 'raises an error' do
         expect { scope._context }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end

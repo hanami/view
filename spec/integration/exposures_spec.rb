@@ -52,7 +52,7 @@ RSpec.describe 'exposures' do
 
       def initialize
         super
-        @prefix = "My friend "
+        @prefix = 'My friend '
       end
 
       expose :users do |users:|
@@ -213,7 +213,7 @@ RSpec.describe 'exposures' do
     expect(rendered[:users][0].value).to eq(name: 'Jane', email: 'jane@doe.org')
 
     expect(rendered[:article]).to be_a(Dry::View::Part)
-    expect(rendered[:article].to_s).to eq "Great article from User: Jane"
+    expect(rendered[:article].to_s).to eq 'Great article from User: Jane'
   end
 
   it 'allows exposures to depend on each other while still using keywords args to access input data' do
@@ -313,7 +313,7 @@ RSpec.describe 'exposures' do
       config.default_format = :html
 
       private_expose :prefix do
-        "COUNT: "
+        'COUNT: '
       end
 
       expose :users
@@ -346,7 +346,7 @@ RSpec.describe 'exposures' do
       config.default_format = :html
 
       private_expose :prefix do
-        "COUNT: "
+        'COUNT: '
       end
 
       expose :users
@@ -385,7 +385,7 @@ RSpec.describe 'exposures' do
       config.default_format = :html
 
       private_expose :prefix do
-        "COUNT: "
+        'COUNT: '
       end
 
       expose :users

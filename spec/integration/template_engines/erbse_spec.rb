@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
-require "dry/view"
-require "dry/view/context"
+require 'dry/view'
+require 'dry/view/context'
 
-RSpec.describe "Template engines / erb (using erbse as default engine)" do
+RSpec.describe 'Template engines / erb (using erbse as default engine)' do
   let(:base_view) {
     Class.new(Dry::View) do
-      config.paths = FIXTURES_PATH.join("integration/template_engines/erbse")
+      config.paths = FIXTURES_PATH.join('integration/template_engines/erbse')
     end
   }
 
-  context "with erbse available" do
-    it "supports partials that yield" do
+  context 'with erbse available' do
+    it 'supports partials that yield' do
       view = Class.new(base_view) do
-        config.template = "render_and_yield"
+        config.template = 'render_and_yield'
       end.new
 
-      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
+      expect(view.().to_s.gsub(/\n\s*/m, '')).to eq '<wrapper>  Yielded</wrapper>'
     end
 
-    it "supports context methods that yield" do
+    it 'supports context methods that yield' do
       context = Class.new(Dry::View::Context) do
         def wrapper
           "<wrapper>#{yield}</wrapper>"
@@ -28,14 +28,14 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
 
       view = Class.new(base_view) do
         config.default_context = context
-        config.template = "method_with_yield"
+        config.template = 'method_with_yield'
       end.new
 
-      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
+      expect(view.().to_s.gsub(/\n\s*/m, '')).to eq '<wrapper>  Yielded</wrapper>'
     end
   end
 
-  context "with erbse not available" do
+  context 'with erbse not available' do
     before do
       @load_path = $LOAD_PATH.dup
       @loaded_features = $LOADED_FEATURES.dup
@@ -53,23 +53,23 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
       Dry::View::Tilt.register_adapter :erb, Dry::View::Tilt::ERB
     end
 
-    it "raises an error explaining the erbse requirement" do
+    it 'raises an error explaining the erbse requirement' do
       view = Class.new(base_view) do
-        config.template = "render_and_yield"
+        config.template = 'render_and_yield'
       end.new
 
       expect { view.() }.to raise_error(LoadError, %r{dry-view requires erbse}m)
     end
 
-    it "allows deregistering the adapter to avoid the load error and accept rendering via a less-compatible erb engine" do
+    it 'allows deregistering the adapter to avoid the load error and accept rendering via a less-compatible erb engine' do
       view = Class.new(base_view) do
-        config.template = "plain_erb"
+        config.template = 'plain_erb'
       end.new
 
       Dry::View::Tilt.deregister_adapter :erb
 
       expect { view.() }.not_to raise_error
-      expect(view.().to_s.strip).to eq "Hello"
+      expect(view.().to_s.strip).to eq 'Hello'
     end
   end
 end

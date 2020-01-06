@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "tilt/erubi"
+require 'tilt/erubi'
 
 RSpec.describe Dry::View do
   subject(:view) {
@@ -77,7 +77,7 @@ RSpec.describe Dry::View do
     end
 
     it 'are passed to renderer' do
-      expect(view.(context: context).to_s.gsub(/\n\s*/m, "")).to eq(
+      expect(view.(context: context).to_s.gsub(/\n\s*/m, '')).to eq(
         '<form action="/people" method="post"><input type="text" name="name" /></form>'
       )
     end

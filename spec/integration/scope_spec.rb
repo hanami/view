@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require "dry/view/part"
-require "dry/view/scope"
+require 'dry/view/part'
+require 'dry/view/scope'
 
-RSpec.describe "Scopes" do
+RSpec.describe 'Scopes' do
   let(:base_view) {
     Class.new(Dry::View) do
-      config.paths = FIXTURES_PATH.join("integration/scopes")
+      config.paths = FIXTURES_PATH.join('integration/scopes')
     end
   }
 
-  specify "Custom scope for a view" do
+  specify 'Custom scope for a view' do
     module Test
       class ControllerScope < Dry::View::Scope
         def hello
@@ -20,110 +20,110 @@ RSpec.describe "Scopes" do
     end
 
     view = Class.new(base_view) do
-      config.template = "custom_view_scope"
+      config.template = 'custom_view_scope'
       config.scope = Test::ControllerScope
 
       expose :text
     end.new
 
-    expect(view.(text: "world").to_s).to eq "Hello world!"
+    expect(view.(text: 'world').to_s).to eq 'Hello world!'
   end
 
-  specify "Rendering a partial via an anonymous scope" do
+  specify 'Rendering a partial via an anonymous scope' do
     view = Class.new(base_view) do
-      config.template = "anonymous_scope"
+      config.template = 'anonymous_scope'
 
       expose :text
     end.new
 
-    expect(view.(text: "Hello").to_s).to eq "Greeting: Hello"
+    expect(view.(text: 'Hello').to_s).to eq 'Greeting: Hello'
   end
 
-  specify "Rendering a partial implicitly via a custom named scope" do
+  specify 'Rendering a partial implicitly via a custom named scope' do
     module Test::Scopes
       class Greeting < Dry::View::Scope
         def greeting
-          _locals[:greeting].upcase + "!"
+          _locals[:greeting].upcase + '!'
         end
       end
     end
 
     view = Class.new(base_view) do
       config.scope_namespace = Test::Scopes
-      config.template = "named_scope_with_implicit_render"
+      config.template = 'named_scope_with_implicit_render'
 
       expose :text
     end.new
 
-    expect(view.(text: "Hello").to_s).to eq "Greeting: HELLO!"
+    expect(view.(text: 'Hello').to_s).to eq 'Greeting: HELLO!'
   end
 
-  specify "Rendering a partial implicitly via a custom named scope (provided via a class)" do
+  specify 'Rendering a partial implicitly via a custom named scope (provided via a class)' do
     module Test::Scopes
       class Greeting < Dry::View::Scope
         def greeting
-          _locals[:greeting].upcase + "!"
+          _locals[:greeting].upcase + '!'
         end
       end
     end
 
     view = Class.new(base_view) do
       config.scope_namespace = Test::Scopes
-      config.template = "class_named_scope_with_implicit_render"
+      config.template = 'class_named_scope_with_implicit_render'
 
       expose :text
     end.new
 
-    expect(view.(text: "Hello").to_s).to eq "Greeting: HELLO!"
+    expect(view.(text: 'Hello').to_s).to eq 'Greeting: HELLO!'
   end
 
-  specify "Raising an error when an unnamed partial cannot be rendered implicitly" do
+  specify 'Raising an error when an unnamed partial cannot be rendered implicitly' do
     view = Class.new(base_view) do
-      config.template = "unnamed_named_scope_with_implicit_render"
+      config.template = 'unnamed_named_scope_with_implicit_render'
     end.new
 
-    expect { view.().to_s }.to raise_error ArgumentError, "+partial_name+ must be provided for unnamed scopes"
+    expect { view.().to_s }.to raise_error ArgumentError, '+partial_name+ must be provided for unnamed scopes'
   end
 
-  specify "Rendering a partial explicitly via a custom named scope" do
+  specify 'Rendering a partial explicitly via a custom named scope' do
     module Test::Scopes
       class Greeting < Dry::View::Scope
         def greeting
-          _locals[:greeting].upcase + "!"
+          _locals[:greeting].upcase + '!'
         end
       end
     end
 
     view = Class.new(base_view) do
       config.scope_namespace = Test::Scopes
-      config.template = "named_scope_with_explicit_render"
+      config.template = 'named_scope_with_explicit_render'
 
       expose :text
     end.new
 
-    expect(view.(text: "Hello").to_s).to eq "Holler: HELLO!"
+    expect(view.(text: 'Hello').to_s).to eq 'Holler: HELLO!'
   end
 
-  specify "Custom named scope providing defaults for missing locals" do
+  specify 'Custom named scope providing defaults for missing locals' do
     module Test::Scopes
       class Greeting < Dry::View::Scope
         def greeting
-          _locals.fetch(:greeting) { "Howdy" }
+          _locals.fetch(:greeting) { 'Howdy' }
         end
       end
     end
 
     view = Class.new(base_view) do
       config.scope_namespace = Test::Scopes
-      config.template = "named_scope_with_defaults"
+      config.template = 'named_scope_with_defaults'
 
       expose :text
     end.new
 
-    expect(view.().to_s).to eq "Greeting: Howdy"
+    expect(view.().to_s).to eq 'Greeting: Howdy'
   end
 
-  specify "Creating a custom scope from a view part" do
+  specify 'Creating a custom scope from a view part' do
     module Test::Parts
       class Message < Dry::View::Part
         def greeting
@@ -135,7 +135,7 @@ RSpec.describe "Scopes" do
     module Test::Scopes
       class Greeting < Dry::View::Scope
         def greeting
-          _locals[:greeting] + "!"
+          _locals[:greeting] + '!'
         end
       end
     end
@@ -143,11 +143,11 @@ RSpec.describe "Scopes" do
     view = Class.new(base_view) do
       config.part_namespace = Test::Parts
       config.scope_namespace = Test::Scopes
-      config.template = "scope_from_part"
+      config.template = 'scope_from_part'
 
       expose :message
     end.new
 
-    expect(view.(message: { text: "Hello from a part" }).to_s).to eq "Greeting: Hello from a part!"
+    expect(view.(message: { text: 'Hello from a part' }).to_s).to eq 'Greeting: Hello from a part!'
   end
 end

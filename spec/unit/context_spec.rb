@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "dry/view/context"
-require "dry/view/part"
-require "dry/view/part_builder"
-require "dry/view/scope_builder"
+require 'dry/view/context'
+require 'dry/view/part'
+require 'dry/view/part_builder'
+require 'dry/view/scope_builder'
 
 RSpec.describe Dry::View::Context do
   let(:context_class) {
@@ -36,27 +36,27 @@ RSpec.describe Dry::View::Context do
 
   subject(:context) { context_class.new(assets: assets, routes: routes) }
 
-  describe "attribute readers" do
-    it "provides access to its attributes" do
+  describe 'attribute readers' do
+    it 'provides access to its attributes' do
       expect(context.assets).to eql assets
     end
   end
 
-  context "with render environment" do
+  context 'with render environment' do
     subject(:context) {
       context_class.new(assets: assets, routes: routes).for_render_env(render_env)
     }
 
-    describe "attribute readers" do
-      it "provides attributes decorated in view parts" do
+    describe 'attribute readers' do
+      it 'provides attributes decorated in view parts' do
         expect(context.assets).to be_a Dry::View::Part
         expect(context.assets.value).to eql assets
       end
     end
   end
 
-  describe "#with" do
-    it "returns a copy of the context with extra options" do
+  describe '#with' do
+    it 'returns a copy of the context with extra options' do
       another_option = double(:another_option)
       new_context = context.with(another_option: another_option)
 
