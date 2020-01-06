@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Views
   module Articles
     class Index < ApplicationView

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "dry/web/container"
 require "dry/system/components"
 

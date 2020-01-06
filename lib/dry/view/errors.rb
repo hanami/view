@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Dry
   class View
     # Error raised when critical settings are not configured

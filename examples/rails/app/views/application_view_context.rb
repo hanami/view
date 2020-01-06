@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "dry/view/context"
 
 class ApplicationViewContext < Dry::View::Context

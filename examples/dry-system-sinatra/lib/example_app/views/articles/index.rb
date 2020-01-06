@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "example_app/import"
 require "example_app/view"
 
