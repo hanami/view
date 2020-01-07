@@ -17,7 +17,7 @@ Like all the other Hanami components, it can be used as a standalone framework o
 ## Status
 
 [![Gem Version](https://badge.fury.io/rb/hanami-view.svg)](https://badge.fury.io/rb/hanami-view)
-[![TravisCI](https://travis-ci.org/hanami/view.svg?branch=master)](https://travis-ci.org/hanami/view)
+[![Build Status](https://ci.hanamirb.org/api/badges/hanami/view/status.svg)](https://ci.hanamirb.org/hanami/view)
 [![CircleCI](https://circleci.com/gh/hanami/view/tree/master.svg?style=svg)](https://circleci.com/gh/hanami/view/tree/master)
 [![Test Coverage](https://codecov.io/gh/hanami/view/branch/master/graph/badge.svg)](https://codecov.io/gh/hanami/view)
 [![Depfu](https://badges.depfu.com/badges/4f5c8868d047d206f33893bc9194812d/overview.svg)](https://depfu.com/github/hanami/view?project=Bundler)
