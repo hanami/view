@@ -90,7 +90,7 @@ module Hanami
         # @see Hanami::View::Rendering#render
         def resolve(context)
           view, template = @registry.fetch(format(context)) { @registry[DEFAULT_FORMAT] }
-          view.new(template, context)
+          view.new(template, **context)
         end
 
         private
