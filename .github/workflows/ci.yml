@@ -26,6 +26,7 @@ jobs:
           - "2.6"
           - "2.5"
           - "2.4"
+          - "2.3"
           - "jruby"
         include:
           - ruby: "2.7"
@@ -40,9 +41,15 @@ jobs:
         run: gem install bundler
       - name: Bundle install
         run: bundle install --jobs 4 --retry 3
-      - name: Run all tests
+      - name: Run unit tests
         env:
           COVERAGE: ${{matrix.coverage}}
           CODACY_RUN_LOCAL: true
           CODACY_PROJECT_TOKEN: ${{secrets.CODACY_PROJECT_TOKEN}}
-        run: script/ci
+        run: bundle exec rake spec:unit
+      - name: Run integration tests
+        env:
+          COVERAGE: ${{matrix.coverage}}
+          CODACY_RUN_LOCAL: true
+          CODACY_PROJECT_TOKEN: ${{secrets.CODACY_PROJECT_TOKEN}}
+        run: script/test integration
