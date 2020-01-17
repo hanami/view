@@ -1,8 +1,13 @@
-# 0.7.0 / 2019-03-06
+## 0.7.0 2019-03-06
+
 
 ### Added
 
 - Raise a `Dry::View::UndefinedConfigError` when a view is called but no paths have been configured (timriley in [#130][pr130])
+
+### Fixed
+
+- Avoid a `SystemStackError` when a view is configured with a template that cannot be found on the filesystem (timriley in [#129][pr129])
 
 ### Changed
 
@@ -11,18 +16,8 @@
 - Stop searching upwards through parent directories when rendering a view's template (as opposed to partials) (timriley in [#130][pr130])
 - Stop searching in `shared/` subdirectories when rendering a view's template (as opposed to partials) (timriley in [#130][pr130])
 - Adjust template lookup cache keys to ensure no false hits (timriley in [#130][pr130])
+## 0.6.0 2019-01-30
 
-### Fixed
-
-- Avoid a `SystemStackError` when a view is configured with a template that cannot be found on the filesystem (timriley in [#129][pr129])
-
-[Compare v0.6.0...v0.7.0](https://github.com/dry-rb/dry-view/compare/v0.6.0...v0.7.0)
-
-
-[pr129]: https://github.com/dry-rb/dry-view/pull/129
-[pr130]: https://github.com/dry-rb/dry-view/pull/130
-
-# 0.6.0 / 2019-01-30
 
 ### Added
 
@@ -37,6 +32,10 @@
 - Added "Tilt adapter" layer, to ensure a rendering engine compatible with dry-view's features is being used. Added adapters for "haml" and "erb" templates to ensure that "hamlit-block" and "erbse" are required and used as engines (unlike their more common counterparts, both of these engines support the implicit block capturing that is a central part of dry-view rendering behaviour) (timriley in [#106][pr106])
 - Added `renderer_engine_mapping` setting to View, which allows an explicit engine class to be provided for the rendering of a given type of template (e.g. `config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}`) (timriley in [#106][pr106])
 
+### Fixed
+
+- Preserve renderer options when chdir-ing (timriley in [889ac7b](https://github.com/dry-rb/dry-view/commit/889ac7b))
+
 ### Changed
 
 - [BREAKING] `Dry::View::Controller` renamed to `Dry::View` (timriley in [#115][pr115])
@@ -47,31 +46,7 @@
 - `Part#inspect` output simplified to include only name and value (timriley in [#98][pr98])
 - Attribute decoration in `Part` now achieved via a prepended module, which means it is possible to decorate an attribute provided by an instance method directly on the part class, which wasn't possible with the previous `method_missing`-based approach (timriley in [#110][pr110])
 - `Part` classes can be initialized with missing `name:` and `rendering:` values, which can be useful for unit testing Part methods that don't use any rendering facilities (timriley in [#116][pr116])
-
-### Fixed
-
-- Preserve renderer options when chdir-ing (timriley in [889ac7b](https://github.com/dry-rb/dry-view/commit/889ac7b))
-
-[Compare v0.5.3...v0.6.0](https://github.com/dry-rb/dry-view/compare/v0.5.3...v0.6.0)
-
-[pr72]: https://github.com/dry-rb/dry-view/pull/72
-[pr80]: https://github.com/dry-rb/dry-view/pull/80
-[pr86]: https://github.com/dry-rb/dry-view/pull/86
-[pr87]: https://github.com/dry-rb/dry-view/pull/87
-[pr88]: https://github.com/dry-rb/dry-view/pull/88
-[pr89]: https://github.com/dry-rb/dry-view/pull/89
-[pr90]: https://github.com/dry-rb/dry-view/pull/90
-[pr91]: https://github.com/dry-rb/dry-view/pull/91
-[pr97]: https://github.com/dry-rb/dry-view/pull/97
-[pr98]: https://github.com/dry-rb/dry-view/pull/98
-[pr106]: https://github.com/dry-rb/dry-view/pull/106
-[pr110]: https://github.com/dry-rb/dry-view/pull/110
-[pr115]: https://github.com/dry-rb/dry-view/pull/115
-[pr116]: https://github.com/dry-rb/dry-view/pull/116
-[pr118]: https://github.com/dry-rb/dry-view/pull/118
-[pr119]: https://github.com/dry-rb/dry-view/pull/119
-
-# 0.5.4 / 2019-01-06 [YANKED 2019-01-18]
+## 0.5.4 2019-01-06
 
 This version was yanked due to the release accidentally containing a batch of breaking changes from master.
 
@@ -79,7 +54,8 @@ This version was yanked due to the release accidentally containing a batch of br
 
 - Preserve renderer options when chdir-ing (timriley in [889ac7b](https://github.com/dry-rb/dry-view/commit/889ac7b))
 
-# 0.5.3 / 2018-10-22
+## 0.5.3 2018-10-22
+
 
 ### Added
 
@@ -88,38 +64,29 @@ This version was yanked due to the release accidentally containing a batch of br
 ### Changed
 
 - Part objects wrap values more transparently, via added `#respond_to_missing?` (liseki in [#63][pr63])
+## 0.5.2 2018-06-13
 
-[Compare v0.5.2...v0.5.3](https://github.com/dry-rb/dry-view/compare/v0.5.2...v0.5.3)
-
-[pr62]: https://github.com/dry-rb/dry-view/pull/62
-[pr63]: https://github.com/dry-rb/dry-view/pull/63
-
-# 0.5.2 / 2018-06-13
 
 ### Changed
 
 - Only truthy view part attributes are decorated (timriley)
+## 0.5.1 2018-02-20
 
-[Compare v0.5.1...v0.5.2](https://github.com/dry-rb/dry-view/compare/v0.5.1...v0.5.2)
-
-# 0.5.1 / 2018-02-20
 
 ### Added
 
 - Exposures are inherited from parent view controller classes (GustavoCaso)
 
-[Compare v0.5.0...v0.5.1](https://github.com/dry-rb/dry-view/compare/v0.5.0...v0.5.1)
+## 0.5.0 2018-01-23
 
-# 0.5.0 / 2018-01-23
 
 ### Added
 
 - Support for parts with decorated attributes (timriley + GustavoCaso)
 - Ability to easily create another part instance via `Part#new` (GustavoCaso)
 
-[Compare v0.4.0...v0.5.0](https://github.com/dry-rb/dry-view/compare/v0.4.0...v0.5.0)
+## 0.4.0 2017-11-01
 
-# 0.4.0 / 2017-11-01
 
 ### Added
 
@@ -132,35 +99,40 @@ This version was yanked due to the release accidentally containing a batch of br
 - [BREAKING] Exposures specify the input data they require using keyword arguments. This includes support for providing default values (via the keyword argument) for keys that are missing from the input data (GustavoCaso)
 - Allow `Dry::View::Part` instances to be created without explicitly passing a `renderer`. This is helpful for unit testing view parts that don't need to render anything (dNitza)
 - Partials can be nested within additional sub-directories by rendering them their relative path as their name, e.g. `render(:"foo/bar")` will look for a `foo/_bar.html.slim` template within the normal template lookup paths (timriley)
-
-# 0.3.0 / 2017-05-14
+## 0.3.0 2017-05-14
 
 This release reintroduces view parts in a more helpful form. You can provide your own custom view part classes to encapsulate your view logic, as well as a  decorator for custom, shared behavior arouund view part wrapping.
-
-### Changed
-
-- [BREAKING] Partial rendering in templates requires an explicit `render` method call instead of method_missing behaviour usinig the partial's name (e.g. `<%= render :my_partial %>` instead of `<%= my_partial %>`)
 
 ### Added
 
 - Wrap all values passed to the template in `Dry::View::Part` objects
 - Added a `decorator` config to `Dry::View::Controller`, with a default `Dry::View::Decorator` that wraps the exposure values in `Dry::View::Part` objects (as above). Provide your own part classes by passing an `:as` option to your exposures, e.g. `expose :user, as: MyApp::UserPart`
 
-# 0.2.2 / 2017-01-31
+### Changed
+
+- [BREAKING] Partial rendering in templates requires an explicit `render` method call instead of method_missing behaviour usinig the partial's name (e.g. `<%= render :my_partial %>` instead of `<%= my_partial %>`)
+## 0.2.2 2017-01-31
+
 
 ### Changed
 
 - Make input passthrough exposures (when there is no block or matching instance metod) return nil instead of raise in the case of a missing input key (timriley)
+## 0.2.1 2017-01-30
 
-# 0.2.1 / 2017-01-30
 
 ### Fixed
 
 - Exposure blocks now have access to the view controller instance when they're called (timriley)
 
-# 0.2.0 / 2017-01-30
+## 0.2.0 2017-01-30
 
 This release is a major reorientation for dry-view, and it should allow for more natural, straightforward template authoring.
+
+### Added
+
+- Will render templates using any Tilt-supported engine, based on the template's final file extension (e.g. `hello.html.slim` will use Slim). For thread-safety, be sure to explicitly require any engine gems you intend to use. (timriley)
+- `expose` (and `expose_private`) `Dry::View::Controller` class methods allow you to more easily declare and prepare the data for your template (timriley)
+- Added `Dry::View::Scope`, which is the scope used for rendering templates. This includes the data from the exposures along with the context object (timriley)
 
 ### Changed
 
@@ -172,27 +144,21 @@ This release is a major reorientation for dry-view, and it should allow for more
 - [BREAKING] View parts have been replaced by a simple `Scope`. Data passed to the templates can be accessed directly, rather than wrapped up in a view part. (timriley)
 - [BREAKING] With view parts removed, partials can only be rendered by top-level method calls within templates (timriley)
 - Ruby version 2.1.0 is now the earliest supported version (timriley)
+## 0.1.1 2016-07-07
 
-### Added
-
-- Will render templates using any Tilt-supported engine, based on the template's final file extension (e.g. `hello.html.slim` will use Slim). For thread-safety, be sure to explicitly require any engine gems you intend to use. (timriley)
-- `expose` (and `expose_private`) `Dry::View::Controller` class methods allow you to more easily declare and prepare the data for your template (timriley)
-- Added `Dry::View::Scope`, which is the scope used for rendering templates. This includes the data from the exposures along with the context object (timriley)
-
-# 0.1.1 / 2016-07-07
 
 ### Changed
 
 - Wrap `page` object exposed to layout templates in a part object, so it offers behaviour that is consistent with the part objects that template authors work with on other templates (timriley)
 - Render template content first, before passing that content to the layout. This makes "content_for"-style behaviours possible, where the template stores some data that the layout can then use later (timriley)
 - Configure default template encoding to be UTF-8, fixing some issues with template rendering on deployed sites (gotar)
+## 0.1.0 2016-03-28
 
-# 0.1.0 / 2016-03-28
 
 ### Added
 
-– `Dry::View::Layout` supports multiple view template formats. Configure format/engine pairs (e.g. `{html: :slim, text: :erb}`) on the `formats` setting. The first format becomes the default. Request specific formats when calling the view, e.g. `my_view.call(format: :text)`.
+- – `Dry::View::Layout` supports multiple view template formats. Configure format/engine pairs (e.g. `{html: :slim, text: :erb}`) on the `formats` setting. The first format becomes the default. Request specific formats when calling the view, e.g. `my_view.call(format: :text)`.
 
 ### Changed
 
-– Extracted from rodakase and renamed to dry-view. `Rodakase::View` is now `Dry::View`.
+- – Extracted from rodakase and renamed to dry-view. `Rodakase::View` is now `Dry::View`.
