@@ -5,13 +5,13 @@ name: sync_configs
 on:
   repository_dispatch:
   push:
-    paths:
-      - project.yml
+    branches:
+      - "master"
 
 jobs:
   sync-configs:
     runs-on: ubuntu-latest
-    if: github.event_name != 'repository_dispatch' || github.event.action == 'sync_configs'
+    if: (github.event_name == 'repository_dispatch' && github.event.action == 'sync_configs') || github.event_name != 'repository_dispatch'
     env:
       GITHUB_LOGIN: dry-bot
       GITHUB_TOKEN: ${{ secrets.GH_PAT }}
@@ -34,7 +34,7 @@ jobs:
       - name: Compile file templates
         run: |
           if [ -f "project.yml" ]; then
-            for t in `ls tmp/devtools/templates | grep -v changelog.erb`
+            for t in `ls tmp/devtools/templates`
             do
               bin/ossy t c tmp/devtools/templates/$t $(basename $t .erb) project.yml
             done
