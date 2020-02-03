@@ -1,4 +1,6 @@
 RSpec.describe Hanami::View::Rendering::LayoutScope do
+  include_context 'reload configuration'
+
   before do
     layout = LayoutForScopeTest.new
     scope  = Hanami::View::Rendering::Scope.new(ViewForScopeTest.new)
@@ -107,6 +109,15 @@ RSpec.describe Hanami::View::Rendering::LayoutScope do
         expect do
           @scope.render(templte: "misspelled")
         end.to raise_error(Hanami::View::UnknownRenderTypeError, /Calls to `render` in a layout must include one of ':partial', ':template'. Found ':templte'./)
+      end
+    end
+
+    describe 'render with partial' do
+      context 'with a block' do
+        it 'passes the block' do
+          rendered = Blocky::Action.render(format: :html)
+          expect(rendered).to eq('bread')
+        end
       end
     end
   end

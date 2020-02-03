@@ -1,6 +1,14 @@
 # Hanami::View
 View layer for Hanami
 
+## v1.3.3 - 2019-01-07
+### Added
+- [Luca Guidi] Official support for Ruby: MRI 2.7
+- [unleashy] Allow `LayoutScope#render` to accept a block (e.g. `<%= render(partial: "shared/sidebar") { %(<div id="sidebar"></div>) } %>` or `<%= render(partial: "shared/sidebar", &Sidebar.new) %>`)
+
+### Fixed
+- [MITSUBOSHI] `Hanami::View::Rendering::TemplateName`: Fix frozen string literal error
+
 ## v1.3.2 - 2019-09-27
 ### Fixed
 - [Luca Guidi] Ensure rendering scope to work with latest `tilt` changes (`2.0.10`)
