@@ -61,7 +61,7 @@ end
 The default context can be `configured` for a view:
 
 ```ruby
-class MyView < Dry::Vew
+class MyView < Dry::View
   config.default_context = MyContext.new
 end
 ```
