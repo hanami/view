@@ -14,7 +14,7 @@ end
 group :test do
   gem "rack", ">= 2.0.6"
 
-  gem "erbse"
+  gem "erbse", "~> 0.1.4"
   gem "erubi"
   gem "hamlit"
   gem "hamlit-block"

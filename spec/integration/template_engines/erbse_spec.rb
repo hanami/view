@@ -16,7 +16,7 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
         config.template = "render_and_yield"
       end.new
 
-      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
+      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
     end
 
     it "supports context methods that yield" do
@@ -31,7 +31,7 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
         config.template = "method_with_yield"
       end.new
 
-      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>  Yielded</wrapper>"
+      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
     end
   end
 
