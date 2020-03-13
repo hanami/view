@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'set'
+require "set"
 
 module Dry
   class View
@@ -27,7 +27,8 @@ module Dry
         #
         # @param names [Array<Symbol>] the attribute names
         # @param options [Hash] the options to pass to the Part Builder
-        # @option options [Symbol, Class] :as an alternative name or class to use when finding a matching Part
+        # @option options [Symbol, Class] :as an alternative name or class to use when finding a
+        #   matching Part
         #
         # @api public
         def decorate(*names, **options)

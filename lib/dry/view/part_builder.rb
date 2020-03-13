@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'dry/core/cache'
-require 'dry/equalizer'
-require_relative 'part'
+require "dry/core/cache"
+require "dry/equalizer"
+require_relative "part"
 
 module Dry
   class View
@@ -54,7 +54,7 @@ module Dry
         klass.new(
           name: name,
           value: value,
-          render_env: render_env,
+          render_env: render_env
         )
       end
 
@@ -69,11 +69,13 @@ module Dry
         build_part(name, arr, **options.merge(as: collection_as))
       end
 
+      # rubocop:disable Lint/UnusedMethodArgument
       def collection_options(name:, **options)
         collection_as = options[:as].is_a?(Array) ? options[:as].first : nil
 
         options.merge(as: collection_as)
       end
+      # rubocop:enable Lint/UnusedMethodArgument
 
       def collection_item_options(name:, **options)
         singular_name = inflector.singularize(name).to_sym
@@ -90,7 +92,7 @@ module Dry
 
         options.merge(
           name: singular_name,
-          as: singular_as,
+          as: singular_as
         )
       end
 
@@ -106,6 +108,7 @@ module Dry
         end
       end
 
+      # rubocop:disable Metrics/PerceivedComplexity
       def resolve_part_class(name:, fallback_class:)
         return fallback_class unless namespace
 
@@ -114,7 +117,7 @@ module Dry
         # Give autoloaders a chance to act
         begin
           klass = namespace.const_get(name)
-        rescue NameError
+        rescue NameError # rubocop:disable Lint/HandleExceptions
         end
 
         if !klass && namespace.const_defined?(name, false)
@@ -127,6 +130,7 @@ module Dry
           fallback_class
         end
       end
+      # rubocop:enable Metrics/PerceivedComplexity
 
       def inflector
         render_env.inflector

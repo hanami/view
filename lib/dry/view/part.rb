@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'dry/equalizer'
-require_relative 'decorated_attributes'
-require_relative 'render_environment_missing'
+require "dry/equalizer"
+require_relative "decorated_attributes"
+require_relative "render_environment_missing"
 
 module Dry
   class View
@@ -60,7 +60,7 @@ module Dry
       #
       # @api private
       def self.part_name(inflector)
-        name ? inflector.underscore(inflector.demodulize(name)) : 'part'
+        name ? inflector.underscore(inflector.demodulize(name)) : "part"
       end
 
       # Returns a new Part instance
@@ -70,7 +70,11 @@ module Dry
       # @param render_env [RenderEnvironment] render environment
       #
       # @api public
-      def initialize(render_env: RenderEnvironmentMissing.new, name: self.class.part_name(render_env.inflector), value:)
+      def initialize(
+        render_env: RenderEnvironmentMissing.new,
+        name: self.class.part_name(render_env.inflector),
+        value:
+      )
         @_name = name
         @_value = value
         @_render_env = render_env
@@ -115,15 +119,18 @@ module Dry
       #   itself responds to `#render`.
       #
       # @param partial_name [Symbol, String] partial name
-      # @param as [Symbol] the name for the Part to assume in the partial's locals. Default's to the Part's `_name`.
+      # @param as [Symbol] the name for the Part to assume in the partial's locals. Defaults to
+      #   the Part's `_name`.
       # @param locals [Hash<Symbol, Object>] other locals to provide the partial
       #
       # @return [String] rendered partial
       #
       # @api public
+      # rubocop:disable Naming/UncommunicativeMethodParamName
       def _render(partial_name, as: _name, **locals, &block)
-        _render_env.partial(partial_name, _render_env.scope({ as => self }.merge(locals)), &block)
+        _render_env.partial(partial_name, _render_env.scope({as => self}.merge(locals)), &block)
       end
+      # rubocop:enable Naming/UncommunicativeMethodParamName
 
       # Builds a new scope with the part included in its locals.
       #
@@ -133,14 +140,15 @@ module Dry
       #   A convenience alias for `#_scope`. Is available unless the value
       #   itself responds to `#scope`.
       #
-      # @param scope_name [Symbol, nil] scope name, used by the scope builder to determine the scope class
+      # @param scope_name [Symbol, nil] scope name, used by the scope builder to determine the
+      #   scope class
       # @param locals [Hash<Symbol, Object>] other locals to provide the partial
       #
       # @return [Dry::View::Scope] scope
       #
       # @api public
       def _scope(scope_name = nil, **locals)
-        _render_env.scope(scope_name, { _name => self }.merge(locals))
+        _render_env.scope(scope_name, {_name => self}.merge(locals))
       end
 
       # Returns a string representation of the value
@@ -168,12 +176,12 @@ module Dry
       # @param options[Hash<Symbol, Object>] other options to provide when initializing the new part
       #
       # @api public
-      def new(klass = (self.class), name: (_name), value: (_value), **options)
+      def new(klass = self.class, name: _name, value: _value, **options)
         klass.new(
           name: name,
           value: value,
           render_env: _render_env,
-          **options,
+          **options
         )
       end
 

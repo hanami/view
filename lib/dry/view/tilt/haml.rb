@@ -5,7 +5,7 @@ module Dry
     module Tilt
       module Haml
         def self.requirements
-          ['hamlit/block', <<~ERROR]
+          ["hamlit/block", <<~ERROR]
             dry-view requires hamlit-block for full compatibility when rendering .haml templates (e.g. implicitly capturing block content when yielding)
 
             To ignore this and use another engine for .haml templates, dereigster this adapter before calling your views:

@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require 'dry/configurable'
-require 'dry/core/cache'
-require 'dry/equalizer'
-require 'dry/inflector'
+require "dry/configurable"
+require "dry/core/cache"
+require "dry/equalizer"
+require "dry/inflector"
 
-require_relative 'view/context'
-require_relative 'view/exposures'
-require_relative 'view/errors'
-require_relative 'view/part_builder'
-require_relative 'view/path'
-require_relative 'view/render_environment'
-require_relative 'view/rendered'
-require_relative 'view/renderer'
-require_relative 'view/scope_builder'
+require_relative "view/context"
+require_relative "view/exposures"
+require_relative "view/errors"
+require_relative "view/part_builder"
+require_relative "view/path"
+require_relative "view/render_environment"
+require_relative "view/rendered"
+require_relative "view/renderer"
+require_relative "view/scope_builder"
 
 # A collection of next-generation Ruby libraries, helping you to write clear,
 # flexible, and more maintainable Ruby code. Each dry-rb gem fulfils a common
@@ -35,7 +35,7 @@ module Dry
   # @api public
   class View
     # @api private
-    DEFAULT_RENDERER_OPTIONS = { default_encoding: 'utf-8' }.freeze
+    DEFAULT_RENDERER_OPTIONS = {default_encoding: "utf-8"}.freeze
 
     include Dry::Equalizer(:config, :exposures)
 
@@ -92,7 +92,7 @@ module Dry
     #   @param dir [String] directory name
     #   @api public
     # @!scope class
-    setting :layouts_dir, 'layouts'
+    setting :layouts_dir, "layouts"
 
     # @overload config.scope=(scope_class)
     #   Set the scope class to use when rendering the view's template.
@@ -230,8 +230,10 @@ module Dry
     # @!macro [new] exposure_options
     #   @param options [Hash] the exposure's options
     #   @option options [Boolean] :layout expose this value to the layout (defaults to false)
-    #   @option options [Boolean] :decorate decorate this value in a matching Part (defaults to true)
-    #   @option options [Symbol, Class] :as an alternative name or class to use when finding a matching Part
+    #   @option options [Boolean] :decorate decorate this value in a matching Part (defaults to
+    #     true)
+    #   @option options [Symbol, Class] :as an alternative name or class to use when finding a
+    #     matching Part
 
     # @overload expose(name, **options, &block)
     #   Define a value to be passed to the template. The return value of the
@@ -315,7 +317,8 @@ module Dry
     #
     #   @param name [Symbol] name for the exposure
     #   @macro exposure_options
-    #   @option options [Boolean] :default a default value to provide if there is no matching input data
+    #   @option options [Boolean] :default a default value to provide if there is no matching
+    #     input data
     #
     # @overload expose(*names, **options)
     #   Define multiple values to pass through from the input data (when there
@@ -326,7 +329,8 @@ module Dry
     #
     #   @param names [Symbol] names for the exposures
     #   @macro exposure_options
-    #   @option options [Boolean] :default a default value to provide if there is no matching input data
+    #   @option options [Boolean] :default a default value to provide if there is no matching
+    #     input data
     #
     # @see https://dry-rb.org/gems/dry-view/exposures/
     #
@@ -411,7 +415,7 @@ module Dry
           config.paths,
           format: format,
           engine_mapping: config.renderer_engine_mapping,
-          **config.renderer_options,
+          **config.renderer_options
         )
       }
     end
@@ -467,7 +471,10 @@ module Dry
 
       if layout?
         layout_env = self.class.layout_env(format: format, context: context)
-        output = env.template(self.class.layout_path, layout_env.scope(config.scope, layout_locals(locals))) { output }
+        output = env.template(
+          self.class.layout_path,
+          layout_env.scope(config.scope, layout_locals(locals))
+        ) { output }
       end
 
       Rendered.new(output: output, locals: locals)
@@ -477,8 +484,8 @@ module Dry
 
     # @api private
     def ensure_config
-      raise UndefinedConfigError.new(:paths) unless Array(config.paths).any?
-      raise UndefinedConfigError.new(:template) unless config.template
+      raise UndefinedConfigError, :paths unless Array(config.paths).any?
+      raise UndefinedConfigError, :template unless config.template
     end
 
     # @api private
@@ -501,7 +508,7 @@ module Dry
 
     # @api private
     def layout?
-      !!config.layout
+      !!config.layout # rubocop:disable Style/DoubleNegation
     end
   end
 end

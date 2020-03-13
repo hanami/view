@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'pathname'
-require 'dry/core/cache'
+require "pathname"
+require "dry/core/cache"
 
 module Dry
   class View
@@ -61,7 +61,7 @@ module Dry
       end
 
       def lookup_in_parent_dir(name, format, child_dirs:)
-        !root? && chdir('..').lookup(name, format, child_dirs: child_dirs, parent_dir: true)
+        !root? && chdir("..").lookup(name, format, child_dirs: child_dirs, parent_dir: true)
       end
     end
   end

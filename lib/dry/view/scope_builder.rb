@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'dry/core/cache'
-require 'dry/equalizer'
-require_relative 'scope'
+require "dry/core/cache"
+require "dry/equalizer"
+require_relative "scope"
 
 module Dry
   class View
@@ -46,11 +46,11 @@ module Dry
       # @return [Dry::View::Scope]
       #
       # @api private
-      def call(name = nil, locals)
+      def call(name = nil, locals) # rubocop:disable Style/OptionalArguments
         scope_class(name).new(
           name: name,
           locals: locals,
-          render_env: render_env,
+          render_env: render_env
         )
       end
 
@@ -76,7 +76,7 @@ module Dry
         # Give autoloaders a chance to act
         begin
           klass = namespace.const_get(name)
-        rescue NameError
+        rescue NameError # rubocop:disable Lint/HandleExceptions
         end
 
         if !klass && namespace.const_defined?(name, false)

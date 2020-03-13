@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'part builder' do
+RSpec.describe "part builder" do
   before do
     module Test
       class Custom < Dry::View::Part
@@ -19,12 +19,12 @@ RSpec.describe 'part builder' do
     end
   end
 
-  describe 'default decorator' do
-    it 'looks up classes from a part namespace' do
+  describe "default decorator" do
+    it "looks up classes from a part namespace" do
       view = Class.new(Dry::View) do
-        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
-        config.template = 'decorated_parts'
+        config.template = "decorated_parts"
         config.part_namespace = Test
 
         expose :customs
@@ -32,46 +32,46 @@ RSpec.describe 'part builder' do
         expose :ordinary
       end.new
 
-      expect(view.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing').to_s).to eql(
-        '<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
+      expect(view.(customs: ["many things"], custom: "custom thing", ordinary: "ordinary thing").to_s).to eql(
+        "<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>"
       )
     end
 
-    it 'supports wrapping array memebers in custom part classes provided to exposure :as option' do
+    it "supports wrapping array memebers in custom part classes provided to exposure :as option" do
       view = Class.new(Dry::View) do
-        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
-        config.template = 'decorated_parts'
+        config.template = "decorated_parts"
 
         expose :customs, as: Test::CustomPart
         expose :custom, as: Test::CustomPart
         expose :ordinary
       end.new
 
-      expect(view.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing').to_s).to eql(
-        '<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
+      expect(view.(customs: ["many things"], custom: "custom thing", ordinary: "ordinary thing").to_s).to eql(
+        "<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>"
       )
     end
 
-    it 'supports wrapping an array and its members in custom part classes provided to exposure :as option as a hash' do
+    it "supports wrapping an array and its members in custom part classes provided to exposure :as option as a hash" do
       view = Class.new(Dry::View) do
-        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
-        config.template = 'decorated_parts'
+        config.template = "decorated_parts"
 
         expose :customs, as: [Test::CustomArrayPart, Test::CustomPart]
         expose :custom, as: Test::CustomPart
         expose :ordinary
       end.new
 
-      expect(view.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing').to_s).to eql(
-        '<p>Custom part wrapping many things</p><p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
+      expect(view.(customs: ["many things"], custom: "custom thing", ordinary: "ordinary thing").to_s).to eql(
+        "<p>Custom part wrapping many things</p><p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>"
       )
     end
   end
 
-  describe 'custom decorator and part classes' do
-    it 'supports wrapping in custom parts based on exposure names' do
+  describe "custom decorator and part classes" do
+    it "supports wrapping in custom parts based on exposure names" do
       part_builder = Class.new(Dry::View::PartBuilder) do
         def part_class(name:, **options)
           name == :custom ? Test::CustomPart : super
@@ -80,15 +80,15 @@ RSpec.describe 'part builder' do
 
       view = Class.new(Dry::View) do
         config.part_builder = part_builder
-        config.paths = SPEC_ROOT.join('fixtures/templates')
+        config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
-        config.template = 'decorated_parts'
+        config.template = "decorated_parts"
 
         expose :customs, :custom, :ordinary
       end.new
 
-      expect(view.(customs: ['many things'], custom: 'custom thing', ordinary: 'ordinary thing').to_s).to eql(
-        '<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>'
+      expect(view.(customs: ["many things"], custom: "custom thing", ordinary: "ordinary thing").to_s).to eql(
+        "<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>"
       )
     end
   end

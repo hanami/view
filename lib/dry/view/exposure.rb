@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry-equalizer'
+require "dry-equalizer"
 
 module Dry
   class View
@@ -10,8 +10,8 @@ module Dry
     class Exposure
       include Dry::Equalizer(:name, :proc, :object, :options)
 
-      EXPOSURE_DEPENDENCY_PARAMETER_TYPES = [:req, :opt].freeze
-      INPUT_PARAMETER_TYPES = [:key, :keyreq, :keyrest].freeze
+      EXPOSURE_DEPENDENCY_PARAMETER_TYPES = %i[req opt].freeze
+      INPUT_PARAMETER_TYPES = %i[key keyreq keyrest].freeze
 
       attr_reader :name
       attr_reader :proc

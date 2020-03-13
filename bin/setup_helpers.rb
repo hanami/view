@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'open3'
+require "open3"
 
 module Setup
   module_function
@@ -18,7 +18,7 @@ module Setup
       status = wait_thr.value
     end
 
-    if !status.success?
+    unless status.success?
       puts "Failed to run #{cmd}"
       puts err
       exit 1

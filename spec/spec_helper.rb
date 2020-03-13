@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require_relative 'support/coverage'
+require_relative "support/coverage"
 
 begin
-  require 'pry-byebug'
+  require "pry-byebug"
 rescue LoadError; end
 SPEC_ROOT = Pathname(__FILE__).dirname
-FIXTURES_PATH = SPEC_ROOT.join('fixtures')
+FIXTURES_PATH = SPEC_ROOT.join("fixtures")
 
-require 'slim'
-require 'dry/view'
+require "slim"
+require "dry/view"
 
 module Test
   def self.remove_constants
@@ -34,7 +34,7 @@ RSpec.configure do |config|
       Dry::View::Path,
       Dry::View::Renderer,
       Dry::View::ScopeBuilder,
-      Dry::View::Tilt,
+      Dry::View::Tilt
     ].each do |klass|
       klass.cache.clear
     end

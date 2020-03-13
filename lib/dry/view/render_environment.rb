@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/equalizer'
+require "dry/equalizer"
 
 module Dry
   class View
@@ -12,7 +12,7 @@ module Dry
           inflector: config.inflector,
           context: context,
           scope_builder: config.scope_builder.new(namespace: config.scope_namespace),
-          part_builder: config.part_builder.new(namespace: config.part_namespace),
+          part_builder: config.part_builder.new(namespace: config.part_namespace)
         )
       end
 
@@ -36,7 +36,7 @@ module Dry
         part_builder.(name, value, **options)
       end
 
-      def scope(name = nil, locals)
+      def scope(name = nil, locals) # rubocop:disable Style/OptionalArguments
         scope_builder.(name, locals)
       end
 
@@ -54,7 +54,7 @@ module Dry
           inflector: inflector,
           context: context,
           scope_builder: scope_builder,
-          part_builder: part_builder,
+          part_builder: part_builder
         )
       end
     end

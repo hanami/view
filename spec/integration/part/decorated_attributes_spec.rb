@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'dry/core/inflector'
-require 'dry/view/scope_builder'
+require "dry/core/inflector"
+require "dry/view/scope_builder"
 
-RSpec.describe 'Part / Decorated attributes' do
+RSpec.describe "Part / Decorated attributes" do
   let(:article_class) {
     Class.new do
       attr_reader :title, :author, :comments
@@ -37,16 +37,16 @@ RSpec.describe 'Part / Decorated attributes' do
     end
   }
 
-  let (:author) {
-    author_class.new(name: 'Jane Doe')
+  let(:author) {
+    author_class.new(name: "Jane Doe")
   }
 
   let(:article) {
     article_class.new(
-      title: 'Hello world',
+      title: "Hello world",
       author: author,
       comments: [
-        comment_class.new(author: author_class.new(name: 'Sue Smith'), body: 'Great article')
+        comment_class.new(author: author_class.new(name: "Sue Smith"), body: "Great article")
       ]
     )
   }
@@ -55,7 +55,7 @@ RSpec.describe 'Part / Decorated attributes' do
     article_part_class.new(
       name: :article,
       value: article,
-      render_env: render_env,
+      render_env: render_env
     )
   }
 
@@ -65,15 +65,15 @@ RSpec.describe 'Part / Decorated attributes' do
       inflector: Dry::Inflector.new,
       context: Dry::View::Context.new,
       scope_builder: Dry::View::ScopeBuilder.new,
-      part_builder: part_builder,
+      part_builder: part_builder
     )
   }
 
-  describe 'using default part builder' do
+  describe "using default part builder" do
     let(:part_builder) { Dry::View::PartBuilder.new }
 
-    describe 'decorating without options' do
-      describe 'multiple declarations' do
+    describe "decorating without options" do
+      describe "multiple declarations" do
         let(:article_part_class) {
           Class.new(Dry::View::Part) do
             decorate :author
@@ -81,43 +81,43 @@ RSpec.describe 'Part / Decorated attributes' do
           end
         }
 
-        it 'decorates attributes with the standard Dry::View::Part class' do
+        it "decorates attributes with the standard Dry::View::Part class" do
           expect(article_part.author).to be_a Dry::View::Part
           expect(article_part.comments[0]).to be_a Dry::View::Part
         end
 
-        context 'falsey values' do
+        context "falsey values" do
           let(:author) { nil }
 
-          it 'does not decorate the attributes' do
+          it "does not decorate the attributes" do
             expect(article_part.author).to be_nil
           end
         end
       end
 
-      describe 'single declaration' do
+      describe "single declaration" do
         let(:article_part_class) {
           Class.new(Dry::View::Part) do
             decorate :author, :comments
           end
         }
 
-        it 'decorates attributes with the standard Dry::View::Part class' do
+        it "decorates attributes with the standard Dry::View::Part class" do
           expect(article_part.author).to be_a Dry::View::Part
           expect(article_part.comments[0]).to be_a Dry::View::Part
         end
 
-        context 'falsey values' do
+        context "falsey values" do
           let(:author) { nil }
 
-          it 'does not decorate the attributes' do
+          it "does not decorate the attributes" do
             expect(article_part.author).to be_nil
           end
         end
       end
     end
 
-    describe 'decorating with part class specified' do
+    describe "decorating with part class specified" do
       before do
         module Test
           class AuthorPart < Dry::View::Part
@@ -135,22 +135,22 @@ RSpec.describe 'Part / Decorated attributes' do
         end
       }
 
-      it 'deorates attributes with the specified part class' do
+      it "deorates attributes with the specified part class" do
         expect(article_part.author).to be_a Test::AuthorPart
         expect(article_part.comments[0]).to be_a Test::CommentPart
       end
 
-      context 'falsey values' do
+      context "falsey values" do
         let(:author) { nil }
 
-        it 'does not decorate the attributes' do
+        it "does not decorate the attributes" do
           expect(article_part.author).to be_nil
         end
       end
     end
   end
 
-  describe 'using custom part builder' do
+  describe "using custom part builder" do
     let(:article_part_class) {
       Class.new(Dry::View::Part) do
         decorate :author
@@ -183,16 +183,16 @@ RSpec.describe 'Part / Decorated attributes' do
       end
     end
 
-    it 'deorates attributes using the custom part builder' do
+    it "deorates attributes using the custom part builder" do
       expect(article_part.author).to be_a Test::AuthorPart
       expect(article_part.comments[0]).to be_a Test::CommentPart
       expect(article_part.comments[0].author).to be_a Test::AuthorPart
     end
 
-    context 'falsey values' do
+    context "falsey values" do
       let(:author) { nil }
 
-      it 'does not decorate the attributes' do
+      it "does not decorate the attributes" do
         expect(article_part.author).to be_nil
       end
     end

@@ -1,34 +1,34 @@
 # frozen_string_literal: true
 
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-eval_gemfile 'Gemfile.devtools'
+eval_gemfile "Gemfile.devtools"
 
 gemspec
 
 group :tools do
-  gem 'hotch'
-  gem 'pry-byebug', platform: :mri
+  gem "hotch"
+  gem "pry-byebug", platform: :mri
 end
 
 group :test do
-  gem 'rack', '>= 2.0.6'
+  gem "rack", ">= 2.0.6"
 
-  gem 'erbse'
-  gem 'erubi'
-  gem 'hamlit'
-  gem 'hamlit-block'
-  gem 'slim', '~> 4.0'
+  gem "erbse"
+  gem "erubi"
+  gem "hamlit"
+  gem "hamlit-block"
+  gem "slim", "~> 4.0"
 end
 
 group :benchmarks do
-  gem 'benchmark-ips'
-  gem 'actionview'
-  gem 'actionpack'
+  gem "actionpack"
+  gem "actionview"
+  gem "benchmark-ips"
 end
 
 group :docs do
-  gem 'yard'
-  gem 'yard-junk'
-  gem 'redcarpet', platforms: :mri
+  gem "redcarpet", platforms: :mri
+  gem "yard"
+  gem "yard-junk"
 end

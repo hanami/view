@@ -1,41 +1,41 @@
 # frozen_string_literal: true
 
-require 'dry/view'
-require 'dry/view/context'
+require "dry/view"
+require "dry/view/context"
 
-RSpec.describe 'Template engines / haml (using hamlit-block as default engine)' do
+RSpec.describe "Template engines / haml (using hamlit-block as default engine)" do
   let(:base_view) {
     Class.new(Dry::View) do
-      config.paths = FIXTURES_PATH.join('integration/template_engines/hamlit')
+      config.paths = FIXTURES_PATH.join("integration/template_engines/hamlit")
     end
   }
 
-  context 'with hamlit-block available' do
-    it 'supports partials that yield' do
+  context "with hamlit-block available" do
+    it "supports partials that yield" do
       view = Class.new(base_view) do
-        config.template = 'render_and_yield'
+        config.template = "render_and_yield"
       end.new
 
-      expect(view.().to_s.gsub(/\n\s*/m, '')).to eq '<wrapper>Yielded</wrapper>'
+      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
     end
 
-    it 'supports methods that yield' do
+    it "supports methods that yield" do
       context = Class.new(Dry::View::Context) do
-        def wrapper(&block)
+        def wrapper
           "<wrapper>#{yield}</wrapper>"
         end
       end.new
 
       view = Class.new(base_view) do
         config.default_context = context
-        config.template = 'method_with_yield'
+        config.template = "method_with_yield"
       end.new
 
-      expect(view.().to_s.gsub(/\n\s*/m, '')).to eq '<wrapper>Yielded</wrapper>'
+      expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
     end
   end
 
-  context 'with hamlit-block not available' do
+  context "with hamlit-block not available" do
     before do
       @load_path = $LOAD_PATH.dup
       @loaded_features = $LOADED_FEATURES.dup
@@ -52,12 +52,12 @@ RSpec.describe 'Template engines / haml (using hamlit-block as default engine)' 
       $LOADED_FEATURES.replace @loaded_features
     end
 
-    it 'raises an error explaining the hamlit-block requirement' do
+    it "raises an error explaining the hamlit-block requirement" do
       view = Class.new(base_view) do
-        config.template = 'render_and_yield'
+        config.template = "render_and_yield"
       end.new
 
-      expect { view.() }.to raise_error(LoadError, %r{dry-view requires hamlit-block}m)
+      expect { view.() }.to raise_error(LoadError, /dry-view requires hamlit-block/m)
     end
   end
 end

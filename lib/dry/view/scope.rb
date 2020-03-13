@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'dry/equalizer'
-require 'dry/core/constants'
-require_relative 'render_environment_missing'
+require "dry/equalizer"
+require "dry/core/constants"
+require_relative "render_environment_missing"
 
 module Dry
   class View
@@ -59,7 +59,11 @@ module Dry
       # @return [Scope]
       #
       # @api public
-      def initialize(name: nil, locals: Dry::Core::Constants::EMPTY_HASH, render_env: RenderEnvironmentMissing.new)
+      def initialize(
+        name: nil,
+        locals: Dry::Core::Constants::EMPTY_HASH,
+        render_env: RenderEnvironmentMissing.new
+      )
         @_name = name
         @_locals = locals
         @_render_env = render_env
@@ -83,9 +87,14 @@ module Dry
       # @api public
       def render(partial_name = nil, **locals, &block)
         partial_name ||= _name
-        raise ArgumentError, '+partial_name+ must be provided for unnamed scopes' unless partial_name
 
-        partial_name = _inflector.underscore(_inflector.demodulize(partial_name.to_s)) if partial_name.is_a?(Class)
+        unless partial_name
+          raise ArgumentError, "+partial_name+ must be provided for unnamed scopes"
+        end
+
+        if partial_name.is_a?(Class)
+          partial_name = _inflector.underscore(_inflector.demodulize(partial_name.to_s))
+        end
 
         _render_env.partial(partial_name, _render_scope(locals), &block)
       end
@@ -153,7 +162,10 @@ module Dry
       end
 
       def respond_to_missing?(name, include_private = false)
-        _locals.key?(name) || _render_env.context.respond_to?(name) || CONVENIENCE_METHODS.include?(name) || super
+        _locals.key?(name) ||
+          _render_env.context.respond_to?(name) ||
+          CONVENIENCE_METHODS.include?(name) ||
+          super
       end
 
       def _render_scope(**locals)
@@ -163,7 +175,7 @@ module Dry
           self.class.new(
             # FIXME: what about `name`?
             locals: locals,
-            render_env: _render_env,
+            render_env: _render_env
           )
         end
       end

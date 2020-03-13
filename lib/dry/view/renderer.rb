@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require 'dry/core/cache'
-require 'dry/equalizer'
-require_relative 'errors'
-require_relative 'tilt'
+require "dry/core/cache"
+require "dry/equalizer"
+require_relative "errors"
+require_relative "tilt"
 
 module Dry
   class View
     # @api private
     class Renderer
-      PARTIAL_PREFIX = '_'
-      PATH_DELIMITER = '/'
+      PARTIAL_PREFIX = "_"
+      PATH_DELIMITER = "/"
 
       extend Dry::Core::Cache
 

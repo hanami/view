@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/inflector'
+require "dry/inflector"
 
 module Dry
   class View
@@ -8,7 +8,7 @@ module Dry
     class RenderEnvironmentMissing
       class MissingEnvironmentError < StandardError
         def message
-          'a +render_env+ must be provided'
+          "a +render_env+ must be provided"
         end
       end
 
@@ -20,19 +20,19 @@ module Dry
         raise MissingEnvironmentError
       end
 
-      def part(name, value, **options)
+      def part(_name, _value, **_options)
         raise MissingEnvironmentError
       end
 
-      def scope(name = nil, locals)
+      def scope(_name = nil, _locals) # rubocop:disable Style/OptionalArguments
         raise MissingEnvironmentError
       end
 
-      def template(name, scope, &block)
+      def template(_name, _scope)
         raise MissingEnvironmentError
       end
 
-      def partial(name, scope, &block)
+      def partial(_name, _scope)
         raise MissingEnvironmentError
       end
 

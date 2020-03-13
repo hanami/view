@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/view/context'
+require "dry/view/context"
 
 class ApplicationViewContext < Dry::View::Context
   def method_missing(name, *args, &block)
@@ -16,7 +16,9 @@ class ApplicationViewContext < Dry::View::Context
   private
 
   def respond_to_missing?(name, include_private = false)
-    url_helpers.respond_to?(name, include_private) || helpers.respond_to?(name, include_private) || super
+    url_helpers.respond_to?(name, include_private) ||
+      helpers.respond_to?(name, include_private) ||
+      super
   end
 
   def url_helpers

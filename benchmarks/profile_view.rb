@@ -1,21 +1,23 @@
 # frozen_string_literal: true
 
-require 'hotch'
-require 'pathname'
-require 'ostruct'
-require 'dry/view'
+require "hotch"
+require "pathname"
+require "ostruct"
+require "dry/view"
 
-TEMPLATES_PATHS = Pathname(__FILE__).dirname.join('templates')
+TEMPLATES_PATHS = Pathname(__FILE__).dirname.join("templates")
 
-TEMPLATE_LOCALS = { users: [
-  OpenStruct.new(name: 'Jane', email: 'Jane@example.com'),
-  OpenStruct.new(name: 'Teresa', email: 'teresa@example.com')
-] }
+TEMPLATE_LOCALS = {
+  users: [
+    OpenStruct.new(name: "Jane", email: "Jane@example.com"),
+    OpenStruct.new(name: "Teresa", email: "teresa@example.com")
+  ]
+}.freeze
 
 class View < Dry::View
   config.paths = TEMPLATES_PATHS
-  config.layout = 'app'
-  config.template = 'users'
+  config.layout = "app"
+  config.template = "users"
 
   expose :users
 end

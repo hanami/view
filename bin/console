@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'bundler/setup'
-require 'dry-view'
+require "bundler/setup"
+require "dry-view"
 
-require 'pry'
+require "pry"
 Pry.start

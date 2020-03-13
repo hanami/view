@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'tilt/template'
-require 'erbse'
+require "tilt/template"
+require "erbse"
 
 module Dry
   class View
@@ -12,7 +12,7 @@ module Dry
           @template = ::Erbse::Engine.new
         end
 
-        def precompiled_template(locals)
+        def precompiled_template(_locals)
           @template.call(data)
         end
       end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/equalizer'
-require_relative 'decorated_attributes'
+require "dry/equalizer"
+require_relative "decorated_attributes"
 
 module Dry
   class View
@@ -43,7 +43,7 @@ module Dry
 
       # @api private
       def for_render_env(render_env)
-        return self if render_env == self._render_env
+        return self if render_env == _render_env
 
         self.class.new(**_options.merge(render_env: render_env))
       end
@@ -72,7 +72,7 @@ module Dry
       def with(**new_options)
         self.class.new(
           render_env: _render_env,
-          **_options.merge(new_options),
+          **_options.merge(new_options)
         )
       end
     end

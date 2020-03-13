@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/view/decorated_attributes'
+require "dry/view/decorated_attributes"
 
 RSpec.describe Dry::View::DecoratedAttributes do
   subject(:decoratable) {
@@ -19,38 +19,38 @@ RSpec.describe Dry::View::DecoratedAttributes do
   let(:attr_2) { double(:attr_2) }
   let(:render_env) { spy(:render_env) }
 
-  context 'with render environment' do
-    it 'returns decorated attributes as parts' do
+  context "with render environment" do
+    it "returns decorated attributes as parts" do
       decoratable.attr_1
       expect(render_env).to have_received(:part).with(:attr_1, attr_1, as: :my_value)
 
       decoratable.attr_2
-      if RUBY_VERSION >= '2.7'
+      if RUBY_VERSION >= "2.7"
         expect(render_env).to have_received(:part).with(:attr_2, attr_2)
       else
         expect(render_env).to have_received(:part).with(:attr_2, attr_2, {})
       end
     end
 
-    it 'raises NoMethodError when an invalid attribute is accessed' do
+    it "raises NoMethodError when an invalid attribute is accessed" do
       expect { decoratable.invalid_attr }.to raise_error(NoMethodError)
     end
   end
 
-  context 'without render environment' do
+  context "without render environment" do
     let(:render_env) { nil }
 
-    it 'returns attributes without decoration' do
+    it "returns attributes without decoration" do
       expect(decoratable.attr_1).to be attr_1
     end
 
-    it 'raises NoMethodError when an invalid attribute is accessed' do
+    it "raises NoMethodError when an invalid attribute is accessed" do
       expect { decoratable.invalid_attr }.to raise_error(NoMethodError)
     end
   end
 
-  it 'prepends a single module to provide the decorated attribute readers' do
+  it "prepends a single module to provide the decorated attribute readers" do
     expect(decoratable.class.ancestors.map(&:name).grep(/Test::Decoratable::DecoratedAttributes/).length).to eq 1
-    expect(decoratable.class.ancestors[0].inspect).to eq '#<Dry::View::DecoratedAttributes::Attributes[:attr_1, :attr_2, :invalid_attr]>'
+    expect(decoratable.class.ancestors[0].inspect).to eq "#<Dry::View::DecoratedAttributes::Attributes[:attr_1, :attr_2, :invalid_attr]>"
   end
 end

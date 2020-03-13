@@ -3,7 +3,7 @@
 module Views
   module Articles
     class Index < ApplicationView
-      config.template = 'articles/index'
+      config.template = "articles/index"
 
       expose :articles
     end
