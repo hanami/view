@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "dry/view/scope_builder"
-require "dry/view/render_environment_missing"
+require "hanami/view/scope_builder"
+require "hanami/view/render_environment_missing"
 
 RSpec::Matchers.define :scope do |locals|
   match do |actual|
@@ -9,16 +9,16 @@ RSpec::Matchers.define :scope do |locals|
   end
 end
 
-RSpec.describe Dry::View::Part do
+RSpec.describe Hanami::View::Part do
   let(:name) { :user }
   let(:value) { double(:value) }
   let(:render_env) {
-    Dry::View::RenderEnvironment.new(
+    Hanami::View::RenderEnvironment.new(
       renderer: renderer,
       inflector: Dry::Inflector.new,
-      context: Dry::View::Context.new,
-      scope_builder: Dry::View::ScopeBuilder.new,
-      part_builder: Dry::View::ScopeBuilder.new
+      context: Hanami::View::Context.new,
+      scope_builder: Hanami::View::ScopeBuilder.new,
+      part_builder: Hanami::View::ScopeBuilder.new
     )
   }
   let(:renderer) { spy(:renderer, format: :xml) }
@@ -68,7 +68,7 @@ RSpec.describe Dry::View::Part do
 
     describe "#inspect" do
       it "includes the clsas name, name, and value only" do
-        expect(part.inspect).to eq "#<Dry::View::Part name=:user value=#<Double :value>>"
+        expect(part.inspect).to eq "#<Hanami::View::Part name=:user value=#<Double :value>>"
       end
     end
 
@@ -124,19 +124,19 @@ RSpec.describe Dry::View::Part do
 
     describe "#format" do
       it "raises an error" do
-        expect { part.render(:info) }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { part.render(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
 
     describe "#render" do
       it "raises an error" do
-        expect { part.render(:info) }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { part.render(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
 
     describe "#scope" do
       it "raises an error" do
-        expect { part.scope(:info) }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { part.scope(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
   end
@@ -145,7 +145,7 @@ RSpec.describe Dry::View::Part do
     describe "#_name" do
       context "when class has a name" do
         before do
-          Test::MyPart = Class.new(Dry::View::Part)
+          Test::MyPart = Class.new(Hanami::View::Part)
         end
 
         subject(:part) {
@@ -159,7 +159,7 @@ RSpec.describe Dry::View::Part do
 
       context "when class is anonymous" do
         subject(:part) {
-          Class.new(Dry::View::Part).new(value: value)
+          Class.new(Hanami::View::Part).new(value: value)
         }
 
         it "defaults to 'part'" do

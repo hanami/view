@@ -5,7 +5,7 @@ require "dry/equalizer"
 require_relative "errors"
 require_relative "tilt"
 
-module Dry
+module Hanami
   class View
     # @api private
     class Renderer

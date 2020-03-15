@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require_relative "../view"
-require "dry/view/context"
+require "hanami/view/context"
 
 module ExampleApp
   class View
-    class Context < Dry::View::Context
+    class Context < Hanami::View::Context
       def initialize(**options)
         @options = options
         super(**options)

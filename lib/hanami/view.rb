@@ -15,11 +15,7 @@ require_relative "view/rendered"
 require_relative "view/renderer"
 require_relative "view/scope_builder"
 
-# A collection of next-generation Ruby libraries, helping you to write clear,
-# flexible, and more maintainable Ruby code. Each dry-rb gem fulfils a common
-# task, and together they make a powerful platform for any kind of Ruby
-# application.
-module Dry
+module Hanami
   # A standalone, template-based view rendering system that offers everything
   # you need to write well-factored view code.
   #
@@ -102,7 +98,7 @@ module Dry
     #
     #   @see https://dry-rb.org/gems/dry-view/scopes/
     #
-    #   @param scope_class [Class] scope class (inheriting from `Dry::View::Scope`)
+    #   @param scope_class [Class] scope class (inheriting from `Hanami::View::Scope`)
     #   @api public
     # @!scope class
     setting :scope
@@ -111,11 +107,11 @@ module Dry
     #   Set the default context object to use when rendering. This will be used
     #   unless another context object is applied at render-time to `View#call`
     #
-    #   Defaults to a frozen instance of `Dry::View::Context`.
+    #   Defaults to a frozen instance of `Hanami::View::Context`.
     #
     #   @see View#call
     #
-    #   @param context [Dry::View::Context] context object
+    #   @param context [Hanami::View::Context] context object
     #   @api public
     # @!scope class
     setting :default_context, Context.new.freeze

@@ -9,7 +9,7 @@ SPEC_ROOT = Pathname(__FILE__).dirname
 FIXTURES_PATH = SPEC_ROOT.join("fixtures")
 
 require "slim"
-require "dry/view"
+require "hanami/view"
 
 module Test
   def self.remove_constants
@@ -29,12 +29,12 @@ RSpec.configure do |config|
 
   config.after do
     [
-      Dry::View,
-      Dry::View::PartBuilder,
-      Dry::View::Path,
-      Dry::View::Renderer,
-      Dry::View::ScopeBuilder,
-      Dry::View::Tilt
+      Hanami::View,
+      Hanami::View::PartBuilder,
+      Hanami::View::Path,
+      Hanami::View::Renderer,
+      Hanami::View::ScopeBuilder,
+      Hanami::View::Tilt
     ].each do |klass|
       klass.cache.clear
     end

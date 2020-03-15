@@ -1,4 +1,4 @@
-name: dry-view
+name: hanami-view
 codacy_id: fe8a45d76d8b45f6a680a29c48b43a99
 gemspec:
   authors: ["Tim Riley", "Piotr Solnica"]

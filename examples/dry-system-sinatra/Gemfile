@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 gem "byebug"
-gem "dry-view", path: "../.."
+gem "hanami-view", path: "../.."
 gem "dry-web"
 gem "sinatra"
 gem "slim"

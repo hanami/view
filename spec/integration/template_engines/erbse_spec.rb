@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "dry/view"
-require "dry/view/context"
+require "hanami/view"
+require "hanami/view/context"
 
 RSpec.describe "Template engines / erb (using erbse as default engine)" do
   let(:base_view) {
-    Class.new(Dry::View) do
+    Class.new(Hanami::View) do
       config.paths = FIXTURES_PATH.join("integration/template_engines/erbse")
     end
   }
@@ -20,7 +20,7 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
     end
 
     it "supports context methods that yield" do
-      context = Class.new(Dry::View::Context) do
+      context = Class.new(Hanami::View::Context) do
         def wrapper
           "<wrapper>#{yield}</wrapper>"
         end
@@ -41,16 +41,16 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
       @loaded_features = $LOADED_FEATURES.dup
 
       $LOAD_PATH.reject! { |path| path =~ /erbse/ }
-      $LOADED_FEATURES.reject! { |path| path =~ %r{erbse|dry/view/tilt/erbse} }
+      $LOADED_FEATURES.reject! { |path| path =~ %r{erbse|hanami/view/tilt/erbse} }
 
-      Dry::View::Tilt.cache.clear
-      Dry::View::Renderer.cache.clear
+      Hanami::View::Tilt.cache.clear
+      Hanami::View::Renderer.cache.clear
     end
 
     after do
       $LOAD_PATH.replace @load_path
       $LOADED_FEATURES.replace @loaded_features
-      Dry::View::Tilt.register_adapter :erb, Dry::View::Tilt::ERB
+      Hanami::View::Tilt.register_adapter :erb, Hanami::View::Tilt::ERB
     end
 
     it "raises an error explaining the erbse requirement" do
@@ -58,7 +58,7 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
         config.template = "render_and_yield"
       end.new
 
-      expect { view.() }.to raise_error(LoadError, /dry-view requires erbse/m)
+      expect { view.() }.to raise_error(LoadError, /hanami-view requires erbse/m)
     end
 
     it "allows deregistering the adapter to avoid the load error and accept rendering via a less-compatible erb engine" do
@@ -66,7 +66,7 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
         config.template = "plain_erb"
       end.new
 
-      Dry::View::Tilt.deregister_adapter :erb
+      Hanami::View::Tilt.deregister_adapter :erb
 
       expect { view.() }.not_to raise_error
       expect(view.().to_s.strip).to eq "Hello"

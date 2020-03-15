@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require "dry/view/render_environment"
+require "hanami/view/render_environment"
 
 require "dry/inflector"
-require "dry/view/context"
-require "dry/view/part_builder"
-require "dry/view/scope_builder"
+require "hanami/view/context"
+require "hanami/view/part_builder"
+require "hanami/view/scope_builder"
 
-RSpec.describe Dry::View::RenderEnvironment do
+RSpec.describe Hanami::View::RenderEnvironment do
   subject(:render_env) { described_class.new(**options) }
 
   let(:options) {
     {
       inflector: Dry::Inflector.new,
-      renderer: Dry::View::Renderer.new([Dry::View::Path.new(FIXTURES_PATH)], format: :html),
-      context: Dry::View::Context.new,
-      part_builder: Dry::View::PartBuilder.new,
-      scope_builder: Dry::View::ScopeBuilder.new
+      renderer: Hanami::View::Renderer.new([Hanami::View::Path.new(FIXTURES_PATH)], format: :html),
+      context: Hanami::View::Context.new,
+      part_builder: Hanami::View::PartBuilder.new,
+      scope_builder: Hanami::View::ScopeBuilder.new
     }
   }
 

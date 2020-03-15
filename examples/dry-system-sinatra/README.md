@@ -1,4 +1,4 @@
-# dry-view example dry-system/sinatra app
+# hanami-view example dry-system/sinatra app
 
 ## Setup
 
@@ -12,7 +12,7 @@ To see the rendered views, run `bundle exec rackup` and visit http://localhost:9
 
 ## Integration
 
-The following files/folders are specific to the dry-view integration:
+The following files/folders are specific to the hanami-view integration:
 
 - View helper methods in `lib/example_app/web.rb`
 - `lib/example_app/view.rb`
@@ -20,4 +20,4 @@ The following files/folders are specific to the dry-view integration:
 - `lib/example_app/views/`
 - `web/templates/`
 
-n.b. this is a minimal integration to demonstrate how dry-view can fit within an app using dry-system and a web front-end like Sinatra; there's plenty more that could be done to flesh out the view-related features and improve the overall experience.
+n.b. this is a minimal integration to demonstrate how hanami-view can fit within an app using dry-system and a web front-end like Sinatra; there's plenty more that could be done to flesh out the view-related features and improve the overall experience.

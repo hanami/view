@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Dry::View::Exposure do
+RSpec.describe Hanami::View::Exposure do
   subject(:exposure) { described_class.new(:hello, proc, object, **options) }
 
   let(:proc) { -> _input { "hi" } }

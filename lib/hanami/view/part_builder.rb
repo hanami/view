@@ -4,7 +4,7 @@ require "dry/core/cache"
 require "dry/equalizer"
 require_relative "part"
 
-module Dry
+module Hanami
   class View
     # Decorates exposure values with matching parts
     #
@@ -37,7 +37,7 @@ module Dry
       # @param value [Object] exposure value
       # @param options [Hash] exposure options
       #
-      # @return [Dry::View::Part] decorated value
+      # @return [Hanami::View::Part] decorated value
       #
       # @api private
       def call(name, value, **options)

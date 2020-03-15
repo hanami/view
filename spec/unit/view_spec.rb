@@ -2,9 +2,9 @@
 
 require "tilt/erubi"
 
-RSpec.describe Dry::View do
+RSpec.describe Hanami::View do
   subject(:view) {
-    Class.new(Dry::View) do
+    Class.new(Hanami::View) do
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "user"
@@ -20,7 +20,7 @@ RSpec.describe Dry::View do
   }
 
   let(:context) do
-    Class.new(Dry::View::Context) do
+    Class.new(Hanami::View::Context) do
       def title
         "Test"
       end
@@ -37,7 +37,7 @@ RSpec.describe Dry::View do
 
   describe "renderer options" do
     subject(:view) {
-      Class.new(Dry::View) do
+      Class.new(Hanami::View) do
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.template = "view_renderer_options"
         config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}
@@ -64,7 +64,7 @@ RSpec.describe Dry::View do
     end
 
     subject(:context) {
-      Class.new(Dry::View::Context) do
+      Class.new(Hanami::View::Context) do
         def form(action:, &blk)
           Test::Form.new(action, &blk)
         end

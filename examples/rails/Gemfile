@@ -8,7 +8,7 @@ gem "puma", "~> 3.11"
 gem "rails", "~> 5.2.2"
 gem "sqlite3"
 
-gem "dry-view", path: "../.."
+gem "hanami-view", path: "../.."
 gem "slim"
 
 group :development, :test do

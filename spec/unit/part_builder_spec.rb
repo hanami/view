@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require "dry/view/scope_builder"
+require "hanami/view/scope_builder"
 
-RSpec.describe Dry::View::PartBuilder do
+RSpec.describe Hanami::View::PartBuilder do
   subject(:part_builder) { render_env.part_builder }
 
   let(:render_env) {
-    Dry::View::RenderEnvironment.new(
-      renderer: Dry::View::Renderer.new([FIXTURES_PATH], format: :html),
+    Hanami::View::RenderEnvironment.new(
+      renderer: Hanami::View::Renderer.new([FIXTURES_PATH], format: :html),
       inflector: Dry::Inflector.new,
-      context: Dry::View::Context.new,
-      scope_builder: Dry::View::ScopeBuilder.new,
-      part_builder: Dry::View::PartBuilder.new(namespace: namespace)
+      context: Hanami::View::Context.new,
+      scope_builder: Hanami::View::ScopeBuilder.new,
+      part_builder: Hanami::View::PartBuilder.new(namespace: namespace)
     )
   }
 
@@ -27,7 +27,7 @@ RSpec.describe Dry::View::PartBuilder do
     let(:options) { {} }
 
     shared_examples "a view part" do
-      let(:part_class) { Dry::View::Part }
+      let(:part_class) { Hanami::View::Part }
 
       it "returns a part" do
         expect(part).to be_a part_class
@@ -43,8 +43,8 @@ RSpec.describe Dry::View::PartBuilder do
     end
 
     shared_examples "a view part collection" do
-      let(:collection_part_class) { Dry::View::Part }
-      let(:item_part_class) { Dry::View::Part }
+      let(:collection_part_class) { Hanami::View::Part }
+      let(:item_part_class) { Hanami::View::Part }
 
       it "returns a part wrapping the collection" do
         expect(part).to be_a collection_part_class
@@ -75,7 +75,7 @@ RSpec.describe Dry::View::PartBuilder do
 
         describe "explicit part class provided via as: option" do
           before do
-            Test::UserPart = Class.new(Dry::View::Part)
+            Test::UserPart = Class.new(Hanami::View::Part)
           end
 
           let(:options) { {as: Test::UserPart} }
@@ -100,7 +100,7 @@ RSpec.describe Dry::View::PartBuilder do
 
         describe "explicit part class provided via as: option" do
           before do
-            Test::UserPart = Class.new(Dry::View::Part)
+            Test::UserPart = Class.new(Hanami::View::Part)
           end
 
           let(:options) { {as: Test::UserPart} }
@@ -112,7 +112,7 @@ RSpec.describe Dry::View::PartBuilder do
 
         describe "explicit collection part class provided via as: option" do
           before do
-            Test::UserCollectionPart = Class.new(Dry::View::Part)
+            Test::UserCollectionPart = Class.new(Hanami::View::Part)
           end
 
           let(:options) { {as: [Test::UserCollectionPart]} }
@@ -128,23 +128,23 @@ RSpec.describe Dry::View::PartBuilder do
       before do
         module Test
           module Parts
-            class Users < Dry::View::Part
+            class Users < Hanami::View::Part
             end
 
-            class UserCollection < Dry::View::Part
+            class UserCollection < Hanami::View::Part
             end
 
-            class User < Dry::View::Part
+            class User < Hanami::View::Part
               decorate :profile
             end
 
-            class AdminUser < Dry::View::Part
+            class AdminUser < Hanami::View::Part
             end
 
             module UserModule
             end
 
-            class Profile < Dry::View::Part
+            class Profile < Hanami::View::Part
             end
           end
         end
@@ -171,11 +171,11 @@ RSpec.describe Dry::View::PartBuilder do
           end
         end
 
-        describe "alternative name provided via :as option, when matched constant is not a class inheriting from Dry::View::Part" do
+        describe "alternative name provided via :as option, when matched constant is not a class inheriting from Hanami::View::Part" do
           let(:options) { {as: :user_module} }
 
           it_behaves_like "a view part" do
-            let(:part_class) { Dry::View::Part }
+            let(:part_class) { Hanami::View::Part }
           end
         end
 

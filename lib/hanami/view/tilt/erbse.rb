@@ -3,7 +3,7 @@
 require "tilt/template"
 require "erbse"
 
-module Dry
+module Hanami
   class View
     module Tilt
       # Tilt template class copied from cells-erb gem

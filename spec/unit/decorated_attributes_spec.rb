@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "dry/view/decorated_attributes"
+require "hanami/view/decorated_attributes"
 
-RSpec.describe Dry::View::DecoratedAttributes do
+RSpec.describe Hanami::View::DecoratedAttributes do
   subject(:decoratable) {
     Test::Decoratable = Struct.new(:attr_1, :attr_2, :_render_env) do
-      include Dry::View::DecoratedAttributes
+      include Hanami::View::DecoratedAttributes
 
       decorate :attr_1, as: :my_value
       decorate :attr_2
@@ -51,6 +51,6 @@ RSpec.describe Dry::View::DecoratedAttributes do
 
   it "prepends a single module to provide the decorated attribute readers" do
     expect(decoratable.class.ancestors.map(&:name).grep(/Test::Decoratable::DecoratedAttributes/).length).to eq 1
-    expect(decoratable.class.ancestors[0].inspect).to eq "#<Dry::View::DecoratedAttributes::Attributes[:attr_1, :attr_2, :invalid_attr]>"
+    expect(decoratable.class.ancestors[0].inspect).to eq "#<Hanami::View::DecoratedAttributes::Attributes[:attr_1, :attr_2, :invalid_attr]>"
   end
 end

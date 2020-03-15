@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "dry-view"
+require "hanami-view"
 
 require "pry"
 Pry.start

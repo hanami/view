@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "dry/view/rendered"
+require "hanami/view/rendered"
 
-RSpec.describe Dry::View::Rendered do
+RSpec.describe Hanami::View::Rendered do
   subject(:rendered) {
     described_class.new(
       output: "rendered template output",

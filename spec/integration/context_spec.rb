@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "dry/view"
-require "dry/view/context"
-require "dry/view/part"
+require "hanami/view"
+require "hanami/view/context"
+require "hanami/view/part"
 
 RSpec.describe "Context" do
   it "Provides decorated attributes for use in templates and parts" do
@@ -13,7 +13,7 @@ RSpec.describe "Context" do
         end
       end
 
-      class Context < Dry::View::Context
+      class Context < Hanami::View::Context
         attr_reader :assets
         decorate :assets
 
@@ -24,7 +24,7 @@ RSpec.describe "Context" do
       end
 
       module Parts
-        class Assets < Dry::View::Part
+        class Assets < Hanami::View::Part
           def image_tag(path)
             <<~HTML
               <img src="#{value[path]}">
@@ -32,7 +32,7 @@ RSpec.describe "Context" do
           end
         end
 
-        class User < Dry::View::Part
+        class User < Hanami::View::Part
           def image_tag
             value[:image_url] || context.assets.image_tag("default.png")
           end
@@ -40,7 +40,7 @@ RSpec.describe "Context" do
       end
     end
 
-    view = Class.new(Dry::View) do
+    view = Class.new(Hanami::View) do
       config.paths = FIXTURES_PATH.join("integration/context")
       config.template = "decorated_attributes"
       config.part_namespace = Test::Parts

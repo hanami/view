@@ -1,7 +1,7 @@
 ---
 title: Scopes
 layout: gem-single
-name: dry-view
+name: hanami-view
 ---
 
 A scope is the object that determines which methods are available to use from within the template. The [standard scope](docs::templates) provides access to template locals (exposed values), partial rendering, as well as the building of custom scopes.
@@ -13,16 +13,16 @@ With a custom scope, you can add your own behavior around a template and its par
 To provide custom scope behavior, define your own scope classes in a common namespace (e.g. `Scopes`) and [configure that](docs::configuration) as your view's `scope_namespace`:
 
 ```ruby
-class MyView < Dry::View
+class MyView < Hanami::View
   config.scope_namespace = Scopes
 end
 ```
 
-Each scope class must inherit from `Dry::View::Scope`:
+Each scope class must inherit from `Hanami::View::Scope`:
 
 ```ruby
 module Scopes
-  class MediaPlayer < Dry::View::Scope
+  class MediaPlayer < Hanami::View::Scope
   end
 end
 ```
@@ -47,7 +47,7 @@ Scope classes are looked up based on the configured `scope_namespace` and the na
 
 So for a `scope_namespace` of `Scopes` and scope built as `:media_player`, the `Scopes::MediaPlayer` class will be looked up.
 
-If a matching scope class cannot be found, the standard `Dry::View::Scope` class will be used.
+If a matching scope class cannot be found, the standard `Hanami::View::Scope` class will be used.
 
 ## Rendering partials
 
@@ -70,7 +70,7 @@ This will use the scope's name for the name of the partial. In the example above
 You can also render partials from  within your scope class' own methods:
 
 ```ruby
-class MediaPlayer < Dry::View::Scope
+class MediaPlayer < Hanami::View::Scope
   def audio_player_html
     render(:audio_player)
   end
@@ -91,7 +91,7 @@ For example, from a template:
 Or from a custom scope class:
 
 ```ruby
-class MediaPlayer < Dry::View::Scope
+class MediaPlayer < Hanami::View::Scope
   def display_title
     # `item` is a local
     "#{item.title} (#{item.duration})"
@@ -104,7 +104,7 @@ You can also access the full hash of locals via `#_locals` (or `#locals` as a co
 This is useful for providing default values for locals that may not explicitly be passed when the scope is built:
 
 ```ruby
-class MediaPlayer < Dry::View::Scope
+class MediaPlayer < Hanami::View::Scope
   def show_artwork?
     locals.fetch(:show_artwork, true)
   end
@@ -120,7 +120,7 @@ Scopes also delegate missing methods to the context object (provided there is no
 For example:
 
 ```ruby
-class MediaPlayer < Dry::View::Scope
+class MediaPlayer < Hanami::View::Scope
   def image_urls
     # item is a local, and asset_path is a method defined on the context object
     [item.image_url, asset_path("standard-media-artwork.png")]
@@ -139,7 +139,7 @@ Aside from building custom scopes explicitly, you can also specify a scope to be
 You can specify the scope as a direct class reference:
 
 ```ruby
-class MyView < Dry::View
+class MyView < Hanami::View
   config.template = "my_view"
   config.scope = Scopes::MyView
 end
@@ -148,7 +148,7 @@ end
 Or if you have a scope namepace configured, you can use a symbolic name and a matching scope will be looked up:
 
 ```ruby
-class MyView < Dry::View
+class MyView < Hanami::View
   config.template = "my_view"
   config.scope_namespace = Scopes
   config.scope = :my_view
@@ -160,7 +160,7 @@ end
 To fully customize scope lookup and initialization, you can provide a replacement scope builder:
 
 ```ruby
-class MyView < Dry::View
+class MyView < Hanami::View
   config.scope_builder = MyScopeBuilder
 end
 ```
@@ -171,4 +171,4 @@ Your scope builder must conform to the following interface:
 - `#for_render_env(render_env)`
 - `#call(name = nil, locals)`
 
-You can also inherit from `Dry::View::ScopeBuilder` and override any of its methods, if you want to customize just a particular aspect of the standard behavior.
+You can also inherit from `Hanami::View::ScopeBuilder` and override any of its methods, if you want to customize just a particular aspect of the standard behavior.

@@ -1,10 +1,10 @@
 ---
 title: Testing
 layout: gem-single
-name: dry-view
+name: hanami-view
 ---
 
-dry-view is designed to encourage better testing of your views, with every component designed to support unit testing, in full isolation. This means you can test your views at whatever level of granularity makes sense for you, all the while maintaining a responsive test-driven development cycle.
+hanami-view is designed to encourage better testing of your views, with every component designed to support unit testing, in full isolation. This means you can test your views at whatever level of granularity makes sense for you, all the while maintaining a responsive test-driven development cycle.
 
 ## Testing views
 
@@ -13,7 +13,7 @@ To test a view object in full, initialize it, passing in any [dependencies](docs
 Given this view:
 
 ```ruby
-class ArticleView < Dry::View
+class ArticleView < Hanami::View
   config.template = "article"
 
   attr_reader :repo
@@ -82,7 +82,7 @@ To test simple [part](docs::parts) behavior, initialize a part and make your exp
 
 ```ruby
 module Parts
-  class Article < Dry::View::Part
+  class Article < Hanami::View::Part
     def byline
       "By #{author_name}"
     end
@@ -106,14 +106,14 @@ end
 To test [part](docs::parts) behavior that [renders partials](docs::templates) or accesses the [context](docs::context), the part will need to be initialized with a name and _render environment_. You can get a render environment from a related view class via its `.template_env`:
 
 ```ruby
-class ArticleView < Dry::View
+class ArticleView < Hanami::View
   config.template = "article"
   config.part_namespace = Parts
   # ...
 end
 
 module Parts
-  class Article < Dry::View::Part
+  class Article < Hanami::View::Part
     def author_details_html
       render(:author_details, author: author)
     end

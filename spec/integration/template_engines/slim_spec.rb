@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require "slim"
-require "dry/view"
-require "dry/view/context"
+require "hanami/view"
+require "hanami/view/context"
 
 RSpec.describe "Template engines / slim" do
   let(:base_view) {
-    Class.new(Dry::View) do
+    Class.new(Hanami::View) do
       config.paths = FIXTURES_PATH.join("integration/template_engines/slim")
     end
   }
@@ -20,7 +20,7 @@ RSpec.describe "Template engines / slim" do
   end
 
   it "supports context methods that yield" do
-    context = Class.new(Dry::View::Context) do
+    context = Class.new(Hanami::View::Context) do
       def wrapper
         "<wrapper>#{yield}</wrapper>"
       end

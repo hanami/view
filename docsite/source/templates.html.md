@@ -1,7 +1,7 @@
 ---
 title: Templates
 layout: gem-single
-name: dry-view
+name: hanami-view
 ---
 
 Every view has a template, which is passed the values from the view’s [exposures](docs::exposures) and then used to render the view output.
@@ -18,9 +18,9 @@ An example is `index.html.slim`, which would be found for a view controller with
 
 ## Template engines
 
-dry-view uses [Tilt](https://github.com/rtomayko/tilt) to render its templates, and relies upon Tilt’s auto-detection of rendering engine based on the template file’s extension. However, you should explicitly `require` any engine gems that you intend to use.
+hanami-view uses [Tilt](https://github.com/rtomayko/tilt) to render its templates, and relies upon Tilt’s auto-detection of rendering engine based on the template file’s extension. However, you should explicitly `require` any engine gems that you intend to use.
 
-Some Tilt-supplied template engines may not fully support dry-view's features (like implicit block capturing). Your view will raise an exception, along with instructions for resolving the issue, if Tilt provides a non-compatible engine.
+Some Tilt-supplied template engines may not fully support hanami-view's features (like implicit block capturing). Your view will raise an exception, along with instructions for resolving the issue, if Tilt provides a non-compatible engine.
 
 The currently known problematic engines are:
 
@@ -31,7 +31,7 @@ The currently known problematic engines are:
 
 Each template is rendered with its own _scope_, which determines the methods available within the template. The scope behavior is established by 3 things:
 
-1. The scope’s class, which is `Dry::View::Scope` by default, but can be changed for a template by specifying a class for the view’s [`scope` setting](docs::configuration), or for a partial rendering by using [`#scope`](docs::scopes) from within a part or scope method, or within the template itself
+1. The scope’s class, which is `Hanami::View::Scope` by default, but can be changed for a template by specifying a class for the view’s [`scope` setting](docs::configuration), or for a partial rendering by using [`#scope`](docs::scopes) from within a part or scope method, or within the template itself
 2. The template’s _locals_, the [exposure values](docs::exposures) decorated by their [parts](docs::parts)
 3. The [context object](docs::context)
 

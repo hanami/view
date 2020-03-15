@@ -1,22 +1,22 @@
 ---
 title: Parts
 layout: gem-single
-name: dry-view
+name: hanami-view
 ---
 
 All values [exposed](docs::exposures) by your view are decorated and passed to your templates as _parts_, which allow encapsulation of view-specific behavior alongside your application's domain objects.
 
-Unlike many third-party approaches to view object decoration, dry-view's parts are fully integrated and have access to the full rendering environment, which means that anything you can do from a template, you can also do from a part. This includes accessing the context object as well as rendering partials and building scopes.
+Unlike many third-party approaches to view object decoration, hanami-view's parts are fully integrated and have access to the full rendering environment, which means that anything you can do from a template, you can also do from a part. This includes accessing the context object as well as rendering partials and building scopes.
 
 This means that much more view logic can move out of template and into parts, which makes the templates simpler and more declarative, and puts the view logic into a place where it can be reused and refactored using typical object oriented approaches, as well as tested in isolation.
 
 ## Defining a part class
 
-To provide custom part behavior, define your own part classes in a common namespace (e.g. `Parts`) and [configure that](docs::configuration) as your view's `part_namespace` Each part class must inherit from `Dry::View::Part`.
+To provide custom part behavior, define your own part classes in a common namespace (e.g. `Parts`) and [configure that](docs::configuration) as your view's `part_namespace` Each part class must inherit from `Hanami::View::Part`.
 
 ```ruby
 module Parts
-  class User < Dry::View::Part
+  class User < Hanami::View::Part
   end
 end
 ```
@@ -31,7 +31,7 @@ For an exposure returning an array, the exposure's name will be singularized and
 
 So for an exposure named `:articles`, the `Parts::Article` class will be looked up for decorating each element, and the `Parts::Articles` class will be looked up for decorating the entire array.
 
-If a matching part class cannot be found, the standard `Dry::View::Part` class will be used.
+If a matching part class cannot be found, the standard `Hanami::View::Part` class will be used.
 
 ## Accessing the decorated value
 
@@ -47,7 +47,7 @@ For example, from a template:
 Or when defining a custom part class:
 
 ```ruby
-class User < Dry::View::Part
+class User < Hanami::View::Part
   def display_name
     # `name` and `email` are methods on the decorated user value
     "#{name} <#{email}>"
@@ -58,7 +58,7 @@ end
 In case of naming collisions or when overriding a method, you can access the value directly via `#_value` (or `#value` as a convenience, as long the decorated value itself doesn't respond to `#value`):
 
 ```ruby
-class User < Dry::View::Part
+class User < Hanami::View::Part
   def name
     value.name.upcase
   end
@@ -78,7 +78,7 @@ When used to output to the template, a part will use it's value `#to_s` behavior
 From a part, you can render a partial, with the part object included in the partial's own locals:
 
 ```ruby
-class User < Dry::View::Part
+class User < Hanami::View::Part
   def info_box
     render(:info_box)
   end
@@ -110,7 +110,7 @@ You can also provide additional locals for the partial:
 You may [build custom scopes](docs::scopes) from within a part using `#_scope` (or `#scope` as a convenience, as long as the decorated value doesn't respond to `#scope`):
 
 ```ruby
-class User < Dry::View::Part
+class User < Hanami::View::Part
   def info_box
     scope(:info_box, size: :large).render
   end
@@ -124,7 +124,7 @@ In your part classes, you can access the [context object](docs::context) as `#_c
 For example:
 
 ```ruby
-class User < Dry::View::Part
+class User < Hanami::View::Part
   def avatar_url
     # asset_path is a method defined on the context object (in this case,
     # providing static asset URLs)
@@ -138,7 +138,7 @@ end
 Your values may have their own attributes that you also want decorated as view parts. Declare these using `decorate` in your own view part classes:
 
 ```ruby
-class UserPart < Dry::View::Part
+class UserPart < Hanami::View::Part
   decorate :address
 end
 ```
@@ -146,7 +146,7 @@ end
 You can pass the same options to `decorate` as you do to [exposures](docs::exposures), for example:
 
 ```ruby
-class UserPart < Dry::View::Part
+class UserPart < Hanami::View::Part
   decorate :address, as: :location
 end
 ```
@@ -156,7 +156,7 @@ end
 A part object lives for the entirety of a view rendering, you can memoize expensive operations to ensure they only run once.
 
 ```ruby
-class User < Dry::View::Part
+class User < Hanami::View::Part
   def bio_html
     @bio_html ||= rich_text_renderer.render(bio)
   end
@@ -192,7 +192,7 @@ All of these examples presume a configured `part_namespace` of `Parts`.
 To fully customize part decoration, you can provide a replacement part builder:
 
 ```ruby
-class MyView < Dry::View
+class MyView < Hanami::View
   config.part_builder = MyPartBuilder
 end
 ```
@@ -203,4 +203,4 @@ Your part builder must conform to the following interface:
 - `#for_render_env(render_env)`
 - `#call(name, value, **options)`
 
-You can also inherit from `Dry::View::PartBuilder` and override any of its methods, if you want to customize just a particular aspect of the standard behavior.
+You can also inherit from `Hanami::View::PartBuilder` and override any of its methods, if you want to customize just a particular aspect of the standard behavior.

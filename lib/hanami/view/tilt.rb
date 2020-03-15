@@ -3,7 +3,7 @@
 require "dry/core/cache"
 require "tilt"
 
-module Dry
+module Hanami
   class View
     # @api private
     module Tilt

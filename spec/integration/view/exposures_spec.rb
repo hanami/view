@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "dry/view"
-require "dry/view/context"
+require "hanami/view"
+require "hanami/view/context"
 
 RSpec.describe "View / exposures" do
   specify "exposures have access to context" do
-    view = Class.new(Dry::View) do
+    view = Class.new(Hanami::View) do
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.template = "greeting"
 
@@ -14,7 +14,7 @@ RSpec.describe "View / exposures" do
       end
     end.new
 
-    context = Class.new(Dry::View::Context) do
+    context = Class.new(Hanami::View::Context) do
       def name
         "Jane"
       end

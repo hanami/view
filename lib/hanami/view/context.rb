@@ -3,7 +3,7 @@
 require "dry/equalizer"
 require_relative "decorated_attributes"
 
-module Dry
+module Hanami
   class View
     # Provides a baseline environment across all the templates, parts and scopes
     # in a given rendering.
@@ -25,7 +25,7 @@ module Dry
       # while preserving your dependencies.
       #
       # @example
-      #   class MyContext < Dry::View::Context
+      #   class MyContext < Hanami::View::Context
       #     # Injected dependency
       #     attr_reader :assets
       #
@@ -54,7 +54,7 @@ module Dry
       # when initializing your custom Context subclass.
       #
       # @example
-      #   class MyContext < Dry::View::Context
+      #   class MyContext < Hanami::View::Context
       #     # Injected dependencies (request is optional)
       #     attr_reader :assets, :request
       #

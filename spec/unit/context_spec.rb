@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "dry/view/context"
-require "dry/view/part"
-require "dry/view/part_builder"
-require "dry/view/scope_builder"
+require "hanami/view/context"
+require "hanami/view/part"
+require "hanami/view/part_builder"
+require "hanami/view/scope_builder"
 
-RSpec.describe Dry::View::Context do
+RSpec.describe Hanami::View::Context do
   let(:context_class) {
-    Class.new(Dry::View::Context) do
+    Class.new(Hanami::View::Context) do
       attr_reader :assets, :routes
 
       decorate :assets, :routes
@@ -25,12 +25,12 @@ RSpec.describe Dry::View::Context do
   let(:routes) { double(:routes) }
 
   let(:render_env) {
-    Dry::View::RenderEnvironment.new(
+    Hanami::View::RenderEnvironment.new(
       inflector: Dry::Inflector.new,
       renderer: double(:renderer),
-      context: Dry::View::Context.new,
-      part_builder: Dry::View::PartBuilder.new,
-      scope_builder: Dry::View::ScopeBuilder.new
+      context: Hanami::View::Context.new,
+      part_builder: Hanami::View::PartBuilder.new,
+      scope_builder: Hanami::View::ScopeBuilder.new
     )
   }
 
@@ -49,7 +49,7 @@ RSpec.describe Dry::View::Context do
 
     describe "attribute readers" do
       it "provides attributes decorated in view parts" do
-        expect(context.assets).to be_a Dry::View::Part
+        expect(context.assets).to be_a Hanami::View::Part
         expect(context.assets.value).to eql assets
       end
     end

@@ -3,7 +3,7 @@
 RSpec.describe "part builder" do
   before do
     module Test
-      class Custom < Dry::View::Part
+      class Custom < Hanami::View::Part
         def to_s
           "Custom part wrapping #{_value}"
         end
@@ -11,7 +11,7 @@ RSpec.describe "part builder" do
 
       CustomPart = Custom
 
-      class CustomArrayPart < Dry::View::Part
+      class CustomArrayPart < Hanami::View::Part
         def each(&block)
           (_value * 2).each(&block)
         end
@@ -21,7 +21,7 @@ RSpec.describe "part builder" do
 
   describe "default decorator" do
     it "looks up classes from a part namespace" do
-      view = Class.new(Dry::View) do
+      view = Class.new(Hanami::View) do
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
         config.template = "decorated_parts"
@@ -38,7 +38,7 @@ RSpec.describe "part builder" do
     end
 
     it "supports wrapping array memebers in custom part classes provided to exposure :as option" do
-      view = Class.new(Dry::View) do
+      view = Class.new(Hanami::View) do
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
         config.template = "decorated_parts"
@@ -54,7 +54,7 @@ RSpec.describe "part builder" do
     end
 
     it "supports wrapping an array and its members in custom part classes provided to exposure :as option as a hash" do
-      view = Class.new(Dry::View) do
+      view = Class.new(Hanami::View) do
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
         config.template = "decorated_parts"
@@ -72,13 +72,13 @@ RSpec.describe "part builder" do
 
   describe "custom decorator and part classes" do
     it "supports wrapping in custom parts based on exposure names" do
-      part_builder = Class.new(Dry::View::PartBuilder) do
+      part_builder = Class.new(Hanami::View::PartBuilder) do
         def part_class(name:, **options)
           name == :custom ? Test::CustomPart : super
         end
       end
 
-      view = Class.new(Dry::View) do
+      view = Class.new(Hanami::View) do
         config.part_builder = part_builder
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil

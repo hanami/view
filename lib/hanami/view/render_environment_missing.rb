@@ -2,7 +2,7 @@
 
 require "dry/inflector"
 
-module Dry
+module Hanami
   class View
     # @api private
     class RenderEnvironmentMissing

@@ -2,7 +2,7 @@
 
 require "set"
 
-module Dry
+module Hanami
   class View
     # Decorates attributes in Parts.
     module DecoratedAttributes
@@ -20,7 +20,7 @@ module Dry
         # current render environment.
         #
         # @example
-        #   class Article < Dry::View::Part
+        #   class Article < Hanami::View::Part
         #     decorate :feature_image
         #     decorate :author as: :person
         #   end

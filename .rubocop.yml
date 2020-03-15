@@ -1,5 +1,3 @@
-# this file is managed by dry-rb/devtools project
-
 AllCops:
   TargetRubyVersion: 2.4
   Exclude:

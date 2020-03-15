@@ -4,12 +4,12 @@ require "erubi"
 require "erubi/capture_end"
 require "tilt/erubi"
 
-require "dry/view"
-require "dry/view/context"
+require "hanami/view"
+require "hanami/view/context"
 
 RSpec.describe "Template engines / erb (using erubi via an explict engine mapping)" do
   let(:base_view) {
-    Class.new(Dry::View) do
+    Class.new(Hanami::View) do
       config.paths = FIXTURES_PATH.join("integration/template_engines/erubi")
       config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}
       config.renderer_options = {engine_class: Erubi::CaptureEndEngine}
@@ -25,7 +25,7 @@ RSpec.describe "Template engines / erb (using erubi via an explict engine mappin
   end
 
   it "supports context methods that yield" do
-    context = Class.new(Dry::View::Context) do
+    context = Class.new(Hanami::View::Context) do
       def wrapper
         "<wrapper>#{yield}</wrapper>"
       end

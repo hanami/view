@@ -12,14 +12,14 @@ require "action_view/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module DryViewExample
+module HanamiViewExample
   class Application < Rails::Application
     config.load_defaults 5.2
 
-    # dry-view setup
+    # hanami-view setup
     Rails.application.config.autoload_paths << Rails.root.join("app/views")
 
     # Remove heinous monkey patch
-    Dry::View::Part.undef_method :to_param
+    Hanami::View::Part.undef_method :to_param
   end
 end

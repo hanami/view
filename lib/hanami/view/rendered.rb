@@ -2,7 +2,7 @@
 
 require "dry/equalizer"
 
-module Dry
+module Hanami
   class View
     # Output of a View rendering
     #
@@ -19,7 +19,7 @@ module Dry
 
       # Returns the hash of locals used to render the view
       #
-      # @return [Hash[<Symbol, Dry::View::Part>] locals hash
+      # @return [Hash[<Symbol, Hanami::View::Part>] locals hash
       #
       # @api public
       attr_reader :locals
@@ -34,7 +34,7 @@ module Dry
       #
       # @param name [Symbol] local key
       #
-      # @return [Dry::View::Part]
+      # @return [Hanami::View::Part]
       #
       # @api public
       def [](name)

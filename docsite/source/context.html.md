@@ -1,7 +1,7 @@
 ---
 title: Context
 layout: gem-single
-name: dry-view
+name: hanami-view
 ---
 
 Use a context object to provide shared facilities to every template, partial, scope, and part in a given view rendering.
@@ -15,19 +15,19 @@ A context object is helpful in holding any behaviour or data you don't want to p
 
 ## Defining a context
 
-Context classes must inherit from `Dry::View::Context`
+Context classes must inherit from `Hanami::View::Context`
 
 ```ruby
-class MyContext < Dry::View::Context
+class MyContext < Hanami::View::Context
 end
 ```
 
 ## Injecting dependencies
 
-`Dry::View::Context` is designed to allow dependencies to be injected into your subclasses. To do this, accept your dependencies as keyword arguments to `#initialize`, and pass every other keyword argument through to `super`:
+`Hanami::View::Context` is designed to allow dependencies to be injected into your subclasses. To do this, accept your dependencies as keyword arguments to `#initialize`, and pass every other keyword argument through to `super`:
 
 ```ruby
-class MyContext < Dry::View::Context
+class MyContext < Hanami::View::Context
   attr_reader :assets
 
   def initialize(assets:, **args)
@@ -41,13 +41,13 @@ class MyContext < Dry::View::Context
 end
 ```
 
-If your app uses [dry-system](/gems/dry-system) or [dry-auto_inject](/gems/dry-auto_inject), this is even less work. dry-auto_inject works out of the box with `Dry::View::Context`’s initializer:
+If your app uses [dry-system](/gems/dry-system) or [dry-auto_inject](/gems/dry-auto_inject), this is even less work. dry-auto_inject works out of the box with `Hanami::View::Context`’s initializer:
 
 ```ruby
 # Require the auto-injector module for your app's container
 require "my_app/import"
 
-class MyContext < Dry::View::Context
+class MyContext < Hanami::View::Context
   include MyApp::Import["assets"]
 
   def asset_path(asset_name)
@@ -61,7 +61,7 @@ end
 The default context can be `configured` for a view:
 
 ```ruby
-class MyView < Dry::View
+class MyView < Hanami::View
   config.default_context = MyContext.new
 end
 ```
@@ -81,7 +81,7 @@ When providing a context at render time, you may wish to provide a version of yo
 Your context may have attribute that you want decorated as [parts](docs::parts). Declare these using `decorate` in your context class:
 
 ```ruby
-class MyContext < Dry::View::Context
+class MyContext < Hanami::View::Context
   decorate :navigation_items
 
   attr_reader :navigation_items
@@ -96,7 +96,7 @@ end
 You can pass the same options to `decorate` as you do to [exposures](docs::exposures), for example:
 
 ```ruby
-class MyContext < Dry::View::Context
+class MyContext < Hanami::View::Context
   decorate :navigation_items, as: :menu_items
 
   # ...

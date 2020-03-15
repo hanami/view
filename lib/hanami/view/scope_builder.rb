@@ -4,7 +4,7 @@ require "dry/core/cache"
 require "dry/equalizer"
 require_relative "scope"
 
-module Dry
+module Hanami
   class View
     # Builds scope objects via matching classes
     #
@@ -43,7 +43,7 @@ module Dry
       # @param name [Symbol, Class] scope name
       # @param locals [Hash<Symbol, Object>] locals hash
       #
-      # @return [Dry::View::Scope]
+      # @return [Hanami::View::Scope]
       #
       # @api private
       def call(name = nil, locals) # rubocop:disable Style/OptionalArguments

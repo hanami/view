@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "dry/view/context"
+require "hanami/view/context"
 
-class ApplicationViewContext < Dry::View::Context
+class ApplicationViewContext < Hanami::View::Context
   def method_missing(name, *args, &block)
     if url_helpers.respond_to?(name)
       url_helpers.public_send(name, *args, &block)

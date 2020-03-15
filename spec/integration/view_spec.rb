@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-RSpec.describe "dry-view" do
+RSpec.describe "hanami-view" do
   let(:view_class) do
-    Class.new(Dry::View) do
+    Class.new(Hanami::View) do
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users"
@@ -18,9 +18,9 @@ RSpec.describe "dry-view" do
   end
 
   let(:context) {
-    Class.new(Dry::View::Context) do
+    Class.new(Hanami::View::Context) do
       def title
-        "dry-view rocks!"
+        "hanami-view rocks!"
       end
 
       def assets
@@ -33,7 +33,7 @@ RSpec.describe "dry-view" do
     view = view_class.new
 
     expect(view.(context: context).to_s).to eql(
-      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
+      '<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
     )
   end
 
@@ -51,7 +51,7 @@ RSpec.describe "dry-view" do
     view = view_class.new
 
     expect(view.(context: context, format: "txt").to_s.strip).to eql(
-      "# dry-view rocks!\n\n\n* Jane (jane@doe.org)\n\n* Joe (joe@doe.org)"
+      "# hanami-view rocks!\n\n\n* Jane (jane@doe.org)\n\n* Joe (joe@doe.org)"
     )
   end
 
@@ -61,7 +61,7 @@ RSpec.describe "dry-view" do
     end.new
 
     expect(view.(context: context).to_s).to eq(
-      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><h1>OVERRIDE</h1><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
+      '<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><h1>OVERRIDE</h1><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
     )
   end
 
@@ -71,7 +71,7 @@ RSpec.describe "dry-view" do
     end.new
 
     expect(view.(context: context).to_s).to eq(
-      '<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><div class="users"><div class="box"><h2>Nombre</h2>Jane</div><div class="box"><h2>Nombre</h2>Joe</div></div></body></html>'
+      '<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><div class="users"><div class="box"><h2>Nombre</h2>Jane</div><div class="box"><h2>Nombre</h2>Joe</div></div></body></html>'
     )
   end
 
@@ -81,13 +81,13 @@ RSpec.describe "dry-view" do
     end.new
 
     expect(view.(context: context).to_s).to eq(
-      "<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body>ç</body></html>"
+      "<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body>ç</body></html>"
     )
   end
 
   describe "inheritance" do
     let(:parent_view) do
-      klass = Class.new(Dry::View)
+      klass = Class.new(Hanami::View)
 
       klass.setting :paths, SPEC_ROOT.join("fixtures/templates")
       klass.setting :layout, "app"
@@ -115,7 +115,7 @@ RSpec.describe "dry-view" do
       end.new
 
       expect(view.(context: context).to_s).to eql(
-        "<!DOCTYPE html><html><head><title>dry-view rocks!</title></head><body><ol><li>one</li><li>two</li></ol></body></html>"
+        "<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><ol><li>one</li><li>two</li></ol></body></html>"
       )
     end
   end

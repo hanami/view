@@ -3,7 +3,7 @@
 require "pathname"
 require "ostruct"
 require "benchmark/ips"
-require "dry/view"
+require "hanami/view"
 require "action_view"
 require "action_controller"
 
@@ -29,7 +29,7 @@ class UsersController < ActionController::Base
   end
 end
 
-class DryView < Dry::View
+class HanamiView < Hanami::View
   config.paths = TEMPLATES_PATHS
   config.layout = "app"
   config.template = "users"
@@ -39,16 +39,16 @@ class DryView < Dry::View
 end
 
 action_controller = UsersController.new
-dry_view = DryView.new
+hanami_view = HanamiView.new
 
 action_controller_output = action_controller.index
-dry_view_output = dry_view.(TEMPLATE_LOCALS).to_s
+hanami_view_output = hanami_view.(TEMPLATE_LOCALS).to_s
 
-if action_controller_output != dry_view_output
+if action_controller_output != hanami_view_output
   puts "Output doesn't match:"
   puts
   puts "ActionView:\n\n#{action_controller_output}\n"
-  puts "dry-view:\n\n#{dry_view_output}\n"
+  puts "hanami-view:\n\n#{hanami_view_output}\n"
 end
 
 Benchmark.ips do |x|
@@ -56,8 +56,8 @@ Benchmark.ips do |x|
     1000.times { action_controller.index }
   end
 
-  x.report("dry-view") do
-    1000.times { dry_view.(TEMPLATE_LOCALS).to_s }
+  x.report("hanami-view") do
+    1000.times { hanami_view.(TEMPLATE_LOCALS).to_s }
   end
 
   x.compare!

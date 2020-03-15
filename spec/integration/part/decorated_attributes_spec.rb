@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "dry/core/inflector"
-require "dry/view/scope_builder"
+require "hanami/view/scope_builder"
 
 RSpec.describe "Part / Decorated attributes" do
   let(:article_class) {
@@ -60,30 +60,30 @@ RSpec.describe "Part / Decorated attributes" do
   }
 
   let(:render_env) {
-    Dry::View::RenderEnvironment.new(
-      renderer: Dry::View::Renderer.new([Dry::View::Path.new(FIXTURES_PATH)], format: :html),
+    Hanami::View::RenderEnvironment.new(
+      renderer: Hanami::View::Renderer.new([Hanami::View::Path.new(FIXTURES_PATH)], format: :html),
       inflector: Dry::Inflector.new,
-      context: Dry::View::Context.new,
-      scope_builder: Dry::View::ScopeBuilder.new,
+      context: Hanami::View::Context.new,
+      scope_builder: Hanami::View::ScopeBuilder.new,
       part_builder: part_builder
     )
   }
 
   describe "using default part builder" do
-    let(:part_builder) { Dry::View::PartBuilder.new }
+    let(:part_builder) { Hanami::View::PartBuilder.new }
 
     describe "decorating without options" do
       describe "multiple declarations" do
         let(:article_part_class) {
-          Class.new(Dry::View::Part) do
+          Class.new(Hanami::View::Part) do
             decorate :author
             decorate :comments
           end
         }
 
-        it "decorates attributes with the standard Dry::View::Part class" do
-          expect(article_part.author).to be_a Dry::View::Part
-          expect(article_part.comments[0]).to be_a Dry::View::Part
+        it "decorates attributes with the standard Hanami::View::Part class" do
+          expect(article_part.author).to be_a Hanami::View::Part
+          expect(article_part.comments[0]).to be_a Hanami::View::Part
         end
 
         context "falsey values" do
@@ -97,14 +97,14 @@ RSpec.describe "Part / Decorated attributes" do
 
       describe "single declaration" do
         let(:article_part_class) {
-          Class.new(Dry::View::Part) do
+          Class.new(Hanami::View::Part) do
             decorate :author, :comments
           end
         }
 
-        it "decorates attributes with the standard Dry::View::Part class" do
-          expect(article_part.author).to be_a Dry::View::Part
-          expect(article_part.comments[0]).to be_a Dry::View::Part
+        it "decorates attributes with the standard Hanami::View::Part class" do
+          expect(article_part.author).to be_a Hanami::View::Part
+          expect(article_part.comments[0]).to be_a Hanami::View::Part
         end
 
         context "falsey values" do
@@ -120,16 +120,16 @@ RSpec.describe "Part / Decorated attributes" do
     describe "decorating with part class specified" do
       before do
         module Test
-          class AuthorPart < Dry::View::Part
+          class AuthorPart < Hanami::View::Part
           end
 
-          class CommentPart < Dry::View::Part
+          class CommentPart < Hanami::View::Part
           end
         end
       end
 
       let(:article_part_class) {
-        Class.new(Dry::View::Part) do
+        Class.new(Hanami::View::Part) do
           decorate :author, as: Test::AuthorPart
           decorate :comments, as: Test::CommentPart
         end
@@ -152,14 +152,14 @@ RSpec.describe "Part / Decorated attributes" do
 
   describe "using custom part builder" do
     let(:article_part_class) {
-      Class.new(Dry::View::Part) do
+      Class.new(Hanami::View::Part) do
         decorate :author
         decorate :comments
       end
     }
 
     let(:part_builder) {
-      Class.new(Dry::View::PartBuilder) do
+      Class.new(Hanami::View::PartBuilder) do
         def part_class(name:, **options)
           part_name = Dry::Core::Inflector.camelize(name)
 
@@ -174,10 +174,10 @@ RSpec.describe "Part / Decorated attributes" do
 
     before do
       module Test
-        class AuthorPart < Dry::View::Part
+        class AuthorPart < Hanami::View::Part
         end
 
-        class CommentPart < Dry::View::Part
+        class CommentPart < Hanami::View::Part
           decorate :author
         end
       end

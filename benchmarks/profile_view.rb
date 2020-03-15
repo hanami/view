@@ -3,7 +3,7 @@
 require "hotch"
 require "pathname"
 require "ostruct"
-require "dry/view"
+require "hanami/view"
 
 TEMPLATES_PATHS = Pathname(__FILE__).dirname.join("templates")
 
@@ -14,7 +14,7 @@ TEMPLATE_LOCALS = {
   ]
 }.freeze
 
-class View < Dry::View
+class View < Hanami::View
   config.paths = TEMPLATES_PATHS
   config.layout = "app"
   config.template = "users"
@@ -25,5 +25,5 @@ end
 view = View.new
 
 Hotch(filter: /View/) do
-  100.times { view.(TEMPLATE_LOCALS).to_s }
+  100.times { view.(**TEMPLATE_LOCALS).to_s }
 end

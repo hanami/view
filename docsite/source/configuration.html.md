@@ -1,13 +1,13 @@
 ---
 title: Configuration
 layout: gem-single
-name: dry-view
+name: hanami-view
 ---
 
 You can configure your views via class-level `config`. Basic configuration looks like this:
 
 ```ruby
-class MyView < Dry::View
+class MyView < Hanami::View
   config.paths = [File.join(__dir__, "templates")]
   config.layout = "application"
   config.template = "my_view"
@@ -40,7 +40,7 @@ In an app with many views, it’s helpful to use inheritance to share common set
 
 ```ruby
 module MyApp
-  class View < Dry::View
+  class View < Hanami::View
     # Set common configuration in the shared base view class
     config.paths = [File.join(__dir__, "templates")]
     config.layout = "application"
@@ -61,7 +61,7 @@ end
 
 ## Changing configuration at render-time
 
-Some configuration-related options can also be passed at render-time, to `Dry::View#call`.
+Some configuration-related options can also be passed at render-time, to `Hanami::View#call`.
 
 - **format**: Specify another format for rendering the view. This overrides the `default_format` setting.
 - **context**: Provide an alternative [context object](docs::context) for the [template scope](docs::templates). This is helpful for providing a context object that has, for example, data specific to the current HTTP request.

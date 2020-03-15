@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Dry
+module Hanami
   class View
     # @api private
     VERSION = "0.7.0"

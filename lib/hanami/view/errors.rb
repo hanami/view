@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Dry
+module Hanami
   class View
     # Error raised when critical settings are not configured
     #

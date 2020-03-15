@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require "dry/view/part"
-require "dry/view/scope"
+require "hanami/view/part"
+require "hanami/view/scope"
 
 RSpec.describe "Scopes" do
   let(:base_view) {
-    Class.new(Dry::View) do
+    Class.new(Hanami::View) do
       config.paths = FIXTURES_PATH.join("integration/scopes")
     end
   }
 
   specify "Custom scope for a view" do
     module Test
-      class ControllerScope < Dry::View::Scope
+      class ControllerScope < Hanami::View::Scope
         def hello
           "Hello #{_locals[:text]}!"
         end
@@ -41,7 +41,7 @@ RSpec.describe "Scopes" do
 
   specify "Rendering a partial implicitly via a custom named scope" do
     module Test::Scopes
-      class Greeting < Dry::View::Scope
+      class Greeting < Hanami::View::Scope
         def greeting
           _locals[:greeting].upcase + "!"
         end
@@ -60,7 +60,7 @@ RSpec.describe "Scopes" do
 
   specify "Rendering a partial implicitly via a custom named scope (provided via a class)" do
     module Test::Scopes
-      class Greeting < Dry::View::Scope
+      class Greeting < Hanami::View::Scope
         def greeting
           _locals[:greeting].upcase + "!"
         end
@@ -87,7 +87,7 @@ RSpec.describe "Scopes" do
 
   specify "Rendering a partial explicitly via a custom named scope" do
     module Test::Scopes
-      class Greeting < Dry::View::Scope
+      class Greeting < Hanami::View::Scope
         def greeting
           _locals[:greeting].upcase + "!"
         end
@@ -106,7 +106,7 @@ RSpec.describe "Scopes" do
 
   specify "Custom named scope providing defaults for missing locals" do
     module Test::Scopes
-      class Greeting < Dry::View::Scope
+      class Greeting < Hanami::View::Scope
         def greeting
           _locals.fetch(:greeting) { "Howdy" }
         end
@@ -125,7 +125,7 @@ RSpec.describe "Scopes" do
 
   specify "Creating a custom scope from a view part" do
     module Test::Parts
-      class Message < Dry::View::Part
+      class Message < Hanami::View::Part
         def greeting
           scope(:greeting, greeting: value[:text]).render
         end
@@ -133,7 +133,7 @@ RSpec.describe "Scopes" do
     end
 
     module Test::Scopes
-      class Greeting < Dry::View::Scope
+      class Greeting < Hanami::View::Scope
         def greeting
           _locals[:greeting] + "!"
         end

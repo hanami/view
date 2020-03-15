@@ -1,7 +1,7 @@
 ---
 title: Injecting dependencies
 layout: gem-single
-name: dry-view
+name: hanami-view
 ---
 
 Most views will need access to other parts of your application to prepare values for the view. Since views follow the "functional object" pattern (local state for config and collaborators only, with any variable data passed to `#call`), it’s easy to use dependency injection to make your application’s objects available to your views.
@@ -9,7 +9,7 @@ Most views will need access to other parts of your application to prepare values
 To set up the injection manually, accept arguments to `#initialize` and assign them to instance variables.
 
 ```ruby
-class MyView < Dry::View
+class MyView < Hanami::View
   attr_reader :user_repo
 
   def initialize(user_repo:)
@@ -29,7 +29,7 @@ Or if your app uses [dry-system](/gems/dry-system) or [dry-auto_inject](/gems/dr
 # Require the auto-injector module for your app's container
 require "my_app/import"
 
-class MyView < Dry::View
+class MyView < Hanami::View
   include MyApp::Import["user_repo"]
 
   expose :users do

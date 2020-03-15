@@ -4,7 +4,7 @@ require "dry/equalizer"
 require "dry/core/constants"
 require_relative "render_environment_missing"
 
-module Dry
+module Hanami
   class View
     # Evaluation context for templates (including layouts and partials) and
     # provides a place to encapsulate view-specific behaviour alongside a

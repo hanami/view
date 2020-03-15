@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "dry/view/scope_builder"
+require "hanami/view/scope_builder"
 
-RSpec.describe Dry::View::Scope do
+RSpec.describe Hanami::View::Scope do
   let(:locals) { {} }
 
   context "with a render environment" do
@@ -96,19 +96,19 @@ RSpec.describe Dry::View::Scope do
 
     describe "#render" do
       it "raises an error" do
-        expect { scope.render(:info) }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { scope.render(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
 
     describe "#scope" do
       it "raises an error" do
-        expect { scope.scope(:info) }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { scope.scope(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
 
     describe "#_context" do
       it "raises an error" do
-        expect { scope._context }.to raise_error(Dry::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { scope._context }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
       end
     end
   end

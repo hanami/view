@@ -1,4 +1,4 @@
-# dry-view example Rails app
+# hanami-view example Rails app
 
 ## Setup
 
@@ -18,14 +18,14 @@ To see the rendered views, run `./bin/rails server` and visit http://localhost:3
 
 ## Integration
 
-The following files/folders are specific to the dry-view integration:
+The following files/folders are specific to the hanami-view integration:
 
 - Setup lines in `config/application.rb`
 - `app/views/`
 - `app/templates/`
 
-n.b. this is a minimal integration to demonstrate how dry-view can work with Rails; there's plenty more that could be done to deepen the integration, flesh out the view-related features, and improve the overall experience.
+n.b. this is a minimal integration to demonstrate how hanami-view can work with Rails; there's plenty more that could be done to deepen the integration, flesh out the view-related features, and improve the overall experience.
 
-The ideal integration would come via a dry-view-rails integration gem. See [this open issue][issue] for more details.
+The ideal integration would come via a hanami-view-rails integration gem. See [this open issue][issue] for more details.
 
 [issue]: https://github.com/dry-rb/dry-view/issues/114

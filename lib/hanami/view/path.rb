@@ -3,7 +3,7 @@
 require "pathname"
 require "dry/core/cache"
 
-module Dry
+module Hanami
   class View
     # @api private
     class Path

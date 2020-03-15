@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "dry/view/path"
-require "dry/view/renderer"
+require "hanami/view/path"
+require "hanami/view/renderer"
 
-RSpec.describe Dry::View::Renderer do
+RSpec.describe Hanami::View::Renderer do
   subject(:renderer) do
-    Dry::View::Renderer.new(
-      [Dry::View::Path.new(SPEC_ROOT.join("fixtures/templates"))],
+    Hanami::View::Renderer.new(
+      [Hanami::View::Path.new(SPEC_ROOT.join("fixtures/templates"))],
       format: "html",
       default_encoding: "utf-8"
     )
@@ -22,13 +22,13 @@ RSpec.describe Dry::View::Renderer do
     it "does not include `shared/` subdirectory under root when looking up templates" do
       expect {
         renderer.template(:_shared_hello, scope)
-      }.to raise_error(Dry::View::TemplateNotFoundError, /_shared_hello/)
+      }.to raise_error(Hanami::View::TemplateNotFoundError, /_shared_hello/)
     end
 
     it "raises error when template cannot be found" do
       expect {
         renderer.template(:missing_template, scope)
-      }.to raise_error(Dry::View::TemplateNotFoundError, /missing_template/)
+      }.to raise_error(Hanami::View::TemplateNotFoundError, /missing_template/)
     end
   end
 
@@ -56,7 +56,7 @@ RSpec.describe Dry::View::Renderer do
     it "raises error when partial cannot be found" do
       expect {
         renderer.partial(:missing_partial, scope)
-      }.to raise_error(Dry::View::TemplateNotFoundError, /_missing_partial/)
+      }.to raise_error(Hanami::View::TemplateNotFoundError, /_missing_partial/)
     end
   end
 

@@ -2,9 +2,9 @@
 
 require "tsort"
 require "dry/equalizer"
-require "dry/view/exposure"
+require_relative "exposure"
 
-module Dry
+module Hanami
   class View
     # @api private
     class Exposures

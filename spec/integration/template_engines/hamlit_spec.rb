@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "dry/view"
-require "dry/view/context"
+require "hanami/view"
+require "hanami/view/context"
 
 RSpec.describe "Template engines / haml (using hamlit-block as default engine)" do
   let(:base_view) {
-    Class.new(Dry::View) do
+    Class.new(Hanami::View) do
       config.paths = FIXTURES_PATH.join("integration/template_engines/hamlit")
     end
   }
@@ -20,7 +20,7 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
     end
 
     it "supports methods that yield" do
-      context = Class.new(Dry::View::Context) do
+      context = Class.new(Hanami::View::Context) do
         def wrapper
           "<wrapper>#{yield}</wrapper>"
         end
@@ -43,8 +43,8 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
       $LOAD_PATH.reject! { |path| path =~ /hamlit-block/ }
       $LOADED_FEATURES.reject! { |path| path =~ /hamlit-block/ }
 
-      Dry::View::Tilt.cache.clear
-      Dry::View::Renderer.cache.clear
+      Hanami::View::Tilt.cache.clear
+      Hanami::View::Renderer.cache.clear
     end
 
     after do
@@ -57,7 +57,7 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
         config.template = "render_and_yield"
       end.new
 
-      expect { view.() }.to raise_error(LoadError, /dry-view requires hamlit-block/m)
+      expect { view.() }.to raise_error(LoadError, /hanami-view requires hamlit-block/m)
     end
   end
 end
