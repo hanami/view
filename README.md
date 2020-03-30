@@ -1,3 +1,9 @@
+⚠️ **The `master` branch for hanami-view 1.x has been renamed to `1.x-master`.**
+
+Please update your Gemfiles accordingly. [More detail here](https://github.com/hanami/hanami/issues/1036#issuecomment-606262007).
+
+---
+
 # Hanami::View
 
 A View layer for [Hanami](http://hanamirb.org).
