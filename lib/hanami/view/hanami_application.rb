@@ -1,21 +1,18 @@
 # frozen_string_literal: true
 
-require "pathname"
-
 module Hanami
   class View
     class << self
       def [](slice_name)
-        slice = Hanami.application.slices[slice_name]
+        application = Hanami.application
+        slice = slice_name.is_a?(Symbol) ? application.slices[slice_name] : slice_name
 
-        # TODO: "web/templates" should be configurable on the application
-        # FIXME: should slice.root always be a pathname?
-        templates_path = Pathname(slice.root).join("web/templates").to_s
+        templates_path = slice.root.join(application.config.views.templates_path).to_s
 
         klass = Class.new(self) do
           config.paths = [templates_path]
-          config.layouts_dir = templates_path
-          config.layout = "application"
+          config.layouts_dir = application.config.views.layouts_dir
+          config.layout = application.config.views.default_layout
         end
 
         klass.define_singleton_method :inherited do |subclass|
@@ -31,11 +28,10 @@ module Hanami
 
       private
 
-      def template_name(view, slice)
-        # FIXME: the "views" prefix thing should be configurable?
-        slice.inflector.underscore(view.name)
+      def template_name(view_class, slice)
+        slice.inflector.underscore(view_class.name)
           .sub(/^#{slice.namespace_path}\//, "")
-          .sub(/^views?\//, "")
+          .sub(/^#{slice.application.config.views.base_path}\//, "")
       end
     end
   end
