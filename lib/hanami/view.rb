@@ -419,7 +419,7 @@ module Hanami
 
     # @api private
     def self.layout_path
-      File.join(config.layouts_dir, config.layout)
+      File.join(*[config.layouts_dir, config.layout].compact)
     end
 
     # @!endgroup
