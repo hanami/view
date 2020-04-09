@@ -3,6 +3,6 @@
 module Hanami
   class View
     # @api private
-    VERSION = "0.7.0"
+    VERSION = "2.0.0.alpha1"
   end
 end
