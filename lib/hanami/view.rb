@@ -5,6 +5,7 @@ require "dry/core/cache"
 require "dry/equalizer"
 require "dry/inflector"
 
+require_relative "view/application_view"
 require_relative "view/context"
 require_relative "view/exposures"
 require_relative "view/errors"
@@ -215,5 +216,17 @@ module Hanami
     # @!endgroup
 
     include StandaloneView
+
+    def self.inherited(subclass)
+      super
+
+      # Only apply application view logic once per view inheritance chain
+      return if subclass.ancestors.any? { |mod| mod.kind_of?(ApplicationView) }
+
+      # Configure view if an Hanami application is providing it
+      if Hanami.respond_to?(:application) && (provider = Hanami.application.component_provider(subclass))
+        subclass.include ApplicationView.new(provider)
+      end
+    end
   end
 end
