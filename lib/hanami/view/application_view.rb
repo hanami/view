@@ -9,7 +9,7 @@ module Hanami
 
       def initialize(provider)
         @provider = provider
-        @application = provider&.application || Hanami.application
+        @application = provider.respond_to?(:application) ? provider.application : Hanami.application
         @inherited_hook = InheritedHook.new
 
         define_inherited_hook
