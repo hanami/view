@@ -28,7 +28,7 @@ module Hanami
       def define_inherited_hook
         template_name = method(:template_name)
 
-        inherited_hook.define_method :inherited do |subclass|
+        inherited_hook.send :define_method, :inherited do |subclass|
           super(subclass)
           subclass.config.template = template_name.(subclass)
         end
