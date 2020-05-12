@@ -220,13 +220,18 @@ module Hanami
     def self.inherited(subclass)
       super
 
-      # Only apply application view logic once per view inheritance chain
-      return if subclass.ancestors.any? { |mod| mod.kind_of?(ApplicationView) }
-
-      # Configure view if an Hanami application is providing it
-      if Hanami.respond_to?(:application) && (provider = Hanami.application.component_provider(subclass))
+      # If inheriting directly from Hanami::View within an Hanami app, configure
+      # the view for the application
+      if subclass.superclass == View && (provider = application_provider(subclass))
         subclass.include ApplicationView.new(provider)
       end
     end
+
+    def self.application_provider(subclass)
+      if Hanami.respond_to?(:application)
+        Hanami.application.component_provider(subclass)
+      end
+    end
+    private_class_method :application_provider
   end
 end
