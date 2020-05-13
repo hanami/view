@@ -1,72 +1,48 @@
 # frozen_string_literal: true
 
-require "dry/inflector"
+require "hanami"
 require "hanami/view"
-require "pathname"
 
-module TestNamespace
-  def remove_constants
-    constants.each do |name|
-      remove_const(name)
-    end
-  end
-end
+RSpec.describe "Application views" do
+  context "Outside Hanami app" do
+    subject(:view_class) { Class.new(Hanami::View) }
 
-RSpec.describe "Hanami application views" do
-  subject(:view_class) { Class.new(Hanami::View) }
-
-  context "outside Hanami app" do
     before do
-      allow(Hanami).to receive(:respond_to?).with(:application) { nil }
+      allow(Hanami).to receive(:respond_to?).with(:application?) { nil }
     end
 
-    it "does not apply" do
+    it "is not an application view" do
+      expect(view_class.ancestors).not_to include(a_kind_of(Hanami::View::ApplicationView))
+    end
+
+    it "does not configure the view" do
       expect(view_class.config.paths).to eq []
     end
   end
 
-  context "inside Hanami app" do
-    let(:application) {
-      double(:application, config: config)
-    }
-
-    let(:config) {
-      double(
-        :config,
-        views: double(
-          :views_config,
-          base_path: "views",
-          templates_path: "templates",
-          layouts_dir: "layouts",
-          default_layout: "my_app",
-        )
-      )
-    }
-
-    let(:slice) {
-      double(
-        :slice,
-        application: application,
-        inflector: Dry::Inflector.new,
-        namespace_path: "main",
-        root: Pathname("/path/to/app/slices/main")
-      )
-    }
-
+  context "Inside Hanami app", :application_integration do
     before do
-      allow(Hanami).to receive(:application) { application }
-      allow(application).to receive(:component_provider) { slice }
-
-      Object.const_set(:Main, Module.new { |m| m.extend(TestNamespace) })
+      module TestApp
+        class Application < Hanami::Application
+          config.root = "/path/to/app"
+          config.views.base_path = "views"
+          config.views.templates_path = "templates"
+          config.views.layouts_dir = "test_app_layouts"
+          config.views.default_layout = "testing"
+        end
+      end
     end
 
-    after do
-      Main.remove_constants
-      Object.send :remove_const, :Main
-    end
+    context "Base view defined inside slice" do
+      before do
+        module Main
+        end
 
-    context "base application view class" do
-      let(:view_class) {
+        Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
+        Hanami.init
+      end
+
+      let!(:base_view_class) {
         module Main
           class View < Hanami::View
           end
@@ -75,56 +51,121 @@ RSpec.describe "Hanami application views" do
         Main::View
       }
 
-      it "configures the class for its provider" do
-        expect(view_class.config.paths).to match [
-          an_object_satisfying { |path| path.dir.to_s == "/path/to/app/slices/main/templates" }
-        ]
-        expect(view_class.config.layouts_dir).to eq "layouts"
-        expect(view_class.config.layout).to eq "my_app"
-      end
+      describe "base view class" do
+        subject(:view_class) { base_view_class }
 
-      it "does not configure a template name" do
-        expect(view_class.config.template).to be_nil
-      end
-    end
+        it "is an application view" do
+          expect(view_class.ancestors).to include(a_kind_of(Hanami::View::ApplicationView))
+        end
 
-    context "inheriting from base application view class" do
-      let!(:base_view) {
-        module Main
-          class View < Hanami::View
+        it "applies configuration from application" do
+          config = view_class.config
+
+          aggregate_failures do
+            expect(config.paths.map { |path| path.dir.to_s }).to eq ["/path/to/app/slices/main/templates"]
+            expect(config.layouts_dir).to eq "test_app_layouts"
+            expect(config.layout).to eq "testing"
           end
         end
-      }
 
-      let(:view_class) {
-        module Main
-          module Views
-            module Articles
-              class Index < View
+        it "does not configure the template" do
+          expect(view_class.config.template).to be_nil
+        end
+      end
+
+      describe "subclass of base view class" do
+        subject(:view_class) {
+          module Main
+            module Views
+              module Articles
+                class Index < Main::View
+                end
               end
             end
           end
+
+          Main::Views::Articles::Index
+        }
+
+        it "inherits the application-specific configuration from the base class" do
+          config = view_class.config
+
+          aggregate_failures do
+            expect(config.paths.map { |path| path.dir.to_s }).to eq ["/path/to/app/slices/main/templates"]
+            expect(config.layouts_dir).to eq "test_app_layouts"
+            expect(config.layout).to eq "testing"
+          end
         end
 
-        Main::Views::Articles::Index
+        it "configures the template name based on the view's class name, relative to the slice and configured views base_path" do
+          expect(view_class.config.template).to eq "articles/index"
+        end
+      end
+    end
+
+    context "Base view defined directly inside application" do
+      before do
+        Hanami.init
+      end
+
+      let!(:base_view_class) {
+        module TestApp
+          class View < Hanami::View
+          end
+        end
+
+        TestApp::View
       }
 
-      it "inherits the base view's configuration" do
-        expect(view_class.config.paths).to match [
-          an_object_satisfying { |path| path.dir.to_s == "/path/to/app/slices/main/templates" }
-        ]
-        expect(view_class.config.layouts_dir).to eq "layouts"
-        expect(view_class.config.layout).to eq "my_app"
+      describe "base view class" do
+        subject(:view_class) { base_view_class }
+
+        it "is an application view" do
+          expect(view_class.ancestors).to include(a_kind_of(Hanami::View::ApplicationView))
+        end
+
+        it "applies configuration from application" do
+          config = view_class.config
+
+          aggregate_failures do
+            expect(config.paths.map { |path| path.dir.to_s }).to eq ["/path/to/app/templates"]
+            expect(config.layouts_dir).to eq "test_app_layouts"
+            expect(config.layout).to eq "testing"
+          end
+        end
+
+        it "does not configure the template" do
+          expect(view_class.config.template).to be_nil
+        end
       end
 
-      it "configures a template name for the inheriting view" do
-        expect(view_class.config.template).to eq "articles/index"
-      end
+      describe "subclass of base view class" do
+        subject(:view_class) {
+          module TestApp
+            module Views
+              module Articles
+                class Index < TestApp::View
+                end
+              end
+            end
+          end
 
-      it "applies the application view behavior only once" do
-        expect(view_class.ancestors.select { |mod|
-          mod.kind_of?(Hanami::View::ApplicationView)
-        }.length).to eq 1
+          TestApp::Views::Articles::Index
+        }
+
+        it "inherits the application-specific configuration from the base class" do
+          config = view_class.config
+
+          aggregate_failures do
+            expect(config.paths.map { |path| path.dir.to_s }).to eq ["/path/to/app/templates"]
+            expect(config.layouts_dir).to eq "test_app_layouts"
+            expect(config.layout).to eq "testing"
+          end
+        end
+
+        it "configures the template name based on the view's class name, relative to the slice and configured views base_path" do
+          expect(view_class.config.template).to eq "articles/index"
+        end
       end
     end
   end

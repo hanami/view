@@ -228,7 +228,7 @@ module Hanami
     end
 
     def self.application_provider(subclass)
-      if Hanami.respond_to?(:application)
+      if Hanami.respond_to?(:application?) && Hanami.application?
         Hanami.application.component_provider(subclass)
       end
     end

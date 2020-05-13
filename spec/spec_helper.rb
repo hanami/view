@@ -11,10 +11,14 @@ FIXTURES_PATH = SPEC_ROOT.join("fixtures")
 require "slim"
 require "hanami/view"
 
-module Test
-  def self.remove_constants
+module TestNamespace
+  def remove_constants
     constants.each(&method(:remove_const))
   end
+end
+
+module Test
+  extend TestNamespace
 end
 
 RSpec.configure do |config|
@@ -48,3 +52,5 @@ RSpec::Matchers.define :part_including do |data|
     }
   }
 end
+
+require_relative "support/application_integration"
