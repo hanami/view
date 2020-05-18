@@ -10,7 +10,7 @@ group :test do
 
   gem "codacy-coverage", require: false, platforms: :ruby
 
-  gem "warning" if RUBY_VERSION >= "2.4.0"
+  gem "warning"
 end
 
 group :tools do

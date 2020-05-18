@@ -15,8 +15,6 @@ after_script:
 rvm:
   - 2.6.3
   - 2.5.5
-  - 2.4.6
-  - 2.3.8
   - jruby-9.2.7.0
 notifications:
   email: false
