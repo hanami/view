@@ -19,7 +19,7 @@ group :test do
   gem "erubi"
   gem "hamlit"
   gem "hamlit-block"
-  gem "hanami", github: "hanami/hanami", branch: "enhancement/unstable/component-provider"
+  gem "hanami", github: "hanami/hanami", branch: "unstable"
   gem "hanami-devtools", github: "hanami/devtools"
   gem "rack", ">= 2.0.6"
   gem "slim", "~> 4.0"
