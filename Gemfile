@@ -2,6 +2,8 @@
 
 source "https://rubygems.org"
 
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+
 eval_gemfile "Gemfile.devtools"
 
 gemspec
@@ -12,12 +14,14 @@ group :tools do
 end
 
 group :test do
-  gem "rack", ">= 2.0.6"
-
+  gem "dry-inflector"
   gem "erbse", "~> 0.1.4"
   gem "erubi"
   gem "hamlit"
   gem "hamlit-block"
+  gem "hanami", github: "hanami/hanami", branch: "unstable"
+  gem "hanami-devtools", github: "hanami/devtools"
+  gem "rack", ">= 2.0.6"
   gem "slim", "~> 4.0"
 end
 
