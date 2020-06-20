@@ -1,0 +1,8 @@
+format: progress
+ignore:
+  - 'examples/**/*'
+  - '**/*':
+    - Layout/SpaceInLambdaLiteral
+    - Style/Alias
+    - Style/LambdaCall
+    - Style/StabbyLambdaParentheses
