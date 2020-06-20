@@ -18,7 +18,7 @@ RSpec.describe "hanami-view" do
   end
 
   let(:context) {
-    Class.new(Hanami::View::Context) do
+    Class.new(Hanami::View::Context) {
       def title
         "hanami-view rocks!"
       end
@@ -26,7 +26,7 @@ RSpec.describe "hanami-view" do
       def assets
         -> input { "#{input}.jpg" }
       end
-    end.new
+    }.new
   }
 
   it "renders within a layout and makes the provided context available everywhere" do
@@ -38,9 +38,9 @@ RSpec.describe "hanami-view" do
   end
 
   it "renders without a layout" do
-    view = Class.new(view_class) do
+    view = Class.new(view_class) {
       config.layout = false
-    end.new
+    }.new
 
     expect(view.(context: context).to_s).to eql(
       '<div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div><img src="mindblown.jpg" />'
@@ -56,9 +56,9 @@ RSpec.describe "hanami-view" do
   end
 
   it "renders a view with a template on another view path" do
-    view = Class.new(view_class) do
+    view = Class.new(view_class) {
       config.paths = [SPEC_ROOT.join("fixtures/templates_override")] + Array(config.paths)
-    end.new
+    }.new
 
     expect(view.(context: context).to_s).to eq(
       '<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><h1>OVERRIDE</h1><div class="users"><table><tbody><tr><td>Jane</td><td>jane@doe.org</td></tr><tr><td>Joe</td><td>joe@doe.org</td></tr></tbody></table></div></body></html>'
@@ -66,9 +66,9 @@ RSpec.describe "hanami-view" do
   end
 
   it "renders a view that passes arguments to partials" do
-    view = Class.new(view_class) do
+    view = Class.new(view_class) {
       config.template = "parts_with_args"
-    end.new
+    }.new
 
     expect(view.(context: context).to_s).to eq(
       '<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><div class="users"><div class="box"><h2>Nombre</h2>Jane</div><div class="box"><h2>Nombre</h2>Joe</div></div></body></html>'
@@ -76,9 +76,9 @@ RSpec.describe "hanami-view" do
   end
 
   it "renders using utf-8 by default" do
-    view = Class.new(view_class) do
+    view = Class.new(view_class) {
       config.template = "utf8"
-    end.new
+    }.new
 
     expect(view.(context: context).to_s).to eq(
       "<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body>ç</body></html>"
@@ -103,7 +103,7 @@ RSpec.describe "hanami-view" do
     end
 
     it "renders within a parent class layout using provided context" do
-      view = Class.new(view_class) do
+      view = Class.new(view_class) {
         config.template = "tasks"
 
         expose :tasks do
@@ -112,7 +112,7 @@ RSpec.describe "hanami-view" do
             {title: "two"}
           ]
         end
-      end.new
+      }.new
 
       expect(view.(context: context).to_s).to eql(
         "<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><ol><li>one</li><li>two</li></ol></body></html>"

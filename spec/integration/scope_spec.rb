@@ -19,22 +19,22 @@ RSpec.describe "Scopes" do
       end
     end
 
-    view = Class.new(base_view) do
+    view = Class.new(base_view) {
       config.template = "custom_view_scope"
       config.scope = Test::ControllerScope
 
       expose :text
-    end.new
+    }.new
 
     expect(view.(text: "world").to_s).to eq "Hello world!"
   end
 
   specify "Rendering a partial via an anonymous scope" do
-    view = Class.new(base_view) do
+    view = Class.new(base_view) {
       config.template = "anonymous_scope"
 
       expose :text
-    end.new
+    }.new
 
     expect(view.(text: "Hello").to_s).to eq "Greeting: Hello"
   end
@@ -48,12 +48,12 @@ RSpec.describe "Scopes" do
       end
     end
 
-    view = Class.new(base_view) do
+    view = Class.new(base_view) {
       config.scope_namespace = Test::Scopes
       config.template = "named_scope_with_implicit_render"
 
       expose :text
-    end.new
+    }.new
 
     expect(view.(text: "Hello").to_s).to eq "Greeting: HELLO!"
   end
@@ -67,20 +67,20 @@ RSpec.describe "Scopes" do
       end
     end
 
-    view = Class.new(base_view) do
+    view = Class.new(base_view) {
       config.scope_namespace = Test::Scopes
       config.template = "class_named_scope_with_implicit_render"
 
       expose :text
-    end.new
+    }.new
 
     expect(view.(text: "Hello").to_s).to eq "Greeting: HELLO!"
   end
 
   specify "Raising an error when an unnamed partial cannot be rendered implicitly" do
-    view = Class.new(base_view) do
+    view = Class.new(base_view) {
       config.template = "unnamed_named_scope_with_implicit_render"
-    end.new
+    }.new
 
     expect { view.().to_s }.to raise_error ArgumentError, "+partial_name+ must be provided for unnamed scopes"
   end
@@ -94,12 +94,12 @@ RSpec.describe "Scopes" do
       end
     end
 
-    view = Class.new(base_view) do
+    view = Class.new(base_view) {
       config.scope_namespace = Test::Scopes
       config.template = "named_scope_with_explicit_render"
 
       expose :text
-    end.new
+    }.new
 
     expect(view.(text: "Hello").to_s).to eq "Holler: HELLO!"
   end
@@ -113,12 +113,12 @@ RSpec.describe "Scopes" do
       end
     end
 
-    view = Class.new(base_view) do
+    view = Class.new(base_view) {
       config.scope_namespace = Test::Scopes
       config.template = "named_scope_with_defaults"
 
       expose :text
-    end.new
+    }.new
 
     expect(view.().to_s).to eq "Greeting: Howdy"
   end
@@ -140,13 +140,13 @@ RSpec.describe "Scopes" do
       end
     end
 
-    view = Class.new(base_view) do
+    view = Class.new(base_view) {
       config.part_namespace = Test::Parts
       config.scope_namespace = Test::Scopes
       config.template = "scope_from_part"
 
       expose :message
-    end.new
+    }.new
 
     expect(view.(message: {text: "Hello from a part"}).to_s).to eq "Greeting: Hello from a part!"
   end

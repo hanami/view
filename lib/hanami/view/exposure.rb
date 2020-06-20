@@ -78,6 +78,7 @@ module Hanami
       def call_proc(input, locals)
         args, keywords = proc_args(input, locals)
 
+        # rubocop:disable Style/IfInsideElse
         if keywords.empty?
           if proc.is_a?(Method)
             proc.(*args)
@@ -91,6 +92,7 @@ module Hanami
             object.instance_exec(*args, **keywords, &proc)
           end
         end
+        # rubocop:enable Style/IfInsideElse
       end
 
       def proc_args(input, locals)

@@ -21,7 +21,7 @@ RSpec.describe "part builder" do
 
   describe "default decorator" do
     it "looks up classes from a part namespace" do
-      view = Class.new(Hanami::View) do
+      view = Class.new(Hanami::View) {
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
         config.template = "decorated_parts"
@@ -30,7 +30,7 @@ RSpec.describe "part builder" do
         expose :customs
         expose :custom
         expose :ordinary
-      end.new
+      }.new
 
       expect(view.(customs: ["many things"], custom: "custom thing", ordinary: "ordinary thing").to_s).to eql(
         "<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>"
@@ -38,7 +38,7 @@ RSpec.describe "part builder" do
     end
 
     it "supports wrapping array memebers in custom part classes provided to exposure :as option" do
-      view = Class.new(Hanami::View) do
+      view = Class.new(Hanami::View) {
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
         config.template = "decorated_parts"
@@ -46,7 +46,7 @@ RSpec.describe "part builder" do
         expose :customs, as: Test::CustomPart
         expose :custom, as: Test::CustomPart
         expose :ordinary
-      end.new
+      }.new
 
       expect(view.(customs: ["many things"], custom: "custom thing", ordinary: "ordinary thing").to_s).to eql(
         "<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>"
@@ -54,7 +54,7 @@ RSpec.describe "part builder" do
     end
 
     it "supports wrapping an array and its members in custom part classes provided to exposure :as option as a hash" do
-      view = Class.new(Hanami::View) do
+      view = Class.new(Hanami::View) {
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
         config.template = "decorated_parts"
@@ -62,7 +62,7 @@ RSpec.describe "part builder" do
         expose :customs, as: [Test::CustomArrayPart, Test::CustomPart]
         expose :custom, as: Test::CustomPart
         expose :ordinary
-      end.new
+      }.new
 
       expect(view.(customs: ["many things"], custom: "custom thing", ordinary: "ordinary thing").to_s).to eql(
         "<p>Custom part wrapping many things</p><p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>"
@@ -72,20 +72,20 @@ RSpec.describe "part builder" do
 
   describe "custom decorator and part classes" do
     it "supports wrapping in custom parts based on exposure names" do
-      part_builder = Class.new(Hanami::View::PartBuilder) do
+      part_builder = Class.new(Hanami::View::PartBuilder) {
         def part_class(name:, **options)
           name == :custom ? Test::CustomPart : super
         end
-      end
+      }
 
-      view = Class.new(Hanami::View) do
+      view = Class.new(Hanami::View) {
         config.part_builder = part_builder
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
         config.template = "decorated_parts"
 
         expose :customs, :custom, :ordinary
-      end.new
+      }.new
 
       expect(view.(customs: ["many things"], custom: "custom thing", ordinary: "ordinary thing").to_s).to eql(
         "<p>Custom part wrapping many things</p><p>Custom part wrapping custom thing</p><p>ordinary thing</p>"

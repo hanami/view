@@ -23,11 +23,11 @@ RSpec.describe Hanami::View::Exposures do
     subject(:bound_exposures) { exposures.bind(object) }
 
     let(:object) do
-      Class.new do
+      Class.new {
         def hello(_input)
           "hi"
         end
-      end.new
+      }.new
     end
 
     before do

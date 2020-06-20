@@ -6,7 +6,7 @@ require "hanami/view/part"
 
 RSpec.describe "exposures" do
   let(:context) {
-    Class.new(Hanami::View::Context) do
+    Class.new(Hanami::View::Context) {
       def title
         "hanami-view rocks!"
       end
@@ -14,11 +14,11 @@ RSpec.describe "exposures" do
       def assets
         -> input { "#{input}.jpg" }
       end
-    end.new
+    }.new
   }
 
   it "uses exposures with blocks to build view locals" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users"
@@ -29,7 +29,7 @@ RSpec.describe "exposures" do
           user.merge(name: user[:name].upcase)
         }
       end
-    end.new
+    }.new
 
     users = [
       {name: "Jane", email: "jane@doe.org"},
@@ -42,7 +42,7 @@ RSpec.describe "exposures" do
   end
 
   it "gives the exposure blocks access to the view instance" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users"
@@ -60,7 +60,7 @@ RSpec.describe "exposures" do
           user.merge(name: prefix + user[:name])
         }
       end
-    end.new
+    }.new
 
     users = [
       {name: "Jane", email: "jane@doe.org"},
@@ -73,7 +73,7 @@ RSpec.describe "exposures" do
   end
 
   it "supports instance methods as exposures" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users"
@@ -88,7 +88,7 @@ RSpec.describe "exposures" do
           user.merge(name: user[:name].upcase)
         }
       end
-    end.new
+    }.new
 
     users = [
       {name: "Jane", email: "jane@doe.org"},
@@ -101,14 +101,14 @@ RSpec.describe "exposures" do
   end
 
   it "passes matching input data if no proc or instance method is available" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users"
       config.default_format = :html
 
       expose :users
-    end.new
+    }.new
 
     users = [
       {name: "Jane", email: "jane@doe.org"},
@@ -121,14 +121,14 @@ RSpec.describe "exposures" do
   end
 
   it "using default values" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users"
       config.default_format = :html
 
       expose :users, default: [{name: "John", email: "john@william.org"}]
-    end.new
+    }.new
 
     expect(view.(context: context).to_s).to eql(
       '<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><div class="users"><table><tbody><tr><td>John</td><td>john@william.org</td></tr></tbody></table></div><img src="mindblown.jpg" /></body></html>'
@@ -136,14 +136,14 @@ RSpec.describe "exposures" do
   end
 
   it "having default values but passing nil as value for exposure" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "greeting"
       config.default_format = :html
 
       expose :greeting, default: "Hello Dry-rb"
-    end.new
+    }.new
 
     expect(view.(greeting: nil, context: context).to_s).to eql(
       "<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><p></p></body></html>"
@@ -151,7 +151,7 @@ RSpec.describe "exposures" do
   end
 
   it "allows exposures to depend on each other" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users_with_count"
@@ -162,7 +162,7 @@ RSpec.describe "exposures" do
       expose :users_count do |users|
         "#{users.length} users"
       end
-    end.new
+    }.new
 
     users = [
       {name: "Jane", email: "jane@doe.org"},
@@ -183,7 +183,7 @@ RSpec.describe "exposures" do
       end
     end
 
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users_with_count"
@@ -198,7 +198,7 @@ RSpec.describe "exposures" do
       expose :article do |users|
         "Great article from #{users.first.display_name}"
       end
-    end.new
+    }.new
 
     users = [
       {name: "Jane", email: "jane@doe.org"},
@@ -217,7 +217,7 @@ RSpec.describe "exposures" do
   end
 
   it "allows exposures to depend on each other while still using keywords args to access input data" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "greeting"
@@ -230,7 +230,7 @@ RSpec.describe "exposures" do
       expose :prefix do
         "Hello"
       end
-    end.new
+    }.new
 
     expect(view.(greeting: "From hanami-view internals", context: context).to_s).to eql(
       "<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><p>Hello From hanami-view internals</p></body></html>"
@@ -238,7 +238,7 @@ RSpec.describe "exposures" do
   end
 
   it "supports default values for keyword arguments" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "greeting"
@@ -251,7 +251,7 @@ RSpec.describe "exposures" do
       expose :prefix do
         "Hello"
       end
-    end.new
+    }.new
 
     expect(view.(context: context).to_s).to eql(
       "<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><p>Hello From the defaults</p></body></html>"
@@ -259,7 +259,7 @@ RSpec.describe "exposures" do
   end
 
   it "only passes keywords arguments that are needed in the block and allows for default values" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "edit"
@@ -272,7 +272,7 @@ RSpec.describe "exposures" do
       expose :errors do |errors: []|
         errors
       end
-    end.new
+    }.new
 
     expect(view.(id: 1, context: context).to_s).to eql(
       "<!DOCTYPE html><html><head><title>hanami-view rocks!</title></head><body><h1>Edit</h1><p>No Errors</p><p>Beautiful 1</p></body></html>"
@@ -280,7 +280,7 @@ RSpec.describe "exposures" do
   end
 
   it "supports defining multiple exposures at once" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users_with_count"
@@ -293,7 +293,7 @@ RSpec.describe "exposures" do
       def users_count(users:)
         "#{users.length} users"
       end
-    end.new
+    }.new
 
     users = [
       {name: "Jane", email: "jane@doe.org"},
@@ -306,7 +306,7 @@ RSpec.describe "exposures" do
   end
 
   it "allows exposures to be hidden from the view" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users_with_count"
@@ -321,7 +321,7 @@ RSpec.describe "exposures" do
       expose :users_count do |prefix, users:|
         "#{prefix}#{users.length} users"
       end
-    end.new
+    }.new
 
     users = [
       {name: "Jane", email: "jane@doe.org"},
@@ -339,7 +339,7 @@ RSpec.describe "exposures" do
   end
 
   it "inherit exposures from parent class" do
-    parent = Class.new(Hanami::View) do
+    parent = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users_with_count_inherit"
@@ -354,13 +354,13 @@ RSpec.describe "exposures" do
       expose :users_count do |prefix, users:|
         "#{prefix}#{users.length} users"
       end
-    end
+    }
 
-    child = Class.new(parent) do
+    child = Class.new(parent) {
       expose :child_expose do
         "Child expose"
       end
-    end.new
+    }.new
 
     users = [
       {name: "Jane", email: "jane@doe.org"},
@@ -378,7 +378,7 @@ RSpec.describe "exposures" do
   end
 
   it "inherit exposures from parent class and allow to override them" do
-    parent = Class.new(Hanami::View) do
+    parent = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "users_with_count_inherit"
@@ -393,9 +393,9 @@ RSpec.describe "exposures" do
       expose :users_count do |prefix, users:|
         "#{prefix}#{users.length} users"
       end
-    end
+    }
 
-    child = Class.new(parent) do
+    child = Class.new(parent) {
       expose :child_expose do
         "Child expose"
       end
@@ -403,7 +403,7 @@ RSpec.describe "exposures" do
       expose :users_count do |prefix, users:|
         "#{prefix}#{users.length} users overrided"
       end
-    end.new
+    }.new
 
     users = [
       {name: "Jane", email: "jane@doe.org"},
@@ -421,7 +421,7 @@ RSpec.describe "exposures" do
   end
 
   it "makes exposures available to layout" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app_with_users"
       config.template = "users"
@@ -430,7 +430,7 @@ RSpec.describe "exposures" do
       expose :users_count, layout: true
 
       expose :users
-    end.new
+    }.new
 
     users = [
       {name: "Jane", email: "jane@doe.org"},

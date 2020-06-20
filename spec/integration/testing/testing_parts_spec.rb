@@ -7,11 +7,11 @@ RSpec.describe "Testing / parts" do
   }
 
   specify "Parts can be unit tested without name or rendering (for testing methods that don't require them)" do
-    part_class = Class.new(Hanami::View::Part) do
+    part_class = Class.new(Hanami::View::Part) {
       def breaking_news_title
         title + "!"
       end
-    end
+    }
 
     article = Struct.new(:title).new("Giant Hand Threatens Beach City")
 
@@ -21,16 +21,16 @@ RSpec.describe "Testing / parts" do
   end
 
   specify "Parts can be unit tested with a rendering from a view class" do
-    view_class = Class.new(Hanami::View) do
+    view_class = Class.new(Hanami::View) {
       config.paths = FIXTURES_PATH.join("integration/testing")
       config.template = "view"
-    end
+    }
 
-    part_class = Class.new(Hanami::View::Part) do
+    part_class = Class.new(Hanami::View::Part) {
       def feature_box
         render(:feature_box)
       end
-    end
+    }
 
     article = Struct.new(:title).new("A Guide to Beach City Funland")
 

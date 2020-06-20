@@ -17,24 +17,24 @@ RSpec.describe "Template engines / erb (using erubi via an explict engine mappin
   }
 
   it "supports partials that yield" do
-    view = Class.new(base_view) do
+    view = Class.new(base_view) {
       config.template = "render_and_yield"
-    end.new
+    }.new
 
     expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
   end
 
   it "supports context methods that yield" do
-    context = Class.new(Hanami::View::Context) do
+    context = Class.new(Hanami::View::Context) {
       def wrapper
         "<wrapper>#{yield}</wrapper>"
       end
-    end.new
+    }.new
 
-    view = Class.new(base_view) do
+    view = Class.new(base_view) {
       config.default_context = context
       config.template = "method_with_yield"
-    end.new
+    }.new
 
     expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
   end

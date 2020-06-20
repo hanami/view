@@ -4,13 +4,13 @@ require "hanami/view/decorated_attributes"
 
 RSpec.describe Hanami::View::DecoratedAttributes do
   subject(:decoratable) {
-    Test::Decoratable = Struct.new(:attr_1, :attr_2, :_render_env) do
+    Test::Decoratable = Struct.new(:attr_1, :attr_2, :_render_env) {
       include Hanami::View::DecoratedAttributes
 
       decorate :attr_1, as: :my_value
       decorate :attr_2
       decorate :invalid_attr
-    end
+    }
 
     Test::Decoratable.new(attr_1, attr_2, render_env)
   }

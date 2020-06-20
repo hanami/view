@@ -92,11 +92,11 @@ RSpec.describe Hanami::View::Exposure do
 
       context "matching instance method" do
         let(:bind_object) do
-          Class.new do
+          Class.new {
             def hello(input)
               "hi there, #{input.fetch(:name)}"
             end
-          end.new
+          }.new
         end
 
         it "sets the proc to the method on the object matching the exposure's name" do
@@ -127,11 +127,11 @@ RSpec.describe Hanami::View::Exposure do
       let(:proc) { nil }
 
       let(:object) do
-        Class.new do
+        Class.new {
           def hello(input, bar, baz) # rubocop:disable Lint/UnusedMethodArgument
             "hi there, #{input.fetch(:name)}"
           end
-        end.new
+        }.new
       end
 
       it "returns an array of exposure dependencies derived from the instance method's argument names" do
@@ -209,13 +209,13 @@ RSpec.describe Hanami::View::Exposure do
       let(:proc) { -> name: { "My name is #{name} but call me #{title} #{name}" } }
 
       let(:object) do
-        Class.new do
+        Class.new {
           attr_reader :title
 
           def initialize(title)
             @title = title
           end
-        end.new("Dr")
+        }.new("Dr")
       end
 
       it "makes the instance available as self" do

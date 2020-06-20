@@ -4,7 +4,7 @@ require "tilt/erubi"
 
 RSpec.describe Hanami::View do
   subject(:view) {
-    Class.new(Hanami::View) do
+    Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"
       config.template = "user"
@@ -16,15 +16,15 @@ RSpec.describe Hanami::View do
       expose :header do
         {title: "User"}
       end
-    end.new
+    }.new
   }
 
   let(:context) do
-    Class.new(Hanami::View::Context) do
+    Class.new(Hanami::View::Context) {
       def title
         "Test"
       end
-    end.new
+    }.new
   end
 
   describe "#call" do
@@ -37,12 +37,12 @@ RSpec.describe Hanami::View do
 
   describe "renderer options" do
     subject(:view) {
-      Class.new(Hanami::View) do
+      Class.new(Hanami::View) {
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.template = "view_renderer_options"
         config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}
         config.renderer_options = {outvar: "@__buf__"}
-      end.new
+      }.new
     }
 
     before do
@@ -64,11 +64,11 @@ RSpec.describe Hanami::View do
     end
 
     subject(:context) {
-      Class.new(Hanami::View::Context) do
+      Class.new(Hanami::View::Context) {
         def form(action:, &blk)
           Test::Form.new(action, &blk)
         end
-      end.new
+      }.new
     }
 
     it "merges configured options with default encoding" do

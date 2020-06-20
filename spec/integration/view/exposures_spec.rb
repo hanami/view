@@ -5,20 +5,20 @@ require "hanami/view/context"
 
 RSpec.describe "View / exposures" do
   specify "exposures have access to context" do
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.template = "greeting"
 
       expose :greeting do |greeting:, context:|
         "#{greeting}, #{context.name}"
       end
-    end.new
+    }.new
 
-    context = Class.new(Hanami::View::Context) do
+    context = Class.new(Hanami::View::Context) {
       def name
         "Jane"
       end
-    end.new
+    }.new
 
     local = view.(greeting: "Hello", context: context).locals[:greeting]
 

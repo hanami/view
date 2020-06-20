@@ -40,13 +40,13 @@ RSpec.describe "Context" do
       end
     end
 
-    view = Class.new(Hanami::View) do
+    view = Class.new(Hanami::View) {
       config.paths = FIXTURES_PATH.join("integration/context")
       config.template = "decorated_attributes"
       config.part_namespace = Test::Parts
 
       expose :user
-    end.new
+    }.new
 
     context = Test::Context.new(assets: Test::Assets.new)
 
@@ -55,7 +55,7 @@ RSpec.describe "Context" do
       context: context
     ).to_s
 
-    expect(output.gsub("\n", "")).to eq <<~HTML.gsub("\n", "")
+    expect(output.delete("\n")).to eq <<~HTML.delete("\n")
       <img src="hashed/path/to/hello.png">
       <div class="user">
       <img src="hashed/path/to/default.png">

@@ -159,7 +159,7 @@ RSpec.describe "Part / Decorated attributes" do
     }
 
     let(:part_builder) {
-      Class.new(Hanami::View::PartBuilder) do
+      Class.new(Hanami::View::PartBuilder) {
         def part_class(name:, **options)
           part_name = Dry::Core::Inflector.camelize(name)
 
@@ -169,7 +169,7 @@ RSpec.describe "Part / Decorated attributes" do
             super
           end
         end
-      end.new
+      }.new
     }
 
     before do
