@@ -25,10 +25,10 @@ RSpec.describe "Application views" do
       module TestApp
         class Application < Hanami::Application
           config.root = "/path/to/app"
-          config.views.base_path = "views"
-          config.views.templates_path = "templates"
+          config.views.template_inference_base = "views"
+          config.views.paths = ["templates"]
           config.views.layouts_dir = "test_app_layouts"
-          config.views.default_layout = "testing"
+          config.views.layout = "testing"
         end
       end
     end
@@ -42,7 +42,7 @@ RSpec.describe "Application views" do
         Hanami.init
       end
 
-      let!(:base_view_class) {
+      let(:base_view_class) {
         module Main
           class View < Hanami::View
           end
@@ -58,23 +58,48 @@ RSpec.describe "Application views" do
           expect(view_class.ancestors).to include(a_kind_of(Hanami::View::ApplicationView))
         end
 
-        it "applies configuration from application" do
-          config = view_class.config
+        describe "config" do
+          subject(:config) { view_class.config }
 
-          aggregate_failures do
-            expect(config.paths.map { |path| path.dir.to_s }).to eq ["/path/to/app/slices/main/templates"]
-            expect(config.layouts_dir).to eq "test_app_layouts"
-            expect(config.layout).to eq "testing"
+          describe "path" do
+            context "relative path provided in application config" do
+              before do
+                Hanami.application.config.views.paths = ["templates"]
+              end
+
+              it "configures the path as the relative path appended onto the slice's root path" do
+                expect(config.paths.map { |path| path.dir.to_s }).to eq ["/path/to/app/slices/main/templates"]
+              end
+            end
+
+            context "absolute path provided in application config" do
+              before do
+                Hanami.application.config.views.paths = ["/absolute/path"]
+              end
+
+              it "leaves the absolute path in place" do
+                expect(config.paths.map { |path| path.dir.to_s }).to eq ["/absolute/path"]
+              end
+            end
           end
-        end
 
-        it "does not configure the template" do
-          expect(view_class.config.template).to be_nil
+          it "applies standard view configuration from the application" do
+            aggregate_failures do
+              expect(config.layouts_dir).to eq "test_app_layouts"
+              expect(config.layout).to eq "testing"
+            end
+          end
+
+          it "does not configure the template" do
+            expect(view_class.config.template).to be_nil
+          end
         end
       end
 
       describe "subclass of base view class" do
         subject(:view_class) {
+          base_view_class
+
           module Main
             module Views
               module Articles
@@ -108,7 +133,7 @@ RSpec.describe "Application views" do
         Hanami.init
       end
 
-      let!(:base_view_class) {
+      let(:base_view_class) {
         module TestApp
           class View < Hanami::View
           end
@@ -124,13 +149,29 @@ RSpec.describe "Application views" do
           expect(view_class.ancestors).to include(a_kind_of(Hanami::View::ApplicationView))
         end
 
-        it "applies configuration from application" do
-          config = view_class.config
+        describe "config" do
+          subject(:config) { view_class.config }
 
-          aggregate_failures do
-            expect(config.paths.map { |path| path.dir.to_s }).to eq ["/path/to/app/templates"]
-            expect(config.layouts_dir).to eq "test_app_layouts"
-            expect(config.layout).to eq "testing"
+          describe "path" do
+            context "relative path provided in application config" do
+              before do
+                Hanami.application.config.views.paths = ["templates"]
+              end
+
+              it "configures the path as the relative path appended onto the slice's root path" do
+                expect(config.paths.map { |path| path.dir.to_s }).to eq ["/path/to/app/templates"]
+              end
+            end
+
+            context "absolute path provided in application config" do
+              before do
+                Hanami.application.config.views.paths = ["/absolute/path"]
+              end
+
+              it "leaves the absolute path in place" do
+                expect(config.paths.map { |path| path.dir.to_s }).to eq ["/absolute/path"]
+              end
+            end
           end
         end
 
@@ -141,6 +182,8 @@ RSpec.describe "Application views" do
 
       describe "subclass of base view class" do
         subject(:view_class) {
+          base_view_class
+
           module TestApp
             module Views
               module Articles

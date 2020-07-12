@@ -71,6 +71,21 @@ module Hanami
     # @!scope class
     setting :template
 
+    # @overload config.template_inference_base=(base_path)
+    #   Set the base path to strip away when when inferring a view's template
+    #   names from its class name.
+    #
+    #   **This setting only applies for views within an Hanami application.**
+    #
+    #   For example, given a view `Main::Views::Articles::Index`, in the `Main`
+    #   slice, and a template_inference_base of "views", the inferred template
+    #   name will be "articles/index".
+    #
+    #   @param base_path [String, nil] base templates path
+    #   @api public
+    # @!scope class
+    setting :template_inference_base
+
     # @overload config.layout=(name)
     #   Set the name of the layout to render templates within. Layouts will be
     #   looked up within the configured `layouts_dir`, within the configured

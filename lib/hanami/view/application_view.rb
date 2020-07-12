@@ -16,9 +16,12 @@ module Hanami
       end
 
       def included(view_class)
-        view_class.config.paths = [provider.root.join(application.config.views.templates_path).to_s]
-        view_class.config.layouts_dir = application.config.views.layouts_dir
-        view_class.config.layout = application.config.views.default_layout
+        view_class.settings.each do |setting|
+          application_value = application.config.views.public_send(:"#{setting}")
+          view_class.config.public_send :"#{setting}=", application_value
+        end
+
+        view_class.config.paths = prepare_paths(provider, view_class.config.paths)
 
         view_class.extend inherited_hook
       end
@@ -34,12 +37,22 @@ module Hanami
         end
       end
 
+      def prepare_paths(provider, configured_paths)
+        configured_paths.map { |path|
+          if path.dir.relative?
+            provider.root.join(path.dir)
+          else
+            path
+          end
+        }
+      end
+
       def template_name(view_class)
         provider
           .inflector
           .underscore(view_class.name)
           .sub(/^#{provider.namespace_path}\//, "")
-          .sub(/^#{application.config.views.base_path}\//, "")
+          .sub(/^#{view_class.config.template_inference_base}\//, "")
       end
     end
   end
