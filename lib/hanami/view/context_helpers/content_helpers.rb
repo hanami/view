@@ -1,9 +1,9 @@
 module Hanami
-  module View
+  class View
     module ContextHelpers
-      module ContentFor
-        def initialize(**options)
-          super(**options.merge(content: {}))
+      module ContentHelpers
+        def initialize(content: {}, **options)
+          super
         end
 
         def content_for(key, value = nil, &block)
