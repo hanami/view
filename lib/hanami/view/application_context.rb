@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require_relative "context"
-
 module Hanami
-  module View
-    class ApplicationContext < Context
-      attr_reader :inflector
-
+  class View
+    module ApplicationContext
       def initialize(**options)
         @inflector = options.fetch(:inflector) { Hanami.application.inflector }
-        super(**options)
+        super
+      end
+
+      def inflector
+        @inflector
       end
 
       def request
@@ -26,7 +26,7 @@ module Hanami
 
       private
 
-      # TODO: put `flash` on Request and stop passing response to view context
+      # TODO: create `Request#flash` so we no longer need the `response`
       def response
         _options.fetch(:response)
       end
