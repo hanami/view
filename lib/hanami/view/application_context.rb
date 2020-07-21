@@ -3,8 +3,8 @@
 module Hanami
   class View
     module ApplicationContext
-      def initialize(**options)
-        @inflector = options.fetch(:inflector) { Hanami.application.inflector }
+      def initialize(inflector: Hanami.application.inflector, **options)
+        @inflector = inflector
         super
       end
 

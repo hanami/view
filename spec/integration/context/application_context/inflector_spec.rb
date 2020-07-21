@@ -40,6 +40,14 @@ RSpec.describe "Application context / Inflector", :application_integration do
       it "is the injected inflector" do
         expect(context.inflector).to be inflector
       end
+
+      context "rebuilt context" do
+        subject(:new_context) { context.with }
+
+        it "retains the injected inflector" do
+          expect(new_context.inflector).to be inflector
+        end
+      end
     end
   end
 end
