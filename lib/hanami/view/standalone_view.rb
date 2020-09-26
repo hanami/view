@@ -265,7 +265,9 @@ module Hanami
           output = env.template(config.template, template_env.scope(config.scope, locals))
 
           if layout?
-            layout_env = self.class.layout_env(format: format, context: context)
+            # Use the template_env's context so the layout can have access to any context
+            # state changed within the template (to support `content_for`-style behaviour)
+            layout_env = self.class.layout_env(format: format, context: template_env.context)
             output = env.template(
               self.class.layout_path,
               layout_env.scope(config.scope, layout_locals(locals))
