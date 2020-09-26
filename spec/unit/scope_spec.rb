@@ -1,20 +1,26 @@
 # frozen_string_literal: true
 
+require "dry/effects"
 require "hanami/view/scope_builder"
 
 RSpec.describe Hanami::View::Scope do
+  include Dry::Effects::Handler.Reader(:render_env)
+
   let(:locals) { {} }
 
   context "with a render environment" do
-    subject(:scope) {
-      described_class.new(
-        locals: locals,
-        render_env: render_env
-      )
-    }
+    subject(:scope) { described_class.new(locals: locals) }
 
     let(:render_env) { spy(:render_env, format: :xml, context: context) }
     let(:context) { double(:context) }
+
+    around do |example|
+      RSpec::Mocks.with_temporary_scope do
+        with_render_env(render_env) do
+          example.run
+        end
+      end
+    end
 
     describe "#render" do
       it "renders a partial with itself as the scope" do
@@ -23,10 +29,7 @@ RSpec.describe Hanami::View::Scope do
       end
 
       it "renders a partial with provided locals" do
-        scope_with_locals = described_class.new(
-          locals: {foo: "bar"},
-          render_env: render_env
-        )
+        scope_with_locals = described_class.new(locals: {foo: "bar"})
 
         scope.render(:info, foo: "bar")
 
@@ -96,19 +99,19 @@ RSpec.describe Hanami::View::Scope do
 
     describe "#render" do
       it "raises an error" do
-        expect { scope.render(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { scope.render(:info) }.to raise_error(Dry::Effects::Errors::MissingStateError)
       end
     end
 
     describe "#scope" do
       it "raises an error" do
-        expect { scope.scope(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { scope.scope(:info) }.to raise_error(Dry::Effects::Errors::MissingStateError)
       end
     end
 
     describe "#_context" do
       it "raises an error" do
-        expect { scope._context }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { scope._context }.to raise_error(Dry::Effects::Errors::MissingStateError)
       end
     end
   end

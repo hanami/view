@@ -2,6 +2,7 @@
 
 require "dry/core/cache"
 require "dry/core/equalizer"
+require "dry/effects"
 require_relative "scope"
 
 module Hanami
@@ -12,30 +13,18 @@ module Hanami
     class ScopeBuilder
       extend Dry::Core::Cache
       include Dry::Equalizer(:namespace)
+      include Dry::Effects.Reader(:render_env)
 
       # The view's configured `scope_namespace`
       #
       # @api private
       attr_reader :namespace
 
-      # @return [RenderEnvironment]
-      #
-      # @api private
-      attr_reader :render_env
-
       # Returns a new instance of ScopeBuilder
       #
       # @api private
-      def initialize(namespace: nil, render_env: nil)
+      def initialize(namespace: nil)
         @namespace = namespace
-        @render_env = render_env
-      end
-
-      # @api private
-      def for_render_env(render_env)
-        return self if render_env == self.render_env
-
-        self.class.new(namespace: namespace, render_env: render_env)
       end
 
       # Returns a new scope using a class matching the name
@@ -50,7 +39,6 @@ module Hanami
         scope_class(name).new(
           name: name,
           locals: locals,
-          render_env: render_env
         )
       end
 

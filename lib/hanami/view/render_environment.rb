@@ -23,9 +23,9 @@ module Hanami
       def initialize(renderer:, inflector:, context:, scope_builder:, part_builder:)
         @renderer = renderer
         @inflector = inflector
-        @context = context.for_render_env(self)
-        @scope_builder = scope_builder.for_render_env(self)
-        @part_builder = part_builder.for_render_env(self)
+        @context = context
+        @scope_builder = scope_builder
+        @part_builder = part_builder
       end
 
       def format
