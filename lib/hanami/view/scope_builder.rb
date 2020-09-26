@@ -3,6 +3,7 @@
 require "dry/core/cache"
 require "dry/core/equalizer"
 require "dry/effects"
+require "dry/inflector"
 require_relative "scope"
 
 module Hanami
@@ -12,8 +13,9 @@ module Hanami
     # @api private
     class ScopeBuilder
       extend Dry::Core::Cache
-      include Dry::Equalizer(:namespace)
-      include Dry::Effects.Reader(:render_env)
+      include Dry::Equalizer(:inflector, :namespace)
+
+      attr_reader :inflector
 
       # The view's configured `scope_namespace`
       #
@@ -23,7 +25,8 @@ module Hanami
       # Returns a new instance of ScopeBuilder
       #
       # @api private
-      def initialize(namespace: nil)
+      def initialize(inflector: Dry::Inflector.new, namespace: nil)
+        @inflector = inflector
         @namespace = namespace
       end
 
@@ -76,10 +79,6 @@ module Hanami
         else
           DEFAULT_SCOPE_CLASS
         end
-      end
-
-      def inflector
-        render_env.inflector
       end
     end
   end

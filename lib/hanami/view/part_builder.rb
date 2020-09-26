@@ -3,6 +3,7 @@
 require "dry/core/cache"
 require "dry/core/equalizer"
 require "dry/effects"
+require "dry/inflector"
 require_relative "part"
 
 module Hanami
@@ -12,15 +13,16 @@ module Hanami
     # @api private
     class PartBuilder
       extend Dry::Core::Cache
-      include Dry::Equalizer(:namespace)
-      include Dry::Effects.Reader(:render_env)
+      include Dry::Equalizer(:inflector, :namespace)
 
+      attr_reader :inflector
       attr_reader :namespace
 
       # Returns a new instance of PartBuilder
       #
       # @api private
-      def initialize(namespace: nil)
+      def initialize(inflector: Dry::Inflector.new, namespace: nil)
+        @inflector = inflector
         @namespace = namespace
       end
 
@@ -123,10 +125,6 @@ module Hanami
         end
       end
       # rubocop:enable Metrics/PerceivedComplexity
-
-      def inflector
-        render_env.inflector
-      end
     end
   end
 end
