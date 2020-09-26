@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
+require "dry/effects"
 require "hanami/view/scope_builder"
-require "hanami/view/render_environment_missing"
 
 RSpec::Matchers.define :scope do |locals|
   match do |actual|
@@ -10,8 +10,11 @@ RSpec::Matchers.define :scope do |locals|
 end
 
 RSpec.describe Hanami::View::Part do
+  include Dry::Effects::Handler.Reader(:render_env)
+
   let(:name) { :user }
   let(:value) { double(:value) }
+
   let(:render_env) {
     Hanami::View::RenderEnvironment.new(
       renderer: renderer,
@@ -24,11 +27,18 @@ RSpec.describe Hanami::View::Part do
   let(:renderer) { spy(:renderer, format: :xml) }
 
   context "with a render environment" do
+    around do |example|
+      RSpec::Mocks.with_temporary_scope do
+        with_render_env(render_env) do
+          example.run
+        end
+      end
+    end
+
     subject(:part) {
       described_class.new(
         name: name,
-        value: value,
-        render_env: render_env
+        value: value
       )
     }
 
@@ -56,13 +66,6 @@ RSpec.describe Hanami::View::Part do
 
       it "delegates to the wrapped value" do
         expect(part.to_s).to eq "to_s on the value"
-      end
-    end
-
-    describe "#new" do
-      it "preserves render environment" do
-        new_part = part.new(value: "new value")
-        expect(new_part._render_env).to be part._render_env
       end
     end
 
@@ -124,47 +127,19 @@ RSpec.describe Hanami::View::Part do
 
     describe "#format" do
       it "raises an error" do
-        expect { part.render(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { part.render(:info) }.to raise_error(Dry::Effects::Errors::MissingStateError)
       end
     end
 
     describe "#render" do
       it "raises an error" do
-        expect { part.render(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { part.render(:info) }.to raise_error(Dry::Effects::Errors::MissingStateError)
       end
     end
 
     describe "#scope" do
       it "raises an error" do
-        expect { part.scope(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
-      end
-    end
-  end
-
-  context "without a name provided" do
-    describe "#_name" do
-      context "when class has a name" do
-        before do
-          Test::MyPart = Class.new(Hanami::View::Part)
-        end
-
-        subject(:part) {
-          Test::MyPart.new(value: value)
-        }
-
-        it "is inferred from the class name" do
-          expect(part._name).to eq "my_part"
-        end
-      end
-
-      context "when class is anonymous" do
-        subject(:part) {
-          Class.new(Hanami::View::Part).new(value: value)
-        }
-
-        it "defaults to 'part'" do
-          expect(part._name).to eq "part"
-        end
+        expect { part.scope(:info) }.to raise_error(Dry::Effects::Errors::MissingStateError)
       end
     end
   end
