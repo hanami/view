@@ -11,8 +11,8 @@ module Hanami
           renderer: renderer,
           inflector: config.inflector,
           context: context,
-          scope_builder: config.scope_builder.new(namespace: config.scope_namespace),
-          part_builder: config.part_builder.new(namespace: config.part_namespace)
+          scope_builder: config.scope_builder.new(inflector: config.inflector, namespace: config.scope_namespace),
+          part_builder: config.part_builder.new(inflector: config.inflector, namespace: config.part_namespace)
         )
       end
 
