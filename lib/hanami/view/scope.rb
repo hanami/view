@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
+require "dry/effects"
 require "dry/equalizer"
 require "dry/core/constants"
-require_relative "render_environment_missing"
 
 module Hanami
   class View
@@ -21,7 +21,8 @@ module Hanami
       # @api private
       CONVENIENCE_METHODS = %i[format context locals].freeze
 
-      include Dry::Equalizer(:_name, :_locals, :_render_env)
+      include Dry::Effects.Reader(:render_env, as: :_render_env)
+      include Dry::Equalizer(:_name, :_locals)
 
       # The scope's name
       #
@@ -43,30 +44,17 @@ module Hanami
       # @api public
       attr_reader :_locals
 
-      # The current render environment
-      #
-      # @return [RenderEnvironment] render environment
-      #
-      # @api private
-      attr_reader :_render_env
-
       # Returns a new Scope instance
       #
       # @param name [Symbol, nil] scope name
       # @param locals [Hash<Symbol, Object>] template locals
-      # @param render_env [RenderEnvironment] render environment
       #
       # @return [Scope]
       #
       # @api public
-      def initialize(
-        name: nil,
-        locals: Dry::Core::Constants::EMPTY_HASH,
-        render_env: RenderEnvironmentMissing.new
-      )
+      def initialize(name: nil, locals: Dry::Core::Constants::EMPTY_HASH)
         @_name = name
         @_locals = locals
-        @_render_env = render_env
       end
 
       # @overload render(partial_name, **locals, &block)
@@ -175,8 +163,7 @@ module Hanami
         else
           self.class.new(
             # FIXME: what about `name`?
-            locals: locals,
-            render_env: _render_env
+            locals: locals
           )
         end
       end

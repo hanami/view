@@ -1,6 +1,10 @@
+require "dry/effects"
+
 module Hanami
   class View
     module StandaloneView
+      include Dry::Effects::Handler.Reader(:render_env)
+
       def self.included(klass)
         klass.extend ClassMethods
         klass.include InstanceMethods
@@ -192,7 +196,8 @@ module Hanami
         #   @param format [Symbol] template format to use (defaults to the `default_format` setting)
         #   @param context [Context] context object to use (defaults to the `default_context` setting)
         #
-        #   @return [RenderEnvironment] @api public
+        #   @return [RenderEnvironment]
+        #   @api public
         def layout_env(**args)
           render_env(**args).chdir(layout_path)
         end
@@ -258,18 +263,25 @@ module Hanami
         def call(format: config.default_format, context: config.default_context, **input)
           ensure_config
 
-          env = self.class.render_env(format: format, context: context)
-          template_env = self.class.template_env(format: format, context: context)
+          render_env = self.class.render_env(format: format, context: context)
+
+          template_env = render_env.chdir(config.template)
 
           locals = locals(template_env, input)
-          output = env.template(config.template, template_env.scope(config.scope, locals))
+
+          output = with_render_env(template_env) {
+            render_env.template(config.template, template_env.scope(config.scope, locals))
+          }
 
           if layout?
-            layout_env = self.class.layout_env(format: format, context: context)
-            output = env.template(
-              self.class.layout_path,
-              layout_env.scope(config.scope, layout_locals(locals))
-            ) { output }
+            layout_env = render_env.chdir(self.class.layout_path)
+
+            output = with_render_env(layout_env) {
+              render_env.template(
+                self.class.layout_path,
+                layout_env.scope(config.scope, layout_locals(locals))
+              ) { output }
+            }
           end
 
           Rendered.new(output: output, locals: locals)

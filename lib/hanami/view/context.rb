@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "dry/effects"
 require "dry/equalizer"
 require_relative "application_context"
 require_relative "decorated_attributes"
@@ -15,6 +16,7 @@ module Hanami
     # @api public
     class Context
       include Dry::Equalizer(:_options)
+      include Dry::Effects.Reader(:render_env)
       include DecoratedAttributes
 
       attr_reader :_render_env, :_options
@@ -53,16 +55,8 @@ module Hanami
       #   end
       #
       # @api public
-      def initialize(render_env: nil, **options)
-        @_render_env = render_env
+      def initialize(**options)
         @_options = options
-      end
-
-      # @api private
-      def for_render_env(render_env)
-        return self if render_env == _render_env
-
-        self.class.new(**_options.merge(render_env: render_env))
       end
 
       # Returns a copy of the Context with new options merged in.
@@ -88,7 +82,6 @@ module Hanami
       # @api public
       def with(**new_options)
         self.class.new(
-          render_env: _render_env,
           **_options.merge(new_options)
         )
       end

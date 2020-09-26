@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
-require "hanami/view/scope_builder"
+require "dry/effects"
+require "hanami/view/part_builder"
 
 RSpec.describe Hanami::View::PartBuilder do
-  subject(:part_builder) { render_env.part_builder }
+  include Dry::Effects::Handler.Reader(:render_env)
+
+  subject(:part_builder) { described_class.new(namespace: namespace) }
+  let(:namespace) { nil }
 
   let(:render_env) {
     Hanami::View::RenderEnvironment.new(
@@ -11,11 +15,15 @@ RSpec.describe Hanami::View::PartBuilder do
       inflector: Dry::Inflector.new,
       context: Hanami::View::Context.new,
       scope_builder: Hanami::View::ScopeBuilder.new,
-      part_builder: Hanami::View::PartBuilder.new(namespace: namespace)
+      part_builder: part_builder,
     )
   }
 
-  let(:namespace) { nil }
+  around do |example|
+    with_render_env(render_env) do
+      example.run
+    end
+  end
 
   describe "#call" do
     subject(:part) {
@@ -35,10 +43,6 @@ RSpec.describe Hanami::View::PartBuilder do
 
       it "wraps the value" do
         expect(part._value).to eq value
-      end
-
-      it "retains the render environment" do
-        expect(part._render_env).to eql render_env
       end
     end
 
@@ -150,7 +154,14 @@ RSpec.describe Hanami::View::PartBuilder do
         end
       end
 
-      let(:namespace) { Test::Parts }
+      let(:namespace) {
+        module Test
+          module Parts
+          end
+        end
+
+        Test::Parts
+      }
 
       describe "singular value" do
         let(:value) { double("user", profile: "profile") }

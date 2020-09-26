@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require "dry/core/inflector"
+require "dry/effects"
 require "hanami/view/scope_builder"
 
 RSpec.describe "Part / Decorated attributes" do
+  include Dry::Effects::Handler.Reader(:render_env)
+
   let(:article_class) {
     Class.new do
       attr_reader :title, :author, :comments
@@ -54,8 +57,7 @@ RSpec.describe "Part / Decorated attributes" do
   subject(:article_part) {
     article_part_class.new(
       name: :article,
-      value: article,
-      render_env: render_env
+      value: article
     )
   }
 
@@ -68,6 +70,12 @@ RSpec.describe "Part / Decorated attributes" do
       part_builder: part_builder
     )
   }
+
+  around do |example|
+    with_render_env(render_env) do
+      example.run
+    end
+  end
 
   describe "using default part builder" do
     let(:part_builder) { Hanami::View::PartBuilder.new }

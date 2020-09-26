@@ -63,8 +63,8 @@ module Hanami
               define_method name do
                 attribute = super()
 
-                if _render_env && attribute
-                  _render_env.part(name, attribute, **options)
+                if render_env && attribute
+                  render_env.part(name, attribute, **options)
                 else
                   attribute
                 end

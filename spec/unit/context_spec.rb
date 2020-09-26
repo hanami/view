@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 
+require "dry/effects"
 require "hanami/view/context"
 require "hanami/view/part"
 require "hanami/view/part_builder"
 require "hanami/view/scope_builder"
 
 RSpec.describe Hanami::View::Context do
+  include Dry::Effects::Handler.Reader(:render_env)
+
   let(:context_class) {
     Class.new(Hanami::View::Context) do
       attr_reader :assets, :routes
 
-      decorate :assets, :routes
+      # decorate :assets, :routes
+      decorate :assets
       decorate :invalid_attribute
 
       def initialize(assets:, routes:, **options)
@@ -28,7 +32,7 @@ RSpec.describe Hanami::View::Context do
     Hanami::View::RenderEnvironment.new(
       inflector: Dry::Inflector.new,
       renderer: double(:renderer),
-      context: Hanami::View::Context.new,
+      context: context,
       part_builder: Hanami::View::PartBuilder.new,
       scope_builder: Hanami::View::ScopeBuilder.new
     )
@@ -36,23 +40,15 @@ RSpec.describe Hanami::View::Context do
 
   subject(:context) { context_class.new(assets: assets, routes: routes) }
 
-  describe "attribute readers" do
-    it "provides access to its attributes" do
-      expect(context.assets).to eql assets
+  around do |example|
+    with_render_env(render_env) do
+      example.run
     end
   end
 
-  context "with render environment" do
-    subject(:context) {
-      context_class.new(assets: assets, routes: routes).for_render_env(render_env)
-    }
-
-    describe "attribute readers" do
-      it "provides attributes decorated in view parts" do
-        expect(context.assets).to be_a Hanami::View::Part
-        expect(context.assets.value).to eql assets
-      end
-    end
+  it "provides attributes decorated in view parts" do
+    expect(context.assets).to be_a Hanami::View::Part
+    expect(context.assets.value).to eql assets
   end
 
   describe "#with" do
@@ -61,7 +57,7 @@ RSpec.describe Hanami::View::Context do
       new_context = context.with(another_option: another_option)
 
       expect(new_context).to be_a(context.class)
-      expect(new_context._options).to eq(assets: context.assets, routes: routes, another_option: another_option)
+      expect(new_context._options).to eq(assets: assets, routes: routes, another_option: another_option)
     end
   end
 end
