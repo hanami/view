@@ -39,8 +39,12 @@ RSpec.describe "Application views" do
         end
 
         Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
+
+        Hanami.application.tap(&application_pre_init_hook)
         Hanami.init
       end
+
+      let(:application_pre_init_hook) { proc { } }
 
       let(:base_view_class) {
         module Main
@@ -63,9 +67,11 @@ RSpec.describe "Application views" do
 
           describe "path" do
             context "relative path provided in application config" do
-              before do
-                Hanami.application.config.views.paths = ["templates"]
-              end
+              let(:application_pre_init_hook) {
+                proc do |application|
+                  application.config.views.paths = ["templates"]
+                end
+              }
 
               it "configures the path as the relative path appended onto the slice's root path" do
                 expect(config.paths.map { |path| path.dir.to_s }).to eq ["/path/to/app/slices/main/templates"]
@@ -73,9 +79,11 @@ RSpec.describe "Application views" do
             end
 
             context "absolute path provided in application config" do
-              before do
-                Hanami.application.config.views.paths = ["/absolute/path"]
-              end
+              let(:application_pre_init_hook) {
+                proc do |application|
+                  application.config.views.paths = ["/absolute/path"]
+                end
+              }
 
               it "leaves the absolute path in place" do
                 expect(config.paths.map { |path| path.dir.to_s }).to eq ["/absolute/path"]
@@ -130,8 +138,11 @@ RSpec.describe "Application views" do
 
     context "Base view defined directly inside application" do
       before do
+        Hanami.application.tap(&application_pre_init_hook)
         Hanami.init
       end
+
+      let(:application_pre_init_hook) { proc { } }
 
       let(:base_view_class) {
         module TestApp
@@ -152,11 +163,13 @@ RSpec.describe "Application views" do
         describe "config" do
           subject(:config) { view_class.config }
 
-          describe "path" do
+          describe "paths" do
             context "relative path provided in application config" do
-              before do
-                Hanami.application.config.views.paths = ["templates"]
-              end
+              let(:application_pre_init_hook) {
+                proc do |application|
+                  application.config.views.paths = ["templates"]
+                end
+              }
 
               it "configures the path as the relative path appended onto the slice's root path" do
                 expect(config.paths.map { |path| path.dir.to_s }).to eq ["/path/to/app/templates"]
@@ -164,9 +177,11 @@ RSpec.describe "Application views" do
             end
 
             context "absolute path provided in application config" do
-              before do
-                Hanami.application.config.views.paths = ["/absolute/path"]
-              end
+              let(:application_pre_init_hook) {
+                proc do |application|
+                  application.config.views.paths = ["/absolute/path"]
+                end
+              }
 
               it "leaves the absolute path in place" do
                 expect(config.paths.map { |path| path.dir.to_s }).to eq ["/absolute/path"]
