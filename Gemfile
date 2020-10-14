@@ -14,6 +14,8 @@ group :tools do
 end
 
 group :test do
+  gem "saharspec"
+
   gem "dry-inflector"
   gem "erbse", "~> 0.1.4"
   gem "erubi"
