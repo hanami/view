@@ -25,7 +25,6 @@ RSpec.describe "Application views" do
       module TestApp
         class Application < Hanami::Application
           config.root = "/path/to/app"
-          config.views.template_inference_base = "views"
           config.views.paths = ["templates"]
           config.views.layouts_dir = "test_app_layouts"
           config.views.layout = "testing"
@@ -96,10 +95,6 @@ RSpec.describe "Application views" do
               expect(config.layout).to eq "testing"
             end
           end
-
-          it "does not configure the template" do
-            expect(view_class.config.template).to be_nil
-          end
         end
       end
 
@@ -127,10 +122,6 @@ RSpec.describe "Application views" do
             expect(config.layouts_dir).to eq "test_app_layouts"
             expect(config.layout).to eq "testing"
           end
-        end
-
-        it "configures the template name based on the view's class name, relative to the slice and configured views base_path" do
-          expect(view_class.config.template).to eq "articles/index"
         end
       end
     end
@@ -185,10 +176,6 @@ RSpec.describe "Application views" do
             end
           end
         end
-
-        it "does not configure the template" do
-          expect(view_class.config.template).to be_nil
-        end
       end
 
       describe "subclass of base view class" do
@@ -215,10 +202,6 @@ RSpec.describe "Application views" do
             expect(config.layouts_dir).to eq "test_app_layouts"
             expect(config.layout).to eq "testing"
           end
-        end
-
-        it "configures the template name based on the view's class name, relative to the slice and configured views base_path" do
-          expect(view_class.config.template).to eq "articles/index"
         end
       end
     end

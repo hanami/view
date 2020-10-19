@@ -25,6 +25,7 @@ module Hanami
 
         view_class.config.inflector = provider.inflector
         view_class.config.paths = prepare_paths(provider, view_class.config.paths)
+        view_class.config.template = template_name(view_class)
 
         view_class.extend inherited_hook
       end
