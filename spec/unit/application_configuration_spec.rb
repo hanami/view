@@ -47,8 +47,30 @@ RSpec.describe Hanami::View::ApplicationConfiguration do
   end
 
   describe "#settings" do
+    it "includes locally defined settings" do
+      expect(configuration.settings).to include :parts_path
+    end
+
     it "includes all view settings apart from inflector" do
-      expect(configuration.settings).to eq Hanami::View.settings - [:inflector]
+      expect(configuration.settings).to include (Hanami::View.settings - [:inflector])
+    end
+  end
+
+  describe "finalized configuration" do
+    before do
+      configuration.finalize!
+    end
+
+    it "is frozen" do
+      expect(configuration).to be_frozen
+    end
+
+    it "does not allow changes to locally defined settings" do
+      expect { configuration.parts_path = "parts" }.to raise_error(Dry::Configurable::FrozenConfig)
+    end
+
+    it "does not allow changes to base view settings" do
+      expect { configuration.paths = [] }.to raise_error(Dry::Configurable::FrozenConfig)
     end
   end
 end
