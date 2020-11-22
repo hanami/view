@@ -21,7 +21,7 @@ group :test do
   gem "erubi"
   gem "hamlit"
   gem "hamlit-block"
-  gem "hanami", github: "hanami/hanami", branch: "use-view-provided-configuration"
+  gem "hanami", github: "hanami/hanami", branch: "unstable"
   gem "hanami-controller", github: "hanami/controller", branch: "unstable"
   gem "hanami-devtools", github: "hanami/devtools"
   gem "rack", ">= 2.0.6"
