@@ -25,12 +25,13 @@ RSpec.describe "Application views" do
       module TestApp
         class Application < Hanami::Application
           config.root = "/path/to/app"
-          config.views.template_inference_base = "views"
           config.views.paths = ["templates"]
           config.views.layouts_dir = "test_app_layouts"
           config.views.layout = "testing"
         end
       end
+
+      Hanami.application.instance_eval(&application_hook) if respond_to?(:application_hook)
     end
 
     context "Base view defined inside slice" do
@@ -40,11 +41,8 @@ RSpec.describe "Application views" do
 
         Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
 
-        Hanami.application.tap(&application_pre_init_hook)
         Hanami.init
       end
-
-      let(:application_pre_init_hook) { proc { } }
 
       let(:base_view_class) {
         module Main
@@ -67,9 +65,9 @@ RSpec.describe "Application views" do
 
           describe "path" do
             context "relative path provided in application config" do
-              let(:application_pre_init_hook) {
-                proc do |application|
-                  application.config.views.paths = ["templates"]
+              let(:application_hook) {
+                proc do
+                  config.views.paths = ["templates"]
                 end
               }
 
@@ -79,9 +77,9 @@ RSpec.describe "Application views" do
             end
 
             context "absolute path provided in application config" do
-              let(:application_pre_init_hook) {
-                proc do |application|
-                  application.config.views.paths = ["/absolute/path"]
+              let(:application_hook) {
+                proc do
+                  config.views.paths = ["/absolute/path"]
                 end
               }
 
@@ -96,10 +94,6 @@ RSpec.describe "Application views" do
               expect(config.layouts_dir).to eq "test_app_layouts"
               expect(config.layout).to eq "testing"
             end
-          end
-
-          it "does not configure the template" do
-            expect(view_class.config.template).to be_nil
           end
         end
       end
@@ -129,20 +123,13 @@ RSpec.describe "Application views" do
             expect(config.layout).to eq "testing"
           end
         end
-
-        it "configures the template name based on the view's class name, relative to the slice and configured views base_path" do
-          expect(view_class.config.template).to eq "articles/index"
-        end
       end
     end
 
     context "Base view defined directly inside application" do
       before do
-        Hanami.application.tap(&application_pre_init_hook)
         Hanami.init
       end
-
-      let(:application_pre_init_hook) { proc { } }
 
       let(:base_view_class) {
         module TestApp
@@ -165,9 +152,9 @@ RSpec.describe "Application views" do
 
           describe "paths" do
             context "relative path provided in application config" do
-              let(:application_pre_init_hook) {
-                proc do |application|
-                  application.config.views.paths = ["templates"]
+              let(:application_hook) {
+                proc do
+                  config.views.paths = ["templates"]
                 end
               }
 
@@ -177,9 +164,9 @@ RSpec.describe "Application views" do
             end
 
             context "absolute path provided in application config" do
-              let(:application_pre_init_hook) {
-                proc do |application|
-                  application.config.views.paths = ["/absolute/path"]
+              let(:application_hook) {
+                proc do
+                  config.views.paths = ["/absolute/path"]
                 end
               }
 
@@ -188,10 +175,6 @@ RSpec.describe "Application views" do
               end
             end
           end
-        end
-
-        it "does not configure the template" do
-          expect(view_class.config.template).to be_nil
         end
       end
 
@@ -219,10 +202,6 @@ RSpec.describe "Application views" do
             expect(config.layouts_dir).to eq "test_app_layouts"
             expect(config.layout).to eq "testing"
           end
-        end
-
-        it "configures the template name based on the view's class name, relative to the slice and configured views base_path" do
-          expect(view_class.config.template).to eq "articles/index"
         end
       end
     end
