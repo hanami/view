@@ -16,6 +16,13 @@ module Hanami
       end
 
       def included(view_class)
+        configure_view view_class
+        view_class.extend inherited_hook
+      end
+
+      private
+
+      def configure_view(view_class)
         view_class.settings.each do |setting|
           if application.config.views.respond_to?(:"#{setting}")
             application_value = application.config.views.public_send(:"#{setting}")
@@ -27,10 +34,10 @@ module Hanami
         view_class.config.paths = prepare_paths(provider, view_class.config.paths)
         view_class.config.template = template_name(view_class)
 
-        view_class.extend inherited_hook
+        if (part_namespace = namespace_from_path(application.config.views.parts_path))
+          view_class.config.part_namespace = part_namespace
+        end
       end
-
-      private
 
       def define_inherited_hook
         template_name = method(:template_name)
@@ -57,6 +64,25 @@ module Hanami
           .underscore(view_class.name)
           .sub(/^#{provider.namespace_path}\//, "")
           .sub(/^#{view_class.config.template_inference_base}\//, "")
+      end
+
+      def namespace_from_path(path)
+        path = "#{provider.namespace_path}/#{path}"
+
+        begin
+          require path
+        rescue LoadError => exception
+          raise exception unless exception.path == path
+        end
+
+        begin
+          inflector.constantize(inflector.camelize(path))
+        rescue NameError => exception
+        end
+      end
+
+      def inflector
+        provider.inflector
       end
     end
   end

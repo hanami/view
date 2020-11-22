@@ -1,11 +1,18 @@
 # frozen_string_literal: true
 
+require "dry/configurable"
 require_relative "../view"
 
 module Hanami
   class View
     class ApplicationConfiguration
-      def initialize
+      include Dry::Configurable
+
+      setting :parts_path, "views/parts"
+
+      def initialize(*)
+        super
+
         @base_config = View.config.dup
 
         configure_defaults
@@ -18,7 +25,15 @@ module Hanami
       # @since 2.0.0
       # @api private
       def settings
-        View.settings - NON_FORWARDABLE_METHODS
+        self.class.settings + View.settings - NON_FORWARDABLE_METHODS
+      end
+
+      def finalize!
+        return self if frozen?
+
+        base_config.finalize!
+
+        super
       end
 
       private
@@ -43,7 +58,9 @@ module Hanami
       def method_missing(name, *args, &block)
         return super if NON_FORWARDABLE_METHODS.include?(name)
 
-        if base_config.respond_to?(name)
+        if config.respond_to?(name)
+          config.public_send(name, *args, &block)
+        elsif base_config.respond_to?(name)
           base_config.public_send(name, *args, &block)
         else
           super
@@ -53,7 +70,7 @@ module Hanami
       def respond_to_missing?(name, _include_all = false)
         return false if NON_FORWARDABLE_METHODS.include?(name)
 
-        base_config.respond_to?(name) || super
+        config.respond_to?(name) || base_config.respond_to?(name) || super
       end
     end
   end
