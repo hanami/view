@@ -17,10 +17,13 @@ module Hanami
 
       def included(view_class)
         view_class.settings.each do |setting|
-          application_value = application.config.views.public_send(:"#{setting}")
-          view_class.config.public_send :"#{setting}=", application_value
+          if application.config.views.respond_to?(:"#{setting}")
+            application_value = application.config.views.public_send(:"#{setting}")
+            view_class.config.public_send :"#{setting}=", application_value
+          end
         end
 
+        view_class.config.inflector = provider.inflector
         view_class.config.paths = prepare_paths(provider, view_class.config.paths)
 
         view_class.extend inherited_hook
