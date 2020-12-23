@@ -152,6 +152,89 @@ module Hanami
 
         # @!endgroup
 
+        # @!group Scope
+
+        # Creates and assigns a scope for the current view.
+        #
+        # The newly created scope is useful to add custom logic that is specific
+        # to the view.
+        #
+        # The scope has access to locals, exposures, and inherited scope (if any)
+        #
+        # If the view already has an explicit scope the newly created scope will
+        # inherit from the explicit scope.
+        #
+        # There are two cases when this may happen:
+        #   1. The scope was explicitly assigned (e.g. `config.scope = MyScope`)
+        #   2. The scope has been inherited by the view superclass
+        #
+        # If the view doesn't have an already existing scope, the newly scope
+        # will inherit from `Hanami::View::Scope` by default.
+        #
+        # However, you can specify any base class for it. This is not
+        # recommended, unless you know what you're doing.
+        #
+        # @param scope [Hanami::View::Scope] the current scope (if any), or the
+        #   default base class will be `Hanami::View::Scope`
+        # @param block [Proc] the scope logic definition
+        #
+        # @api public
+        #
+        # @example Basic usage
+        #   class MyView < Hanami::View
+        #     config.scope = MyScope
+        #
+        #     scope do
+        #       def greeting
+        #         _locals[:message].upcase + "!"
+        #       end
+        #
+        #       def copyright(time)
+        #         "Copy #{time.year}"
+        #       end
+        #     end
+        #   end
+        #
+        #   # my_view.html.erb
+        #   # <%= greeting %>
+        #   # <%= copyright(Time.now.utc) %>
+        #
+        #   MyView.new.(message: "Hello") # => "HELLO!"
+        #
+        # @example Inherited scope
+        #   class MyScope < Hanami::View::Scope
+        #     private
+        #
+        #     def shout(string)
+        #       string.upcase + "!"
+        #     end
+        #   end
+        #
+        #   class MyView < Hanami::View
+        #     config.scope = MyScope
+        #
+        #     scope do
+        #       def greeting
+        #         shout(_locals[:message])
+        #       end
+        #
+        #       def copyright(time)
+        #         "Copy #{time.year}"
+        #       end
+        #     end
+        #   end
+        #
+        #   # my_view.html.erb
+        #   # <%= greeting %>
+        #   # <%= copyright(Time.now.utc) %>
+        #
+        #   MyView.new.(message: "Hello") # => "HELLO!"
+        def scope(base: config.scope || Hanami::View::Scope, &block)
+          config.scope = Class.new(base, &block)
+        end
+
+        # @!endgroup
+
         # @!group Render environment
 
         # Returns a render environment for the view and the given options. This
