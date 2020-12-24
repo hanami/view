@@ -1,3 +1,5 @@
+require_relative "scope"
+
 module Hanami
   class View
     module StandaloneView
