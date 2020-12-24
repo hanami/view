@@ -150,4 +150,83 @@ RSpec.describe "Scopes" do
 
     expect(view.(message: {text: "Hello from a part"}).to_s).to eq "Greeting: Hello from a part!"
   end
+
+  specify "Creating a custom anonymous scope" do
+    view = Class.new(base_view) do
+      config.template = "custom_anonymous_scope"
+      expose :message
+
+      scope do
+        def greeting
+          shout(_locals[:message])
+        end
+
+        def shout(string)
+          string.upcase + "!"
+        end
+
+        def year(time)
+          time.year.to_s
+        end
+      end
+    end.new
+
+    message = "Hello"
+    rendered = view.(message: message).to_s
+    expect(rendered).to include(message.upcase + "!")
+    expect(rendered).to include(Time.now.utc.year.to_s)
+  end
+
+  specify "Creating a custom anonymous scope that inherites from application scope" do
+    module Test
+      module Helpers
+        module StringFormattingHelpers
+          private
+
+          def upcase(string)
+            string.upcase
+          end
+        end
+
+        module TimeFormattingHelpers
+          private
+
+          def year(time)
+            time.year.to_s
+          end
+        end
+      end
+
+      module Scopes
+        class ApplicationScope < Hanami::View::Scope
+          include Test::Helpers::StringFormattingHelpers
+          include Test::Helpers::TimeFormattingHelpers
+        end
+      end
+    end
+
+    ApplicationView = Class.new(base_view) do
+      config.scope = Test::Scopes::ApplicationScope
+    end
+
+    view = Class.new(ApplicationView) do
+      config.template = "custom_anonymous_scope"
+      expose :message
+
+      scope do
+        def greeting
+          shout(_locals[:message])
+        end
+
+        def shout(string)
+          upcase(string) + "!"
+        end
+      end
+    end.new
+
+    message = "Hello"
+    rendered = view.(message: message).to_s
+    expect(rendered).to include(message.upcase + "!")
+    expect(rendered).to include(Time.now.utc.year.to_s)
+  end
 end
