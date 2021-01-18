@@ -1,3 +1,9 @@
+⚠️ **The `master` branch for hanami-view 1.x has been renamed to `1.x-master`.**
+
+Please update your Gemfiles accordingly. [More detail here](https://github.com/hanami/hanami/issues/1036#issuecomment-606262007).
+
+---
+
 # Hanami::View
 
 A View layer for [Hanami](http://hanamirb.org).
@@ -17,8 +23,7 @@ Like all the other Hanami components, it can be used as a standalone framework o
 ## Status
 
 [![Gem Version](https://badge.fury.io/rb/hanami-view.svg)](https://badge.fury.io/rb/hanami-view)
-[![Build Status](https://ci.hanamirb.org/api/badges/hanami/view/status.svg)](https://ci.hanamirb.org/hanami/view)
-[![CircleCI](https://circleci.com/gh/hanami/view/tree/master.svg?style=svg)](https://circleci.com/gh/hanami/view/tree/master)
+[![CI](https://github.com/hanami/view/workflows/ci/badge.svg?branch=master)](https://github.com/hanami/view/actions?query=workflow%3Aci+branch%3Amaster)
 [![Test Coverage](https://codecov.io/gh/hanami/view/branch/master/graph/badge.svg)](https://codecov.io/gh/hanami/view)
 [![Depfu](https://badges.depfu.com/badges/4f5c8868d047d206f33893bc9194812d/overview.svg)](https://depfu.com/github/hanami/view?project=Bundler)
 [![Inline Docs](http://inch-ci.org/github/hanami/view.svg)](http://inch-ci.org/github/hanami/view)
@@ -866,6 +871,6 @@ __Hanami::View__ uses [Semantic Versioning 2.0.0](http://semver.org)
 
 ## Copyright
 
-Copyright 2014-2017 Luca Guidi – Released under MIT License
+Copyright 2014-2021 Luca Guidi – Released under MIT License
 
 This project was formerly known as Lotus (`lotus-view`).
