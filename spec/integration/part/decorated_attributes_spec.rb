@@ -135,7 +135,7 @@ RSpec.describe "Part / Decorated attributes" do
         end
       }
 
-      it "deorates attributes with the specified part class" do
+      it "decorates attributes with the specified part class" do
         expect(article_part.author).to be_a Test::AuthorPart
         expect(article_part.comments[0]).to be_a Test::CommentPart
       end
@@ -183,7 +183,7 @@ RSpec.describe "Part / Decorated attributes" do
       end
     end
 
-    it "deorates attributes using the custom part builder" do
+    it "decorates attributes using the custom part builder" do
       expect(article_part.author).to be_a Test::AuthorPart
       expect(article_part.comments[0]).to be_a Test::CommentPart
       expect(article_part.comments[0].author).to be_a Test::AuthorPart

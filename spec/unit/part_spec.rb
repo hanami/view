@@ -67,7 +67,7 @@ RSpec.describe Hanami::View::Part do
     end
 
     describe "#inspect" do
-      it "includes the clsas name, name, and value only" do
+      it "includes the class name, name, and value only" do
         expect(part.inspect).to eq "#<Hanami::View::Part name=:user value=#<Double :value>>"
       end
     end

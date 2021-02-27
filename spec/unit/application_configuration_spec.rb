@@ -9,7 +9,7 @@ RSpec.describe Hanami::View::ApplicationConfiguration do
     expect(configuration).to respond_to(:paths=)
   end
 
-  it "is does not include the inflector setting" do
+  it "does not include the inflector setting" do
     expect(configuration).not_to respond_to(:inflector)
     expect(configuration).not_to respond_to(:inflector=)
   end

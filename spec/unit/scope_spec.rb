@@ -35,7 +35,7 @@ RSpec.describe Hanami::View::Scope do
     end
 
     describe "#_format" do
-      it "returns the render environments's format" do
+      it "returns the render environment's format" do
         expect(scope._format).to eq :xml
       end
     end
