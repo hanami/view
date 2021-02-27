@@ -49,6 +49,10 @@ module Hanami
       private
 
       def build_part(name, value, **options)
+        if options[:as].is_a?(Array)
+          raise ArgumentError, "Unable to use Array for :as when exposing not array-like #{value.class}"
+        end
+
         klass = part_class(name: name, **options)
 
         klass.new(
