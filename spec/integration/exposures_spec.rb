@@ -216,7 +216,7 @@ RSpec.describe "exposures" do
     expect(rendered[:article].to_s).to eq "Great article from User: Jane"
   end
 
-  it "allows exposures to depend on each other while still using keywords args to access input data" do
+  it "allows exposures to depend on each other while still using keyword args to access input data" do
     view = Class.new(Hanami::View) do
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.layout = "app"

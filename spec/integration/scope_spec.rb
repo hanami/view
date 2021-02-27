@@ -177,7 +177,7 @@ RSpec.describe "Scopes" do
     expect(rendered).to include(Time.now.utc.year.to_s)
   end
 
-  specify "Creating a custom anonymous scope that inherites from application scope" do
+  specify "Creating a custom anonymous scope that inherits from application scope" do
     module Test
       module Helpers
         module StringFormattingHelpers

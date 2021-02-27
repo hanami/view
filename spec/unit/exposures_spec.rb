@@ -4,7 +4,7 @@ RSpec.describe Hanami::View::Exposures do
   subject(:exposures) { described_class.new }
 
   describe "#exposures" do
-    it "is empty by defalut" do
+    it "is empty by default" do
       expect(exposures.exposures).to be_empty
     end
   end

@@ -37,7 +37,7 @@ RSpec.describe "part builder" do
       )
     end
 
-    it "supports wrapping array memebers in custom part classes provided to exposure :as option" do
+    it "supports wrapping array members in custom part classes provided to exposure :as option" do
       view = Class.new(Hanami::View) do
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
@@ -53,7 +53,7 @@ RSpec.describe "part builder" do
       )
     end
 
-    it "supports wrapping an array and its members in custom part classes provided to exposure :as option as a hash" do
+    it "supports wrapping an array and its members in custom part classes provided to exposure :as option as an array" do
       view = Class.new(Hanami::View) do
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
