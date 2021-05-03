@@ -21,6 +21,8 @@ group :test do
   gem "erubi"
   gem "hamlit"
   gem "hamlit-block"
+  gem "dry-files", github: "dry-rb/dry-files", branch: "master"
+  gem "hanami-cli", github: "hanami/cli", branch: "main"
   gem "hanami", github: "hanami/hanami", branch: "unstable"
   gem "hanami-controller", github: "hanami/controller", branch: "unstable"
   gem "hanami-devtools", github: "hanami/devtools"
