@@ -2,7 +2,7 @@
 
 require "dry/configurable"
 require "dry/core/cache"
-require "dry/equalizer"
+require "dry/core/equalizer"
 require "dry/inflector"
 
 require_relative "view/application_view"

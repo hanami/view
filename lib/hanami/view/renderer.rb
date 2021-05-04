@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "dry/core/cache"
-require "dry/equalizer"
+require "dry/core/equalizer"
 require_relative "errors"
 require_relative "tilt"
 

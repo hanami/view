@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "dry/equalizer"
+require "dry/core/equalizer"
 require_relative "application_context"
 require_relative "decorated_attributes"
 
