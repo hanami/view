@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "tsort"
-require "dry/equalizer"
+require "dry/core/equalizer"
 require_relative "exposure"
 
 module Hanami
