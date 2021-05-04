@@ -1,3 +1,16 @@
+## 0.7.1 2021-02-08
+
+### Fixed
+
+- Template not found errors properly show configured paths (@adam12 in #144)
+
+### Changed
+
+- Compatible with Ruby 2.7/3.0 keyword argument handling (@flash-gordon in 4e7cefb)
+- dry-equalizer dependency dropped in favor of dry-core (@solnic)
+
+[Compare v0.7.0...v0.7.1](https://github.com/dry-rb/dry-view/compare/v0.7.0...v0.7.1)
+
 # 0.7.0 / 2019-03-06
 
 ### Added
