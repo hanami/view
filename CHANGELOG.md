@@ -1,203 +1,201 @@
-## 0.7.0 2019-03-06
+# Hanami::View
+View layer for Hanami
 
+## v2.0.0.alpha2 - 2021-05-04
 
+### Changed
+
+- [Tim Riley] Replaced entire gem with dry-view (now renamed to hanami-view). See [dry-view's documentation](https://dry-rb.org/gems/dry-view/) for its capabilities and [the dry-view changelog](CHANGELOG.dry-view.md) for its history.
+
+## v1.3.1 - 2019-01-18
 ### Added
+- [Luca Guidi] Official support for Ruby: MRI 2.6
+- [Luca Guidi] Support `bundler` 2.0+
 
-- Raise a `Dry::View::UndefinedConfigError` when a view is called but no paths have been configured (timriley in [#130][pr130])
+## v1.3.0 - 2018-10-24
+
+## v1.3.0.beta1 - 2018-08-08
+### Fixed
+- [Ferdinand Niedermann] Ensure to set `:disable_escape` option only for Slim and don't let Tilt to emit a warning for other template engines.
+- [glaszig] Ensure partial rendering to respect `format` overriding
+
+## v1.2.1 - 2018-10-16
+### Added
+- [Luca Guidi] Introduced new, backward compatible, signature to render a layout for testing purposes (eg. `ApplicationLayout.new({ format: :html }, "contents").render`)
 
 ### Fixed
+- [Luca Guidi] Ensure layout to be rendered when using HAML 5
+- [Luca Guidi] Ensure to raise `NoMethodError` when an unknown method is invoked by a view/template
 
-- Avoid a `SystemStackError` when a view is configured with a template that cannot be found on the filesystem (timriley in [#129][pr129])
+## v1.2.0 - 2018-04-06
 
-### Changed
+## v1.2.0.rc2 - 2018-04-06
 
-- [BREAKING] Move `Dry::View::Renderer::TemplateNotFoundError` to `Dry::View::TemplateNotFoundError` (timriley in [#130][pr130])
-- [BREAKING] `Dry::View::UndefinedConfigError` is raised instead of `Dry::View::UndefinedTemplateError` when a view is called but no template has been configured (timriley in [#130][pr130])
-- Stop searching upwards through parent directories when rendering a view's template (as opposed to partials) (timriley in [#130][pr130])
-- Stop searching in `shared/` subdirectories when rendering a view's template (as opposed to partials) (timriley in [#130][pr130])
-- Adjust template lookup cache keys to ensure no false hits (timriley in [#130][pr130])
+## v1.2.0.rc1 - 2018-03-30
 
-[Compare v0.6.0...v0.7.0](https://github.com/dry-rb/dry-view/compare/v0.6.0...v0.7.0)
+## v1.2.0.beta2 - 2018-03-23
 
-## 0.6.0 2019-01-30
+## v1.2.0.beta1 - 2018-02-28
 
+## v1.1.2 - 2018-04-10
+### Fixed
+- [Luca Guidi] Ensure to be able to use `exposures` even when they aren't duplicable objects
 
+## v1.1.1 - 2018-02-27
 ### Added
-
-- [BREAKING] `Dry::View#call` now returns a `Dry::View::Rendered` instance, which carries both the rendered output (accessible via `#to_s` or `#to_str`) as well as all of the view's locals, wrapped in their view parts (accessible via `#locals` or individually via `#[]`) (timriley in [#72][pr72])
-- [BREAKING] Added `Dry::View::PartBuilder` (renamed from `Dry::View::Decorator`), which resolves part classes from a namespace configured via View's `part_namespace` setting. A custom part builder can be specified via a View's `part_builder` setting. (timriley in [#80][pr80])
-- [BREAKING] Context classes can now declare decorated attributes just like part classes, via `.decorate` class-level API. Context classes are now required to inherit from `Dry::View::Context`. `Dry::View::Context` provides a `#with` method for creating copies of itself while preserving the rendering details needed for decorated attributes to work (timriley in [#89][pr89] and [#91][pr91])
-- Customizable _scope_ objects, which work like view parts, but instead of encapsulating a single value, they encapsulate a whole template or partial and all of its locals. Scopes can be created via `#scope` method in templates, parts, as well as scope classes themselves. Scope classes are resolved via a View's `scope_builder` setting, which defaults to an instance of `Dry::View::ScopeBuilder`.
-- Added `inflector` setting to View, which is used by the part and scope builders to resolve classes for a given part or scope name. Defaults to `Dry::Inflector.new` (timriley in [#80][pr80] and [#90][pr90])
-- Exposures can be sent to the layout template when defined with `layout: true` option (GustavoCaso in [#87][pr87])
-- Exposures can be left undecorated by a part when defined with `decorate: false` option (timriley in [#88][pr88])
-- Part classes have access to the current template format via a private `#_format` method (timriley in [#118][pr118])
-- Added "Tilt adapter" layer, to ensure a rendering engine compatible with dry-view's features is being used. Added adapters for "haml" and "erb" templates to ensure that "hamlit-block" and "erbse" are required and used as engines (unlike their more common counterparts, both of these engines support the implicit block capturing that is a central part of dry-view rendering behaviour) (timriley in [#106][pr106])
-- Added `renderer_engine_mapping` setting to View, which allows an explicit engine class to be provided for the rendering of a given type of template (e.g. `config.renderer_engine_mapping = {erb: Tilt::ErubiTemplate}`) (timriley in [#106][pr106])
+- [Luca Guidi] Official support for Ruby: MRI 2.5
 
 ### Fixed
+- [Alfonso Uceda] Ensure that `exposures` are properly overwritten for partials when `locals:` option is used
 
-- Preserve renderer options when chdir-ing (timriley in [889ac7b](https://github.com/dry-rb/dry-view/commit/889ac7b))
+## v1.1.0 - 2017-10-25
+
+## v1.1.0.rc1 - 2017-10-16
+
+## v1.1.0.beta3 - 2017-10-04
+
+## v1.1.0.beta2 - 2017-10-03
+### Added
+- [Luca Guidi] Added `Hanami::Layout#local` to safely access locals from layouts
+
+## v1.1.0.beta1 - 2017-08-11
+### Fixed
+- [yjukaku] Raise `Hanami::View::UnknownRenderTypeError` when an argument different from `:template` or `:partial` is passed to `render`
+
+## v1.0.1 - 2017-08-04
+### Added
+- [Luca Guidi] Compatibility with `haml` 5.0
+
+## v1.0.0 - 2017-04-06
+
+## v1.0.0.rc1 - 2017-03-31
+
+## v1.0.0.beta2 - 2017-03-17
+### Changed
+- [Luca Guidi] Remove deprecated `Hanami::View::Rendering::LayoutScope#content`
+
+## v1.0.0.beta1 - 2017-02-14
+### Added
+- [Luca Guidi] Official support for Ruby: MRI 2.4
+- [Vladimir Dralo] Allow `View#initialize` to splat keyword arguments
+
+## v0.8.0 - 2016-11-15
+### Fixed
+- [Luca Guidi] Ensure `Rendering::NullLocal` to work with HAML templates
 
 ### Changed
+- [Luca Guidi] Official support for Ruby: MRI 2.3+ and JRuby 9.1.5.0+
 
-- [BREAKING] `Dry::View::Controller` renamed to `Dry::View` (timriley in [#115][pr115])
-- [BREAKING] `Dry::View` `context` setting renamed to `default_context` (GustavoCaso in [#86][pr86])
-- Exposure values are wrapped in their view parts before being made available as exposure dependencies (timriley in [#80][pr80])
-- Exposures can access current context object through `context:` block or method parameter (timriley in [#119][pr119])
-- Improved performance due to caching various lookups (timriley and GustavoCaso in [#97][pr97])
-- `Part#inspect` output simplified to include only name and value (timriley in [#98][pr98])
-- Attribute decoration in `Part` now achieved via a prepended module, which means it is possible to decorate an attribute provided by an instance method directly on the part class, which wasn't possible with the previous `method_missing`-based approach (timriley in [#110][pr110])
-- `Part` classes can be initialized with missing `name:` and `rendering:` values, which can be useful for unit testing Part methods that don't use any rendering facilities (timriley in [#116][pr116])
-
-[Compare v0.5.4...v0.6.0](https://github.com/dry-rb/dry-view/compare/v0.5.4...v0.6.0)
-
-## 0.5.4 2019-01-06
-
-This version was yanked due to the release accidentally containing a batch of breaking changes from master.
+## v0.7.0 - 2016-07-22
+### Added
+- [Luca Guidi] Introduced `#local` for views, layouts and templates. It allows to safely access locals without raising errors in case the referenced local is missing.
 
 ### Fixed
-
-- Preserve renderer options when chdir-ing (timriley in [889ac7b](https://github.com/dry-rb/dry-view/commit/889ac7b))
-
-
-[Compare v0.5.3...v0.5.4](https://github.com/dry-rb/dry-view/compare/v0.5.3...v0.5.4)
-
-## 0.5.3 2018-10-22
-
-
-### Added
-
-- `renderer_options` setting for configuring tilt-based renderer (liseki in [#62][pr62])
+- [nessur] Find the correct partial in case of deeply nested templates.
+- [Marcello Rocha] Ensure `Hanami::Presenter` to respect method visibility of wrapped object.
+- [Luca Guidi] Ensure to use new registry when loading the framework
 
 ### Changed
+– [Luca Guidi] Drop support for Ruby 2.0 and 2.1. Official support for JRuby 9.0.5.0+.
+– [Luca Guidi] Deprecate `#content` in favor of `#local`.
 
-- Part objects wrap values more transparently, via added `#respond_to_missing?` (liseki in [#63][pr63])
-
-[Compare v0.5.2...v0.5.3](https://github.com/dry-rb/dry-view/compare/v0.5.2...v0.5.3)
-
-## 0.5.2 2018-06-13
-
-
+## v0.6.1 - 2016-02-05
 ### Changed
-
-- Only truthy view part attributes are decorated (timriley)
-
-[Compare v0.5.1...v0.5.2](https://github.com/dry-rb/dry-view/compare/v0.5.1...v0.5.2)
-
-## 0.5.1 2018-02-20
-
-
-### Added
-
-- Exposures are inherited from parent view controller classes (GustavoCaso)
-
-
-[Compare v0.5.0...v0.5.1](https://github.com/dry-rb/dry-view/compare/v0.5.0...v0.5.1)
-
-## 0.5.0 2018-01-23
-
-
-### Added
-
-- Support for parts with decorated attributes (timriley + GustavoCaso)
-- Ability to easily create another part instance via `Part#new` (GustavoCaso)
-
-
-[Compare v0.4.0...v0.5.0](https://github.com/dry-rb/dry-view/compare/v0.4.0...v0.5.0)
-
-## 0.4.0 2017-11-01
-
-
-### Added
-
-- Raise a helpful error when trying to render a template or partial that cannot be found (GustavoCaso)
-- Raise a helpful error when trying to call a view controller with no template configured (timriley)
-- Allow a default to be specified for pass-through exposures with the `default:` option (GustavoCaso)
-
-### Changed
-
-- [BREAKING] Exposures specify the input data they require using keyword arguments. This includes support for providing default values (via the keyword argument) for keys that are missing from the input data (GustavoCaso)
-- Allow `Dry::View::Part` instances to be created without explicitly passing a `renderer`. This is helpful for unit testing view parts that don't need to render anything (dNitza)
-- Partials can be nested within additional sub-directories by rendering them their relative path as their name, e.g. `render(:"foo/bar")` will look for a `foo/_bar.html.slim` template within the normal template lookup paths (timriley)
-
-[Compare v0.3.0...v0.4.0](https://github.com/dry-rb/dry-view/compare/v0.3.0...v0.4.0)
-
-## 0.3.0 2017-05-14
-
-This release reintroduces view parts in a more helpful form. You can provide your own custom view part classes to encapsulate your view logic, as well as a  decorator for custom, shared behavior arouund view part wrapping.
-
-### Added
-
-- Wrap all values passed to the template in `Dry::View::Part` objects
-- Added a `decorator` config to `Dry::View::Controller`, with a default `Dry::View::Decorator` that wraps the exposure values in `Dry::View::Part` objects (as above). Provide your own part classes by passing an `:as` option to your exposures, e.g. `expose :user, as: MyApp::UserPart`
-
-### Changed
-
-- [BREAKING] Partial rendering in templates requires an explicit `render` method call instead of method_missing behaviour usinig the partial's name (e.g. `<%= render :my_partial %>` instead of `<%= my_partial %>`)
-
-[Compare v0.2.2...v0.3.0](https://github.com/dry-rb/dry-view/compare/v0.2.2...v0.3.0)
-
-## 0.2.2 2017-01-31
-
-
-### Changed
-
-- Make input passthrough exposures (when there is no block or matching instance metod) return nil instead of raise in the case of a missing input key (timriley)
-
-[Compare v0.2.1...v0.2.2](https://github.com/dry-rb/dry-view/compare/v0.2.1...v0.2.2)
-
-## 0.2.1 2017-01-30
-
+- [Steve Hook] Preload partial templates in order to boost performances for partials rendering (2x faster)
 
 ### Fixed
+- [Luca Guidi] Disable Slim autoescape to use `Hanami::View`'s feature
 
-- Exposure blocks now have access to the view controller instance when they're called (timriley)
+## v0.6.0 - 2016-01-22
+### Changed
+- [Luca Guidi] Renamed the project
 
-
-[Compare v0.2.0...v0.2.1](https://github.com/dry-rb/dry-view/compare/v0.2.0...v0.2.1)
-
-## 0.2.0 2017-01-30
-
-This release is a major reorientation for dry-view, and it should allow for more natural, straightforward template authoring.
-
+## v0.5.0 - 2016-01-12
 ### Added
+- [Luca Guidi] Added `Lotus::View::Configuration#default_encoding` to set the encoding for templates
 
-- Will render templates using any Tilt-supported engine, based on the template's final file extension (e.g. `hello.html.slim` will use Slim). For thread-safety, be sure to explicitly require any engine gems you intend to use. (timriley)
-- `expose` (and `expose_private`) `Dry::View::Controller` class methods allow you to more easily declare and prepare the data for your template (timriley)
-- Added `Dry::View::Scope`, which is the scope used for rendering templates. This includes the data from the exposures along with the context object (timriley)
-
-### Changed
-
-- [BREAKING] `Dry::View::Layout` renamed to `Dry::View::Controller`. The "view controller" name better represents this object's job: to  (timriley)
-- [BREAKING] `Dry::View::Controller`'s `name` setting is replaced by `template`, which also supports falsey values to disable layout rendering entirely (timriley)
-- [BREAKING] `Dry::View::Controller`'s `formats` setting is replaced by `default_format`, which expects a simple string or symbol. The default value is `:html`. (timriley)
-- [BREAKING] `Dry::View::Controller`'s `root` setting is replaced by `paths`, which can now accept an array of one or more directories. These will be searched for templates in order, with the first match winning (timriley)
-- [BREAKING] `Dry::View::Controller`'s `scope` setting is removed and replaced by `context`, which will be made available to all templates rendered from a view controller (layouts and partials inculded), not just the layout (timriley)
-- [BREAKING] View parts have been replaced by a simple `Scope`. Data passed to the templates can be accessed directly, rather than wrapped up in a view part. (timriley)
-- [BREAKING] With view parts removed, partials can only be rendered by top-level method calls within templates (timriley)
-- Ruby version 2.1.0 is now the earliest supported version (timriley)
-
-[Compare v0.1.1...v0.2.0](https://github.com/dry-rb/dry-view/compare/v0.1.1...v0.2.0)
-
-## 0.1.1 2016-07-07
-
+### Fixed
+- [Luca Guidi] Let exceptions to be raised as they occur in rendering context. This fixes misleading backtraces for exceptions.
+- [Martin Rubi] Raise a `Lotus::View::MissingTemplateError` when rendering a missing partial from a template
+- [Luca Guidi] Fix for `template.erb is not valid US-ASCII (Encoding::InvalidByteSequenceError)` when system encoding is not set
 
 ### Changed
+- [Liam Dawson] Introduced `Lotus::View::Error` and let all the framework exceptions to inherit from it.
 
-- Wrap `page` object exposed to layout templates in a part object, so it offers behaviour that is consistent with the part objects that template authors work with on other templates (timriley)
-- Render template content first, before passing that content to the layout. This makes "content_for"-style behaviours possible, where the template stores some data that the layout can then use later (timriley)
-- Configure default template encoding to be UTF-8, fixing some issues with template rendering on deployed sites (gotar)
-
-[Compare v0.1.0...v0.1.1](https://github.com/dry-rb/dry-view/compare/v0.1.0...v0.1.1)
-
-## 0.1.0 2016-03-28
-
-
+## v0.4.4 - 2015-09-30
 ### Added
+- [Luca Guidi] Autoescape for layout helpers.
 
-- – `Dry::View::Layout` supports multiple view template formats. Configure format/engine pairs (e.g. `{html: :slim, text: :erb}`) on the `formats` setting. The first format becomes the default. Request specific formats when calling the view, e.g. `my_view.call(format: :text)`.
+## v0.4.3 - 2015-07-10
+### Fixed
+- [Farrel Lifson] Force partial finder to be explicit when to templates have the same name.
+
+## v0.4.2 - 2015-06-23
+### Fixed
+- [Tom Kadwill] Ensure views to use methods defined by the associated layout.
+
+## v0.4.1 - 2015-05-22
+### Added
+- [Luca Guidi] Introduced `#content` to render optional contents in a different context (eg. a view sets a page specific javascript in the application template footer).
+
+## v0.4.0 - 2015-03-23
+### Changed
+- [Luca Guidi] Autoescape concrete and virtual methods from presenters
+- [Luca Guidi] Autoescape concrete and virtual methods from views
+
+### Fixed
+- [Tom Kadwill] Improve error message for undefined method in view
+- [Luca Guidi] Ensure that layouts will include modules from `Configuration#prepare`
+
+## v0.3.0 - 2014-12-23
+### Added
+- [Trung Lê] When duplicate the framework, also duplicate `Presenter`
+- [Benny Klotz] Introduced `Scope#class`, `#inspect`, `LayoutScope#class` and `#inspect`
+- [Alfonso Uceda Pompa & Trung Lê] Introduced `Configuration#prepare`
+- [Luca Guidi] Implemented "respond to" logic for `Lotus::View::Scope` (`respond_to?` and `respond_to_missing?`)
+- [Luca Guidi] Implemented "respond to" logic for `Lotus::Layout` (`respond_to?` and `respond_to_missing?`)
+- [Jeremy Stephens] Allow view concrete methods that accept a block to be invoked from templates
+- [Peter Suschlik] Implemented "respond to" logic for `Lotus::Presenter` (`respond_to?` and `respond_to_missing?`)
+- [Luca Guidi] Official support for Ruby 2.2
 
 ### Changed
+- [Alfonso Uceda Pompa] Raise an exception when a layout doesn't have an associated template
 
-- – Extracted from rodakase and renamed to dry-view. `Rodakase::View` is now `Dry::View`.
+### Fixed
+- [Luca Guidi] Ensure that concrete methods in layouts are available in templates
+- [Luca Guidi] Ensure to associate the right layout to a view in case fo duplicated framework
+- [Luca Guidi] Safe override of Ruby's top level methods in Scope. (Eg. use `select` from a view, not from `::Kernel`)
+
+## v0.2.0 - 2014-06-23
+### Added
+- [Luca Guidi] Introduced `Configuration#duplicate`
+- [Luca Guidi] Introduced `Configuration#layout` to define the layout that all the views will use
+- [Luca Guidi] Introduced `Configuration#load_paths` to define several sources where to lookup for templates
+- [Luca Guidi] Introduced `Configuration#root` to define the root path where to find templates
+- [Luca Guidi] Introduced `Lotus::View::Configuration`
+- [Grant Ammons] Allow view concrete methods with arity > 0 to be invoked from templates
+- [Luca Guidi] Official support for Ruby 2.1
+
+### Changed
+- [Luca Guidi] `Rendering::TemplatesFinder` now look recursively for templates, starting from the root.
+- [Luca Guidi] Removed `View.layout=`
+- [Luca Guidi] Removed `View.root=`
+
+### Fixed
+- [Luca Guidi] Ensure outermost locals to not shadow innermost inside templates/partials
+
+## v0.1.0 - 2014-03-23
+### Added
+- [Luca Guidi] Allow custom rendering policy via `Action#render` override. This bypasses the template lookup and rendering.
+- [Luca Guidi] Introduced `Lotus::Presenter`
+- [Luca Guidi] Introduced templates rendering from templates and layouts
+- [Luca Guidi] Introduced partials rendering from templates and layouts
+- [Luca Guidi] Introduced layouts support
+- [Luca Guidi] Introduced `Lotus::View.load!` as entry point to load views and templates
+- [Luca Guidi] Allow to setup template name via `View.template`
+- [Luca Guidi] Rendering context also considers locals passed to the constructor
+- [Luca Guidi] Introduced `View.format` as DSL to declare which format to handle
+- [Luca Guidi] Introduced view subclasses as way to handle different formats (mime types)
+- [Luca Guidi] Introduced multiple templates per each View
+- [Luca Guidi] Implemented basic rendering with templates
+- [Luca Guidi] Official support for Ruby 2.0
