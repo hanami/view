@@ -2,11 +2,12 @@
 
 source "https://rubygems.org"
 
-git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
-
 eval_gemfile "Gemfile.devtools"
 
 gemspec
+
+gem "dry-configurable", github: "dry-rb/dry-configurable"
+gem "dry-system", github: "dry-rb/dry-system"
 
 group :tools do
   gem "hotch"

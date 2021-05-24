@@ -56,9 +56,9 @@ module Hanami
     #
     #   @api public
     # @!scope class
-    setting :paths do |paths|
+    setting :paths, constructor: -> paths {
       Array(paths).map { |path| Path[path] }
-    end
+    }
 
     # @overload config.template=(name)
     #   Set the name of the template for rendering this view. Template name
@@ -96,7 +96,7 @@ module Hanami
     #   @param name [String, FalseClass, nil] layout name, or false to indicate no layout
     #   @api public
     # @!scope class
-    setting :layout, false
+    setting :layout, default: false
 
     # @overload config.layouts_dir=(dir)
     #   Set the name of the directory (within the configured `paths`) holding
@@ -105,7 +105,7 @@ module Hanami
     #   @param dir [String] directory name
     #   @api public
     # @!scope class
-    setting :layouts_dir, "layouts"
+    setting :layouts_dir, default: "layouts"
 
     # @overload config.scope=(scope_class)
     #   Set the scope class to use when rendering the view's template.
@@ -131,7 +131,7 @@ module Hanami
     #   @param context [Hanami::View::Context] context object
     #   @api public
     # @!scope class
-    setting :default_context, Context.new.freeze
+    setting :default_context, default: Context.new.freeze
 
     # @overload config.default_format=(format)
     #   Set the default format to use when rendering.
@@ -141,7 +141,7 @@ module Hanami
     #   @param format [Symbol]
     #   @api public
     # @!scope class
-    setting :default_format, :html
+    setting :default_format, default: :html
 
     # @overload config.scope_namespace=(namespace)
     #   Set a namespace that will be searched when building scope classes.
@@ -162,7 +162,7 @@ module Hanami
     #   @param part_builder [Class]
     #   @api public
     # @!scope class
-    setting :part_builder, PartBuilder
+    setting :part_builder, default: PartBuilder
 
     # @overload config.scope_namespace=(namespace)
     #   Set a namespace that will be searched when building scope classes.
@@ -183,7 +183,7 @@ module Hanami
     #   @param scope_builder [Class]
     #   @api public
     # @!scope class
-    setting :scope_builder, ScopeBuilder
+    setting :scope_builder, default: ScopeBuilder
 
     # @overload config.inflector=(inflector)
     #   Set an inflector to provide to the part_builder and scope_builder.
@@ -193,7 +193,7 @@ module Hanami
     #   @param inflector
     #   @api public
     # @!scope class
-    setting :inflector, Dry::Inflector.new
+    setting :inflector, default: Dry::Inflector.new
 
     # @overload config.renderer_options=(options)
     #   A hash of options to pass to the template engine. Template engines are
@@ -208,9 +208,9 @@ module Hanami
     #   @param options [Hash] renderer options
     #   @api public
     # @!scope class
-    setting :renderer_options, DEFAULT_RENDERER_OPTIONS do |options|
+    setting :renderer_options, default: DEFAULT_RENDERER_OPTIONS, constructor: -> options {
       DEFAULT_RENDERER_OPTIONS.merge(options.to_h).freeze
-    end
+    }
 
     # @overload config.renderer_engine_mapping=(mapping)
     #   A hash specifying the (Tilt-compatible) template engine class to use
