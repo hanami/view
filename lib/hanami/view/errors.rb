@@ -25,5 +25,20 @@ module Hanami
         super(msg)
       end
     end
+
+    # Error raised when layout could not be found within a view's configured
+    # paths
+    #
+    # @api private
+    class LayoutNotFoundError < StandardError
+      def initialize(layout_name, lookup_paths)
+        msg = [
+          "Layout +#{layout_name}+ could not be found in paths:",
+          lookup_paths.map { |path| " - #{path}" }
+        ].join("\n\n")
+
+        super(msg)
+      end
+    end
   end
 end

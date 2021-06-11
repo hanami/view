@@ -33,6 +33,11 @@ RSpec.describe Hanami::View do
         "<!DOCTYPE html><html><head><title>Test</title></head><body><h1>User</h1><p>Jane</p></body></html>"
       )
     end
+
+    it "raises error when layout cannot be found" do
+      view.config.layout = "invalid"
+      expect { view.(context: context).to_s }.to raise_error Hanami::View::LayoutNotFoundError, /Layout \+invalid\+/
+    end
   end
 
   describe "renderer options" do
