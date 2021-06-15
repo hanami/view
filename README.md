@@ -1,9 +1,3 @@
-⚠️ **The `master` branch for hanami-view 1.x has been renamed to `1.x-master`.**
-
-Please update your Gemfiles accordingly. [More detail here](https://github.com/hanami/hanami/issues/1036#issuecomment-606262007).
-
----
-
 # Hanami::View
 
 A View layer for [Hanami](http://hanamirb.org).
@@ -20,11 +14,15 @@ If you ever used [Mustache](http://mustache.github.io/), you are already aware o
 
 Like all the other Hanami components, it can be used as a standalone framework or within a full Hanami application.
 
+## Version
+
+**This branch contains the code for `hanami-view` 1.3.x.**
+
 ## Status
 
 [![Gem Version](https://badge.fury.io/rb/hanami-view.svg)](https://badge.fury.io/rb/hanami-view)
-[![CI](https://github.com/hanami/view/workflows/ci/badge.svg?branch=master)](https://github.com/hanami/view/actions?query=workflow%3Aci+branch%3Amaster)
-[![Test Coverage](https://codecov.io/gh/hanami/view/branch/master/graph/badge.svg)](https://codecov.io/gh/hanami/view)
+[![CI](https://github.com/hanami/view/workflows/ci/badge.svg?branch=1.3.x)](https://github.com/hanami/view/actions?query=workflow%3Aci+branch%3A1.3.x)
+[![Test Coverage](https://codecov.io/gh/hanami/view/branch/1.3.x/graph/badge.svg)](https://codecov.io/gh/hanami/view)
 [![Depfu](https://badges.depfu.com/badges/4f5c8868d047d206f33893bc9194812d/overview.svg)](https://depfu.com/github/hanami/view?project=Bundler)
 [![Inline Docs](http://inch-ci.org/github/hanami/view.svg)](http://inch-ci.org/github/hanami/view)
 
