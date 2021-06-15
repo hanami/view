@@ -1,28 +1,52 @@
-[gem]: https://rubygems.org/gems/hanami-view
-[actions]: https://github.com/hanami/view/actions
-[codacy]: https://www.codacy.com/gh/hanami/view
-[chat]: https://dry-rb.zulipchat.com
-[inchpages]: http://inch-ci.org/github/hanami/view
+# Hanami::View
 
-# hanami-view [![Join the chat at https://dry-rb.zulipchat.com](https://img.shields.io/badge/dry--rb-join%20chat-%23346b7a.svg)][chat]
+A view layer for [Hanami](http://hanamirb.org)
 
-[![Gem Version](https://badge.fury.io/rb/hanami-view.svg)][gem]
-[![CI Status](https://github.com/hanami/view/workflows/ci/badge.svg)][actions]
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fe8a45d76d8b45f6a680a29c48b43a99)][codacy]
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/fe8a45d76d8b45f6a680a29c48b43a99)][codacy]
-[![Inline docs](http://inch-ci.org/github/hanami/view.svg?branch=master)][inchpages]
+## Version
 
-## Links
+**This branch contains the code for `hanami-view` 2.x.**
 
-* [User documentation](http://dry-rb.org/gems/hanami-view)
-* [API documentation](http://rubydoc.info/gems/hanami-view)
+## Status
 
-## Supported Ruby versions
+[![Gem Version](https://badge.fury.io/rb/hanami-view.svg)](https://badge.fury.io/rb/hanami-view)
+[![CI](https://github.com/hanami/view/workflows/ci/badge.svg?branch=main)](https://github.com/hanami/view/actions?query=workflow%3Aci+branch%3Amain)
+[![Test Coverage](https://codecov.io/gh/hanami/view/branch/main/graph/badge.svg)](https://codecov.io/gh/hanami/view)
+[![Depfu](https://badges.depfu.com/badges/7cd17419fba78b726be1353118fb01de/overview.svg)](https://depfu.com/github/hanami/view?project=Bundler)
+[![Inline Docs](http://inch-ci.org/github/hanami/view.svg)](http://inch-ci.org/github/hanami/view)
 
-This library officially supports the following Ruby versions:
+## Contact
 
-* MRI >= `2.4`
-* jruby >= `9.2`
+* Home page: http://hanamirb.org
+* Community: http://hanamirb.org/community
+* Guides: https://guides.hanamirb.org
+* Mailing List: http://hanamirb.org/mailing-list
+* API Doc: http://rdoc.info/gems/hanami-view
+* Bugs/Issues: https://github.com/hanami/view/issues
+* Chat: http://chat.hanamirb.org
+
+## Rubies
+
+__Hanami::view__ supports Ruby (MRI) 2.6+
+
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem "hanami/view"
+```
+
+And then execute:
+
+```shell
+$ bundle
+```
+
+Or install it yourself as:
+
+```shell
+$ gem install hanami-view
+```
 
 ## License
 

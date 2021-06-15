@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
-  spec.metadata['changelog_uri']     = 'https://github.com/hanami/view/blob/master/CHANGELOG.md'
+  spec.metadata['changelog_uri']     = 'https://github.com/hanami/view/blob/main/CHANGELOG.md'
   spec.metadata['source_code_uri']   = 'https://github.com/hanami/view'
   spec.metadata['bug_tracker_uri']   = 'https://github.com/hanami/view/issues'
 
