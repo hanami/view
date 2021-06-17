@@ -24,9 +24,9 @@ group :test do
   gem "hamlit-block"
   gem "dry-files", github: "dry-rb/dry-files", branch: "master"
   gem "hanami-cli", github: "hanami/cli", branch: "main"
-  gem "hanami", github: "hanami/hanami", branch: "unstable"
-  gem "hanami-controller", github: "hanami/controller", branch: "unstable"
-  gem "hanami-devtools", github: "hanami/devtools"
+  gem "hanami", github: "hanami/hanami", branch: "main"
+  gem "hanami-controller", github: "hanami/controller", branch: "main"
+  gem "hanami-devtools", github: "hanami/devtools", branch: "main"
   gem "rack", ">= 2.0.6"
   gem "slim", "~> 4.0"
 end
