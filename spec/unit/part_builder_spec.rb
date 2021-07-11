@@ -163,6 +163,14 @@ RSpec.describe Hanami::View::PartBuilder do
           expect(part.profile).to be_a Test::Parts::Profile
         end
 
+        describe "alternative names provided via :as option" do
+          let(:options) { {as: [:admin_user, :admin_collection]} }
+
+          it "raises ArgumentError" do
+            expect { part }.to raise_error(ArgumentError, /Unable to use Array for :as/)
+          end
+        end
+
         describe "alternative name provided via :as option" do
           let(:options) { {as: :admin_user} }
 
