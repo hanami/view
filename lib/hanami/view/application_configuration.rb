@@ -8,7 +8,7 @@ module Hanami
     class ApplicationConfiguration
       include Dry::Configurable
 
-      setting :parts_path, "views/parts"
+      setting :parts_path, default: "views/parts"
 
       def initialize(*)
         super
