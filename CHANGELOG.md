@@ -5,6 +5,9 @@ View layer for Hanami
 ### Added
 - [Pablo Vicente] Raise `LayoutNotFoundError` exception with friendlier, more specific error message when layouts cannot be found
 
+### Changed
+- [Tim Riley] (Internal) Updated settings to use updated dry-configurable `setting` 0.13.0 API
+
 ## v2.0.0.alpha2 - 2021-05-04
 ### Changed
 - [Tim Riley] Replaced entire gem with dry-view (now renamed to hanami-view). See [dry-view's documentation](https://dry-rb.org/gems/dry-view/) for its capabilities and [the dry-view changelog](CHANGELOG.dry-view.md) for its history.
