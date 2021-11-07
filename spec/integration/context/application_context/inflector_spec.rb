@@ -5,7 +5,6 @@ RSpec.describe "Application context / Inflector", :application_integration do
   before do
     module TestApp
       class Application < Hanami::Application
-        config.autoloader = nil
       end
     end
 

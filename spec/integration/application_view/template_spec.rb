@@ -9,7 +9,6 @@ RSpec.describe "Application view / Template", :application_integration do
   before do
     module TestApp
       class Application < Hanami::Application
-        config.autoloader = nil
       end
     end
 
