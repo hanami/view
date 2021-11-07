@@ -7,7 +7,6 @@ RSpec.describe "Application view / Inflector", :application_integration do
   before do
     module TestApp
       class Application < Hanami::Application
-        config.autoloader = nil
       end
     end
 
@@ -40,7 +39,7 @@ RSpec.describe "Application view / Inflector", :application_integration do
   context "custom inflections configured" do
     let(:application_class_config) {
       proc do
-        config.inflector do |inflections|
+        config.inflections do |inflections|
           inflections.acronym "NBA"
         end
       end
