@@ -1,7 +1,7 @@
 # Hanami::View
 View layer for Hanami
 
-## v2.0.0.alpha3 - Unreleased
+## v2.0.0.alpha3 - 2021-11-09
 ### Added
 - [Pablo Vicente] Raise `LayoutNotFoundError` exception with friendlier, more specific error message when layouts cannot be found
 
