@@ -23,8 +23,9 @@ module Hanami
         super
 
         # When inheriting within an Hanami app, add application context behavior
-        if application_provider(subclass)
-          subclass.include ApplicationContext
+        provider = application_provider(subclass)
+        if provider
+          subclass.include ApplicationContext.new(provider)
         end
       end
 
