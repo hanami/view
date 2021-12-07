@@ -1,5 +1,5 @@
 require "hanami"
-require "hanami/view/context"
+require "hanami/view/application_context"
 
 RSpec.describe "Application context / Request", :application_integration do
   before do
@@ -14,7 +14,7 @@ RSpec.describe "Application context / Request", :application_integration do
   let(:context_class) {
     module TestApp
       module View
-        class Context < Hanami::View::Context
+        class Context < Hanami::View::ApplicationContext
         end
       end
     end
