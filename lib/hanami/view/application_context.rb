@@ -6,12 +6,12 @@ require "hanami/component"
 module Hanami
   class View
     class ApplicationContext < Context
-      include Hanami::Component
+      extend Hanami::Component
 
       attr_reader :inflector
 
       def initialize(**options)
-        @inflector = options[:inflector] || application.inflector
+        @inflector = options[:inflector] || self.class.application.inflector
         super(**options)
       end
 
