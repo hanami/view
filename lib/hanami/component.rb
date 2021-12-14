@@ -1,4 +1,9 @@
 module Hanami
+  # Adds knowledge about an active Hanami app
+  #
+  # Some of this knowledge is fetched by just forwarding to {Hanami} itself, like
+  # {#application}. Other, is dependant on the hierarchy of the extending class
+  # or module within the Hanami application, like {#provider}.
   module Component
     def application
       raise "A Hanami application must exist" unless Hanami.application?
@@ -12,11 +17,9 @@ module Hanami
       # [Admin, Main, MyApp] or [MyApp::Admin, MyApp::Main, MyApp]
       providers = application.slices.values + [application]
 
-      component_name = name
+      return unless name
 
-      return unless component_name
-
-      providers.detect { |provider| component_name.include?(provider.namespace.to_s) }
+      providers.detect { |provider| name.include?(provider.namespace.to_s) }
     end
   end
 end
