@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "hanami"
-require "hanami/view"
+require "hanami/view/application_view"
 
 RSpec.describe "Application view / Part namespace", :application_integration do
   subject(:template) { view_class.config.part_namespace }
@@ -25,7 +25,7 @@ RSpec.describe "Application view / Part namespace", :application_integration do
   context "view in slice" do
     let(:view_class) {
       module Main
-        class View < Hanami::View
+        class View < Hanami::View::ApplicationView
         end
       end
 
@@ -97,7 +97,7 @@ RSpec.describe "Application view / Part namespace", :application_integration do
   context "view in application" do
     let(:view_class) {
       module TestApp
-        class View < Hanami::View
+        class View < Hanami::View::ApplicationView
         end
       end
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "hanami"
-require "hanami/view"
+require "hanami/view/application_view"
 
 RSpec.describe "Application view / Template", :application_integration do
   subject(:template) { view_class.config.template }
@@ -25,7 +25,7 @@ RSpec.describe "Application view / Template", :application_integration do
   context "Direct Hanami::View subclass" do
     let(:view_class) {
       module Main
-        class View < Hanami::View
+        class View < Hanami::View::ApplicationView
         end
       end
 
@@ -40,7 +40,7 @@ RSpec.describe "Application view / Template", :application_integration do
   context "Deeper Hanami::View subclass" do
     let(:view_class) {
       module Main
-        class View < Hanami::View
+        class View < Hanami::View::ApplicationView
         end
 
         class ArticleIndex < View
@@ -64,7 +64,7 @@ RSpec.describe "Application view / Template", :application_integration do
 
     let(:view_class) {
       module Main
-        class View < Hanami::View
+        class View < Hanami::View::ApplicationView
         end
 
         module MyViews

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "hanami"
-require "hanami/view"
+require "hanami/view/application_view"
 
 RSpec.describe "Application view / Inflector", :application_integration do
   before do
@@ -23,7 +23,7 @@ RSpec.describe "Application view / Inflector", :application_integration do
 
   subject(:view_class) {
     module Main
-      class View < Hanami::View
+      class View < Hanami::View::ApplicationView
       end
     end
 

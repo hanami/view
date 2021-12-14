@@ -1,6 +1,8 @@
 module Hanami
   module Component
     def application
+      raise "A Hanami application must exist" unless Hanami.application?
+
       Hanami.application
     end
 

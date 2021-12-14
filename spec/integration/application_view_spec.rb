@@ -1,22 +1,14 @@
 # frozen_string_literal: true
 
 require "hanami"
-require "hanami/view"
+require "hanami/view/application_view"
 
 RSpec.describe "Application views" do
   context "Outside Hanami app" do
-    subject(:view_class) { Class.new(Hanami::View) }
-
-    before do
-      allow(Hanami).to receive(:respond_to?).with(:application?) { nil }
-    end
-
-    it "is not an application view" do
-      expect(view_class.ancestors).not_to include(a_kind_of(Hanami::View::ApplicationView))
-    end
+    subject(:view_class) { Class.new(Hanami::View::ApplicationView) }
 
     it "does not configure the view" do
-      expect(view_class.config.paths).to eq []
+      expect { subject }.to raise_error /application must exist/
     end
   end
 
@@ -46,7 +38,7 @@ RSpec.describe "Application views" do
 
       let(:base_view_class) {
         module Main
-          class View < Hanami::View
+          class View < Hanami::View::ApplicationView
           end
         end
 
@@ -55,10 +47,6 @@ RSpec.describe "Application views" do
 
       describe "base view class" do
         subject(:view_class) { base_view_class }
-
-        it "is an application view" do
-          expect(view_class.ancestors).to include(a_kind_of(Hanami::View::ApplicationView))
-        end
 
         describe "config" do
           subject(:config) { view_class.config }
@@ -133,7 +121,7 @@ RSpec.describe "Application views" do
 
       let(:base_view_class) {
         module TestApp
-          class View < Hanami::View
+          class View < Hanami::View::ApplicationView
           end
         end
 
@@ -142,10 +130,6 @@ RSpec.describe "Application views" do
 
       describe "base view class" do
         subject(:view_class) { base_view_class }
-
-        it "is an application view" do
-          expect(view_class.ancestors).to include(a_kind_of(Hanami::View::ApplicationView))
-        end
 
         describe "config" do
           subject(:config) { view_class.config }
