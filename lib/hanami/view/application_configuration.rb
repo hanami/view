@@ -41,7 +41,7 @@ module Hanami
       attr_reader :base_config
 
       def configure_defaults
-        self.paths = ["web/templates"]
+        self.paths = ["templates"]
         self.template_inference_base = "views"
         self.layout = "application"
       end
