@@ -20,15 +20,18 @@ module Hanami
 
       def define_initialize
         inflector = application.inflector
+        routes = application[:routes_helper] if application.key?(:routes_helper)
 
         define_method :initialize do |**options|
           @inflector = options[:inflector] || inflector
+          @routes = options[:routes] || routes
           super(**options)
         end
       end
 
       module InstanceMethods
         attr_reader :inflector
+        attr_reader :routes
 
         def request
           _options.fetch(:request)
