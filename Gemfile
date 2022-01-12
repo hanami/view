@@ -6,9 +6,6 @@ eval_gemfile "Gemfile.devtools"
 
 gemspec
 
-gem "dry-configurable", github: "dry-rb/dry-configurable"
-gem "dry-system", github: "dry-rb/dry-system"
-
 group :tools do
   gem "hotch"
   gem "pry-byebug", platform: :mri

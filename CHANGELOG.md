@@ -1,6 +1,10 @@
 # Hanami::View
 View layer for Hanami
 
+## v2.0.0.alpha5 - 2022-01-12
+### Added
+- [Marc Busqué] Automatically provide access to Hanami application routes helper as `routes` in default application view context (`Hanami::View::ApplicationContext`)
+
 ## v2.0.0.alpha3 - 2021-11-09
 ### Added
 - [Pablo Vicente] Raise `LayoutNotFoundError` exception with friendlier, more specific error message when layouts cannot be found
