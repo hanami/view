@@ -17,6 +17,8 @@ on:
   pull_request:
     branches:
       - main
+  schedule:
+    - cron: "30 4 * * *"
   create:
 
 jobs:
@@ -37,6 +39,13 @@ jobs:
       CODACY_RUN_LOCAL: true
       CODACY_PROJECT_TOKEN: ${{secrets.CODACY_PROJECT_TOKEN}}
     steps:
+      - uses: ravsamhq/notify-slack-action@v1
+        if: always()
+        with:
+          status: ${{ job.status }}
+          notify_when: "failure"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - uses: actions/checkout@v1
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1

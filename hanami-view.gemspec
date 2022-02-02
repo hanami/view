@@ -18,6 +18,7 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'bin'
   spec.executables   = []
   spec.require_paths = ['lib']
+  spec.metadata["rubygems_mfa_required"] = "true"
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
   spec.metadata['changelog_uri']     = 'https://github.com/hanami/view/blob/main/CHANGELOG.md'

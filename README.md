@@ -26,7 +26,7 @@ A view layer for [Hanami](http://hanamirb.org)
 
 ## Rubies
 
-__Hanami::view__ supports Ruby (MRI) 2.6+
+__Hanami::view__ supports Ruby (MRI) 3.0+
 
 ## Installation
 
