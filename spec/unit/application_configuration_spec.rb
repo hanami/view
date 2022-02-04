@@ -28,7 +28,7 @@ RSpec.describe Hanami::View::ApplicationConfiguration do
     describe "paths" do
       it 'is ["web/templates"]' do
         expect(configuration.paths).to match [
-          an_object_satisfying { |path| path.dir.to_s == "web/templates" }
+          an_object_satisfying { |path| path.dir.to_s == "templates" }
         ]
       end
     end
