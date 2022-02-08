@@ -8,7 +8,7 @@ RSpec.describe "Application context / Request", :application_integration do
       end
     end
 
-    Hanami.init
+    Hanami.prepare
   end
 
   let(:context_class) {

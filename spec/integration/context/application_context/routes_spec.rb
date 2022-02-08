@@ -36,7 +36,7 @@ RSpec.describe "Application context / Routes", :application_integration do
         end
       RUBY
 
-      require "hanami/init"
+      require "hanami/prepare"
 
       context = TestApp::View::Context.new
       expect(context.routes.path(:root)).to eq "/"
@@ -48,7 +48,7 @@ RSpec.describe "Application context / Routes", :application_integration do
       class Application < Hanami::Application
       end
     end
-    Hanami.init
+    Hanami.prepare
     module TestApp
       module View
         class Context < Hanami::View::Context
