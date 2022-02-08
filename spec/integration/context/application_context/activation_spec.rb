@@ -9,7 +9,7 @@ RSpec.describe "Application context / Activation", :application_integration do
         end
       end
 
-      Hanami.init
+      Hanami.prepare
     end
 
     subject(:context_class) {

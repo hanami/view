@@ -41,7 +41,7 @@ RSpec.describe "Application views" do
 
         Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
 
-        Hanami.init
+        Hanami.prepare
       end
 
       let(:base_view_class) {
@@ -128,7 +128,7 @@ RSpec.describe "Application views" do
 
     context "Base view defined directly inside application" do
       before do
-        Hanami.init
+        Hanami.prepare
       end
 
       let(:base_view_class) {
