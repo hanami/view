@@ -19,7 +19,7 @@ RSpec.describe "Application view / Template", :application_integration do
 
     Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
 
-    Hanami.init
+    Hanami.prepare
   end
 
   context "Direct Hanami::View subclass" do

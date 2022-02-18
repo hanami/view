@@ -8,7 +8,7 @@ RSpec.describe "Application context / Inflector", :application_integration do
       end
     end
 
-    Hanami.init
+    Hanami.prepare
   end
 
   let(:context_class) {

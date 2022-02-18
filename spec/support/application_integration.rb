@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "tmpdir"
 require "hanami/devtools/integration/files"
 require "hanami/devtools/integration/with_tmp_directory"
 
@@ -30,7 +31,7 @@ RSpec.configure do |config|
 
     $LOAD_PATH.replace(@load_paths)
     $LOADED_FEATURES.delete_if do |feature_path|
-      feature_path =~ %r{hanami/(setup|init|boot|application/container/boot)}
+      feature_path =~ %r{hanami/(setup|prepare|boot|application/container/providers)}
     end
 
     application_modules.each do |app_module|

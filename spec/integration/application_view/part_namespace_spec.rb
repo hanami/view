@@ -19,7 +19,7 @@ RSpec.describe "Application view / Part namespace", :application_integration do
 
     Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
 
-    Hanami.init
+    Hanami.prepare
   end
 
   context "view in slice" do

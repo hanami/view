@@ -1,6 +1,13 @@
 # Hanami::View
 View layer for Hanami
 
+## v2.0.0.alpha6 - 2022-02-10
+### Added
+- [Luca Guidi] Official support for Ruby: MRI 3.0 and 3.1
+
+### Changed
+- [Luca Guidi] Drop support for Ruby: MRI 2.3, 2.4, 2.5, 2.6, and 2.7.
+
 ## v2.0.0.alpha5 - 2022-01-12
 ### Added
 - [Marc Busqué] Automatically provide access to Hanami application routes helper as `routes` in default application view context (`Hanami::View::ApplicationContext`)
