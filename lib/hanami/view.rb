@@ -235,9 +235,10 @@ module Hanami
     def self.inherited(subclass)
       super
 
-      # If inheriting directly from Hanami::View within an Hanami app, configure
-      # the view for the application
-      if subclass.superclass == View && (provider = application_provider(subclass))
+      # When inheriting within an Hanami app, and the application provider has
+      # changed from the superclass, (re-)configure the action for the provider,
+      # i.e. for the slice and/or the application itself
+      if (provider = application_provider(subclass)) && provider != application_provider(subclass.superclass)
         subclass.include ApplicationView.new(provider)
       end
     end

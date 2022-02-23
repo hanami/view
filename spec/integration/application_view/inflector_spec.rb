@@ -17,17 +17,26 @@ RSpec.describe "Application view / Inflector", :application_integration do
 
     Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
     Hanami.prepare
+
+    module TestApp
+      module View
+        class Base < Hanami::View
+        end
+      end
+    end
   end
 
   let(:application_class_config) { proc {} }
 
   subject(:view_class) {
     module Main
-      class View < Hanami::View
+      module View
+        class Base < TestApp::View::Base
+        end
       end
     end
 
-    Main::View
+    Main::View::Base
   }
 
   context "no application inflector configured" do

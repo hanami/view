@@ -42,15 +42,24 @@ RSpec.describe "Application views" do
         Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
 
         Hanami.prepare
+
+        module TestApp
+          module View
+            class Base < Hanami::View
+            end
+          end
+        end
       end
 
       let(:base_view_class) {
         module Main
-          class View < Hanami::View
+          module View
+            class Base < TestApp::View::Base
+            end
           end
         end
 
-        Main::View
+        Main::View::Base
       }
 
       describe "base view class" do
@@ -105,7 +114,7 @@ RSpec.describe "Application views" do
           module Main
             module Views
               module Articles
-                class Index < Main::View
+                class Index < Main::View::Base
                 end
               end
             end

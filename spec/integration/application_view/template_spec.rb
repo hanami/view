@@ -20,42 +20,58 @@ RSpec.describe "Application view / Template", :application_integration do
     Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
 
     Hanami.prepare
-  end
 
-  context "Direct Hanami::View subclass" do
-    let(:view_class) {
-      module Main
-        class View < Hanami::View
+    module TestApp
+      module View
+        class Base < Hanami::View
         end
       end
+    end
 
-      Main::View
-    }
-
-    it "configures the template to match the class name" do
-      expect(template).to eq "view"
+    module Main
+      module View
+        class Base < TestApp::View::Base
+        end
+      end
     end
   end
 
-  context "Deeper Hanami::View subclass" do
+  context "Application base view" do
+    let(:view_class) { TestApp::View::Base }
+
+    it "configures the template to match the class name" do
+      expect(template).to eq "view/base"
+    end
+  end
+
+  context "Slice base view" do
+    let(:view_class) { Main::View::Base }
+
+    it "configures the template to match the class name" do
+      expect(template).to eq "main/view/base"
+    end
+  end
+
+  context "Slice view" do
     let(:view_class) {
       module Main
-        class View < Hanami::View
-        end
-
-        class ArticleIndex < View
+        module Views
+          module Article
+            class Index < View::Base
+            end
+          end
         end
       end
 
-      Main::ArticleIndex
+      Main::Views::Article::Index
     }
 
     it "configures the tempalte to match the class name" do
-      expect(template).to eq "article_index"
+      expect(template).to eq "article/index"
     end
   end
 
-  context "Deeper Hanami::View subclass, namespace matching template inference base" do
+  context "Slice view with namespace matching template inference base" do
     let(:application_hook) {
       proc do
         config.views.template_inference_base = "my_views"
@@ -64,22 +80,19 @@ RSpec.describe "Application view / Template", :application_integration do
 
     let(:view_class) {
       module Main
-        class View < Hanami::View
-        end
-
         module MyViews
-          module Articles
-            class Index < View
+          module Users
+            class Show < View::Base
             end
           end
         end
       end
 
-      Main::MyViews::Articles::Index
+      Main::MyViews::Users::Show
     }
 
     it "configures the tempalte to match the class name" do
-      expect(template).to eq "articles/index"
+      expect(template).to eq "users/show"
     end
   end
 end

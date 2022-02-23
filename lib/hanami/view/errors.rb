@@ -2,6 +2,11 @@
 
 module Hanami
   class View
+    # @since 2.0.0
+    # @api public
+    class Error < StandardError
+    end
+
     # Error raised when critical settings are not configured
     #
     # @api private
@@ -38,6 +43,14 @@ module Hanami
         ].join("\n\n")
 
         super(msg)
+      end
+    end
+
+    # @since 2.0.0
+    # @api public
+    class MissingProviderError < Error
+      def initialize(provider)
+        super("#{provider.inspect} is missing")
       end
     end
   end
