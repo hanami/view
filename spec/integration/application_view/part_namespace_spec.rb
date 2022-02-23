@@ -4,7 +4,7 @@ require "hanami"
 require "hanami/view"
 
 RSpec.describe "Application view / Part namespace", :application_integration do
-  subject(:template) { view_class.config.part_namespace }
+  subject(:part_namespace) { view_class.config.part_namespace }
 
   before do
     module TestApp
@@ -14,23 +14,20 @@ RSpec.describe "Application view / Part namespace", :application_integration do
 
     Hanami.application.instance_eval(&application_hook) if respond_to?(:application_hook)
 
-    module Main
-    end
-
+    module Main; end
     Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
 
     Hanami.prepare
-
-    module TestApp
-      module View
-        class Base < Hanami::View
-        end
-      end
-    end
   end
 
   context "view in slice" do
     let(:view_class) {
+      module TestApp
+        module View
+          class Base < Hanami::View; end
+        end
+      end
+
       module Main
         module View
           class Base < TestApp::View::Base
@@ -104,7 +101,15 @@ RSpec.describe "Application view / Part namespace", :application_integration do
   end
 
   context "view in application" do
-    let(:view_class) { TestApp::View::Base }
+    let(:view_class) {
+      module TestApp
+        module View
+          class Base < Hanami::View; end
+        end
+      end
+
+      TestApp::View::Base
+    }
 
     context "parts_path configured" do
       let(:application_hook) {
@@ -123,8 +128,7 @@ RSpec.describe "Application view / Part namespace", :application_integration do
           end
         end
 
-        # FIXME: @jodosha ask @timriley
-        xit "is the matching module within the slice" do
+        it "is the matching module within the slice" do
           is_expected.to eq TestApp::View::CustomParts
         end
       end
@@ -144,8 +148,7 @@ RSpec.describe "Application view / Part namespace", :application_integration do
           }
         end
 
-        # FIXME: @jodosha ask @timriley
-        xit "is the matching module within the slice" do
+        it "is the matching module within the slice" do
           is_expected.to eq TestApp::View::CustomParts
         end
       end
