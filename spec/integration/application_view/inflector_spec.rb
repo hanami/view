@@ -10,13 +10,9 @@ RSpec.describe "Application view / Inflector", :application_integration do
       end
     end
 
-    TestApp::Application.instance_eval(&application_class_config)
-
-    module Main
-    end
-
-    Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
-    Hanami.prepare
+    Hanami.application.instance_eval(&application_class_config)
+    Hanami.application.register_slice :main
+    Hanami.application.prepare
 
     module TestApp
       module View

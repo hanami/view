@@ -11,6 +11,7 @@ RSpec.describe "Application context / Routes", :application_integration do
 
         module TestApp
           class Application < Hanami::Application
+            register_slice :main
           end
         end
       RUBY
