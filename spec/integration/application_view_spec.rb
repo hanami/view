@@ -36,11 +36,7 @@ RSpec.describe "Application views" do
 
     context "Base view defined inside slice" do
       before do
-        module Main
-        end
-
-        Hanami.application.register_slice :main, namespace: Main, root: "/path/to/app/slices/main"
-
+        Hanami.application.register_slice :main
         Hanami.prepare
 
         module TestApp
