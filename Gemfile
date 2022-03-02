@@ -25,6 +25,7 @@ group :test do
   gem "hanami", github: "hanami/hanami", branch: "feature/hanami-2-helpers"
   gem "hanami-controller", github: "hanami/controller", branch: "main"
   gem "hanami-router", github: "hanami/router", branch: "main"
+  gem "hanami-helpers", github: "hanami/helpers", branch: "rewrite/hanami-2"
   gem "hanami-devtools", github: "hanami/devtools", branch: "main"
   gem "rack", ">= 2.0.6"
   gem "slim", "~> 4.0"
