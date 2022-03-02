@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "hanami/view/errors"
+require "dry/core/basic_object"
 
 module Hanami
   class View
@@ -23,12 +24,14 @@ module Hanami
       def define_initialize
         inflector = application.inflector
         settings = application[:settings] if application.key?(:settings)
+        helpers = application[:helpers] if application.key?(:helpers)
         routes = application[:routes_helper] if application.key?(:routes_helper)
         assets = application[:assets] if application.key?(:assets)
 
         define_method :initialize do |**options|
           @inflector = options[:inflector] || inflector
           @settings = options[:settings] || settings
+          @helpers = options[:helpers] || helpers
           @routes = options[:routes] || routes
           @assets = options[:assets] || assets
           super(**options)
@@ -37,6 +40,7 @@ module Hanami
 
       module InstanceMethods
         attr_reader :inflector
+        attr_reader :helpers
         attr_reader :routes
         attr_reader :settings
 
