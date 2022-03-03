@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "hanami/view/errors"
-require "dry/core/basic_object"
 
 module Hanami
   class View
