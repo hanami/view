@@ -1,6 +1,19 @@
 # Hanami::View
 View layer for Hanami
 
+## v2.0.0.alpha7 - 2022-03-08
+
+### Added
+- [Luca Guidi] Automatically inject the app's `settings` and `assets` components (if present) into instances of `Hanami::View::ApplicationContext`
+- [Luca Guidi] Temporarily added to `Hanami::View::ApplicationContext` the `#content_for`, `#current_path` `#csrf_token` helpers, ported from the hanami-2-application-template. Some of those helpers will be moved to `hanami-helpers` gem in a later release.
+
+### Changed
+- [Sean Collins] For views within an Hanami application, changed default location for templates from "web/templates" to "templates"
+- [Luca Guidi] For views within an Hanami application, the default `part_namespace` is now `"view/parts"` (previously `"views/parts"`)
+
+## Fixed
+- [Luca Guidi] Application-level configuration is now applied to `Hanami::View` subclasses, no matter how deep their inheritance chain (e.g. app base view -> slice base view -> slice view)
+
 ## v2.0.0.alpha6 - 2022-02-10
 ### Added
 - [Luca Guidi] Official support for Ruby: MRI 3.0 and 3.1
