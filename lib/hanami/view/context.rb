@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "dry/core/equalizer"
-require_relative "application_context"
 require_relative "decorated_attributes"
 
 module Hanami
@@ -18,23 +17,6 @@ module Hanami
       include DecoratedAttributes
 
       attr_reader :_render_env, :_options
-
-      def self.inherited(subclass)
-        super
-
-        # When inheriting within an Hanami app, add application context behavior
-        provider = application_provider(subclass)
-        if provider
-          subclass.include ApplicationContext.new(provider)
-        end
-      end
-
-      def self.application_provider(subclass)
-        if Hanami.respond_to?(:application?) && Hanami.application?
-          Hanami.application.component_provider(subclass)
-        end
-      end
-      private_class_method :application_provider
 
       # Returns a new instance of Context
       #
