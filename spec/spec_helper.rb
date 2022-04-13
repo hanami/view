@@ -52,5 +52,3 @@ RSpec::Matchers.define :part_including do |data|
     }
   }
 end
-
-require_relative "support/application_integration"
