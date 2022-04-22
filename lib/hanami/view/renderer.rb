@@ -46,7 +46,7 @@ module Hanami
       end
 
       def render(path, scope, &block)
-        tilt(path).render(scope, &block)
+        tilt(path).render(scope, {locals: scope._locals}, &block)
       end
 
       def chdir(dirname)

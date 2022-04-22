@@ -12,7 +12,7 @@ RSpec.describe Hanami::View::Renderer do
     )
   end
 
-  let(:scope) { double(:scope) }
+  let(:scope) { double(:scope, _locals: {}) }
 
   describe "#template" do
     it "renders template in current directory" do
