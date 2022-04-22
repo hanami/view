@@ -45,13 +45,5 @@ module Hanami
         super(msg)
       end
     end
-
-    # @since 2.0.0
-    # @api public
-    class MissingProviderError < Error
-      def initialize(provider)
-        super("#{provider.inspect} is missing")
-      end
-    end
   end
 end
