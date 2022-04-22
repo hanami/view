@@ -35,7 +35,7 @@ module Hanami
       # @overload _locals
       #   Returns the locals
       # @overload locals
-      #   A convenience alias for `#_format.` Is available unless there is a
+      #   A convenience alias for `#_locals.` Is available unless there is a
       #   local named `locals`
       #
       # @return [Hash[<Symbol, Object>]
