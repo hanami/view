@@ -23,7 +23,7 @@ module Hanami
 
       include Dry::Equalizer(:_name, :_locals)
 
-      include Dry::Effects::Handler.Reader(:locals)
+      include Dry::Effects::Handler.Reader(:scope)
       include Dry::Effects.Reader(:render_env, as: :_render_env)
 
       # The scope's name
@@ -86,11 +86,9 @@ module Hanami
           partial_name = _inflector.underscore(_inflector.demodulize(partial_name.to_s))
         end
 
-        # TODO: the fact that I need to remember to use `with_locals` here I feel is a
-        # signal that perhaps the locals handling should actually be done inside
-        # RenderEnvironment somehwere?
-        with_locals(locals) {
-          _render_env.partial(partial_name, _render_scope(**locals), &block)
+        scope = _render_scope(**locals)
+        with_scope(scope) {
+          _render_env.partial(partial_name, scope, &block)
         }
       end
 

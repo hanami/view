@@ -42,7 +42,7 @@ module Hanami
     extend Dry::Configurable
 
     include Dry::Effects::Handler.Reader(:render_env)
-    include Dry::Effects::Handler.Reader(:locals)
+    include Dry::Effects::Handler.Reader(:scope)
 
     # @!group Configuration
 
@@ -569,28 +569,26 @@ module Hanami
       render_env = self.class.render_env(format: format, context: context, )
 
       template_env = render_env.chdir(config.template)
-
       locals = locals(template_env, input)
+      template_scope = template_env.scope(config.scope, locals)
 
       output =
         with_render_env(template_env) {
-          with_locals(locals) {
-            render_env.template(config.template, template_env.scope(config.scope, locals))
+          with_scope(template_scope) {
+            render_env.template(config.template, template_scope)
           }
         }
 
       if layout?
         layout_env = render_env.chdir(self.class.layout_path)
         layout_locals = layout_locals(locals)
+        layout_scope = layout_env.scope(config.scope, layout_locals)
 
         begin
           output =
             with_render_env(layout_env) {
-              with_locals(locals) {
-                render_env.template(
-                  self.class.layout_path,
-                  layout_env.scope(config.scope, layout_locals)
-                ) { output }
+              with_scope(layout_scope) {
+                render_env.template(self.class.layout_path, layout_scope) { output }
               }
             }
         rescue TemplateNotFoundError
