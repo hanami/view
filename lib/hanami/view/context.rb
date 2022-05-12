@@ -16,7 +16,7 @@ module Hanami
     class Context
       include Dry::Equalizer(:_options)
       include Dry::Effects.Reader(:render_env)
-      include Dry::Effects.Reader(:locals)
+      include Dry::Effects.Reader(:scope)
       include DecoratedAttributes
 
       attr_reader :_options
@@ -41,6 +41,10 @@ module Hanami
       # @api public
       def initialize(**options)
         @_options = options
+      end
+
+      def locals
+        scope._locals
       end
 
       # Returns a copy of the Context with new options merged in.
