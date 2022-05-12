@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 require "dry/core/equalizer"
+require "dry/effects"
 
 module Hanami
   class View
     # @api private
     class RenderEnvironment
+      include Dry::Effects::Handler.Reader(:scope)
+
       def self.prepare(renderer, config, context)
         new(
           renderer: renderer,
@@ -41,11 +44,19 @@ module Hanami
       end
 
       def template(name, scope, &block)
-        renderer.template(name, scope, &block)
+        # with_render_env(self) {
+          with_scope(scope) {
+            renderer.template(name, scope, &block)
+          }
+        # }
       end
 
       def partial(name, scope, &block)
-        renderer.partial(name, scope, &block)
+        # TODO: with_render_env here?? Probably not needed, since partials are only rendered within a tempalte already
+
+        with_scope(scope) {
+          renderer.partial(name, scope, &block)
+        }
       end
 
       def chdir(dirname)
