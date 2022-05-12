@@ -563,8 +563,7 @@ module Hanami
       ensure_config
 
       render_env = self.class.render_env(format: format, context: context)
-      template_env = render_env.chdir(config.template)
-      locals = locals(template_env, input)
+      locals = locals(render_env, input)
 
       output = render_env.template(config.template, config.scope, locals)
 
