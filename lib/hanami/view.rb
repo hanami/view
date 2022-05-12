@@ -562,7 +562,7 @@ module Hanami
     def call(format: config.default_format, context: config.default_context, **input)
       ensure_config
 
-      render_env = self.class.render_env(format: format, context: context, )
+      render_env = self.class.render_env(format: format, context: context)
 
       template_env = render_env.chdir(config.template)
       locals = locals(template_env, input)
