@@ -87,9 +87,7 @@ module Hanami
         end
 
         scope = _render_scope(**locals)
-        # with_scope(scope) {
-          _render_env.partial(partial_name, scope, &block)
-        # }
+        _render_env.partial(partial_name, scope, &block)
       end
 
       # Build a new scope using a scope class matching the provided name
