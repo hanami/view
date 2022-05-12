@@ -7,6 +7,7 @@ module Hanami
   class View
     # @api private
     class RenderEnvironment
+      include Dry::Effects::Handler.Reader(:render_env)
       include Dry::Effects::Handler.Reader(:scope)
 
       def self.prepare(renderer, config, context)
@@ -44,16 +45,14 @@ module Hanami
       end
 
       def template(name, scope, &block)
-        # with_render_env(self) {
+        with_render_env(chdir(name)) {
           with_scope(scope) {
             renderer.template(name, scope, &block)
           }
-        # }
+        }
       end
 
       def partial(name, scope, &block)
-        # TODO: with_render_env here?? Probably not needed, since partials are only rendered within a tempalte already
-
         with_scope(scope) {
           renderer.partial(name, scope, &block)
         }
