@@ -45,6 +45,10 @@ module Hanami
       end
 
       # def template(name, scope, &block)
+
+      # TODO:
+      # - Give this keyword arguments, it's getting out of control
+      # - Rename `scope` to `scope_name` to make it clear it's not the fully built scope
       def template(name, scope, locals, &block)
         template_env = chdir(name)
         scope = self.scope(scope, locals)
@@ -56,6 +60,7 @@ module Hanami
         }
       end
 
+      # TODO: Update this to match how `#template` works and see what the flow-on effects are
       def partial(name, scope, &block)
         with_scope(scope) {
           renderer.partial(name, scope, &block)
