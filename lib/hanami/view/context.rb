@@ -18,7 +18,7 @@ module Hanami
       include Dry::Effects.Reader(:render_env)
       include DecoratedAttributes
 
-      attr_reader :_render_env, :_options
+      attr_reader :_options
 
       # Returns a new instance of Context
       #
