@@ -21,8 +21,10 @@ module Hanami
       # @api private
       CONVENIENCE_METHODS = %i[format context locals].freeze
 
-      include Dry::Effects.Reader(:render_env, as: :_render_env)
       include Dry::Equalizer(:_name, :_locals)
+
+      include Dry::Effects::Handler.Reader(:locals)
+      include Dry::Effects.Reader(:render_env, as: :_render_env)
 
       # The scope's name
       #
@@ -84,7 +86,12 @@ module Hanami
           partial_name = _inflector.underscore(_inflector.demodulize(partial_name.to_s))
         end
 
-        _render_env.partial(partial_name, _render_scope(**locals), &block)
+        # TODO: the fact that I need to remember to use `with_locals` here I feel is a
+        # signal that perhaps the locals handling should actually be done inside
+        # RenderEnvironment somehwere?
+        with_locals(locals) {
+          _render_env.partial(partial_name, _render_scope(**locals), &block)
+        }
       end
 
       # Build a new scope using a scope class matching the provided name

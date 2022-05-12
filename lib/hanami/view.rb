@@ -3,6 +3,7 @@
 require "dry/configurable"
 require "dry/core/cache"
 require "dry/core/equalizer"
+require "dry/effects"
 require "dry/inflector"
 
 require_relative "view/application_view"
@@ -39,6 +40,9 @@ module Hanami
     extend Dry::Core::Cache
 
     extend Dry::Configurable
+
+    include Dry::Effects::Handler.Reader(:render_env)
+    include Dry::Effects::Handler.Reader(:locals)
 
     # @!group Configuration
 
@@ -562,19 +566,33 @@ module Hanami
     def call(format: config.default_format, context: config.default_context, **input)
       ensure_config
 
-      env = self.class.render_env(format: format, context: context)
-      template_env = self.class.template_env(format: format, context: context)
+      render_env = self.class.render_env(format: format, context: context, )
+
+      template_env = render_env.chdir(config.template)
 
       locals = locals(template_env, input)
-      output = env.template(config.template, template_env.scope(config.scope, locals))
+
+      output =
+        with_render_env(template_env) {
+          with_locals(locals) {
+            render_env.template(config.template, template_env.scope(config.scope, locals))
+          }
+        }
 
       if layout?
-        layout_env = self.class.layout_env(format: format, context: context)
+        layout_env = render_env.chdir(self.class.layout_path)
+        layout_locals = layout_locals(locals)
+
         begin
-          output = env.template(
-            self.class.layout_path,
-            layout_env.scope(config.scope, layout_locals(locals))
-          ) { output }
+          output =
+            with_render_env(layout_env) {
+              with_locals(locals) {
+                render_env.template(
+                  self.class.layout_path,
+                  layout_env.scope(config.scope, layout_locals)
+                ) { output }
+              }
+            }
         rescue TemplateNotFoundError
           raise LayoutNotFoundError.new(config.layout, config.paths)
         end
@@ -592,8 +610,17 @@ module Hanami
     end
 
     # @api private
+    #
+    # TODO: We've changed this so that the context is no longer available to exposures,
+    # because if we maintained this access, it would mean a cyclic dependency: exposures
+    # would have access to the context, while the context would also have access to the
+    # exposures via its `#locals` reader effect.
+    #
+    # For this initial experiment of making the locals available to the context, I've
+    # removed the context access, and we should consider if/how this might need to be
+    # preserved as part of finishing this work.
     def locals(render_env, input)
-      exposures.(context: render_env.context, **input) do |value, exposure|
+      exposures.(input) do |value, exposure|
         if exposure.decorate? && value
           render_env.part(exposure.name, value, **exposure.options)
         else
