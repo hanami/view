@@ -574,9 +574,9 @@ module Hanami
 
       output =
         with_render_env(template_env) {
-          with_scope(template_scope) {
+          # with_scope(template_scope) {
             render_env.template(config.template, template_scope)
-          }
+          # }
         }
 
       if layout?
@@ -587,9 +587,9 @@ module Hanami
         begin
           output =
             with_render_env(layout_env) {
-              with_scope(layout_scope) {
+              # with_scope(layout_scope) {
                 render_env.template(self.class.layout_path, layout_scope) { output }
-              }
+              # }
             }
         rescue TemplateNotFoundError
           raise LayoutNotFoundError.new(config.layout, config.paths)
