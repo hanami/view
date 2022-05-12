@@ -16,6 +16,7 @@ module Hanami
     class Context
       include Dry::Equalizer(:_options)
       include Dry::Effects.Reader(:render_env)
+      include Dry::Effects.Reader(:locals)
       include DecoratedAttributes
 
       attr_reader :_options
