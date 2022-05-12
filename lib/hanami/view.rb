@@ -497,7 +497,8 @@ module Hanami
     #   @param format [Symbol] template format to use (defaults to the `default_format` setting)
     #   @param context [Context] context object to use (defaults to the `default_context` setting)
     #
-    #   @return [RenderEnvironment] @api public
+    #   @return [RenderEnvironment]
+    #   @api public
     def self.layout_env(**args)
       render_env(**args).chdir(layout_path)
     end
