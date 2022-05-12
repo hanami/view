@@ -166,10 +166,7 @@ module Hanami
         if locals.none?
           self
         else
-          self.class.new(
-            # FIXME: what about `name`?
-            locals: locals
-          )
+          self.class.new(locals: locals)
         end
       end
 
