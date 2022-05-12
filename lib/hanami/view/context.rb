@@ -2,7 +2,6 @@
 
 require "dry/core/equalizer"
 require "dry/effects"
-require_relative "application_context"
 require_relative "decorated_attributes"
 
 module Hanami
