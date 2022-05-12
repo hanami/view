@@ -44,8 +44,12 @@ module Hanami
         scope_builder.(name, locals)
       end
 
-      def template(name, scope, &block)
-        with_render_env(chdir(name)) {
+      # def template(name, scope, &block)
+      def template(name, scope, locals, &block)
+        template_env = chdir(name)
+        scope = self.scope(scope, locals)
+
+        with_render_env(template_env) {
           with_scope(scope) {
             renderer.template(name, scope, &block)
           }

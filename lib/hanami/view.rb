@@ -563,20 +563,16 @@ module Hanami
       ensure_config
 
       render_env = self.class.render_env(format: format, context: context)
-
       template_env = render_env.chdir(config.template)
       locals = locals(template_env, input)
-      template_scope = template_env.scope(config.scope, locals)
 
-      output = render_env.template(config.template, template_scope)
+      output = render_env.template(config.template, config.scope, locals)
 
       if layout?
-        layout_env = render_env.chdir(self.class.layout_path)
         layout_locals = layout_locals(locals)
-        layout_scope = layout_env.scope(config.scope, layout_locals)
 
         begin
-          output = render_env.template(self.class.layout_path, layout_scope) { output }
+          output = render_env.template(self.class.layout_path, config.scope, layout_locals) { output }
         rescue TemplateNotFoundError
           raise LayoutNotFoundError.new(config.layout, config.paths)
         end
