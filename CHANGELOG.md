@@ -1,6 +1,14 @@
 # Hanami::View
 View layer for Hanami
 
+## v2.0.0.alpha8 - 2022-05-19
+
+### Added
+- [Tim Riley] Access a hash of template locals via accessing `locals` inside any template
+
+### Changed
+- [Tim Riley] Removed automatic integration of `Hanami::View` subclasses with their surrounding Hanami application. View base classes within Hanami apps should inherit from `Hanami::Application::View` instead.
+
 ## v2.0.0.alpha7 - 2022-03-08
 
 ### Added
