@@ -140,30 +140,6 @@ module Hanami
         _value.to_s
       end
 
-      # Builds a new a part with the given parameters
-      #
-      # This is helpful for manually constructing a new part object that
-      # maintains the current render environment.
-      #
-      # However, using `.decorate` is preferred for declaring attributes that
-      # should also be decorated as parts.
-      #
-      # @see DecoratedAttributes::ClassInterface#decorate
-      #
-      # @param klass [Class] part class to use (defaults to the part's class)
-      # @param name [Symbol] part name (defaults to the part's name)
-      # @param value [Object] value to decorate (defaults to the part's value)
-      # @param options[Hash<Symbol, Object>] other options to provide when initializing the new part
-      #
-      # @api public
-      def new(klass = self.class, name: _name, value: _value, **options)
-        klass.new(
-          name: name,
-          value: value,
-          **options
-        )
-      end
-
       # Returns a string representation of the part
       #
       # @return [String]
