@@ -10,7 +10,7 @@ RSpec.describe "Context / Accessing locals" do
     }.new
   }
 
-  it "works" do
+  it "provides access to all locals as a hash" do
     expect(view.(text: "Hello").to_s).to eq (<<~TEXT).strip
       Locals from context: {:text=>"Hello"}<br />Locals from context in partial: {:partial_local=>"hello"}
     TEXT
