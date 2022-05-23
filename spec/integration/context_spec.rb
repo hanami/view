@@ -17,9 +17,9 @@ RSpec.describe "Context" do
         attr_reader :assets
         decorate :assets
 
-        def initialize(assets:, **options)
+        def initialize(assets:, **args)
+          super(**args)
           @assets = assets
-          super
         end
       end
 

@@ -2,12 +2,15 @@ module Hanami
   class View
     module ContextHelpers
       module ContentHelpers
-        def initialize(content: {}, **options)
+        attr_reader :content
+        private :content
+
+        def initialize(*)
           super
+          @content = {}
         end
 
         def content_for(key, value = nil, &block)
-          content = _options[:content]
           output = nil
 
           if block

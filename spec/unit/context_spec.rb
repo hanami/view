@@ -13,14 +13,13 @@ RSpec.describe Hanami::View::Context do
     Class.new(Hanami::View::Context) do
       attr_reader :assets, :routes
 
-      # decorate :assets, :routes
       decorate :assets
       decorate :invalid_attribute
 
-      def initialize(assets:, routes:, **options)
+      def initialize(assets:, routes:, **args)
+        super(**args)
         @assets = assets
         @routes = routes
-        super
       end
     end
   }
@@ -49,15 +48,5 @@ RSpec.describe Hanami::View::Context do
   it "provides attributes decorated in view parts" do
     expect(context.assets).to be_a Hanami::View::Part
     expect(context.assets.value).to eql assets
-  end
-
-  describe "#with" do
-    it "returns a copy of the context with extra options" do
-      another_option = double(:another_option)
-      new_context = context.with(another_option: another_option)
-
-      expect(new_context).to be_a(context.class)
-      expect(new_context._options).to eq(assets: assets, routes: routes, another_option: another_option)
-    end
   end
 end
