@@ -589,17 +589,8 @@ module Hanami
     end
 
     # @api private
-    #
-    # TODO: We've changed this so that the context is no longer available to exposures,
-    # because if we maintained this access, it would mean a cyclic dependency: exposures
-    # would have access to the context, while the context would also have access to the
-    # exposures via its `#locals` reader effect.
-    #
-    # For this initial experiment of making the locals available to the context, I've
-    # removed the context access, and we should consider if/how this might need to be
-    # preserved as part of finishing this work.
     def locals(render_env, input)
-      exposures.(input) do |value, exposure|
+      exposures.(context: render_env.context, **input) do |value, exposure|
         if exposure.decorate? && value
           render_env.part(exposure.name, value, **exposure.options)
         else
