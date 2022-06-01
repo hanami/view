@@ -23,7 +23,6 @@ module Hanami
 
       include Dry::Equalizer(:_name, :_locals)
 
-      include Dry::Effects::Handler.Reader(:scope)
       include Dry::Effects.Reader(:render_env, as: :_render_env)
 
       # The scope's name
