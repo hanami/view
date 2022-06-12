@@ -8,7 +8,6 @@ module Hanami
     # @api private
     class RenderEnvironment
       include Dry::Effects::Handler.Reader(:render_env)
-      include Dry::Effects::Handler.Reader(:scope)
 
       def self.prepare(renderer, config, context)
         new(
@@ -54,17 +53,13 @@ module Hanami
         scope = self.scope(scope, locals)
 
         with_render_env(template_env) {
-          with_scope(scope) {
-            renderer.template(name, scope, &block)
-          }
+          renderer.template(name, scope, &block)
         }
       end
 
       # TODO: Update this to match how `#template` works and see what the flow-on effects are
       def partial(name, scope, &block)
-        with_scope(scope) {
-          renderer.partial(name, scope, &block)
-        }
+        renderer.partial(name, scope, &block)
       end
 
       def chdir(dirname)
