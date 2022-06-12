@@ -15,12 +15,7 @@ module Hanami
     # @api public
     class Context
       include Dry::Effects.Reader(:render_env)
-      include Dry::Effects.Reader(:scope)
       include DecoratedAttributes
-
-      def locals
-        scope._locals
-      end
     end
   end
 end
