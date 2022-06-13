@@ -131,6 +131,10 @@ module Hanami
         _render_env.context
       end
 
+      def _render_env
+        @_render_env ||= super
+      end
+
       private
 
       # Handles missing methods, according to the following rules:
