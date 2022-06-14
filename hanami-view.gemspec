@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "dry-core", "~> 0.5", ">= 0.5"
   spec.add_runtime_dependency "dry-inflector", "~> 0.1"
   spec.add_runtime_dependency "tilt", "~> 2.0", ">= 2.0.6"
+  spec.add_runtime_dependency "temple", "~> 0.8"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
