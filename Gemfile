@@ -9,6 +9,7 @@ gemspec
 group :tools do
   gem "hotch"
   gem "pry-byebug", platform: :mri
+  gem "stackprof"
 end
 
 group :test do
