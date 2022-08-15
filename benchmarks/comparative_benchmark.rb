@@ -1,63 +1,44 @@
 # frozen_string_literal: true
 
-require "pathname"
-require "ostruct"
 require "benchmark/ips"
-require "hanami/view"
-require "action_view"
-require "action_controller"
+require_relative "comparative/hanami"
+require_relative "comparative/rails"
+require_relative "comparative/tilt"
 
-TEMPLATES_PATHS = Pathname(__FILE__).dirname.join("templates")
+Benchmarks::Comparative::Hanami.prepare
+Benchmarks::Comparative::Rails.prepare
+Benchmarks::Comparative::Tilt.prepare
 
-TEMPLATE_LOCALS = {
-  users: [
-    OpenStruct.new(name: "Jane", email: "Jane@example.com"),
-    OpenStruct.new(name: "Teresa", email: "teresa@example.com")
-  ]
-}.freeze
+def normalize(str)
+  str.gsub(/\s+/, " ")
+end
 
-ActionController::Base.view_paths = TEMPLATES_PATHS
+outputs = {
+  hanami: Benchmarks::Comparative::Hanami.run,
+  rails: Benchmarks::Comparative::Rails.run,
+  tilt: Benchmarks::Comparative::Tilt.run,
+}
 
-class UsersController < ActionController::Base
-  layout "app"
+if outputs.values.map { normalize(_1) }.uniq.size > 1
+  puts "Outputs do not match\n"
 
-  attr_reader :users
-
-  def index
-    @users = TEMPLATE_LOCALS[:users]
-    render_to_string :index
+  outputs.each do |system, output|
+    puts "#{system}:"
+    puts normalize(output)
   end
-end
-
-class HanamiView < Hanami::View
-  config.paths = TEMPLATES_PATHS
-  config.layout = "app"
-  config.template = "users"
-  config.default_format = :html
-
-  expose :users
-end
-
-action_controller = UsersController.new
-hanami_view = HanamiView.new
-
-action_controller_output = action_controller.index
-hanami_view_output = hanami_view.(TEMPLATE_LOCALS).to_s
-
-if action_controller_output != hanami_view_output
-  puts "Output doesn't match:"
-  puts
-  puts "ActionView:\n\n#{action_controller_output}\n"
-  puts "hanami-view:\n\n#{hanami_view_output}\n"
 end
 
 Benchmark.ips do |x|
-  x.report("action_controller") do
-    1000.times { action_controller.index }
+  x.report("hanami/view") do
+    Benchmarks::Comparative::Hanami.run
   end
 
-  x.report("hanami-view") do
-    1000.times { hanami_view.(TEMPLATE_LOCALS).to_s }
+  x.report("rails") do
+    Benchmarks::Comparative::Hanami.run
+  end
+
+  x.report("tilt") do
+    Benchmarks::Comparative::Tilt.run
   end
 
   x.compare!
