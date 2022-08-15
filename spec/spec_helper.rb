@@ -35,7 +35,6 @@ RSpec.configure do |config|
     [
       Hanami::View,
       Hanami::View::PartBuilder,
-      Hanami::View::Path,
       Hanami::View::Renderer,
       Hanami::View::ScopeBuilder,
       Hanami::View::Tilt

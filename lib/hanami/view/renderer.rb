@@ -58,9 +58,11 @@ module Hanami
       private
 
       def lookup(name, **options)
-        paths.inject(nil) { |_, path|
-          result = path.lookup(name, format, **options)
-          break result if result
+        fetch_or_store(:lookup, name, options) {
+          paths.inject(nil) { |_, path|
+            result = path.lookup(name, format, **options)
+            break result if result
+          }
         }
       end
 

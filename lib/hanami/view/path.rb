@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 require "pathname"
-require "dry/core/cache"
 
 module Hanami
   class View
     # @api private
     class Path
-      extend Dry::Core::Cache
       include Dry::Equalizer(:dir, :root)
 
       attr_reader :dir, :root
@@ -26,11 +24,9 @@ module Hanami
       end
 
       def lookup(name, format, child_dirs: [], parent_dir: false)
-        fetch_or_store(dir, root, name, format, child_dirs, parent_dir) do
-          lookup_template(name, format) ||
-            lookup_in_child_dirs(name, format, child_dirs: child_dirs) ||
-            parent_dir && lookup_in_parent_dir(name, format, child_dirs: child_dirs)
-        end
+        lookup_template(name, format) ||
+          lookup_in_child_dirs(name, format, child_dirs: child_dirs) ||
+          parent_dir && lookup_in_parent_dir(name, format, child_dirs: child_dirs)
       end
 
       def chdir(dirname)
