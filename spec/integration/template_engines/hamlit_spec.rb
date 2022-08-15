@@ -35,13 +35,13 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
     end
   end
 
-  context "with hamlit-block not available" do
+  context "with hamlit not available" do
     before do
       @load_path = $LOAD_PATH.dup
       @loaded_features = $LOADED_FEATURES.dup
 
-      $LOAD_PATH.reject! { |path| path =~ /hamlit-block/ }
-      $LOADED_FEATURES.reject! { |path| path =~ /hamlit-block/ }
+      $LOAD_PATH.reject! { |path| path =~ /hamlit/ }
+      $LOADED_FEATURES.reject! { |path| path =~ /hamlit/ }
 
       Hanami::View::Tilt.cache.clear
       Hanami::View::Renderer.cache.clear
@@ -52,12 +52,12 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
       $LOADED_FEATURES.replace @loaded_features
     end
 
-    it "raises an error explaining the hamlit-block requirement" do
+    it "raises an error explaining the hamlit requirement" do
       view = Class.new(base_view) do
         config.template = "render_and_yield"
       end.new
 
-      expect { view.() }.to raise_error(LoadError, /hanami-view requires hamlit-block/m)
+      expect { view.() }.to raise_error(LoadError, /hanami-view requires hamlit/m)
     end
   end
 end
