@@ -6,7 +6,7 @@ require_relative "comparative/hanami"
 Benchmarks::Comparative::Hanami.prepare
 
 Benchmark.ips do |x|
-  x.report("hanami/view") do
+  x.report(ENV.fetch("BENCHMARK_NAME", "hanami/view")) do
     Benchmarks::Comparative::Hanami.run
   end
 

@@ -34,7 +34,7 @@ Benchmark.ips do |x|
   end
 
   x.report("rails") do
-    Benchmarks::Comparative::Hanami.run
+    Benchmarks::Comparative::Rails.run
   end
 
   x.report("tilt") do
