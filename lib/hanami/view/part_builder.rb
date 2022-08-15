@@ -64,7 +64,7 @@ module Hanami
       end
 
       def collection_item_name_as(name, as)
-        singular_name = inflector.singularize(name).to_sym
+        singular_name = singularize(name).to_sym
         singular_as =
           if as.is_a?(Array)
             as.last if as.length > 1
@@ -73,7 +73,7 @@ module Hanami
           end
 
         if singular_as && !singular_as.is_a?(Class)
-          singular_as = inflector.singularize(singular_as.to_s)
+          singular_as = singularize(singular_as)
         end
 
         [singular_name, singular_as]
@@ -114,6 +114,12 @@ module Hanami
         end
       end
       # rubocop:enable Metrics/PerceivedComplexity
+
+      # TODO: add doc explaining that we cache this because it can be called a large number of times
+      # due to building collections of parts
+      def singularize(name)
+        fetch_or_store(:singularize, name) { inflector.singularize(name.to_s) }
+      end
     end
   end
 end
