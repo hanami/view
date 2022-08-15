@@ -1,4 +1,4 @@
 <% users.each_with_index do |user, index| %>
   <h1><%= user.name %></h1>
-  <%= render 'button', user_link: user.email, index: index + 1 %>
+  <%= render "button", user_link: user.email, index: index + 1 %>
 <% end %>
