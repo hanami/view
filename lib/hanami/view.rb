@@ -584,8 +584,11 @@ module Hanami
 
     # @api private
     def ensure_config
-      raise UndefinedConfigError, :paths unless Array(config.paths).any?
-      raise UndefinedConfigError, :template unless config.template
+      @_config_ensured ||= begin
+        raise UndefinedConfigError, :paths unless Array(config.paths).any?
+        raise UndefinedConfigError, :template unless config.template
+        true
+      end
     end
 
     # @api private
