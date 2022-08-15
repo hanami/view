@@ -80,15 +80,15 @@ module Hanami
       end
 
       def part_class(name:, fallback_class: Part, **options)
-        name = options[:as] || name
+        fetch_or_store(:part_class, namespace, name, fallback_class) {
+          name = options[:as] || name
 
-        if name.is_a?(Class)
-          name
-        else
-          fetch_or_store(:part_class, namespace, name, fallback_class) do
+          if name.is_a?(Class)
+            name
+          else
             resolve_part_class(name: name, fallback_class: fallback_class)
           end
-        end
+        }
       end
 
       # rubocop:disable Metrics/PerceivedComplexity

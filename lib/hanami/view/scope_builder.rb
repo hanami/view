@@ -50,15 +50,15 @@ module Hanami
       DEFAULT_SCOPE_CLASS = Scope
 
       def scope_class(name = nil)
-        if name.nil?
-          DEFAULT_SCOPE_CLASS
-        elsif name.is_a?(Class)
-          name
-        else
-          fetch_or_store(namespace, name) do
+        fetch_or_store(:scope_class, namespace, name) {
+          if name.nil?
+            DEFAULT_SCOPE_CLASS
+          elsif name.is_a?(Class)
+            name
+          else
             resolve_scope_class(name: name)
           end
-        end
+        }
       end
 
       def resolve_scope_class(name:)
