@@ -10,5 +10,6 @@ Benchmark.ips do |x|
     Benchmarks::Comparative::Hanami.run
   end
 
+  x.save! ENV["SAVE_FILE"] if ENV["SAVE_FILE"]
   x.compare!
 end
