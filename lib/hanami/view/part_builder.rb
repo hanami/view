@@ -53,8 +53,8 @@ module Hanami
       end
 
       def build_collection_part(name, value, **options)
-        collection_as = collection_options(name: name, **options)[:as]
-        item_name, item_as = collection_item_options(name: name, **options).values_at(:name, :as)
+        collection_as = options[:as].is_a?(Array) ? options[:as].first : nil
+        item_name, item_as = collection_item_name_as(name, options[:as])
 
         arr = value.to_ary.map { |obj|
           build_part(item_name, obj, **options.merge(as: item_as))
@@ -63,31 +63,20 @@ module Hanami
         build_part(name, arr, **options.merge(as: collection_as))
       end
 
-      # rubocop:disable Lint/UnusedMethodArgument
-      def collection_options(name:, **options)
-        collection_as = options[:as].is_a?(Array) ? options[:as].first : nil
-
-        options.merge(as: collection_as)
-      end
-      # rubocop:enable Lint/UnusedMethodArgument
-
-      def collection_item_options(name:, **options)
+      def collection_item_name_as(name, as)
         singular_name = inflector.singularize(name).to_sym
         singular_as =
-          if options[:as].is_a?(Array)
-            options[:as].last if options[:as].length > 1
+          if as.is_a?(Array)
+            as.last if as.length > 1
           else
-            options[:as]
+            as
           end
 
         if singular_as && !singular_as.is_a?(Class)
           singular_as = inflector.singularize(singular_as.to_s)
         end
 
-        options.merge(
-          name: singular_name,
-          as: singular_as
-        )
+        [singular_name, singular_as]
       end
 
       def part_class(name:, fallback_class: Part, **options)
@@ -96,7 +85,7 @@ module Hanami
         if name.is_a?(Class)
           name
         else
-          fetch_or_store(namespace, name, fallback_class) do
+          fetch_or_store(:part_class, namespace, name, fallback_class) do
             resolve_part_class(name: name, fallback_class: fallback_class)
           end
         end
