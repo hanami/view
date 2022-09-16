@@ -33,7 +33,7 @@ __Hanami::view__ supports Ruby (MRI) 3.0+
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "hanami/view"
+gem "hanami-view"
 ```
 
 And then execute:
