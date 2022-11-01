@@ -6,6 +6,13 @@ eval_gemfile "Gemfile.devtools"
 
 gemspec
 
+gem "dry-auto_inject", github: "dry-rb/dry-auto_inject"
+gem "dry-configurable", github: "dry-rb/dry-configurable"
+gem "dry-core", github: "dry-rb/dry-core"
+gem "dry-events", github: "dry-rb/dry-events"
+gem "dry-monitor", github: "dry-rb/dry-monitor"
+gem "dry-system", github: "dry-rb/dry-system"
+
 group :tools do
   gem "hotch"
   gem "pry-byebug", platform: :mri
