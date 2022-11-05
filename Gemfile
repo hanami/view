@@ -6,13 +6,6 @@ eval_gemfile "Gemfile.devtools"
 
 gemspec
 
-gem "dry-auto_inject", github: "dry-rb/dry-auto_inject"
-gem "dry-configurable", github: "dry-rb/dry-configurable"
-gem "dry-core", github: "dry-rb/dry-core"
-gem "dry-events", github: "dry-rb/dry-events"
-gem "dry-monitor", github: "dry-rb/dry-monitor"
-gem "dry-system", github: "dry-rb/dry-system"
-
 group :tools do
   gem "hotch"
   gem "pry-byebug", platform: :mri
@@ -22,10 +15,10 @@ group :test do
   gem "saharspec"
 
   gem "dry-inflector"
+  gem "dry-files"
   gem "erbse", "~> 0.1.4"
   gem "erubi"
   gem "hamlit", ">= 3.0"
-  gem "dry-files", github: "dry-rb/dry-files"
   gem "hanami-cli", github: "hanami/cli", branch: "main"
   gem "hanami", github: "hanami/hanami", branch: "main"
   gem "hanami-controller", github: "hanami/controller", branch: "main"
