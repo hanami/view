@@ -31,7 +31,7 @@ module Hanami
         if path
           render(path, scope, &block)
         else
-          raise TemplateNotFoundError.new(name, paths)
+          raise TemplateNotFoundError.new(name, format, paths)
         end
       end
 
