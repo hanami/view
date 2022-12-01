@@ -28,7 +28,7 @@ RSpec.describe Hanami::View::Renderer do
     it "raises error when template cannot be found" do
       expect {
         renderer.template(:missing_template, scope)
-      }.to raise_error(Hanami::View::TemplateNotFoundError, /missing_template/)
+      }.to raise_error(Hanami::View::TemplateNotFoundError, /missing_template.*html/)
     end
   end
 

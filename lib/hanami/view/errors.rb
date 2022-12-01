@@ -21,9 +21,9 @@ module Hanami
     #
     # @api private
     class TemplateNotFoundError < StandardError
-      def initialize(template_name, lookup_paths)
+      def initialize(template_name, format, lookup_paths)
         msg = [
-          "Template +#{template_name}+ could not be found in paths:",
+          "Template `#{template_name}' for format `#{format}' could not be found in paths:",
           lookup_paths.map { |path| " - #{path}" }
         ].join("\n\n")
 
