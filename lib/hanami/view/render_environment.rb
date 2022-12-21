@@ -47,10 +47,9 @@ module Hanami
 
       # TODO:
       # - Give this keyword arguments, it's getting out of control
-      # - Rename `scope` to `scope_name` to make it clear it's not the fully built scope
-      def template(name, scope, locals, &block)
+      def template(name, scope_name, locals, &block)
         template_env = chdir(name)
-        scope = self.scope(scope, locals)
+        scope = self.scope(scope_name, locals)
 
         with_render_env(template_env) {
           renderer.template(name, scope, &block)
