@@ -42,11 +42,11 @@ module Hanami
       end
 
       # @api private
-      def for_render_env(render_env)
-        return self if render_env == _render_env
+      # def for_render_env(render_env)
+      #   return self if render_env == _render_env
 
-        self.class.new(**_options.merge(render_env: render_env))
-      end
+      #   self.class.new(**_options.merge(render_env: render_env))
+      # end
 
       # Returns a copy of the Context with new options merged in.
       #

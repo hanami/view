@@ -3,7 +3,7 @@
 require "dry/core/inflector"
 require "hanami/view/scope_builder"
 
-RSpec.describe "Part / Decorated attributes" do
+RSpec.xdescribe "Part / Decorated attributes" do
   let(:article_class) {
     Class.new do
       attr_reader :title, :author, :comments

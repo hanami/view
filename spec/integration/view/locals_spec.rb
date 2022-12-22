@@ -3,7 +3,7 @@
 require "hanami/view"
 require "hanami/view/part"
 
-RSpec.describe "View / locals" do
+RSpec.xdescribe "View / locals" do
   specify "locals are decorated with parts by default" do
     view = Class.new(Hanami::View) do
       config.paths = SPEC_ROOT.join("fixtures/templates")

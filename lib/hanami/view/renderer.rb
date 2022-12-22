@@ -39,8 +39,8 @@ module Hanami
         template(
           name_for_partial(name),
           scope,
-          child_dirs: %w[shared],
-          parent_dir: true,
+          # child_dirs: %w[shared],
+          # parent_dir: true,
           &block
         )
       end
@@ -58,12 +58,14 @@ module Hanami
       private
 
       def lookup(name, **options)
+        # FIXME: this should just be paths.each with a return inside the block
         paths.inject(nil) { |_, path|
           result = path.lookup(name, format, **options)
           break result if result
         }
       end
 
+      # Renames "foo/bar/baz" to "foo/bar/_baz"
       def name_for_partial(name)
         name_segments = name.to_s.split(PATH_DELIMITER)
         name_segments[0..-2].push("#{PARTIAL_PREFIX}#{name_segments[-1]}").join(PATH_DELIMITER)

@@ -174,7 +174,7 @@ RSpec.describe "exposures" do
     )
   end
 
-  it "wraps exposures in view parts before they are supplied as dependencies" do
+  xit "wraps exposures in view parts before they are supplied as dependencies" do
     module Test
       class UserPart < Hanami::View::Part
         def display_name

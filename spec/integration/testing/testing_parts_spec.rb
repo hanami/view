@@ -20,7 +20,7 @@ RSpec.describe "Testing / parts" do
     expect(article_part.breaking_news_title).to eq "Giant Hand Threatens Beach City!"
   end
 
-  specify "Parts can be unit tested with a rendering from a view class" do
+  xspecify "Parts can be unit tested with a rendering from a view class" do
     view_class = Class.new(Hanami::View) do
       config.paths = FIXTURES_PATH.join("integration/testing")
       config.template = "view"

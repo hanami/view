@@ -3,7 +3,7 @@
 require "hanami/view"
 require "hanami/view/context"
 
-RSpec.describe "View / exposures" do
+RSpec.xdescribe "View / exposures" do
   specify "exposures have access to context" do
     view = Class.new(Hanami::View) do
       config.paths = SPEC_ROOT.join("fixtures/templates")

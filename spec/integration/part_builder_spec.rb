@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe "part builder" do
+RSpec.xdescribe "part builder" do
   before do
     module Test
       class Custom < Hanami::View::Part

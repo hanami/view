@@ -9,12 +9,13 @@ require_relative "view/application_view"
 require_relative "view/context"
 require_relative "view/exposures"
 require_relative "view/errors"
-require_relative "view/part_builder"
+# require_relative "view/part_builder"
 require_relative "view/path"
 require_relative "view/render_environment"
 require_relative "view/rendered"
 require_relative "view/renderer"
-require_relative "view/scope_builder"
+require_relative "view/scope"
+# require_relative "view/scope_builder"
 
 module Hanami
   # A standalone, template-based view rendering system that offers everything
@@ -151,7 +152,7 @@ module Hanami
     #
     #   @api public
     # @!scope class
-    setting :part_namespace
+    # setting :part_namespace
 
     # @overload config.part_builder=(part_builder)
     #   Set a custom part builder class
@@ -161,7 +162,7 @@ module Hanami
     #   @param part_builder [Class]
     #   @api public
     # @!scope class
-    setting :part_builder, default: PartBuilder
+    # setting :part_builder, default: PartBuilder
 
     # @overload config.scope_namespace=(namespace)
     #   Set a namespace that will be searched when building scope classes.
@@ -172,7 +173,7 @@ module Hanami
     #
     #   @api public
     # @!scope class
-    setting :scope_namespace
+    # setting :scope_namespace
 
     # @overload config.scope_builder=(scope_builder)
     #   Set a custom scope builder class
@@ -182,7 +183,7 @@ module Hanami
     #   @param scope_builder [Class]
     #   @api public
     # @!scope class
-    setting :scope_builder, default: ScopeBuilder
+    # setting :scope_builder, default: ScopeBuilder
 
     # @overload config.inflector=(inflector)
     #   Set an inflector to provide to the part_builder and scope_builder.
@@ -486,7 +487,8 @@ module Hanami
     #   @return [RenderEnvironment]
     #   @api public
     def self.template_env(**args)
-      render_env(**args).chdir(config.template)
+      # render_env(**args).chdir(config.template)
+      render_env(**args).chdir(File.dirname(config.template))
     end
 
     # @overload layout_env(format: config.default_format, context: config.default_context)
@@ -532,7 +534,11 @@ module Hanami
     #
     # @api public
     def initialize
+      self.class.config.finalize!
+
       @exposures = self.class.exposures.bind(self)
+
+      # could possibly set up @render_env here?
     end
 
     # The view's configuration
@@ -565,14 +571,19 @@ module Hanami
       template_env = self.class.template_env(format: format, context: context)
 
       locals = locals(template_env, input)
-      output = env.template(config.template, template_env.scope(config.scope, locals))
+      # output = env.template(config.template, template_env.scope(config.scope, locals))
+      output = env.template(
+        config.template,
+        Scope.new(locals: locals, render_env: template_env)
+      )
 
       if layout?
         layout_env = self.class.layout_env(format: format, context: context)
         begin
           output = env.template(
             self.class.layout_path,
-            layout_env.scope(config.scope, layout_locals(locals))
+            # layout_env.scope(config.scope, layout_locals(locals))
+            Scope.new(locals: layout_locals(locals), render_env: layout_env)
           ) { output }
         rescue TemplateNotFoundError
           raise LayoutNotFoundError.new(config.layout, config.paths)
@@ -592,13 +603,14 @@ module Hanami
 
     # @api private
     def locals(render_env, input)
-      exposures.(context: render_env.context, **input) do |value, exposure|
-        if exposure.decorate? && value
-          render_env.part(exposure.name, value, **exposure.options)
-        else
-          value
-        end
-      end
+      exposures.(context: render_env.context, **input)
+      # do |value, exposure|
+      #   if exposure.decorate? && value
+      #     render_env.part(exposure.name, value, **exposure.options)
+      #   else
+      #     value
+      #   end
+      # end
     end
 
     # @api private

@@ -34,10 +34,10 @@ RSpec.configure do |config|
   config.after do
     [
       Hanami::View,
-      Hanami::View::PartBuilder,
+      # Hanami::View::PartBuilder,
       Hanami::View::Path,
       Hanami::View::Renderer,
-      Hanami::View::ScopeBuilder,
+      # Hanami::View::ScopeBuilder,
       Hanami::View::Tilt
     ].each do |klass|
       klass.cache.clear

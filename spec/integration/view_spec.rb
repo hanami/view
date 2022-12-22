@@ -65,7 +65,7 @@ RSpec.describe "hanami-view" do
     )
   end
 
-  it "renders a view that passes arguments to partials" do
+  xit "renders a view that passes arguments to partials" do
     view = Class.new(view_class) do
       config.template = "parts_with_args"
     end.new

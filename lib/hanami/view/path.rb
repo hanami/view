@@ -25,13 +25,19 @@ module Hanami
         @root = Pathname(root)
       end
 
-      def lookup(name, format, child_dirs: [], parent_dir: false)
-        fetch_or_store(dir, root, name, format, child_dirs, parent_dir) do
-          lookup_template(name, format) ||
-            lookup_in_child_dirs(name, format, child_dirs: child_dirs) ||
-            parent_dir && lookup_in_parent_dir(name, format, child_dirs: child_dirs)
+      def lookup(name, format)
+        fetch_or_store(dir, root, name, format) do
+          lookup_template(name, format)
         end
       end
+
+      # def lookup(name, format, child_dirs: [], parent_dir: false)
+      #   fetch_or_store(dir, root, name, format, child_dirs, parent_dir) do
+      #     lookup_template(name, format) ||
+      #       lookup_in_child_dirs(name, format, child_dirs: child_dirs) ||
+      #       parent_dir && lookup_in_parent_dir(name, format, child_dirs: child_dirs)
+      #   end
+      # end
 
       def chdir(dirname)
         self.class.new(dir.join(dirname), root: root)
