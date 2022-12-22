@@ -535,6 +535,7 @@ module Hanami
     # @api public
     def initialize
       self.class.config.finalize!
+      ensure_config
 
       @exposures = self.class.exposures.bind(self)
 
@@ -565,8 +566,6 @@ module Hanami
     # @return [Rendered] rendered view object
     # @api public
     def call(format: config.default_format, context: config.default_context, **input)
-      ensure_config
-
       env = self.class.render_env(format: format, context: context)
       template_env = self.class.template_env(format: format, context: context)
 
