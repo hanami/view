@@ -486,10 +486,10 @@ module Hanami
     #
     #   @return [RenderEnvironment]
     #   @api public
-    def self.template_env(**args)
-      # render_env(**args).chdir(config.template)
-      render_env(**args).chdir(File.dirname(config.template))
-    end
+    # def self.template_env(**args)
+    #   # render_env(**args).chdir(config.template)
+    #   render_env(**args).chdir(File.dirname(config.template))
+    # end
 
     # @overload layout_env(format: config.default_format, context: config.default_context)
     #   Returns a render environment for the view and the given options,
@@ -500,9 +500,9 @@ module Hanami
     #   @param context [Context] context object to use (defaults to the `default_context` setting)
     #
     #   @return [RenderEnvironment] @api public
-    def self.layout_env(**args)
-      render_env(**args).chdir(layout_path)
-    end
+    # def self.layout_env(**args)
+    #   render_env(**args).chdir(layout_path)
+    # end
 
     # Returns renderer for the view and provided format
     #
@@ -519,9 +519,9 @@ module Hanami
     end
 
     # @api private
-    def self.layout_path
-      File.join(*[config.layouts_dir, config.layout].compact)
-    end
+    # def self.layout_path
+    #   File.join(*[config.layouts_dir, config.layout].compact)
+    # end
 
     # @!endgroup
 
@@ -540,6 +540,7 @@ module Hanami
       @exposures = self.class.exposures.bind(self)
 
       # could possibly set up @render_env here?
+      # @render_env =
     end
 
     # The view's configuration
@@ -567,22 +568,25 @@ module Hanami
     # @api public
     def call(format: config.default_format, context: config.default_context, **input)
       env = self.class.render_env(format: format, context: context)
-      template_env = self.class.template_env(format: format, context: context)
+      # template_env = self.class.template_env(format: format, context: context)
 
-      locals = locals(template_env, input)
+      locals = locals(env, input)
+      # locals = locals(template_env, input)
       # output = env.template(config.template, template_env.scope(config.scope, locals))
       output = env.template(
         config.template,
-        Scope.new(locals: locals, render_env: template_env)
+        # Scope.new(locals: locals, render_env: template_env)
+        Scope.new(locals: locals, render_env: env)
       )
 
       if layout?
-        layout_env = self.class.layout_env(format: format, context: context)
+        # layout_env = self.class.layout_env(format: format, context: context)
         begin
           output = env.template(
-            self.class.layout_path,
+            "#{config.layouts_dir}/#{config.layout}", # TODO: this will break for a nil layouts dir
+            # self.class.layout_path,
             # layout_env.scope(config.scope, layout_locals(locals))
-            Scope.new(locals: layout_locals(locals), render_env: layout_env)
+            Scope.new(locals: layout_locals(locals), render_env: env)
           ) { output }
         rescue TemplateNotFoundError
           raise LayoutNotFoundError.new(config.layout, config.paths)
