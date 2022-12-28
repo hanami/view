@@ -71,7 +71,7 @@ module Hanami
       #
       # @api public
       def initialize(
-        render_env: RenderEnvironmentMissing.new,
+        render_env: nil,
         name: self.class.part_name(render_env.inflector),
         value:
       )
