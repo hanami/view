@@ -11,7 +11,7 @@ require_relative "view/exposures"
 require_relative "view/errors"
 # require_relative "view/part_builder"
 require_relative "view/path"
-require_relative "view/render_environment"
+# require_relative "view/render_environment"
 require_relative "view/rendered"
 require_relative "view/renderer"
 require_relative "view/scope"
@@ -533,7 +533,7 @@ module Hanami
         begin
           output = renderer.template(
             "#{config.layouts_dir}/#{config.layout}", # FIXME: this will break for a nil layouts dir
-            Scope.new(locals: layout_locals(locals), renderer: renderer, context: contextt)
+            Scope.new(locals: layout_locals(locals), renderer: renderer, context: context)
           ) { output }
         rescue TemplateNotFoundError
           raise LayoutNotFoundError.new(config.layout, config.paths)

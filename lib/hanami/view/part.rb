@@ -2,7 +2,7 @@
 
 require "dry/core/equalizer"
 require_relative "decorated_attributes"
-require_relative "render_environment_missing"
+# require_relative "render_environment_missing"
 
 module Hanami
   class View
