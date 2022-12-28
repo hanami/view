@@ -21,8 +21,7 @@ module Hanami
       # @api private
       CONVENIENCE_METHODS = %i[format context locals].freeze
 
-      # include Dry::Equalizer(:_name, :_locals, :_render_env)
-      include Dry::Equalizer(:_name, :_locals, :_renderer) # TODO: equalize on context too now?
+      include Dry::Equalizer(:_name, :_locals, :_context, :_renderer)
 
       # The scope's name
       #
@@ -44,6 +43,8 @@ module Hanami
       # @api public
       attr_reader :_locals
 
+      attr_reader :_context
+
       # The current render environment
       #
       # @return [RenderEnvironment] render environment
@@ -51,8 +52,6 @@ module Hanami
       # @api private
       # attr_reader :_render_env
       attr_reader :_renderer
-
-      attr_reader :_context
 
       # Returns a new Scope instance
       #
@@ -66,13 +65,11 @@ module Hanami
       def initialize(
         name: nil,
         locals: Dry::Core::Constants::EMPTY_HASH,
-        # render_env: RenderEnvironmentMissing.new
-        renderer: RenderEnvironmentMissing.new, # TODO: Use a RendererMissing?
+        renderer: nil,
         context: nil
       )
         @_name = name
         @_locals = locals
-        # @_render_env = render_env
         @_renderer = renderer
         @_context = context
       end
@@ -116,9 +113,14 @@ module Hanami
       #
       # @api public
       def scope(name = nil, **locals)
-        raise "broken" # this kind of needs render_env...
+        # TODO: consider what to do with `name` now that we don't have a scope builder
 
-        # _render_env.scope(name, locals)
+        self.class.new(
+          name: _name,
+          locals: locals,
+          renderer: _renderer,
+          context: _context
+        )
       end
 
       # The template format for the current render environment.
@@ -135,21 +137,6 @@ module Hanami
       def _format
         _renderer.format
       end
-
-      # The context object for the current render environment
-      #
-      # @overload _context
-      #   Returns the context.
-      # @overload context
-      #   A convenience alias for `#_context`. Is available unless there is a
-      #   local named `context`.
-      #
-      # @return [Context] context
-      #
-      # @api public
-      # def _context
-      #   # _render_env.context
-      # end
 
       private
 
@@ -186,9 +173,8 @@ module Hanami
           self.class.new(
             # FIXME: what about `name`?
             locals: locals,
-            # render_env: _render_env
-            renderer: _renderer,
             context: _context,
+            renderer: _renderer,
           )
         end
       end

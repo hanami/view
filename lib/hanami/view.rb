@@ -458,52 +458,6 @@ module Hanami
 
     # @!endgroup
 
-    # @!group Render environment
-
-    # Returns a render environment for the view and the given options. This
-    # environment isn't chdir'ed into any particular directory.
-    #
-    # @param format [Symbol] template format to use (defaults to the `default_format` setting)
-    # @param context [Context] context object to use (defaults to the `default_context` setting)
-    #
-    # @see View.template_env render environment for the view's template
-    # @see View.layout_env render environment for the view's layout
-    #
-    # @return [RenderEnvironment]
-    # @api public
-    def self.render_env(format: config.default_format, context: config.default_context)
-      RenderEnvironment.prepare(renderer(format), config, context)
-    end
-
-    # @overload template_env(format: config.default_format, context: config.default_context)
-    #   Returns a render environment for the view and the given options,
-    #   chdir'ed into the view's template directory. This is the environment
-    #   used when rendering the template, and is useful to to fetch
-    #   independently when unit testing Parts and Scopes.
-    #
-    #   @param format [Symbol] template format to use (defaults to the `default_format` setting)
-    #   @param context [Context] context object to use (defaults to the `default_context` setting)
-    #
-    #   @return [RenderEnvironment]
-    #   @api public
-    # def self.template_env(**args)
-    #   # render_env(**args).chdir(config.template)
-    #   render_env(**args).chdir(File.dirname(config.template))
-    # end
-
-    # @overload layout_env(format: config.default_format, context: config.default_context)
-    #   Returns a render environment for the view and the given options,
-    #   chdir'ed into the view's layout directory. This is the environment used
-    #   when rendering the view's layout.
-    #
-    #   @param format [Symbol] template format to use (defaults to the `default_format` setting)
-    #   @param context [Context] context object to use (defaults to the `default_context` setting)
-    #
-    #   @return [RenderEnvironment] @api public
-    # def self.layout_env(**args)
-    #   render_env(**args).chdir(layout_path)
-    # end
-
     # Returns renderer for the view and provided format
     #
     # @api private
@@ -567,28 +521,19 @@ module Hanami
     # @return [Rendered] rendered view object
     # @api public
     def call(format: config.default_format, context: config.default_context, **input)
-      # env = self.class.render_env(format: format, context: context)
-      # template_env = self.class.template_env(format: format, context: context)
-
       renderer = self.class.renderer(format)
 
       locals = locals(context, input)
-      # locals = locals(template_env, input)
-      # output = env.template(config.template, template_env.scope(config.scope, locals))
       output = renderer.template(
         config.template,
-        # Scope.new(locals: locals, render_env: template_env)
         Scope.new(locals: locals, renderer: renderer, context: context)
       )
 
       if layout?
-        # layout_env = self.class.layout_env(format: format, context: context)
         begin
           output = renderer.template(
-            "#{config.layouts_dir}/#{config.layout}", # TODO: this will break for a nil layouts dir
-            # self.class.layout_path,
-            # layout_env.scope(config.scope, layout_locals(locals))
-            Scope.new(locals: layout_locals(locals), renderer: renderer, context: context)
+            "#{config.layouts_dir}/#{config.layout}", # FIXME: this will break for a nil layouts dir
+            Scope.new(locals: layout_locals(locals), renderer: renderer, context: contextt)
           ) { output }
         rescue TemplateNotFoundError
           raise LayoutNotFoundError.new(config.layout, config.paths)
@@ -600,7 +545,6 @@ module Hanami
 
     private
 
-    # @api private
     def ensure_config
       raise UndefinedConfigError, :paths unless Array(config.paths).any?
       raise UndefinedConfigError, :template unless config.template
@@ -610,26 +554,12 @@ module Hanami
       exposures.(context: context, **input)
     end
 
-    # @api private
-    # def _env_locals(render_env, input)
-    #   exposures.(context: render_env.context, **input)
-    #   # do |value, exposure|
-    #   #   if exposure.decorate? && value
-    #   #     render_env.part(exposure.name, value, **exposure.options)
-    #   #   else
-    #   #     value
-    #   #   end
-    #   # end
-    # end
-
-    # @api private
     def layout_locals(locals)
       locals.each_with_object({}) do |(key, value), layout_locals|
         layout_locals[key] = value if exposures[key].for_layout?
       end
     end
 
-    # @api private
     def layout?
       !!config.layout # rubocop:disable Style/DoubleNegation
     end
