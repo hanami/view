@@ -52,16 +52,6 @@ module Hanami
       def partial(name, scope, &block)
         renderer.partial(name, scope, &block)
       end
-
-      def chdir(dirname)
-        self.class.new(
-          renderer: renderer.chdir(dirname),
-          inflector: inflector,
-          context: context,
-          # scope_builder: scope_builder,
-          # part_builder: part_builder
-        )
-      end
     end
   end
 end

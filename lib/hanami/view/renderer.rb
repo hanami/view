@@ -49,12 +49,6 @@ module Hanami
         tilt(path).render(scope, {locals: scope._locals}, &block)
       end
 
-      def chdir(dirname)
-        new_paths = paths.map { |path| path.chdir(dirname) }
-
-        self.class.new(new_paths, format: format, **options)
-      end
-
       private
 
       def lookup(name, **options)
