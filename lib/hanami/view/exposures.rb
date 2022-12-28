@@ -55,18 +55,20 @@ module Hanami
             exposures.keys
           end
 
-        # rubocop:disable Style/MultilineBlockChain
-        names.each_with_object({}) { |name, memo|
-          next unless (exposure = self[name])
+        names
+          .each_with_object({}) { |name, memo|
+            next unless (exposure = self[name])
 
-          value = exposure.(input, memo)
-          value = yield(value, exposure) if block_given?
+            value = exposure.(input, memo)
+            value = yield(value, exposure) if block_given?
 
-          memo[name] = value
-        }.each_with_object({}) { |(name, value), memo|
-          memo[name] = value unless self[name].private?
-        }
-        # rubocop:enable Style/MultilineBlockChain
+            memo[name] = value
+          }
+          .tap { |hsh|
+            names.each do |key|
+              hsh.delete(key) if self[key].private?
+            end
+          }
       end
 
       private
