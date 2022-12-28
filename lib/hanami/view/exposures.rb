@@ -48,8 +48,8 @@ module Hanami
       def call(input)
         # Only tsort if we need to (it's faster when we can avoid it)
         names =
-          # TODO: this sholud be cachable at time of `#add`
-          if exposures.values.any? { |e| e.dependency_names.any? }
+          # TODO: this sholud be cachable at time of `#add` (not necessarily faster though)
+          if exposures.values.any?(&:dependencies?)
             tsort
           else
             exposures.keys
