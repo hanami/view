@@ -567,26 +567,28 @@ module Hanami
     # @return [Rendered] rendered view object
     # @api public
     def call(format: config.default_format, context: config.default_context, **input)
-      env = self.class.render_env(format: format, context: context)
+      # env = self.class.render_env(format: format, context: context)
       # template_env = self.class.template_env(format: format, context: context)
 
-      locals = locals(env, input)
+      renderer = self.class.renderer(format)
+
+      locals = locals(context, input)
       # locals = locals(template_env, input)
       # output = env.template(config.template, template_env.scope(config.scope, locals))
-      output = env.template(
+      output = renderer.template(
         config.template,
         # Scope.new(locals: locals, render_env: template_env)
-        Scope.new(locals: locals, render_env: env)
+        Scope.new(locals: locals, renderer: renderer, context: context)
       )
 
       if layout?
         # layout_env = self.class.layout_env(format: format, context: context)
         begin
-          output = env.template(
+          output = renderer.template(
             "#{config.layouts_dir}/#{config.layout}", # TODO: this will break for a nil layouts dir
             # self.class.layout_path,
             # layout_env.scope(config.scope, layout_locals(locals))
-            Scope.new(locals: layout_locals(locals), render_env: env)
+            Scope.new(locals: layout_locals(locals), renderer: renderer, context: context)
           ) { output }
         rescue TemplateNotFoundError
           raise LayoutNotFoundError.new(config.layout, config.paths)
@@ -604,17 +606,21 @@ module Hanami
       raise UndefinedConfigError, :template unless config.template
     end
 
-    # @api private
-    def locals(render_env, input)
-      exposures.(context: render_env.context, **input)
-      # do |value, exposure|
-      #   if exposure.decorate? && value
-      #     render_env.part(exposure.name, value, **exposure.options)
-      #   else
-      #     value
-      #   end
-      # end
+    def locals(context, input)
+      exposures.(context: context, **input)
     end
+
+    # @api private
+    # def _env_locals(render_env, input)
+    #   exposures.(context: render_env.context, **input)
+    #   # do |value, exposure|
+    #   #   if exposure.decorate? && value
+    #   #     render_env.part(exposure.name, value, **exposure.options)
+    #   #   else
+    #   #     value
+    #   #   end
+    #   # end
+    # end
 
     # @api private
     def layout_locals(locals)
