@@ -10,6 +10,15 @@ module Hanami
       extend Dry::Core::Cache
 
       class << self
+        # WIP
+        def mapping(custom_mapping)
+          if custom_mapping.any?
+            build_mapping(custom_mapping)
+          else
+            default_mapping
+          end
+        end
+
         def [](path, mapping, **options)
           ext = File.extname(path).sub(/^./, "").to_sym
           activate_adapter ext
@@ -35,6 +44,8 @@ module Hanami
           @adapters ||= {}
         end
 
+        # FIXME: this would be better done with a hash of activated adapters rather than our generic
+        # cache
         def activate_adapter(ext)
           fetch_or_store(:adapter, ext) {
             adapter = adapters[ext]

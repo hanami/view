@@ -46,7 +46,8 @@ module Hanami
       end
 
       def render(path, scope, &block)
-        tilt(path).render(scope, {locals: scope._locals}, &block)
+        # tilt(path).render(scope, {locals: scope._locals}, &block)
+        tilt_template(path).render(scope, {locals: scope._locals}, &block)
       end
 
       private
@@ -65,11 +66,26 @@ module Hanami
         name_segments[0..-2].push("#{PARTIAL_PREFIX}#{name_segments[-1]}").join(PATH_DELIMITER)
       end
 
-      def tilt(path)
-        fetch_or_store(:engine, path, engine_mapping, options) {
-          Tilt[path, engine_mapping, **options]
+      def tilt_template(path)
+        fetch_or_store(:tilt_template, path) {
+          ext = File.extname(path).sub(/^./, "").to_sym
+          Tilt.send :activate_adapter, ext
+
+          tilt.new(path, options) # do we need to splat these options still?
         }
       end
+
+      def tilt
+        # TODO: need to activate our internal tilt "adapters" here
+        # TODO: engine_mapping could be frozen and have its hash cached?
+        fetch_or_store(:tilt, engine_mapping) { Tilt.mapping(engine_mapping) }
+      end
+
+      # def tilt(path)
+      #   fetch_or_store(:engine, path, engine_mapping, options) {
+      #     Tilt[path, engine_mapping, **options]
+      #   }
+      # end
     end
   end
 end
