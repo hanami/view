@@ -62,8 +62,10 @@ module Hanami
 
       # Renames "foo/bar/baz" to "foo/bar/_baz"
       def name_for_partial(name)
-        name_segments = name.to_s.split(PATH_DELIMITER)
-        name_segments[0..-2].push("#{PARTIAL_PREFIX}#{name_segments[-1]}").join(PATH_DELIMITER)
+        fetch_or_store(:partial_name, name) {
+          name_segments = name.to_s.split(PATH_DELIMITER)
+          name_segments[0..-2].push("#{PARTIAL_PREFIX}#{name_segments[-1]}").join(PATH_DELIMITER)
+        }
       end
 
       def tilt_template(path)
