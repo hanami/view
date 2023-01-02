@@ -18,7 +18,10 @@ module Hanami
 
       attr_reader :paths, :format, :engine_mapping, :options
 
-      def initialize(paths, format:, engine_mapping: nil, **options)
+      attr_reader :config
+
+      def initialize(config, paths, format:, engine_mapping: nil, **options)
+        @config = config
         @paths = paths
         @format = format
         @engine_mapping = engine_mapping || {}
@@ -46,17 +49,18 @@ module Hanami
       end
 
       def render(path, scope, &block)
-        # tilt(path).render(scope, {locals: scope._locals}, &block)
         tilt_template(path).render(scope, {locals: scope._locals}, &block)
       end
 
       private
 
       def lookup(name)
-        paths.each do |path|
-          result = path.lookup(name, format)
-          return result if result
-        end
+        fetch_or_store(:lookup, config, name, format) {
+          paths.each do |path|
+            result = path.lookup(name, format)
+            break result if result
+          end
+        }
       end
 
       # Renames "foo/bar/baz" to "foo/bar/_baz"
@@ -79,6 +83,8 @@ module Hanami
         # TODO: need to activate our internal tilt "adapters" here
         # TODO: engine_mapping could be frozen and have its hash cached?
         fetch_or_store(:tilt, engine_mapping) { Tilt.mapping(engine_mapping) }
+        # Tilt.mapping(engine_mapping)
+        # ::Tilt.default_mapping
       end
 
       # def tilt(path)

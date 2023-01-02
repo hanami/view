@@ -21,7 +21,7 @@ module Hanami
       # @api private
       CONVENIENCE_METHODS = %i[format context locals].freeze
 
-      include Dry::Equalizer(:_name, :_locals, :_context, :_renderer)
+      include Dry::Equalizer(:_name, :_locals, :_context, :_renderer) # hmmm
 
       # The scope's name
       #

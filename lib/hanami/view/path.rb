@@ -7,7 +7,6 @@ module Hanami
   class View
     # @api private
     class Path
-      extend Dry::Core::Cache
       include Dry::Equalizer(:dir, :root)
 
       attr_reader :dir, :root
@@ -25,19 +24,11 @@ module Hanami
         @root = Pathname(root)
       end
 
+      # Search for a template using a wildcard for the engine extension
       def lookup(name, format)
-        fetch_or_store(dir, root, name, format) do
-          lookup_template(name, format)
-        end
+        glob = dir.join("#{name}.#{format}.*")
+        Dir[glob].first
       end
-
-      # def lookup(name, format, child_dirs: [], parent_dir: false)
-      #   fetch_or_store(dir, root, name, format, child_dirs, parent_dir) do
-      #     lookup_template(name, format) ||
-      #       lookup_in_child_dirs(name, format, child_dirs: child_dirs) ||
-      #       parent_dir && lookup_in_parent_dir(name, format, child_dirs: child_dirs)
-      #   end
-      # end
 
       def chdir(dirname)
         self.class.new(dir.join(dirname), root: root)
@@ -51,12 +42,6 @@ module Hanami
 
       def root?
         dir == root
-      end
-
-      # Search for a template using a wildcard for the engine extension
-      def lookup_template(name, format)
-        glob = dir.join("#{name}.#{format}.*")
-        Dir[glob].first
       end
 
       def lookup_in_child_dirs(name, format, child_dirs:)

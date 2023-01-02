@@ -464,6 +464,7 @@ module Hanami
     def self.renderer(format)
       fetch_or_store(:renderer, config, format) {
         Renderer.new(
+          config,
           config.paths,
           format: format,
           engine_mapping: config.renderer_engine_mapping,
