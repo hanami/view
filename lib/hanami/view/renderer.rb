@@ -25,8 +25,8 @@ module Hanami
         @options = options
       end
 
-      def template(name, scope, **lookup_options, &block)
-        path = lookup(name, **lookup_options)
+      def template(name, scope, &block)
+        path = lookup(name)
 
         if path
           render(path, scope, &block)
@@ -52,12 +52,11 @@ module Hanami
 
       private
 
-      def lookup(name, **options)
-        # FIXME: this should just be paths.each with a return inside the block
-        paths.inject(nil) { |_, path|
-          result = path.lookup(name, format, **options)
-          break result if result
-        }
+      def lookup(name)
+        paths.each do |path|
+          result = path.lookup(name, format)
+          return result if result
+        end
       end
 
       # Renames "foo/bar/baz" to "foo/bar/_baz"
