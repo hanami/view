@@ -30,23 +30,29 @@ module Hanami
       end
 
       def dependency_names
-        if proc
-          proc.parameters.each_with_object([]) { |(type, name), names|
-            names << name if EXPOSURE_DEPENDENCY_PARAMETER_TYPES.include?(type)
-          }
-        else
-          []
-        end
+        @dependency_names ||=
+          if proc
+            proc.parameters.each_with_object([]) { |(type, name), names|
+              names << name if EXPOSURE_DEPENDENCY_PARAMETER_TYPES.include?(type)
+            }
+          else
+            []
+          end
+      end
+
+      def dependencies?
+        !dependency_names.empty?
       end
 
       def input_keys
-        if proc
-          proc.parameters.each_with_object([]) { |(type, name), keys|
-            keys << name if INPUT_PARAMETER_TYPES.include?(type)
-          }
-        else
-          []
-        end
+        @input_keys ||=
+          if proc
+            proc.parameters.each_with_object([]) { |(type, name), keys|
+              keys << name if INPUT_PARAMETER_TYPES.include?(type)
+            }
+          else
+            []
+          end
       end
 
       def for_layout?

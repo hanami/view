@@ -46,8 +46,16 @@ module Hanami
       end
 
       def call(input)
+        # Avoid performance cost of tsorting when we don't need it
+        names =
+          if exposures.values.any?(&:dependencies?) # TODO: this sholud be cachable at time of `#add`
+            tsort
+          else
+            exposures.keys
+          end
+
         # rubocop:disable Style/MultilineBlockChain
-        tsort.each_with_object({}) { |name, memo|
+        names.each_with_object({}) { |name, memo|
           next unless (exposure = self[name])
 
           value = exposure.(input, memo)
