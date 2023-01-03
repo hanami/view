@@ -25,8 +25,8 @@ module Hanami
         @options = options
       end
 
-      def template(name, scope, **lookup_options, &block)
-        path = lookup(name, **lookup_options)
+      def template(name, scope, &block)
+        path = lookup(name)
 
         if path
           render(path, scope, &block)
@@ -36,13 +36,7 @@ module Hanami
       end
 
       def partial(name, scope, &block)
-        template(
-          name_for_partial(name),
-          scope,
-          child_dirs: %w[shared],
-          parent_dir: true,
-          &block
-        )
+        template(name_for_partial(name), scope, &block)
       end
 
       def render(path, scope, &block)
@@ -57,10 +51,12 @@ module Hanami
 
       private
 
-      def lookup(name, **options)
-        paths.inject(nil) { |_, path|
-          result = path.lookup(name, format, **options)
-          break result if result
+      def lookup(name)
+        fetch_or_store(:lookup, paths, name) {
+          paths.reduce(nil) do |_, path|
+            result = path.lookup(name, format)
+            break result if result
+          end
         }
       end
 

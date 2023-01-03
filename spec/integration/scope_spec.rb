@@ -127,7 +127,8 @@ RSpec.describe "Scopes" do
     module Test::Parts
       class Message < Hanami::View::Part
         def greeting
-          scope(:greeting, greeting: value[:text]).render
+          # FIXME: partial name should not be required here
+          scope(:greeting, greeting: value[:text]).render("../shared/greeting")
         end
       end
     end
