@@ -65,8 +65,9 @@ module Hanami
       end
 
       def name_for_partial(name)
-        name_segments = name.to_s.split(PATH_DELIMITER)
-        name_segments[0..-2].push("#{PARTIAL_PREFIX}#{name_segments[-1]}").join(PATH_DELIMITER)
+        segments = name.to_s.split(PATH_DELIMITER)
+        segments[-1] = "_#{segments[-1]}"
+        segments.join(PATH_DELIMITER)
       end
 
       def tilt(path)
