@@ -50,15 +50,15 @@ module Hanami
       end
 
       def for_layout?
-        options.fetch(:layout) { false }
+        options.fetch(:layout, false)
       end
 
       def decorate?
-        options.fetch(:decorate) { true }
+        options[:as] || options.fetch(:decorate, false)
       end
 
       def private?
-        options.fetch(:private) { false }
+        options.fetch(:private, false)
       end
 
       def default_value

@@ -9,7 +9,7 @@ RSpec.describe "View / locals" do
       config.paths = SPEC_ROOT.join("fixtures/templates")
       config.template = "greeting"
 
-      expose :greeting
+      expose :greeting, decorate: true
     end.new
 
     local = view.(greeting: "Hello").locals[:greeting]

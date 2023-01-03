@@ -45,7 +45,7 @@ RSpec.describe "Context" do
       config.template = "decorated_attributes"
       config.part_namespace = Test::Parts
 
-      expose :user
+      expose :user, decorate: true
     end.new
 
     context = Test::Context.new(assets: Test::Assets.new)

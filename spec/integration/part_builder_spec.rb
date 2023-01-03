@@ -27,8 +27,8 @@ RSpec.describe "part builder" do
         config.template = "decorated_parts"
         config.part_namespace = Test
 
-        expose :customs
-        expose :custom
+        expose :customs, decorate: true
+        expose :custom, decorate: true
         expose :ordinary
       end.new
 
@@ -84,7 +84,7 @@ RSpec.describe "part builder" do
         config.layout = nil
         config.template = "decorated_parts"
 
-        expose :customs, :custom, :ordinary
+        expose :customs, :custom, :ordinary, decorate: true
       end.new
 
       expect(view.(customs: ["many things"], custom: "custom thing", ordinary: "ordinary thing").to_s).to eql(

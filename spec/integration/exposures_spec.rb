@@ -195,7 +195,7 @@ RSpec.describe "exposures" do
         "#{users.length} users"
       end
 
-      expose :article do |users|
+      expose :article, decorate: true do |users|
         "Great article from #{users.first.display_name}"
       end
     end.new
