@@ -14,25 +14,32 @@ module Hanami
 
       extend Dry::Core::Cache
 
-      include Dry::Equalizer(:paths, :format, :engine_mapping, :options)
+      include Dry::Equalizer(:paths, :prefixes, :format, :engine_mapping, :options)
 
-      attr_reader :paths, :format, :engine_mapping, :options
+      attr_reader :paths, :prefixes, :format, :engine_mapping, :options
 
       def initialize(paths, format:, engine_mapping: nil, **options)
         @paths = paths
+        @prefixes = ["."]
         @format = format
         @engine_mapping = engine_mapping || {}
         @options = options
       end
 
       def template(name, scope, &block)
-        path = lookup(name)
+        old_prefixes = @prefixes
 
-        if path
-          render(path, scope, &block)
-        else
-          raise TemplateNotFoundError.new(name, format, paths)
-        end
+        template_path, found_in_path = lookup(name)
+
+        raise TemplateNotFoundError.new(name, format, paths) unless template_path
+
+        # new_prefix = File.dirname(Pathname(template_path).relative_path_from(found_in_path.dir))
+        new_prefix = File.dirname(name)
+        @prefixes << new_prefix unless @prefixes.include?(new_prefix)
+
+        render(template_path, scope, &block)
+      ensure
+        @prefixes = old_prefixes
       end
 
       def partial(name, scope, &block)
@@ -52,10 +59,14 @@ module Hanami
       private
 
       def lookup(name)
-        fetch_or_store(:lookup, paths, name) {
-          paths.reduce(nil) do |_, path|
-            result = path.lookup(name, format)
-            break result if result
+        fetch_or_store(:lookup, paths, prefixes, name) {
+          catch :found do
+            paths.reduce(nil) do |_, path|
+              prefixes.each do |prefix|
+                result = path.lookup(prefix, name, format)
+                throw :found, [result, path] if result
+              end
+            end
           end
         }
       end

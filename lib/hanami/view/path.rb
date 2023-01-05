@@ -24,8 +24,8 @@ module Hanami
       end
 
       # Searches for a template using a wildcard for the engine extension
-      def lookup(name, format)
-        glob = dir.join("#{name}.#{format}.*")
+      def lookup(prefix, name, format)
+        glob = dir.join(prefix, "#{name}.#{format}.*")
         Dir[glob].first
       end
 

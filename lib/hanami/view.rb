@@ -14,6 +14,7 @@ require_relative "view/path"
 require_relative "view/render_environment"
 require_relative "view/rendered"
 require_relative "view/renderer"
+require_relative "view/rendering"
 require_relative "view/scope_builder"
 
 module Hanami
@@ -561,6 +562,26 @@ module Hanami
     # @return [Rendered] rendered view object
     # @api public
     def call(format: config.default_format, context: config.default_context, **input)
+      rendering = Rendering.new(config, format, context)
+
+      locals = locals(rendering, input)
+      output = rendering.template(config.template, rendering.scope(config.scope, locals))
+
+      if layout?
+        begin
+          output = rendering.template(
+            self.class.layout_path,
+            rendering.scope(config.scope, layout_locals(locals))
+          ) { output }
+        rescue TemplateNotFoundError
+          raise LayoutNotFoundError, config.layout, config.paths
+        end
+      end
+
+      Rendered.new(output: output, locals: locals)
+    end
+
+    def old_call(format: config.default_format, context: config.default_context, **input)
       env = self.class.render_env(format: format, context: context)
       template_env = self.class.template_env(format: format, context: context)
 
