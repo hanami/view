@@ -12,23 +12,21 @@ module Hanami
       PATH_DELIMITER = "/"
 
       include Dry::Equalizer(:config, :format)
-      attr_reader :cache, :config, :format, :prefixes
+      attr_reader :cache, :config, :prefixes
 
-      def initialize(cache, config, format)
+      def initialize(cache, config)
         @cache = cache
         @config = config
-        @format = format
         @prefixes = ["."]
       end
 
-      def template(name, scope, &block)
-        old_prefixes = @prefixes
+      def template(name, format, scope, &block)
+        old_prefixes = @prefixes.dup
 
-        template_path = lookup(name)
+        template_path = lookup(name, format)
 
         raise TemplateNotFoundError.new(name, format, config.paths) unless template_path
 
-        # new_prefix = File.dirname(Pathname(template_path).relative_path_from(found_in_path.dir))
         new_prefix = File.dirname(name)
         @prefixes << new_prefix unless @prefixes.include?(new_prefix)
 
@@ -37,18 +35,14 @@ module Hanami
         @prefixes = old_prefixes
       end
 
-      def partial(name, scope, &block)
-        template(name_for_partial(name), scope, &block)
-      end
-
-      def render(path, scope, &block)
-        tilt(path).render(scope, {locals: scope._locals}, &block)
+      def partial(name, format, scope, &block)
+        template(name_for_partial(name), format, scope, &block)
       end
 
       private
 
-      def lookup(name)
-        cache.fetch_or_store([:lookup, config.paths, prefixes, name].hash) {
+      def lookup(name, format)
+        cache.fetch_or_store([:lookup, name, format, config, prefixes].hash) {
           catch :found do
             config.paths.reduce(nil) do |_, path|
               prefixes.each do |prefix|
@@ -64,6 +58,10 @@ module Hanami
         segments = name.to_s.split(PATH_DELIMITER)
         segments[-1] = "_#{segments[-1]}"
         segments.join(PATH_DELIMITER)
+      end
+
+      def render(path, scope, &block)
+        tilt(path).render(scope, {locals: scope._locals}, &block)
       end
 
       def tilt(path)

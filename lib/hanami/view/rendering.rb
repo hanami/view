@@ -19,7 +19,7 @@ module Hanami
 
         @inflector = config.inflector
 
-        @renderer = Renderer.new(cache, config, format)
+        @renderer = Renderer.new(cache, config)
 
         # Maybe these could be single cached instances too, and we use effect for render_env?
         @part_builder = config.part_builder.new(namespace: config.part_namespace, render_env: self)
@@ -27,11 +27,11 @@ module Hanami
       end
 
       def template(name, scope, &block)
-        renderer.template(name, scope, &block)
+        renderer.template(name, format, scope, &block)
       end
 
       def partial(name, scope, &block)
-        renderer.partial(name, scope, &block)
+        renderer.partial(name, format, scope, &block)
       end
 
       def part(name, value, **options)
