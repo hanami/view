@@ -19,14 +19,7 @@ module Hanami
 
         @inflector = config.inflector
 
-        # Maybe this can be a single instance, and we pass in config, etc.
-        @renderer = Renderer.new(
-          cache,
-          config.paths,
-          format: format,
-          engine_mapping: config.renderer_engine_mapping,
-          **config.renderer_options
-        )
+        @renderer = Renderer.new(cache, config, format)
 
         # Maybe these could be single cached instances too, and we use effect for render_env?
         @part_builder = config.part_builder.new(namespace: config.part_namespace, render_env: self)

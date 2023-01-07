@@ -226,7 +226,7 @@ module Hanami
     #   @param mapping [Hash<Symbol, Class>] engine mapping
     #   @api public
     # @!scope class
-    setting :renderer_engine_mapping
+    setting :renderer_engine_mapping, default: {}
 
     # @!endgroup
 
@@ -533,6 +533,7 @@ module Hanami
     #
     # @api public
     def initialize
+      self.class.config.finalize!
       ensure_config
 
       @exposures = self.class.exposures.bind(self)

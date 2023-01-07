@@ -11,17 +11,14 @@ module Hanami
       PARTIAL_PREFIX = "_"
       PATH_DELIMITER = "/"
 
-      include Dry::Equalizer(:paths, :prefixes, :format, :engine_mapping, :options)
+      include Dry::Equalizer(:config, :format)
+      attr_reader :cache, :config, :format, :prefixes
 
-      attr_reader :cache, :paths, :prefixes, :format, :engine_mapping, :options
-
-      def initialize(cache, paths, format:, engine_mapping: nil, **options)
+      def initialize(cache, config, format)
         @cache = cache
-        @paths = paths
-        @prefixes = ["."]
+        @config = config
         @format = format
-        @engine_mapping = engine_mapping || {}
-        @options = options
+        @prefixes = ["."]
       end
 
       def template(name, scope, &block)
@@ -29,7 +26,7 @@ module Hanami
 
         template_path = lookup(name)
 
-        raise TemplateNotFoundError.new(name, format, paths) unless template_path
+        raise TemplateNotFoundError.new(name, format, config.paths) unless template_path
 
         # new_prefix = File.dirname(Pathname(template_path).relative_path_from(found_in_path.dir))
         new_prefix = File.dirname(name)
@@ -48,18 +45,12 @@ module Hanami
         tilt(path).render(scope, {locals: scope._locals}, &block)
       end
 
-      def chdir(dirname)
-        new_paths = paths.map { |path| path.chdir(dirname) }
-
-        self.class.new(new_paths, format: format, **options)
-      end
-
       private
 
       def lookup(name)
-        cache.fetch_or_store([:lookup, paths, prefixes, name].hash) {
+        cache.fetch_or_store([:lookup, config.paths, prefixes, name].hash) {
           catch :found do
-            paths.reduce(nil) do |_, path|
+            config.paths.reduce(nil) do |_, path|
               prefixes.each do |prefix|
                 result = path.lookup(prefix, name, format)
                 throw :found, result if result
@@ -76,8 +67,8 @@ module Hanami
       end
 
       def tilt(path)
-        cache.fetch_or_store([:engine, path, engine_mapping, options].hash) {
-          Tilt[path, engine_mapping, **options]
+        cache.fetch_or_store([:engine, path, config].hash) {
+          Tilt[path, config.renderer_engine_mapping, **config.renderer_options]
         }
       end
     end
