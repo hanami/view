@@ -605,13 +605,11 @@ module Hanami
 
     private
 
-    # @api private
     def ensure_config
       raise UndefinedConfigError, :paths unless Array(config.paths).any?
       raise UndefinedConfigError, :template unless config.template
     end
 
-    # @api private
     def locals(render_env, input)
       exposures.(context: render_env.context, **input) do |value, exposure|
         if exposure.decorate? && value
@@ -622,14 +620,12 @@ module Hanami
       end
     end
 
-    # @api private
     def layout_locals(locals)
       locals.each_with_object({}) do |(key, value), layout_locals|
         layout_locals[key] = value if exposures[key].for_layout?
       end
     end
 
-    # @api private
     def layout?
       !!config.layout # rubocop:disable Style/DoubleNegation
     end
