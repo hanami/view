@@ -44,7 +44,7 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
       $LOADED_FEATURES.reject! { |path| path =~ /hamlit/ }
 
       Hanami::View::Tilt.cache.clear
-      Hanami::View::Renderer.cache.clear
+      Hanami::View.cache.clear
     end
 
     after do

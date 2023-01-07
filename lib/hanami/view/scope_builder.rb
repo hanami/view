@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/cache"
 require "dry/core/equalizer"
 require_relative "scope"
 
@@ -10,7 +9,6 @@ module Hanami
     #
     # @api private
     class ScopeBuilder
-      extend Dry::Core::Cache
       include Dry::Equalizer(:namespace)
 
       # The view's configured `scope_namespace`
@@ -64,7 +62,7 @@ module Hanami
         elsif name.is_a?(Class)
           name
         else
-          fetch_or_store(namespace, name) do
+          render_env.cache.fetch_or_store([namespace, name].hash) do
             resolve_scope_class(name: name)
           end
         end

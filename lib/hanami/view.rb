@@ -562,7 +562,7 @@ module Hanami
     # @return [Rendered] rendered view object
     # @api public
     def call(format: config.default_format, context: config.default_context, **input)
-      rendering = Rendering.new(config, format, context)
+      rendering = Rendering.new(self.class.cache, config, format, context)
 
       locals = locals(rendering, input)
       output = rendering.template(config.template, rendering.scope(config.scope, locals))

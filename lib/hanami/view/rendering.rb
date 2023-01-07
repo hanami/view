@@ -7,24 +7,30 @@ module Hanami
   class View
     # @api private
     class Rendering
-      attr_reader :config, :format, :context
+      attr_reader :cache, :config, :format, :context
 
       attr_reader :inflector, :renderer, :part_builder, :scope_builder
 
-      def initialize(config, format, context)
+      def initialize(cache, config, format, context)
+        @cache = cache
         @config = config
         @format = format
         @context = context.for_render_env(self)
 
         @inflector = config.inflector
+
+        # Maybe this can be a single instance, and we pass in config, etc.
         @renderer = Renderer.new(
+          cache,
           config.paths,
           format: format,
           engine_mapping: config.renderer_engine_mapping,
           **config.renderer_options
         )
-        @part_builder = config.part_builder.new(namespace: config.part_namespace).for_render_env(self)
-        @scope_builder = config.scope_builder.new(namespace: config.scope_namespace).for_render_env(self)
+
+        # Maybe these could be single cached instances too, and we use effect for render_env?
+        @part_builder = config.part_builder.new(namespace: config.part_namespace, render_env: self)
+        @scope_builder = config.scope_builder.new(namespace: config.scope_namespace, render_env: self)
       end
 
       def template(name, scope, &block)

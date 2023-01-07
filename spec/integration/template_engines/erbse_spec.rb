@@ -44,7 +44,7 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
       $LOADED_FEATURES.reject! { |path| path =~ %r{erbse|hanami/view/tilt/erbse} }
 
       Hanami::View::Tilt.cache.clear
-      Hanami::View::Renderer.cache.clear
+      Hanami::View.cache.clear
     end
 
     after do

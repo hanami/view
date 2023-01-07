@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/cache"
 require "dry/core/equalizer"
 require_relative "errors"
 require_relative "tilt"
@@ -12,13 +11,12 @@ module Hanami
       PARTIAL_PREFIX = "_"
       PATH_DELIMITER = "/"
 
-      extend Dry::Core::Cache
-
       include Dry::Equalizer(:paths, :prefixes, :format, :engine_mapping, :options)
 
-      attr_reader :paths, :prefixes, :format, :engine_mapping, :options
+      attr_reader :cache, :paths, :prefixes, :format, :engine_mapping, :options
 
-      def initialize(paths, format:, engine_mapping: nil, **options)
+      def initialize(cache, paths, format:, engine_mapping: nil, **options)
+        @cache = cache
         @paths = paths
         @prefixes = ["."]
         @format = format
@@ -29,7 +27,7 @@ module Hanami
       def template(name, scope, &block)
         old_prefixes = @prefixes
 
-        template_path, found_in_path = lookup(name)
+        template_path = lookup(name)
 
         raise TemplateNotFoundError.new(name, format, paths) unless template_path
 
@@ -59,12 +57,12 @@ module Hanami
       private
 
       def lookup(name)
-        fetch_or_store(:lookup, paths, prefixes, name) {
+        cache.fetch_or_store([:lookup, paths, prefixes, name].hash) {
           catch :found do
             paths.reduce(nil) do |_, path|
               prefixes.each do |prefix|
                 result = path.lookup(prefix, name, format)
-                throw :found, [result, path] if result
+                throw :found, result if result
               end
             end
           end
@@ -78,7 +76,7 @@ module Hanami
       end
 
       def tilt(path)
-        fetch_or_store(:engine, path, engine_mapping, options) {
+        cache.fetch_or_store([:engine, path, engine_mapping, options].hash) {
           Tilt[path, engine_mapping, **options]
         }
       end

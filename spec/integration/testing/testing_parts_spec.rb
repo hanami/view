@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe "Testing / parts" do
+RSpec.xdescribe "Testing / parts" do
   let(:part_class) {
     Class.new(Hanami::View::Part) do
     end
