@@ -33,4 +33,18 @@ RSpec.describe "Template engines / slim" do
 
     expect(view.().to_s).to eq "<wrapper>Yielded</wrapper>"
   end
+
+  it "escapes contents" do
+    view = Class.new(base_view) do
+      config.template = "escape"
+
+      expose :users
+    end.new
+
+    users = [
+      {name: "XSS", email: "<script></script>"}
+    ]
+
+    expect(view.(users: users).to_s).to eq %(<div id="escaped"><table><tr><td>XSS</td><td>&lt;script&gt;&lt;/script&gt;</td></tr></table></div><div id="unescaped"><script></script></div>)
+  end
 end

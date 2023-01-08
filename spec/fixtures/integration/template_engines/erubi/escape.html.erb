@@ -1,0 +1,13 @@
+<div id="escaped">
+  <table>
+  <% users.each do |user| %>
+    <tr>
+      <td><%= user[:name] %></td>
+      <td><%= user[:email] %></td>
+    </tr>
+  <% end %>
+  </table>
+</div>
+<div id="unescaped">
+  <%== users.first[:email] %>
+</div>

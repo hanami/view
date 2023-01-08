@@ -33,6 +33,38 @@ RSpec.describe "Template engines / haml (using hamlit-block as default engine)" 
 
       expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
     end
+
+    it "escapes contents" do
+      view = Class.new(base_view) do
+        config.template = "escape"
+
+        expose :users
+      end.new
+
+      users = [
+        {name: "XSS", email: "<script></script>"}
+      ]
+
+      expected = <<~HTML
+        <div id='escaped'>
+        <table>
+        <tr>
+        <td>
+        XSS
+        </td>
+        <td>
+        &lt;script&gt;&lt;/script&gt;
+        </td>
+        </tr>
+        </table>
+        </div>
+        <div id='unescaped'>
+        <script></script>
+        </div>
+      HTML
+
+      expect(view.(users: users).to_s).to eq(expected)
+    end
   end
 
   context "with hamlit not available" do

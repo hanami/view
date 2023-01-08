@@ -33,6 +33,21 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
 
       expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
     end
+
+    xit "escapes contents" do
+      view = Class.new(base_view) do
+        config.template = "escape"
+
+        expose :users
+      end.new
+
+      users = [
+        {name: "XSS", email: "<script></script>"}
+      ]
+
+      actual = view.(users: users).to_s.gsub("\n", "")
+      expect(actual).to eq %(<div id="escaped">  <table>      <tr>      <td>XSS</td>      <td>&lt;script&gt;&lt;/script&gt;</td>    </tr>    </table></div><div id="unescaped">  <script></script></div>)
+    end
   end
 
   context "with erbse not available" do

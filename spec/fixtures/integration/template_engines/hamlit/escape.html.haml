@@ -1,0 +1,11 @@
+%div#escaped
+  %table
+    - users.each do |user|
+      %tr
+        %td
+          = user[:name]
+        %td
+          = user[:email]
+
+%div#unescaped
+  != users.first[:email]
