@@ -10,11 +10,11 @@ module Hanami
       extend Dry::Core::Cache
 
       class << self
-        def [](path, mapping, **options)
+        def [](path, mapping, options)
           ext = File.extname(path).sub(/^./, "").to_sym
           activate_adapter ext
 
-          with_mapping(mapping).new(path, **options)
+          with_mapping(mapping).new(path, options)
         end
 
         def default_mapping
