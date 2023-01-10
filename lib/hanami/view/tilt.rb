@@ -7,11 +7,11 @@ module Hanami
     # @api private
     module Tilt
       class << self
-        def [](path, mapping, **options)
+        def [](path, mapping, options)
           ext = File.extname(path).sub(/^./, "").to_sym
           activate_adapter ext
 
-          with_mapping(mapping).new(path, **options)
+          with_mapping(mapping).new(path, options)
         end
 
         def default_mapping
