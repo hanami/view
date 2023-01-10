@@ -33,21 +33,21 @@ module Hanami
       #
       # @param name [Symbol] exposure name
       # @param value [Object] exposure value
-      # @param options [Hash] exposure options
+      # @param as [Symbol, nil] alternative name to use for part class resolution
       #
       # @return [Hanami::View::Part] decorated value
       #
       # @api private
-      def call(name, value, **options)
+      def call(name, value, as: nil)
         builder = value.respond_to?(:to_ary) ? :build_collection_part : :build_part
 
-        send(builder, name, value, **options)
+        send(builder, name, value, as: as)
       end
 
       private
 
-      def build_part(name, value, **options)
-        klass = part_class(name: name, **options)
+      def build_part(name, value, as:)
+        klass = part_class(name: name, as: as)
 
         klass.new(
           name: name,
@@ -56,46 +56,36 @@ module Hanami
         )
       end
 
-      def build_collection_part(name, value, **options)
-        collection_as = collection_options(name: name, **options)[:as]
-        item_name, item_as = collection_item_options(name: name, **options).values_at(:name, :as)
+      def build_collection_part(name, value, as: nil)
+        item_name, item_as = collection_item_name_as(name: name, as: as)
+        item_part_class = part_class(name: item_name, as: item_as)
 
-        arr = value.to_ary.map { |obj|
-          build_part(item_name, obj, **options.merge(as: item_as))
+        arr = value.to_ary.map { |item|
+          item_part_class.new(name: item_name, value: item, render_env: render_env)
         }
 
-        build_part(name, arr, **options.merge(as: collection_as))
+        collection_as = as.is_a?(Array) ? as.first : nil
+        build_part(name, arr, as: collection_as)
       end
 
-      # rubocop:disable Lint/UnusedMethodArgument
-      def collection_options(name:, **options)
-        collection_as = options[:as].is_a?(Array) ? options[:as].first : nil
-
-        options.merge(as: collection_as)
-      end
-      # rubocop:enable Lint/UnusedMethodArgument
-
-      def collection_item_options(name:, **options)
+      def collection_item_name_as(name:, as:)
         singular_name = inflector.singularize(name).to_sym
         singular_as =
-          if options[:as].is_a?(Array)
-            options[:as].last if options[:as].length > 1
+          if as.is_a?(Array)
+            as.last if as.length > 1
           else
-            options[:as]
+            as
           end
 
         if singular_as && !singular_as.is_a?(Class)
           singular_as = inflector.singularize(singular_as.to_s)
         end
 
-        options.merge(
-          name: singular_name,
-          as: singular_as
-        )
+        [singular_name, singular_as]
       end
 
-      def part_class(name:, fallback_class: Part, **options)
-        name = options[:as] || name
+      def part_class(name:, as:, fallback_class: Part)
+        name = as || name
 
         if name.is_a?(Class)
           name

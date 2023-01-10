@@ -34,8 +34,8 @@ module Hanami
         renderer.partial(name, format, scope, &block)
       end
 
-      def part(name, value, **options)
-        part_builder.(name, value, **options)
+      def part(name, value, as: nil)
+        part_builder.(name, value, as: as)
       end
 
       def scope(name = nil, locals) # rubocop:disable Style/OptionalArguments

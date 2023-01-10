@@ -592,7 +592,7 @@ module Hanami
     def locals(render_env, input)
       exposures.(context: render_env.context, **input) do |value, exposure|
         if exposure.decorate? && value
-          render_env.part(exposure.name, value, **exposure.options)
+          render_env.part(exposure.name, value, as: exposure.options[:as])
         else
           value
         end
