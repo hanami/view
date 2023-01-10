@@ -582,28 +582,6 @@ module Hanami
       Rendered.new(output: output, locals: locals)
     end
 
-    def old_call(format: config.default_format, context: config.default_context, **input)
-      env = self.class.render_env(format: format, context: context)
-      template_env = self.class.template_env(format: format, context: context)
-
-      locals = locals(template_env, input)
-      output = env.template(config.template, template_env.scope(config.scope, locals))
-
-      if layout?
-        layout_env = self.class.layout_env(format: format, context: context)
-        begin
-          output = env.template(
-            self.class.layout_path,
-            layout_env.scope(config.scope, layout_locals(locals))
-          ) { output }
-        rescue TemplateNotFoundError
-          raise LayoutNotFoundError.new(config.layout, config.paths)
-        end
-      end
-
-      Rendered.new(output: output, locals: locals)
-    end
-
     private
 
     def ensure_config
