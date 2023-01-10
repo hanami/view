@@ -65,7 +65,7 @@ module Hanami
       end
 
       def tilt(path)
-        cache.fetch_or_store([:engine, path, config].hash) {
+        cache.fetch_or_store([:tilt, path, config].hash) {
           Tilt[path, config.renderer_engine_mapping, **config.renderer_options]
         }
       end
