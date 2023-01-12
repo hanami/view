@@ -16,7 +16,7 @@ module Hanami
       include Dry::Equalizer(:_options)
       include DecoratedAttributes
 
-      attr_reader :_render_env, :_options
+      attr_reader :_rendering, :_options
 
       # Returns a new instance of Context
       #
@@ -36,16 +36,16 @@ module Hanami
       #   end
       #
       # @api public
-      def initialize(render_env: nil, **options)
-        @_render_env = render_env
+      def initialize(rendering: nil, **options)
+        @_rendering = rendering
         @_options = options
       end
 
       # @api private
-      def for_render_env(render_env)
-        return self if render_env == _render_env
+      def for_rendering(rendering)
+        return self if rendering == _rendering
 
-        self.class.new(**_options.merge(render_env: render_env))
+        self.class.new(**_options.merge(rendering: rendering))
       end
 
       # Returns a copy of the Context with new options merged in.
@@ -71,7 +71,7 @@ module Hanami
       # @api public
       def with(**new_options)
         self.class.new(
-          render_env: _render_env,
+          rendering: _rendering,
           **_options.merge(new_options)
         )
       end

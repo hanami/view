@@ -16,24 +16,17 @@ module Hanami
       # @api private
       attr_reader :namespace
 
-      # @return [RenderEnvironment]
+      # @return [Rendering]
       #
       # @api private
-      attr_reader :render_env
+      attr_reader :rendering
 
       # Returns a new instance of ScopeBuilder
       #
       # @api private
-      def initialize(namespace: nil, render_env: nil)
+      def initialize(namespace: nil, rendering: nil)
         @namespace = namespace
-        @render_env = render_env
-      end
-
-      # @api private
-      def for_render_env(render_env)
-        return self if render_env == self.render_env
-
-        self.class.new(namespace: namespace, render_env: render_env)
+        @rendering = rendering
       end
 
       # Returns a new scope using a class matching the name
@@ -48,7 +41,7 @@ module Hanami
         scope_class(name).new(
           name: name,
           locals: locals,
-          render_env: render_env
+          rendering: rendering
         )
       end
 
@@ -62,7 +55,7 @@ module Hanami
         elsif name.is_a?(Class)
           name
         else
-          render_env.cache.fetch_or_store([namespace, name].hash) do
+          rendering.cache.fetch_or_store([namespace, name].hash) do
             resolve_scope_class(name: name)
           end
         end
@@ -89,7 +82,7 @@ module Hanami
       end
 
       def inflector
-        render_env.inflector
+        rendering.inflector
       end
     end
   end

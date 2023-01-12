@@ -15,15 +15,14 @@ module Hanami
         @cache = cache
         @config = config
         @format = format
-        @context = context.for_render_env(self)
+        @context = context.for_rendering(self)
 
         @inflector = config.inflector
 
         @renderer = Renderer.new(cache, config)
 
-        # Maybe these could be single cached instances too, and we use effect for render_env?
-        @part_builder = config.part_builder.new(namespace: config.part_namespace, render_env: self)
-        @scope_builder = config.scope_builder.new(namespace: config.scope_namespace, render_env: self)
+        @part_builder = config.part_builder.new(namespace: config.part_namespace, rendering: self)
+        @scope_builder = config.scope_builder.new(namespace: config.scope_namespace, rendering: self)
       end
 
       def template(name, scope, &block)

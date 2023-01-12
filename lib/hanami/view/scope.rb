@@ -2,7 +2,7 @@
 
 require "dry/core/equalizer"
 require "dry/core/constants"
-require_relative "render_environment_missing"
+require_relative "rendering_missing"
 
 module Hanami
   class View
@@ -21,7 +21,7 @@ module Hanami
       # @api private
       CONVENIENCE_METHODS = %i[format context locals].freeze
 
-      include Dry::Equalizer(:_name, :_locals, :_render_env)
+      include Dry::Equalizer(:_name, :_locals, :_rendering)
 
       # The scope's name
       #
@@ -43,18 +43,18 @@ module Hanami
       # @api public
       attr_reader :_locals
 
-      # The current render environment
+      # The current rendering
       #
-      # @return [RenderEnvironment] render environment
+      # @return [Rendering]
       #
       # @api private
-      attr_reader :_render_env
+      attr_reader :_rendering
 
       # Returns a new Scope instance
       #
       # @param name [Symbol, nil] scope name
       # @param locals [Hash<Symbol, Object>] template locals
-      # @param render_env [RenderEnvironment] render environment
+      # @param rendering [Rendering] the current rendering
       #
       # @return [Scope]
       #
@@ -62,11 +62,11 @@ module Hanami
       def initialize(
         name: nil,
         locals: Dry::Core::Constants::EMPTY_HASH,
-        render_env: RenderEnvironmentMissing.new
+        rendering: RenderingMissing.new
       )
         @_name = name
         @_locals = locals
-        @_render_env = render_env
+        @_rendering = rendering
       end
 
       # @overload render(partial_name, **locals, &block)
@@ -96,7 +96,7 @@ module Hanami
           partial_name = _inflector.underscore(_inflector.demodulize(partial_name.to_s))
         end
 
-        _render_env.partial(partial_name, _render_scope(**locals), &block)
+        _rendering.partial(partial_name, _render_scope(**locals), &block)
       end
 
       # Build a new scope using a scope class matching the provided name
@@ -108,7 +108,7 @@ module Hanami
       #
       # @api public
       def scope(name = nil, **locals)
-        _render_env.scope(name, locals)
+        _rendering.scope(name, locals)
       end
 
       # The template format for the current render environment.
@@ -123,7 +123,7 @@ module Hanami
       #
       # @api public
       def _format
-        _render_env.format
+        _rendering.format
       end
 
       # The context object for the current render environment
@@ -138,7 +138,7 @@ module Hanami
       #
       # @api public
       def _context
-        _render_env.context
+        _rendering.context
       end
 
       private
@@ -164,7 +164,7 @@ module Hanami
 
       def respond_to_missing?(name, include_private = false)
         _locals.key?(name) ||
-          _render_env.context.respond_to?(name) ||
+          _rendering.context.respond_to?(name) ||
           CONVENIENCE_METHODS.include?(name) ||
           super
       end
@@ -176,13 +176,13 @@ module Hanami
           self.class.new(
             # FIXME: what about `name`?
             locals: locals,
-            render_env: _render_env
+            rendering: _rendering
           )
         end
       end
 
       def _inflector
-        _render_env.inflector
+        _rendering.inflector
       end
     end
   end

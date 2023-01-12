@@ -527,10 +527,10 @@ module Hanami
       raise UndefinedConfigError, :template unless config.template
     end
 
-    def locals(render_env, input)
-      exposures.(context: render_env.context, **input) do |value, exposure|
+    def locals(rendering, input)
+      exposures.(context: rendering.context, **input) do |value, exposure|
         if exposure.decorate? && value
-          render_env.part(exposure.name, value, as: exposure.options[:as])
+          rendering.part(exposure.name, value, as: exposure.options[:as])
         else
           value
         end
