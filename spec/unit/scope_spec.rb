@@ -6,42 +6,51 @@ RSpec.describe Hanami::View::Scope do
   let(:locals) { {} }
 
   context "with a render environment" do
-    subject(:scope) {
-      described_class.new(
-        locals: locals,
-        render_env: render_env
-      )
+    subject(:scope) { described_class.new(locals: locals, rendering: rendering) }
+
+    let(:rendering) { view.rendering(format: :html) }
+    let(:view) {
+      Class.new(Hanami::View) {
+        config.paths = SPEC_ROOT.join("fixtures/templates")
+        config.template = "hello"
+      }.new
     }
 
-    let(:render_env) { spy(:render_env, format: :xml, context: context) }
     let(:context) { double(:context) }
+
+    before do
+      allow(rendering).to receive(:partial)
+      allow(rendering).to receive(:context) { context }
+    end
 
     describe "#render" do
       it "renders a partial with itself as the scope" do
-        scope.render(:info)
-        expect(render_env).to have_received(:partial).with(:info, scope)
+        scope.render("info")
+        expect(rendering).to have_received(:partial).with("info", scope)
       end
 
       it "renders a partial with provided locals" do
         scope_with_locals = described_class.new(
           locals: {foo: "bar"},
-          render_env: render_env
+          rendering: rendering,
         )
 
-        scope.render(:info, foo: "bar")
+        scope.render("info", foo: "bar")
 
-        expect(render_env).to have_received(:partial).with(:info, scope_with_locals)
+        expect(rendering).to have_received(:partial).with("info", scope_with_locals)
       end
     end
 
     describe "#_format" do
-      it "returns the render environment's format" do
+      let(:rendering) { view.rendering(format: :xml) }
+
+      it "returns the rendering's format" do
         expect(scope._format).to eq :xml
       end
     end
 
     describe "#_context" do
-      it "returns the render environment's context" do
+      it "returns the renderings's context" do
         expect(scope._context).to be context
       end
     end
@@ -96,19 +105,19 @@ RSpec.describe Hanami::View::Scope do
 
     describe "#render" do
       it "raises an error" do
-        expect { scope.render(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { scope.render(:info) }.to raise_error(Hanami::View::RenderingMissingError)
       end
     end
 
     describe "#scope" do
       it "raises an error" do
-        expect { scope.scope(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { scope.scope(:info) }.to raise_error(Hanami::View::RenderingMissingError)
       end
     end
 
     describe "#_context" do
       it "raises an error" do
-        expect { scope._context }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { scope._context }.to raise_error(Hanami::View::RenderingMissingError)
       end
     end
   end
