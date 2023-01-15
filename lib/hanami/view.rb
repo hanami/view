@@ -513,7 +513,7 @@ module Hanami
             rendering.scope(config.scope, layout_locals(locals))
           ) { output }
         rescue TemplateNotFoundError
-          raise LayoutNotFoundError, config.layout, config.paths
+          raise LayoutNotFoundError.new(config.layout, config.paths)
         end
       end
 

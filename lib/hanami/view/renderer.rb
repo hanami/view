@@ -45,7 +45,7 @@ module Hanami
         cache.fetch_or_store([:lookup, name, format, config, prefixes].hash) {
           catch :found do
             config.paths.reduce(nil) do |_, path|
-              prefixes.each do |prefix|
+              prefixes.reduce(nil) do |_, prefix|
                 result = path.lookup(prefix, name, format)
                 throw :found, result if result
               end
