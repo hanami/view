@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 require "hanami/view/scope_builder"
-require "hanami/view/render_environment_missing"
 
-RSpec::Matchers.define :scope do |locals|
+RSpec::Matchers.define :scope_including do |locals|
   match do |actual|
     locals == actual._locals
   end
@@ -12,40 +11,37 @@ end
 RSpec.describe Hanami::View::Part do
   let(:name) { :user }
   let(:value) { double(:value) }
-  let(:render_env) {
-    Hanami::View::RenderEnvironment.new(
-      renderer: renderer,
-      inflector: Dry::Inflector.new,
-      context: Hanami::View::Context.new,
-      scope_builder: Hanami::View::ScopeBuilder.new,
-      part_builder: Hanami::View::ScopeBuilder.new
-    )
+  let(:rendering) {
+    view.rendering(format: :html).tap do |rendering|
+      allow(rendering).to receive(:partial)
+    end
   }
-  let(:renderer) { spy(:renderer, format: :xml) }
+  let(:view) {
+    Class.new(Hanami::View) {
+      config.paths = SPEC_ROOT.join("fixtures/templates")
+      config.template = "hello"
+    }.new
+  }
 
   context "with a render environment" do
     subject(:part) {
-      described_class.new(
-        name: name,
-        value: value,
-        render_env: render_env
-      )
+      described_class.new(name: name, value: value, rendering: rendering)
     }
 
     describe "#render" do
       it "renders a partial with the part available in its scope" do
-        part.render(:info)
-        expect(renderer).to have_received(:partial).with(:info, scope(user: part))
+        part.render("info")
+        expect(rendering).to have_received(:partial).with("info", scope_including(user: part))
       end
 
       it "allows the part to be made available on a different name" do
-        part.render(:info, as: :admin)
-        expect(renderer).to have_received(:partial).with(:info, scope(admin: part))
+        part.render("info", as: :admin)
+        expect(rendering).to have_received(:partial).with("info", scope_including(admin: part))
       end
 
       it "includes extra locals in the scope" do
-        part.render(:info, extra_local: "hello")
-        expect(renderer).to have_received(:partial).with(:info, scope(user: part, extra_local: "hello"))
+        part.render("info", extra_local: "hello")
+        expect(rendering).to have_received(:partial).with("info", scope_including(user: part, extra_local: "hello"))
       end
     end
 
@@ -62,7 +58,7 @@ RSpec.describe Hanami::View::Part do
     describe "#new" do
       it "preserves render environment" do
         new_part = part.new(value: "new value")
-        expect(new_part._render_env).to be part._render_env
+        expect(new_part._rendering).to be part._rendering
       end
     end
 
@@ -73,6 +69,10 @@ RSpec.describe Hanami::View::Part do
     end
 
     describe "#_format" do
+      before do
+        allow(rendering).to receive(:format) { :xml }
+      end
+
       it "returns the render environment's format" do
         expect(part._format).to eq :xml
       end
@@ -124,19 +124,19 @@ RSpec.describe Hanami::View::Part do
 
     describe "#format" do
       it "raises an error" do
-        expect { part.render(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { part.render("info") }.to raise_error(Hanami::View::RenderingMissingError)
       end
     end
 
     describe "#render" do
       it "raises an error" do
-        expect { part.render(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { part.render("info") }.to raise_error(Hanami::View::RenderingMissingError)
       end
     end
 
     describe "#scope" do
       it "raises an error" do
-        expect { part.scope(:info) }.to raise_error(Hanami::View::RenderEnvironmentMissing::MissingEnvironmentError)
+        expect { part.scope("info") }.to raise_error(Hanami::View::RenderingMissingError)
       end
     end
   end
