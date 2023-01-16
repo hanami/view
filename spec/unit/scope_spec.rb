@@ -5,7 +5,7 @@ require "hanami/view/scope_builder"
 RSpec.describe Hanami::View::Scope do
   let(:locals) { {} }
 
-  context "with a render environment" do
+  context "with a rendering" do
     subject(:scope) { described_class.new(locals: locals, rendering: rendering) }
 
     let(:rendering) { view.rendering(format: :html) }
@@ -98,7 +98,7 @@ RSpec.describe Hanami::View::Scope do
     end
   end
 
-  context "without a render environment" do
+  context "without a rendering" do
     subject(:scope) {
       described_class.new(locals: locals)
     }

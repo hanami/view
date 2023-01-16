@@ -36,7 +36,7 @@ RSpec.describe Hanami::View::PartBuilder do
         expect(part._value).to eq value
       end
 
-      it "retains the render environment" do
+      it "retains the rendering" do
         expect(part._rendering).to eql rendering
       end
     end

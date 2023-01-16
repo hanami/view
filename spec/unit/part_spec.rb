@@ -23,7 +23,7 @@ RSpec.describe Hanami::View::Part do
     }.new
   }
 
-  context "with a render environment" do
+  context "with a rendering" do
     subject(:part) {
       described_class.new(name: name, value: value, rendering: rendering)
     }
@@ -56,7 +56,7 @@ RSpec.describe Hanami::View::Part do
     end
 
     describe "#new" do
-      it "preserves render environment" do
+      it "preserves rendering" do
         new_part = part.new(value: "new value")
         expect(new_part._rendering).to be part._rendering
       end
@@ -73,7 +73,7 @@ RSpec.describe Hanami::View::Part do
         allow(rendering).to receive(:format) { :xml }
       end
 
-      it "returns the render environment's format" do
+      it "returns the rendering's format" do
         expect(part._format).to eq :xml
       end
     end
@@ -114,7 +114,7 @@ RSpec.describe Hanami::View::Part do
     end
   end
 
-  context "without a render environment" do
+  context "without a rendering" do
     subject(:part) {
       described_class.new(
         name: name,
