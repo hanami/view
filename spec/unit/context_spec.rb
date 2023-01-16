@@ -24,14 +24,11 @@ RSpec.describe Hanami::View::Context do
   let(:assets) { double(:assets) }
   let(:routes) { double(:routes) }
 
-  let(:render_env) {
-    Hanami::View::RenderEnvironment.new(
-      inflector: Dry::Inflector.new,
-      renderer: double(:renderer),
-      context: Hanami::View::Context.new,
-      part_builder: Hanami::View::PartBuilder.new,
-      scope_builder: Hanami::View::ScopeBuilder.new
-    )
+  let(:rendering) {
+    Class.new(Hanami::View) {
+      config.paths = FIXTURES_PATH
+      config.template = "_"
+    }.new.rendering(format: :html)
   }
 
   subject(:context) { context_class.new(assets: assets, routes: routes) }
@@ -42,9 +39,9 @@ RSpec.describe Hanami::View::Context do
     end
   end
 
-  context "with render environment" do
+  context "with rendering" do
     subject(:context) {
-      context_class.new(assets: assets, routes: routes).for_render_env(render_env)
+      context_class.new(assets: assets, routes: routes).for_rendering(rendering)
     }
 
     describe "attribute readers" do
