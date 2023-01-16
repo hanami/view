@@ -60,7 +60,7 @@ module Hanami
       end
 
       def decorate?
-        options[:as] || options.fetch(:decorate, false)
+        options[:as] || options.fetch(:decorate, true)
       end
 
       def private?
