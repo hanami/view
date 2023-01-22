@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/equalizer"
 require_relative "errors"
 require_relative "tilt"
 
@@ -11,7 +10,6 @@ module Hanami
       PARTIAL_PREFIX = "_"
       PATH_DELIMITER = "/"
 
-      include Dry::Equalizer(:config, :format)
       attr_reader :config, :prefixes
 
       def initialize(config)

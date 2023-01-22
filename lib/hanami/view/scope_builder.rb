@@ -8,8 +8,6 @@ module Hanami
     #
     # @api private
     class ScopeBuilder
-      include Dry::Equalizer(:namespace)
-
       # The view's configured `scope_namespace`
       #
       # @api private
