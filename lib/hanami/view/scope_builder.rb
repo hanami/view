@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/equalizer"
 require_relative "scope"
 
 module Hanami
@@ -55,7 +54,7 @@ module Hanami
         elsif name.is_a?(Class)
           name
         else
-          rendering.cache.fetch_or_store([namespace, name].hash) do
+          View.cache.fetch_or_store(:scope_class, namespace, name) do
             resolve_scope_class(name: name)
           end
         end

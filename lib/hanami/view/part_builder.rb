@@ -83,7 +83,7 @@ module Hanami
         if name.is_a?(Class)
           name
         else
-          rendering.cache.fetch_or_store([:part_class, namespace, name, fallback_class].hash) do
+          View.cache.fetch_or_store(:part_class, namespace, name, fallback_class) do
             resolve_part_class(name: name, fallback_class: fallback_class)
           end
         end

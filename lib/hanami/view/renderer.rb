@@ -12,10 +12,9 @@ module Hanami
       PATH_DELIMITER = "/"
 
       include Dry::Equalizer(:config, :format)
-      attr_reader :cache, :config, :prefixes
+      attr_reader :config, :prefixes
 
-      def initialize(cache, config)
-        @cache = cache
+      def initialize(config)
         @config = config
         @prefixes = ["."]
       end
@@ -42,7 +41,7 @@ module Hanami
       private
 
       def lookup(name, format)
-        cache.fetch_or_store([:lookup, name, format, config, prefixes].hash) {
+        View.cache.fetch_or_store(:lookup, name, format, config, prefixes) {
           catch :found do
             config.paths.reduce(nil) do |_, path|
               prefixes.reduce(nil) do |_, prefix|
@@ -65,7 +64,7 @@ module Hanami
       end
 
       def tilt(path)
-        cache.fetch_or_store([:tilt, path, config].hash) {
+        View.cache.fetch_or_store(:tilt, path, config) {
           Tilt[path, config.renderer_engine_mapping, config.renderer_options]
         }
       end

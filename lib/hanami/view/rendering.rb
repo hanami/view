@@ -7,20 +7,16 @@ module Hanami
   class View
     # @api private
     class Rendering
-      attr_reader :cache, :config, :format, :context
+      attr_reader :config, :format, :context
 
       attr_reader :inflector, :renderer, :part_builder, :scope_builder
 
-      def initialize(cache, config, format, context)
-        @cache = cache
-        @config = config
+      def initialize(config, format, context)
         @format = format
         @context = context.for_rendering(self)
-
         @inflector = config.inflector
 
-        @renderer = Renderer.new(cache, config)
-
+        @renderer = Renderer.new(config)
         @part_builder = config.part_builder.new(namespace: config.part_namespace, rendering: self)
         @scope_builder = config.scope_builder.new(namespace: config.scope_namespace, rendering: self)
       end
