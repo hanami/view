@@ -20,7 +20,7 @@ module Hanami
         @inflector = config.inflector
 
         @renderer = Renderer.new(config)
-        @part_builder = config.part_builder.new(namespace: config.part_namespace, rendering: self)
+        @part_builder = config.part_builder.new(config)
         @scope_builder = config.scope_builder.new(namespace: config.scope_namespace, rendering: self)
       end
 
@@ -33,7 +33,7 @@ module Hanami
       end
 
       def part(name, value, as: nil)
-        part_builder.(name, value, as: as)
+        part_builder.(name, value, as: as, rendering: self)
       end
 
       def scope(name = nil, locals) # rubocop:disable Style/OptionalArguments

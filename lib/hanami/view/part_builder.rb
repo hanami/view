@@ -8,16 +8,15 @@ module Hanami
     #
     # @api private
     class PartBuilder
-
-      attr_reader :namespace
-      attr_reader :rendering
+      attr_reader :config, :namespace, :inflector
 
       # Returns a new instance of PartBuilder
       #
       # @api private
-      def initialize(namespace: nil, rendering: nil)
-        @namespace = namespace
-        @rendering = rendering
+      def initialize(config)
+        @config = config
+        @namespace = config.part_namespace
+        @inflector = config.inflector
       end
 
       # Decorates an exposure value
@@ -29,26 +28,22 @@ module Hanami
       # @return [Hanami::View::Part] decorated value
       #
       # @api private
-      def call(name, value, as: nil)
+      def call(name, value, as: nil, rendering:)
         builder = value.respond_to?(:to_ary) ? :build_collection_part : :build_part
 
-        send(builder, name, value, as: as)
+        send(builder, name: name, value: value, as: as, rendering: rendering)
       end
 
       private
 
-      def build_part(name, value, as:)
+      def build_part(name:, value:, as:, rendering:)
         klass = part_class(name: name, as: as)
 
-        klass.new(
-          name: name,
-          value: value,
-          rendering: rendering
-        )
+        klass.new(name: name, value: value, rendering: rendering)
       end
 
-      def build_collection_part(name, value, as: nil)
-        item_name, item_as = collection_item_name_as(name: name, as: as)
+      def build_collection_part(name:, value:, as: nil, rendering:)
+        item_name, item_as = collection_item_name_as(name, as)
         item_part_class = part_class(name: item_name, as: item_as)
 
         arr = value.to_ary.map { |item|
@@ -56,10 +51,10 @@ module Hanami
         }
 
         collection_as = as.is_a?(Array) ? as.first : nil
-        build_part(name, arr, as: collection_as)
+        build_part(name: name, value: arr, as: collection_as, rendering: rendering)
       end
 
-      def collection_item_name_as(name:, as:)
+      def collection_item_name_as(name, as)
         singular_name = inflector.singularize(name).to_sym
         singular_as =
           if as.is_a?(Array)
@@ -110,10 +105,6 @@ module Hanami
         end
       end
       # rubocop:enable Metrics/PerceivedComplexity
-
-      def inflector
-        rendering.inflector
-      end
     end
   end
 end

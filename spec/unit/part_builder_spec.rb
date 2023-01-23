@@ -18,7 +18,7 @@ RSpec.describe Hanami::View::PartBuilder do
 
   describe "#call" do
     subject(:part) {
-      part_builder.(name, value, **options)
+      part_builder.(name, value, rendering: rendering, **options)
     }
 
     let(:name) { :user }
