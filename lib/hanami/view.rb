@@ -524,7 +524,7 @@ module Hanami
     end
 
     def rendering(format: config.default_format, context: config.default_context)
-      Rendering.new(config, format, context)
+      Rendering.new(config: config, format: format, context: context)
     end
 
     private

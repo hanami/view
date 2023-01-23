@@ -6,11 +6,15 @@ module Hanami
   class View
     # @api private
     class Rendering
-      attr_reader :config, :format, :context
+      attr_reader :format, :context
 
       attr_reader :inflector, :renderer, :part_builder, :scope_builder
 
-      def initialize(config, format, context)
+      attr_reader :config
+      private :config
+
+      def initialize(config:, format:, context:)
+        @config = config
         @format = format
         @context = context.for_rendering(self)
         @inflector = config.inflector
