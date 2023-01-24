@@ -164,13 +164,15 @@ RSpec.describe "Part / Decorated attributes" do
 
     let(:part_builder) {
       Class.new(Hanami::View::PartBuilder) do
-        def part_class(name:, **options)
-          part_name = Dry::Core::Inflector.camelize(name)
+        class << self
+          def part_class(name:, **options)
+            part_name = Dry::Core::Inflector.camelize(name)
 
-          begin
-            Test.const_get(:"#{part_name}Part")
-          rescue NameError
-            super
+            begin
+              Test.const_get(:"#{part_name}Part")
+            rescue NameError
+              super
+            end
           end
         end
       end

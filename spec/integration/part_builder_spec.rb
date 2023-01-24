@@ -73,8 +73,10 @@ RSpec.describe "part builder" do
   describe "custom decorator and part classes" do
     it "supports wrapping in custom parts based on exposure names" do
       part_builder = Class.new(Hanami::View::PartBuilder) do
-        def part_class(name:, **options)
-          name == :custom ? Test::CustomPart : super
+        class << self
+          def part_class(name:, **options)
+            name == :custom ? Test::CustomPart : super
+          end
         end
       end
 

@@ -6,22 +6,22 @@ module Hanami
   class View
     # @api private
     class Rendering
-      attr_reader :format, :context
+      attr_reader :config, :format
 
-      attr_reader :inflector, :renderer, :part_builder, :scope_builder
+      attr_reader :inflector, :part_builder, :scope_builder
 
-      attr_reader :config
-      private :config
+      attr_reader :context, :renderer
 
       def initialize(config:, format:, context:)
         @config = config
         @format = format
-        @context = context.for_rendering(self)
-        @inflector = config.inflector
 
+        @inflector = config.inflector
+        @part_builder = config.part_builder
+        @scope_builder = config.scope_builder
+
+        @context = context.for_rendering(self)
         @renderer = Renderer.new(config)
-        @part_builder = config.part_builder.new(config)
-        @scope_builder = config.scope_builder.new(config)
       end
 
       def template(name, scope, &block)
