@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/equalizer"
 require_relative "decorated_attributes"
 
 module Hanami
@@ -13,67 +12,38 @@ module Hanami
     #
     # @api public
     class Context
-      include Dry::Equalizer(:_options)
       include DecoratedAttributes
 
-      attr_reader :_rendering, :_options
+      # @api private
+      attr_reader :_rendering
+
+      # @api private
+      def self.new(rendering: RenderingMissing.new, **args)
+        allocate.tap do |obj|
+          obj.instance_variable_set(:@_rendering, rendering)
+          obj.send(:initialize, **args)
+        end
+      end
 
       # Returns a new instance of Context
       #
-      # In subclasses, you should include an `**options` parameter and pass _all
-      # arguments_ to `super`. This allows Context to make copies of itself
-      # while preserving your dependencies.
-      #
-      # @example
-      #   class MyContext < Hanami::View::Context
-      #     # Injected dependency
-      #     attr_reader :assets
-      #
-      #     def initialize(assets:, **options)
-      #       @assets = assets
-      #       super
-      #     end
-      #   end
-      #
       # @api public
-      def initialize(rendering: nil, **options)
-        @_rendering = rendering
-        @_options = options
+      def initialize(**)
       end
 
       # @api private
-      def for_rendering(rendering)
-        return self if rendering == _rendering
-
-        self.class.new(**_options.merge(rendering: rendering))
+      private def initialize_copy(source)
+        ivars = source.instance_variables - [:@_rendering]
+        ivars.each do |ivar|
+          instance_variable_set(ivar, source.instance_variable_get(ivar).dup)
+        end
       end
 
-      # Returns a copy of the Context with new options merged in.
-      #
-      # This may be useful to supply values for dependencies that are _optional_
-      # when initializing your custom Context subclass.
-      #
-      # @example
-      #   class MyContext < Hanami::View::Context
-      #     # Injected dependencies (request is optional)
-      #     attr_reader :assets, :request
-      #
-      #     def initialize(assets:, request: nil, **options)
-      #       @assets = assets
-      #       @request = reuqest
-      #       super
-      #     end
-      #   end
-      #
-      #   my_context = MyContext.new(assets: assets)
-      #   my_context_with_request = my_context.with(request: request)
-      #
-      # @api public
-      def with(**new_options)
-        self.class.new(
-          rendering: _rendering,
-          **_options.merge(new_options)
-        )
+      # @api private
+      def dup_for_rendering(rendering)
+        dup.tap do |obj|
+          obj.instance_variable_set(:@_rendering, rendering)
+        end
       end
     end
   end

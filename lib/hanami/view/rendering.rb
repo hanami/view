@@ -20,7 +20,7 @@ module Hanami
         @part_builder = config.part_builder
         @scope_builder = config.scope_builder
 
-        @context = context.for_rendering(self)
+        @context = context.dup_for_rendering(self)
         @renderer = Renderer.new(config)
       end
 

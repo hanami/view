@@ -6,24 +6,6 @@ require "hanami/view/part_builder"
 require "hanami/view/scope_builder"
 
 RSpec.describe Hanami::View::Context do
-  let(:context_class) {
-    Class.new(Hanami::View::Context) do
-      attr_reader :assets, :routes
-
-      decorate :assets, :routes
-      decorate :invalid_attribute
-
-      def initialize(assets:, routes:, **options)
-        @assets = assets
-        @routes = routes
-        super
-      end
-    end
-  }
-
-  let(:assets) { double(:assets) }
-  let(:routes) { double(:routes) }
-
   let(:rendering) {
     Class.new(Hanami::View) {
       config.paths = FIXTURES_PATH
@@ -31,34 +13,65 @@ RSpec.describe Hanami::View::Context do
     }.new.rendering(format: :html)
   }
 
-  subject(:context) { context_class.new(assets: assets, routes: routes) }
+  describe "#for_rendering" do
+    let(:context_class) {
+      Class.new(Hanami::View::Context) {
+        attr_reader :injected_obj, :internal_var
 
-  describe "attribute readers" do
-    it "provides access to its attributes" do
-      expect(context.assets).to eql assets
-    end
-  end
-
-  context "with rendering" do
-    subject(:context) {
-      context_class.new(assets: assets, routes: routes).for_rendering(rendering)
+        def initialize(injected_obj:)
+          @injected_obj = injected_obj
+          @internal_var = "internal"
+        end
+      }
     }
 
-    describe "attribute readers" do
-      it "provides attributes decorated in view parts" do
-        expect(context.assets).to be_a Hanami::View::Part
-        expect(context.assets.value).to eql assets
-      end
+    let(:injected_obj) { Struct.new(:foo).new } # having a working #== is important for the example below
+
+    it "copies all state" do
+      context = context_class.new(injected_obj: injected_obj)
+      context.instance_variable_set(:@internal_var, "updated internal")
+
+      new_context = context.dup_for_rendering(rendering)
+
+      expect(new_context._rendering).to be rendering
+      expect(new_context.injected_obj).to eq injected_obj
+      expect(new_context.injected_obj).not_to be injected_obj # it is a dup, not the same object
+      expect(new_context.internal_var).to eq "updated internal"
     end
   end
 
-  describe "#with" do
-    it "returns a copy of the context with extra options" do
-      another_option = double(:another_option)
-      new_context = context.with(another_option: another_option)
+  describe "decorated attributes" do
+    subject(:context) { context_class.new(assets: assets) }
 
-      expect(new_context).to be_a(context.class)
-      expect(new_context._options).to eq(assets: context.assets, routes: routes, another_option: another_option)
+    let(:context_class) {
+      Class.new(Hanami::View::Context) {
+        attr_reader :assets
+
+        decorate :assets
+
+        def initialize(assets:)
+          @assets = assets
+        end
+      }
+    }
+
+    let(:assets) { Struct.new(:manifests).new }
+
+    context "without rendering" do
+      it "raises a RenderingMissingError" do
+        expect { context.assets }.to raise_error(Hanami::View::RenderingMissingError)
+      end
+    end
+
+    context "with rendering" do
+      subject(:context) { context_class.new(assets: assets).dup_for_rendering(rendering) }
+
+      describe "attribute readers" do
+        it "provides attributes decorated in view parts" do
+          expect(context.assets).to be_a Hanami::View::Part
+          expect(context.assets.value).to eq assets
+        end
+      end
     end
   end
 end

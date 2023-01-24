@@ -2,20 +2,20 @@ module Hanami
   class View
     module ContextHelpers
       module ContentHelpers
-        def initialize(content: {}, **options)
+        def initialize(**)
+          @content_for = {}
           super
         end
 
         def content_for(key, value = nil, &block)
-          content = _options[:content]
           output = nil
 
           if block
-            content[key] = yield
+            @content_for[key] = yield
           elsif value
-            content[key] = value
+            @content_for[key] = value
           else
-            output = content[key]
+            output = @content_for[key]
           end
 
           output

@@ -23,14 +23,6 @@ RSpec.describe Hanami::View::Context, "ContentHelpers" do
       it "returns the content" do
         expect(context.content_for(:title)).to eq "Hello World"
       end
-
-      context "rebuilt context" do
-        subject(:new_context) { context.with }
-
-        it "retains the content" do
-          expect(new_context.content_for(:title)).to eq "Hello World"
-        end
-      end
     end
 
     context "content set with a block" do
