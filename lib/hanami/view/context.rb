@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/equalizer"
 require_relative "decorated_attributes"
 
 module Hanami
@@ -13,7 +12,6 @@ module Hanami
     #
     # @api public
     class Context
-      include Dry::Equalizer(:_options)
       include DecoratedAttributes
 
       attr_reader :_rendering, :_options
@@ -46,34 +44,6 @@ module Hanami
         return self if rendering == _rendering
 
         self.class.new(**_options.merge(rendering: rendering))
-      end
-
-      # Returns a copy of the Context with new options merged in.
-      #
-      # This may be useful to supply values for dependencies that are _optional_
-      # when initializing your custom Context subclass.
-      #
-      # @example
-      #   class MyContext < Hanami::View::Context
-      #     # Injected dependencies (request is optional)
-      #     attr_reader :assets, :request
-      #
-      #     def initialize(assets:, request: nil, **options)
-      #       @assets = assets
-      #       @request = reuqest
-      #       super
-      #     end
-      #   end
-      #
-      #   my_context = MyContext.new(assets: assets)
-      #   my_context_with_request = my_context.with(request: request)
-      #
-      # @api public
-      def with(**new_options)
-        self.class.new(
-          rendering: _rendering,
-          **_options.merge(new_options)
-        )
       end
     end
   end

@@ -51,14 +51,4 @@ RSpec.describe Hanami::View::Context do
       end
     end
   end
-
-  describe "#with" do
-    it "returns a copy of the context with extra options" do
-      another_option = double(:another_option)
-      new_context = context.with(another_option: another_option)
-
-      expect(new_context).to be_a(context.class)
-      expect(new_context._options).to eq(assets: context.assets, routes: routes, another_option: another_option)
-    end
-  end
 end
