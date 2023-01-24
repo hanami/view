@@ -21,7 +21,7 @@ module Hanami
 
         @renderer = Renderer.new(config)
         @part_builder = config.part_builder.new(config)
-        @scope_builder = config.scope_builder.new(namespace: config.scope_namespace, rendering: self)
+        @scope_builder = config.scope_builder.new(config)
       end
 
       def template(name, scope, &block)
@@ -37,7 +37,7 @@ module Hanami
       end
 
       def scope(name = nil, locals) # rubocop:disable Style/OptionalArguments
-        scope_builder.(name, locals)
+        scope_builder.(name, locals: locals, rendering: self)
       end
     end
   end

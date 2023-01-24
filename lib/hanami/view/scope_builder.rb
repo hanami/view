@@ -8,22 +8,20 @@ module Hanami
     #
     # @api private
     class ScopeBuilder
+      attr_reader :config, :inflector
+
       # The view's configured `scope_namespace`
       #
       # @api private
       attr_reader :namespace
 
-      # @return [Rendering]
-      #
-      # @api private
-      attr_reader :rendering
-
       # Returns a new instance of ScopeBuilder
       #
       # @api private
-      def initialize(namespace: nil, rendering: nil)
-        @namespace = namespace
-        @rendering = rendering
+      def initialize(config)
+        @config = config
+        @namespace = config.scope_namespace
+        @inflector = config.inflector
       end
 
       # Returns a new scope using a class matching the name
@@ -34,12 +32,8 @@ module Hanami
       # @return [Hanami::View::Scope]
       #
       # @api private
-      def call(name = nil, locals) # rubocop:disable Style/OptionalArguments
-        scope_class(name).new(
-          name: name,
-          locals: locals,
-          rendering: rendering
-        )
+      def call(name = nil, locals:, rendering:) # rubocop:disable Style/OptionalArguments
+        scope_class(name).new(name: name, locals: locals, rendering: rendering)
       end
 
       private
@@ -76,10 +70,6 @@ module Hanami
         else
           DEFAULT_SCOPE_CLASS
         end
-      end
-
-      def inflector
-        rendering.inflector
       end
     end
   end
