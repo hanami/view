@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
-require "dry/core/cache"
 require "tilt"
 
 module Hanami
   class View
     # @api private
     module Tilt
-      extend Dry::Core::Cache
-
       class << self
         def [](path, mapping, **options)
           ext = File.extname(path).sub(/^./, "").to_sym
@@ -36,7 +33,7 @@ module Hanami
         end
 
         def activate_adapter(ext)
-          fetch_or_store(:adapter, ext) {
+          View.cache.fetch_or_store(:tilt_adapter, ext) {
             adapter = adapters[ext]
             return unless adapter
 
@@ -53,7 +50,7 @@ module Hanami
         end
 
         def with_mapping(mapping)
-          fetch_or_store(:mapping, mapping) {
+          View.cache.fetch_or_store(:tilt_mapping, mapping) {
             if mapping.any?
               build_mapping(mapping)
             else

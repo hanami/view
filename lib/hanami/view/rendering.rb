@@ -17,7 +17,6 @@ module Hanami
         @config = config
         @format = format
         @context = context.for_rendering(self)
-
         @inflector = config.inflector
 
         @renderer = Renderer.new(config)

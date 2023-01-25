@@ -32,15 +32,7 @@ RSpec.configure do |config|
   end
 
   config.after do
-    [
-      Hanami::View,
-      Hanami::View::PartBuilder,
-      Hanami::View::Renderer,
-      Hanami::View::ScopeBuilder,
-      Hanami::View::Tilt
-    ].each do |klass|
-      klass.cache.clear
-    end
+    Hanami::View.cache.clear
   end
 end
 

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/cache"
 require "dry/core/equalizer"
 require_relative "errors"
 require_relative "tilt"
@@ -11,8 +10,6 @@ module Hanami
     class Renderer
       PARTIAL_PREFIX = "_"
       PATH_DELIMITER = "/"
-
-      extend Dry::Core::Cache
 
       include Dry::Equalizer(:config, :format)
 
@@ -45,7 +42,7 @@ module Hanami
       private
 
       def lookup(name, format)
-        fetch_or_store(:lookup, name, format, config, prefixes) {
+        View.cache.fetch_or_store(:lookup, name, format, config, prefixes) {
           catch :found do
             config.paths.reduce(nil) do |_, path|
               prefixes.reduce(nil) do |_, prefix|
@@ -68,7 +65,7 @@ module Hanami
       end
 
       def tilt(path)
-        fetch_or_store(:engine, path, config) {
+        View.cache.fetch_or_store(:tilt, path, config) {
           Tilt[path, config.renderer_engine_mapping, **config.renderer_options]
         }
       end

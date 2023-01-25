@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/core/cache"
 require "dry/core/equalizer"
 require_relative "part"
 
@@ -10,7 +9,6 @@ module Hanami
     #
     # @api private
     class PartBuilder
-      extend Dry::Core::Cache
       include Dry::Equalizer(:namespace)
 
       attr_reader :namespace
@@ -95,7 +93,7 @@ module Hanami
         if name.is_a?(Class)
           name
         else
-          fetch_or_store(:part_class, namespace, name, fallback_class) do
+          View.cache.fetch_or_store(:part_class, namespace, name, fallback_class) do
             resolve_part_class(name: name, fallback_class: fallback_class)
           end
         end

@@ -4,7 +4,7 @@ require "hanami/view/path"
 require "hanami/view/renderer"
 
 RSpec.describe Hanami::View::Renderer do
-  subject(:renderer) { Hanami::View::Renderer.new(view_class.cache, view_class.config) }
+  subject(:renderer) { Hanami::View::Renderer.new(view_class.config) }
 
   let(:view_class) {
     Class.new(Hanami::View) {

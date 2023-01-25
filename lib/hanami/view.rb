@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require "dry/configurable"
-require "dry/core/cache"
 require "dry/core/equalizer"
 require "dry/inflector"
 
 require_relative "view/application_view"
+require_relative "view/cache"
 require_relative "view/context"
 require_relative "view/exposures"
 require_relative "view/errors"
@@ -35,8 +35,6 @@ module Hanami
     DEFAULT_RENDERER_OPTIONS = {default_encoding: "utf-8"}.freeze
 
     include Dry::Equalizer(:config, :exposures)
-
-    extend Dry::Core::Cache
 
     extend Dry::Configurable
 
@@ -460,6 +458,11 @@ module Hanami
     # @api private
     def self.layout_path
       File.join(*[config.layouts_dir, config.layout].compact)
+    end
+
+    # @api private
+    def self.cache
+      Cache
     end
 
     # Returns an instance of the view. This binds the defined exposures to the
