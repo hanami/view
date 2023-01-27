@@ -2,7 +2,7 @@
 
 require "dry/core/equalizer"
 require_relative "decorated_attributes"
-require_relative "render_environment_missing"
+require_relative "rendering_missing"
 
 module Hanami
   class View
@@ -25,7 +25,7 @@ module Hanami
         value
       ].freeze
 
-      include Dry::Equalizer(:_name, :_value, :_render_env)
+      include Dry::Equalizer(:_name, :_value, :_rendering)
       include DecoratedAttributes
 
       # The part's name. This comes from the exposure supplying the value.
@@ -48,12 +48,12 @@ module Hanami
       # @api public
       attr_reader :_value
 
-      # The current render environment
+      # The current rendering
       #
-      # @return [RenderEnvironment] render environment
+      # @return [Rendering]
       #
       # @api private
-      attr_reader :_render_env
+      attr_reader :_rendering
 
       # Determins a part name (when initialized without one). Intended for use
       # only while unit testing Parts.
@@ -67,17 +67,17 @@ module Hanami
       #
       # @param name [Symbol] part name
       # @param value [Object] the value to decorate
-      # @param render_env [RenderEnvironment] render environment
+      # @param rendering [Rendering] the current rendering
       #
       # @api public
       def initialize(
-        render_env: RenderEnvironmentMissing.new,
-        name: self.class.part_name(render_env.inflector),
+        rendering: RenderingMissing.new,
+        name: self.class.part_name(rendering.inflector),
         value:
       )
         @_name = name
         @_value = value
-        @_render_env = render_env
+        @_rendering = rendering
       end
 
       # The template format for the current render environment.
@@ -92,7 +92,7 @@ module Hanami
       #
       # @api public
       def _format
-        _render_env.format
+        _rendering.format
       end
 
       # The context object for the current render environment
@@ -107,7 +107,7 @@ module Hanami
       #
       # @api public
       def _context
-        _render_env.context
+        _rendering.context
       end
 
       # Renders a new partial with the part included in its locals.
@@ -128,7 +128,7 @@ module Hanami
       # @api public
       # rubocop:disable Naming/UncommunicativeMethodParamName
       def _render(partial_name, as: _name, **locals, &block)
-        _render_env.partial(partial_name, _render_env.scope({as => self}.merge(locals)), &block)
+        _rendering.partial(partial_name, _rendering.scope({as => self}.merge(locals)), &block)
       end
       # rubocop:enable Naming/UncommunicativeMethodParamName
 
@@ -148,7 +148,7 @@ module Hanami
       #
       # @api public
       def _scope(scope_name = nil, **locals)
-        _render_env.scope(scope_name, {_name => self}.merge(locals))
+        _rendering.scope(scope_name, {_name => self}.merge(locals))
       end
 
       # Returns a string representation of the value
@@ -180,7 +180,7 @@ module Hanami
         klass.new(
           name: name,
           value: value,
-          render_env: _render_env,
+          rendering: _rendering,
           **options
         )
       end

@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.describe "Testing / parts" do
-  let(:part_class) {
-    Class.new(Hanami::View::Part) do
-    end
-  }
-
   specify "Parts can be unit tested without name or rendering (for testing methods that don't require them)" do
     part_class = Class.new(Hanami::View::Part) do
       def breaking_news_title
@@ -20,15 +15,15 @@ RSpec.describe "Testing / parts" do
     expect(article_part.breaking_news_title).to eq "Giant Hand Threatens Beach City!"
   end
 
-  specify "Parts can be unit tested with a rendering from a view class" do
-    view_class = Class.new(Hanami::View) do
+  specify "Parts can be unit tested with a rendering from a view" do
+    view = Class.new(Hanami::View) do
       config.paths = FIXTURES_PATH.join("integration/testing")
       config.template = "view"
-    end
+    end.new
 
     part_class = Class.new(Hanami::View::Part) do
       def feature_box
-        render(:feature_box)
+        render "feature_box"
       end
     end
 
@@ -37,7 +32,7 @@ RSpec.describe "Testing / parts" do
     article_part = part_class.new(
       name: :article,
       value: article,
-      render_env: view_class.template_env
+      rendering: view.rendering
     )
 
     expect(article_part.feature_box).to eq %(

@@ -4,7 +4,7 @@ require "hanami/view/decorated_attributes"
 
 RSpec.describe Hanami::View::DecoratedAttributes do
   subject(:decoratable) {
-    Test::Decoratable = Struct.new(:attr_1, :attr_2, :_render_env) do
+    Test::Decoratable = Struct.new(:attr_1, :attr_2, :_rendering) do
       include Hanami::View::DecoratedAttributes
 
       decorate :attr_1, as: :my_value
@@ -12,23 +12,23 @@ RSpec.describe Hanami::View::DecoratedAttributes do
       decorate :invalid_attr
     end
 
-    Test::Decoratable.new(attr_1, attr_2, render_env)
+    Test::Decoratable.new(attr_1, attr_2, rendering)
   }
 
   let(:attr_1) { double(:attr_1) }
   let(:attr_2) { double(:attr_2) }
-  let(:render_env) { spy(:render_env) }
+  let(:rendering) { instance_spy(Hanami::View::Rendering) }
 
-  context "with render environment" do
+  context "with rendering" do
     it "returns decorated attributes as parts" do
       decoratable.attr_1
-      expect(render_env).to have_received(:part).with(:attr_1, attr_1, as: :my_value)
+      expect(rendering).to have_received(:part).with(:attr_1, attr_1, as: :my_value)
 
       decoratable.attr_2
       if RUBY_VERSION >= "2.7"
-        expect(render_env).to have_received(:part).with(:attr_2, attr_2)
+        expect(rendering).to have_received(:part).with(:attr_2, attr_2)
       else
-        expect(render_env).to have_received(:part).with(:attr_2, attr_2, {})
+        expect(rendering).to have_received(:part).with(:attr_2, attr_2, {})
       end
     end
 
@@ -37,8 +37,8 @@ RSpec.describe Hanami::View::DecoratedAttributes do
     end
   end
 
-  context "without render environment" do
-    let(:render_env) { nil }
+  context "without rendering" do
+    let(:rendering) { nil }
 
     it "returns attributes without decoration" do
       expect(decoratable.attr_1).to be attr_1

@@ -33,10 +33,27 @@ RSpec.describe Hanami::View do
         "<!DOCTYPE html><html><head><title>Test</title></head><body><h1>User</h1><p>Jane</p></body></html>"
       )
     end
+  end
+
+  describe "layout rendering" do
+    subject(:view) {
+      Class.new(Hanami::View) {
+        config.paths = SPEC_ROOT.join("fixtures/templates")
+        config.layout = "missing_layout"
+        config.template = "user"
+
+        expose :user do
+          {name: "Jane"}
+        end
+
+        expose :header do
+          {title: "User"}
+        end
+      }.new
+    }
 
     it "raises error when layout cannot be found" do
-      view.config.layout = "invalid"
-      expect { view.(context: context).to_s }.to raise_error Hanami::View::LayoutNotFoundError, /Layout \+invalid\+/
+      expect { view.() }.to raise_error Hanami::View::LayoutNotFoundError, /Layout \+missing_layout\+/
     end
   end
 

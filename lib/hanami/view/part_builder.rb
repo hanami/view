@@ -14,21 +14,14 @@ module Hanami
       include Dry::Equalizer(:namespace)
 
       attr_reader :namespace
-      attr_reader :render_env
+      attr_reader :rendering
 
       # Returns a new instance of PartBuilder
       #
       # @api private
-      def initialize(namespace: nil, render_env: nil)
+      def initialize(namespace: nil, rendering: nil)
         @namespace = namespace
-        @render_env = render_env
-      end
-
-      # @api private
-      def for_render_env(render_env)
-        return self if render_env == self.render_env
-
-        self.class.new(namespace: namespace, render_env: render_env)
+        @rendering = rendering
       end
 
       # Decorates an exposure value
@@ -54,7 +47,7 @@ module Hanami
         klass.new(
           name: name,
           value: value,
-          render_env: render_env
+          rendering: rendering
         )
       end
 
@@ -62,8 +55,8 @@ module Hanami
         collection_as = collection_options(name: name, **options)[:as]
         item_name, item_as = collection_item_options(name: name, **options).values_at(:name, :as)
 
-        arr = value.to_ary.map { |obj|
-          build_part(item_name, obj, **options.merge(as: item_as))
+        arr = value.to_ary.map { |item|
+          build_part(item_name, item, **options.merge(as: item_as))
         }
 
         build_part(name, arr, **options.merge(as: collection_as))
@@ -102,7 +95,7 @@ module Hanami
         if name.is_a?(Class)
           name
         else
-          fetch_or_store(namespace, name, fallback_class) do
+          fetch_or_store(:part_class, namespace, name, fallback_class) do
             resolve_part_class(name: name, fallback_class: fallback_class)
           end
         end
@@ -133,7 +126,7 @@ module Hanami
       # rubocop:enable Metrics/PerceivedComplexity
 
       def inflector
-        render_env.inflector
+        rendering.inflector
       end
     end
   end

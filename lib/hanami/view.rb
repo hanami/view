@@ -11,9 +11,9 @@ require_relative "view/exposures"
 require_relative "view/errors"
 require_relative "view/part_builder"
 require_relative "view/path"
-require_relative "view/render_environment"
 require_relative "view/rendered"
 require_relative "view/renderer"
+require_relative "view/rendering"
 require_relative "view/scope_builder"
 
 module Hanami
@@ -225,7 +225,7 @@ module Hanami
     #   @param mapping [Hash<Symbol, Class>] engine mapping
     #   @api public
     # @!scope class
-    setting :renderer_engine_mapping
+    setting :renderer_engine_mapping, default: {}
 
     # @!endgroup
 
@@ -457,71 +457,10 @@ module Hanami
 
     # @!endgroup
 
-    # @!group Render environment
-
-    # Returns a render environment for the view and the given options. This
-    # environment isn't chdir'ed into any particular directory.
-    #
-    # @param format [Symbol] template format to use (defaults to the `default_format` setting)
-    # @param context [Context] context object to use (defaults to the `default_context` setting)
-    #
-    # @see View.template_env render environment for the view's template
-    # @see View.layout_env render environment for the view's layout
-    #
-    # @return [RenderEnvironment]
-    # @api public
-    def self.render_env(format: config.default_format, context: config.default_context)
-      RenderEnvironment.prepare(renderer(format), config, context)
-    end
-
-    # @overload template_env(format: config.default_format, context: config.default_context)
-    #   Returns a render environment for the view and the given options,
-    #   chdir'ed into the view's template directory. This is the environment
-    #   used when rendering the template, and is useful to to fetch
-    #   independently when unit testing Parts and Scopes.
-    #
-    #   @param format [Symbol] template format to use (defaults to the `default_format` setting)
-    #   @param context [Context] context object to use (defaults to the `default_context` setting)
-    #
-    #   @return [RenderEnvironment]
-    #   @api public
-    def self.template_env(**args)
-      render_env(**args).chdir(config.template)
-    end
-
-    # @overload layout_env(format: config.default_format, context: config.default_context)
-    #   Returns a render environment for the view and the given options,
-    #   chdir'ed into the view's layout directory. This is the environment used
-    #   when rendering the view's layout.
-    #
-    #   @param format [Symbol] template format to use (defaults to the `default_format` setting)
-    #   @param context [Context] context object to use (defaults to the `default_context` setting)
-    #
-    #   @return [RenderEnvironment] @api public
-    def self.layout_env(**args)
-      render_env(**args).chdir(layout_path)
-    end
-
-    # Returns renderer for the view and provided format
-    #
-    # @api private
-    def self.renderer(format)
-      fetch_or_store(:renderer, config, format) {
-        Renderer.new(
-          config.paths,
-          format: format,
-          engine_mapping: config.renderer_engine_mapping,
-          **config.renderer_options
-        )
-      }
-    end
-
     # @api private
     def self.layout_path
       File.join(*[config.layouts_dir, config.layout].compact)
     end
-
-    # @!endgroup
 
     # Returns an instance of the view. This binds the defined exposures to the
     # view instance.
@@ -561,18 +500,16 @@ module Hanami
     # @return [Rendered] rendered view object
     # @api public
     def call(format: config.default_format, context: config.default_context, **input)
-      env = self.class.render_env(format: format, context: context)
-      template_env = self.class.template_env(format: format, context: context)
+      rendering = self.rendering(format: format, context: context)
 
-      locals = locals(template_env, input)
-      output = env.template(config.template, template_env.scope(config.scope, locals))
+      locals = locals(rendering, input)
+      output = rendering.template(config.template, rendering.scope(config.scope, locals))
 
       if layout?
-        layout_env = self.class.layout_env(format: format, context: context)
         begin
-          output = env.template(
+          output = rendering.template(
             self.class.layout_path,
-            layout_env.scope(config.scope, layout_locals(locals))
+            rendering.scope(config.scope, layout_locals(locals))
           ) { output }
         rescue TemplateNotFoundError
           raise LayoutNotFoundError.new(config.layout, config.paths)
@@ -580,6 +517,10 @@ module Hanami
       end
 
       Rendered.new(output: output, locals: locals)
+    end
+
+    def rendering(format: config.default_format, context: config.default_context)
+      Rendering.new(config: config, format: format, context: context)
     end
 
     private
@@ -591,10 +532,10 @@ module Hanami
     end
 
     # @api private
-    def locals(render_env, input)
-      exposures.(context: render_env.context, **input) do |value, exposure|
+    def locals(rendering, input)
+      exposures.(context: rendering.context, **input) do |value, exposure|
         if exposure.decorate? && value
-          render_env.part(exposure.name, value, **exposure.options)
+          rendering.part(exposure.name, value, as: exposure.options[:as])
         else
           value
         end
