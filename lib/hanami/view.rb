@@ -471,6 +471,7 @@ module Hanami
     #
     # @api public
     def initialize
+      self.class.config.finalize!
       ensure_config
 
       @exposures = self.class.exposures.bind(self)

@@ -45,7 +45,7 @@ module Hanami
       private
 
       def lookup(name, format)
-        fetch_or_store(:lookup, name, format, config.paths, prefixes) {
+        fetch_or_store(:lookup, name, format, config, prefixes) {
           catch :found do
             config.paths.reduce(nil) do |_, path|
               prefixes.reduce(nil) do |_, prefix|
@@ -68,7 +68,7 @@ module Hanami
       end
 
       def tilt(path)
-        fetch_or_store(:engine, path, config.renderer_engine_mapping, config.renderer_options) {
+        fetch_or_store(:engine, path, config) {
           Tilt[path, config.renderer_engine_mapping, **config.renderer_options]
         }
       end
