@@ -55,23 +55,27 @@ RSpec.describe "Part / Decorated attributes" do
     article_part_class.new(
       name: :article,
       value: article,
-      render_env: render_env
+      rendering: rendering
     )
   }
 
-  let(:render_env) {
-    Hanami::View::RenderEnvironment.new(
-      renderer: Hanami::View::Renderer.new([Hanami::View::Path.new(FIXTURES_PATH)], format: :html),
-      inflector: Dry::Inflector.new,
-      context: Hanami::View::Context.new,
-      scope_builder: Hanami::View::ScopeBuilder.new,
-      part_builder: part_builder
+  let(:rendering) {
+    Hanami::View::Rendering.new(
+      config: view.config,
+      format: :html,
+      context: Hanami::View::Context.new
     )
+  }
+
+  let(:view) {
+    part_builder = self.part_builder if respond_to?(:part_builder)
+
+    Class.new(Hanami::View) {
+      config.part_builder = part_builder if part_builder
+    }
   }
 
   describe "using default part builder" do
-    let(:part_builder) { Hanami::View::PartBuilder.new }
-
     describe "decorating without options" do
       describe "multiple declarations" do
         let(:article_part_class) {
@@ -160,16 +164,18 @@ RSpec.describe "Part / Decorated attributes" do
 
     let(:part_builder) {
       Class.new(Hanami::View::PartBuilder) do
-        def part_class(name:, **options)
-          part_name = Dry::Core::Inflector.camelize(name)
+        class << self
+          def part_class(name:, **options)
+            part_name = Dry::Core::Inflector.camelize(name)
 
-          begin
-            Test.const_get(:"#{part_name}Part")
-          rescue NameError
-            super
+            begin
+              Test.const_get(:"#{part_name}Part")
+            rescue NameError
+              super
+            end
           end
         end
-      end.new
+      end
     }
 
     before do

@@ -45,5 +45,11 @@ module Hanami
         super(msg)
       end
     end
+
+    class RenderingMissingError < Error
+      def message
+        "a +rendering+ must be provided"
+      end
+    end
   end
 end

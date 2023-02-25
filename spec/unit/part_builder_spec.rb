@@ -3,23 +3,22 @@
 require "hanami/view/scope_builder"
 
 RSpec.describe Hanami::View::PartBuilder do
-  subject(:part_builder) { render_env.part_builder }
+  subject(:part_builder) { rendering.part_builder }
 
-  let(:render_env) {
-    Hanami::View::RenderEnvironment.new(
-      renderer: Hanami::View::Renderer.new([FIXTURES_PATH], format: :html),
-      inflector: Dry::Inflector.new,
-      context: Hanami::View::Context.new,
-      scope_builder: Hanami::View::ScopeBuilder.new,
-      part_builder: Hanami::View::PartBuilder.new(namespace: namespace)
-    )
+  let(:rendering) { view.rendering(format: :html) }
+  let(:view) {
+    part_namespace = namespace
+    Class.new(Hanami::View) {
+      config.paths = FIXTURES_PATH
+      config.template = "_"
+      config.part_namespace = part_namespace
+    }.new
   }
-
   let(:namespace) { nil }
 
   describe "#call" do
     subject(:part) {
-      part_builder.(name, value, **options)
+      part_builder.(name, value, rendering: rendering, **options)
     }
 
     let(:name) { :user }
@@ -37,8 +36,8 @@ RSpec.describe Hanami::View::PartBuilder do
         expect(part._value).to eq value
       end
 
-      it "retains the render environment" do
-        expect(part._render_env).to eql render_env
+      it "retains the rendering" do
+        expect(part._rendering).to eql rendering
       end
     end
 

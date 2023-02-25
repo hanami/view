@@ -46,18 +46,28 @@ module Hanami
       end
 
       def call(input)
-        # rubocop:disable Style/MultilineBlockChain
-        tsort.each_with_object({}) { |name, memo|
-          next unless (exposure = self[name])
+        # Avoid performance cost of tsorting when we don't need it
+        names =
+          if exposures.values.any?(&:dependencies?) # TODO: this sholud be cachable at time of `#add`
+            tsort
+          else
+            exposures.keys
+          end
 
-          value = exposure.(input, memo)
-          value = yield(value, exposure) if block_given?
+        names
+          .each_with_object({}) { |name, memo|
+            next unless (exposure = self[name])
 
-          memo[name] = value
-        }.each_with_object({}) { |(name, value), memo|
-          memo[name] = value unless self[name].private?
-        }
-        # rubocop:enable Style/MultilineBlockChain
+            value = exposure.(input, memo)
+            value = yield(value, exposure) if block_given?
+
+            memo[name] = value
+          }
+          .tap { |hsh|
+            names.each do |key|
+              hsh.delete(key) if self[key].private?
+            end
+          }
       end
 
       private
