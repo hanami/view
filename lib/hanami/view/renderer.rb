@@ -9,12 +9,13 @@ module Hanami
     class Renderer
       PARTIAL_PREFIX = "_"
       PATH_DELIMITER = "/"
+      CURRENT_PATH_PREFIX = "."
 
       attr_reader :config, :prefixes
 
       def initialize(config)
         @config = config
-        @prefixes = ["."]
+        @prefixes = [CURRENT_PATH_PREFIX]
       end
 
       def template(name, format, scope, &block)
