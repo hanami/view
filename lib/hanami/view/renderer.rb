@@ -53,7 +53,7 @@ module Hanami
 
       def name_for_partial(name)
         segments = name.to_s.split(PATH_DELIMITER)
-        segments[-1] = "_#{segments[-1]}"
+        segments[-1] = "#{PARTIAL_PREFIX}#{segments[-1]}"
         segments.join(PATH_DELIMITER)
       end
 
