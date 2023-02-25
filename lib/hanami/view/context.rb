@@ -32,8 +32,12 @@ module Hanami
       end
 
       # @api private
+      SKIP_COPY_IVARS = %i[@_rendering].freeze
+      private_constant :SKIP_COPY_IVARS
+
+      # @api private
       private def initialize_copy(source)
-        ivars = source.instance_variables - [:@_rendering]
+        ivars = source.instance_variables - SKIP_COPY_IVARS
         ivars.each do |ivar|
           instance_variable_set(ivar, source.instance_variable_get(ivar).dup)
         end
