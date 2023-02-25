@@ -46,7 +46,7 @@ module Hanami
       end
     end
 
-    class RenderingMissingError < StandardError
+    class RenderingMissingError < Error
       def message
         "a +rendering+ must be provided"
       end
