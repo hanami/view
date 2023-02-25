@@ -13,7 +13,7 @@ RSpec.describe Hanami::View::Context do
     }.new.rendering(format: :html)
   }
 
-  describe "#for_rendering" do
+  describe "#dup_for_rendering" do
     let(:context_class) {
       Class.new(Hanami::View::Context) {
         attr_reader :injected_obj, :internal_var
@@ -25,7 +25,7 @@ RSpec.describe Hanami::View::Context do
       }
     }
 
-    let(:injected_obj) { Struct.new(:foo).new } # having a working #== is important for the example below
+    let(:injected_obj) { Struct.new(:foo).new }
 
     it "copies all state" do
       context = context_class.new(injected_obj: injected_obj)
@@ -34,8 +34,7 @@ RSpec.describe Hanami::View::Context do
       new_context = context.dup_for_rendering(rendering)
 
       expect(new_context._rendering).to be rendering
-      expect(new_context.injected_obj).to eq injected_obj
-      expect(new_context.injected_obj).not_to be injected_obj # it is a dup, not the same object
+      expect(new_context.injected_obj).to be injected_obj
       expect(new_context.internal_var).to eq "updated internal"
     end
   end
