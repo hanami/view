@@ -3,6 +3,7 @@
 require "dry/configurable"
 require "dry/core/equalizer"
 require "dry/inflector"
+require "temple/html/safe"
 
 require_relative "view/application_view"
 require_relative "view/cache"
