@@ -34,7 +34,7 @@ RSpec.describe "Template engines / erb (using erbse as default engine)" do
       expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
     end
 
-    xit "escapes contents" do
+    it "escapes contents" do
       view = Class.new(base_view) do
         config.template = "escape"
 
