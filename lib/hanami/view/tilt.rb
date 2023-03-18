@@ -6,16 +6,14 @@ module Hanami
   class View
     # @api private
     module Tilt
+      Mapping = ::Tilt.default_mapping.dup.tap { |mapping|
+        mapping.register_lazy "Hanami::View::ERB::Template", "hanami/view/erb/template", "erb", "rhtml"
+        mapping.register_lazy "Hanami::View::Haml::Template", "hanami/view/haml/template", "haml"
+      }
+
       class << self
         def [](path, mapping, options)
-          ext = File.extname(path).sub(/^./, "").to_sym
-          activate_adapter ext
-
           with_mapping(mapping).new(path, options)
-        end
-
-        def default_mapping
-          ::Tilt.default_mapping
         end
 
         def register_adapter(ext, adapter)
@@ -28,39 +26,18 @@ module Hanami
 
         private
 
-        def adapters
-          @adapters ||= {}
-        end
-
-        def activate_adapter(ext)
-          View.cache.fetch_or_store(:tilt_adapter, ext) {
-            adapter = adapters[ext]
-            return unless adapter
-
-            *requires, error_message = adapter.requirements
-
-            begin
-              requires.each(&method(:require))
-            rescue LoadError => e
-              raise e, "#{e.message}\n\n#{error_message}"
-            end
-
-            adapter.activate
-          }
-        end
-
         def with_mapping(mapping)
           View.cache.fetch_or_store(:tilt_mapping, mapping) {
             if mapping.any?
               build_mapping(mapping)
             else
-              default_mapping
+              Mapping
             end
           }
         end
 
         def build_mapping(mapping)
-          default_mapping.dup.tap do |new_mapping|
+          Mapping.dup.tap do |new_mapping|
             mapping.each do |extension, template_class|
               new_mapping.register template_class, extension
             end
@@ -70,6 +47,3 @@ module Hanami
     end
   end
 end
-
-require_relative "tilt/erb"
-require_relative "tilt/haml"

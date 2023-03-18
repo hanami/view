@@ -51,7 +51,7 @@ RSpec.describe "hanami-view" do
     view = view_class.new
 
     expect(view.(context: context, format: "txt").to_s.strip).to eql(
-      "# hanami-view rocks!\n\n\n* Jane (jane@doe.org)\n\n* Joe (joe@doe.org)"
+      "# hanami-view rocks!\n\n* Jane (jane@doe.org)\n* Joe (joe@doe.org)"
     )
   end
 

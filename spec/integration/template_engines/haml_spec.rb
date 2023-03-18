@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-require "slim"
 require "hanami/view"
 require "hanami/view/context"
 
-RSpec.describe "Template engines / slim" do
+RSpec.describe "Template engines / haml" do
   let(:base_view) {
     Class.new(Hanami::View) do
-      config.paths = FIXTURES_PATH.join("integration/template_engines/slim")
+      config.paths = FIXTURES_PATH.join("integration/template_engines/haml")
     end
   }
 
@@ -27,13 +26,13 @@ RSpec.describe "Template engines / slim" do
       config.template = "render_and_yield"
     end.new
 
-    expect(view.().to_s).to eq "<wrapper>Yielded</wrapper>"
+    expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
   end
 
-  it "supports context methods that yield" do
+  it "supports methods that yield" do
     context = Class.new(Hanami::View::Context) do
       def wrapper
-        "<wrapper>#{yield}</wrapper>"
+        "<wrapper>#{yield}</wrapper>".html_safe
       end
     end.new
 
@@ -42,6 +41,6 @@ RSpec.describe "Template engines / slim" do
       config.template = "method_with_yield"
     end.new
 
-    expect(view.().to_s).to eq "<wrapper>Yielded</wrapper>"
+    expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
   end
 end

@@ -16,9 +16,8 @@ group :test do
 
   gem "dry-inflector"
   gem "dry-files"
-  gem "erbse", "~> 0.1.4"
   gem "erubi"
-  gem "hamlit", ">= 3.0"
+  gem "haml", "~> 6.0"
   gem "hanami-cli", github: "hanami/cli", branch: "main"
   gem "hanami", github: "hanami/hanami", branch: "main"
   gem "hanami-controller", github: "hanami/controller", branch: "main"
