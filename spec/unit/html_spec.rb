@@ -28,6 +28,18 @@ RSpec.describe Hanami::View::HTML::SafeString do
     end
   end
 
+  describe "#dup" do
+    subject(:dup) { safe_string.dup }
+
+    it "is html_safe" do
+      expect(dup).to be_html_safe
+    end
+
+    it "is frozen" do
+      expect(dup).to be_frozen
+    end
+  end
+
   describe "#to_s" do
     it "returns itself" do
       expect(safe_string.to_s).to be safe_string

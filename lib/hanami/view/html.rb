@@ -21,6 +21,12 @@ module Hanami
           freeze
         end
 
+        # @api private
+        private def initialize_copy(other)
+          super
+          freeze
+        end
+
         # @return [true]
         #
         # @api public
