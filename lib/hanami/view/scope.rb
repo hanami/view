@@ -96,7 +96,7 @@ module Hanami
           partial_name = _inflector.underscore(_inflector.demodulize(partial_name.to_s))
         end
 
-        _rendering.partial(partial_name, _render_scope(**locals), &block).html_safe
+        _rendering.partial(partial_name, _render_scope(**locals), &block)
       end
 
       # Build a new scope using a scope class matching the provided name

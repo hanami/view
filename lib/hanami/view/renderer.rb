@@ -59,7 +59,7 @@ module Hanami
       end
 
       def render(path, scope, &block)
-        tilt(path).render(scope, {locals: scope._locals}, &block)
+        tilt(path).render(scope, {locals: scope._locals}, &block).html_safe
       end
 
       def tilt(path)
