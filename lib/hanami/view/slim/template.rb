@@ -8,8 +8,8 @@ module Hanami
     module SlimAdapter
       # Slim template renderer for Hanami::View.
       #
-      # This differs from the standard Slim::Template by automatically escaping HTML depending on
-      # the given string's `#html_safe?` status.
+      # This differs from the standard Slim::Template by automatically escaping HTML based on a
+      # given string's `#html_safe?`, regardless of when "hanami/view/html" is required.
       #
       # @see Hanami::View::Tilt
       # @api private
