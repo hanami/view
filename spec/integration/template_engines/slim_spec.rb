@@ -33,7 +33,7 @@ RSpec.describe "Template engines / slim" do
   it "supports context methods that yield" do
     context = Class.new(Hanami::View::Context) do
       def wrapper
-        "<wrapper>#{yield}</wrapper>"
+        "<wrapper>#{yield}</wrapper>".html_safe
       end
     end.new
 
