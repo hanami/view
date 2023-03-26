@@ -29,14 +29,6 @@ module Hanami
           with_mapping(mapping).new(path, options)
         end
 
-        def register_adapter(ext, adapter)
-          adapters[ext] = adapter
-        end
-
-        def deregister_adapter(ext)
-          adapters.delete(ext)
-        end
-
         private
 
         def with_mapping(mapping)
