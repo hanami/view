@@ -19,7 +19,7 @@ RSpec.describe Hanami::View::Scope do
     let(:context) { double(:context) }
 
     before do
-      allow(rendering).to receive(:partial)
+      allow(rendering).to receive(:partial) { "" }
       allow(rendering).to receive(:context) { context }
     end
 
