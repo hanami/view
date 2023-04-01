@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "scope"
-
 module Hanami
   class View
     # Builds scope objects via matching classes
@@ -18,28 +16,29 @@ module Hanami
         #
         # @api private
         def call(name = nil, locals:, rendering:) # rubocop:disable Style/OptionalArguments
-          scope_class(name, namespace: rendering.config.scope_namespace, inflector: rendering.inflector)
-            .new(name: name, locals: locals, rendering: rendering)
+          klass = scope_class(name, rendering: rendering)
+
+          klass.new(name: name, locals: locals, rendering: rendering)
         end
 
         private
 
-        DEFAULT_SCOPE_CLASS = Scope
-
-        def scope_class(name = nil, namespace:, inflector:)
+        def scope_class(name = nil, rendering:)
           if name.nil?
-            DEFAULT_SCOPE_CLASS
+            rendering.config.scope_class
           elsif name.is_a?(Class)
             name
           else
-            View.cache.fetch_or_store(:scope_class, namespace, name) do
+            View.cache.fetch_or_store(:scope_class, rendering.config) do
+              resolve_scope_class(name: name, rendering: rendering)
             end
-            resolve_scope_class(name: name, namespace: namespace, inflector: inflector)
           end
         end
 
-        def resolve_scope_class(name:, namespace:, inflector:)
-          name = inflector.camelize(name.to_s)
+        def resolve_scope_class(name:, rendering:)
+          name = rendering.inflector.camelize(name.to_s)
+
+          namespace = rendering.config.scope_namespace
 
           # Give autoloaders a chance to act
           begin
@@ -54,7 +53,7 @@ module Hanami
           if klass && klass < Scope
             klass
           else
-            DEFAULT_SCOPE_CLASS
+            rendering.config.scope_class
           end
         end
       end
