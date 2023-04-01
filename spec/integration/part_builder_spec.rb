@@ -19,7 +19,33 @@ RSpec.describe "part builder" do
     end
   end
 
-  describe "default decorator" do
+  describe "default part builder" do
+    it "defaults to creating instances of Hanami::View::Part" do
+      view = Class.new(Hanami::View) do
+        config.paths = SPEC_ROOT.join("__ignore__")
+        config.template = "__ignore__"
+      end.new
+
+      part = view.rendering.part(:my_part, Object.new)
+
+      expect(part).to be_an_instance_of Hanami::View::Part
+    end
+
+    it "create instances of a configured part_class" do
+      part_class = Class.new(Hanami::View::Part)
+
+      view = Class.new(Hanami::View) do
+        config.paths = SPEC_ROOT.join("__ignore__")
+        config.template = "__ignore__"
+
+        config.part_class = part_class
+      end.new
+
+      part = view.rendering.part(:my_part, Object.new)
+
+      expect(part).to be_an_instance_of part_class
+    end
+
     it "looks up classes from a part namespace" do
       view = Class.new(Hanami::View) do
         config.paths = SPEC_ROOT.join("fixtures/templates")
@@ -37,7 +63,7 @@ RSpec.describe "part builder" do
       )
     end
 
-    it "supports wrapping array members in custom part classes provided to exposure :as option" do
+    it "wraps array members in custom part classes provided to exposure :as option" do
       view = Class.new(Hanami::View) do
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
@@ -53,7 +79,7 @@ RSpec.describe "part builder" do
       )
     end
 
-    it "supports wrapping an array and its members in custom part classes provided to exposure :as option as an array" do
+    it "wraps an array and its members in custom part classes provided to exposure :as option as an array" do
       view = Class.new(Hanami::View) do
         config.paths = SPEC_ROOT.join("fixtures/templates")
         config.layout = nil
@@ -70,7 +96,7 @@ RSpec.describe "part builder" do
     end
   end
 
-  describe "custom decorator and part classes" do
+  describe "custom part builder and part classes" do
     it "supports wrapping in custom parts based on exposure names" do
       part_builder = Class.new(Hanami::View::PartBuilder) do
         class << self

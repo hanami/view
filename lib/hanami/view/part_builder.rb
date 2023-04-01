@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "part"
-
 module Hanami
   class View
     # Decorates exposure values with matching parts
@@ -27,14 +25,14 @@ module Hanami
         private
 
         def build_part(name:, value:, as:, rendering:)
-          klass = part_class(name: name, as: as, namespace: rendering.config.part_namespace, inflector: rendering.inflector)
+          klass = part_class(name: name, as: as, rendering: rendering)
 
           klass.new(name: name, value: value, rendering: rendering)
         end
 
         def build_collection_part(name:, value:, as: nil, rendering:)
           item_name, item_as = collection_item_name_as(name, as, inflector: rendering.inflector)
-          item_part_class = part_class(name: item_name, as: item_as, namespace: rendering.config.part_namespace, inflector: rendering.inflector)
+          item_part_class = part_class(name: item_name, as: item_as, rendering: rendering)
 
           arr = value.to_ary.map { |item|
             item_part_class.new(name: item_name, value: item, rendering: rendering)
@@ -60,23 +58,24 @@ module Hanami
           [singular_name, singular_as]
         end
 
-        def part_class(name:, as:, namespace:, inflector:, fallback_class: Part)
+        def part_class(name:, as:, rendering:)
           name = as || name
 
           if name.is_a?(Class)
             name
           else
-            View.cache.fetch_or_store(:part_class, namespace, name, fallback_class) do
-              resolve_part_class(name: name, namespace: namespace, inflector: inflector, fallback_class: fallback_class)
+            View.cache.fetch_or_store(:part_class, name, rendering.config) do
+              resolve_part_class(name: name, rendering: rendering)
             end
           end
         end
 
         # rubocop:disable Metrics/PerceivedComplexity
-        def resolve_part_class(name:, namespace:, inflector:, fallback_class:)
-          return fallback_class unless namespace
+        def resolve_part_class(name:, rendering:)
+          namespace = rendering.config.part_namespace
+          return rendering.config.part_class unless namespace
 
-          name = inflector.camelize(name.to_s)
+          name = rendering.inflector.camelize(name.to_s)
 
           # Give autoloaders a chance to act
           begin
@@ -88,10 +87,10 @@ module Hanami
             klass = namespace.const_get(name)
           end
 
-          if klass && klass < Part
+          if klass && klass < rendering.config.part_class
             klass
           else
-            fallback_class
+            rendering.config.part_class
           end
         end
         # rubocop:enable Metrics/PerceivedComplexity

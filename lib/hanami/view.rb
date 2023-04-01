@@ -10,6 +10,7 @@ require_relative "view/context"
 require_relative "view/exposures"
 require_relative "view/errors"
 require_relative "view/html"
+require_relative "view/part"
 require_relative "view/part_builder"
 require_relative "view/path"
 require_relative "view/rendered"
@@ -140,6 +141,8 @@ module Hanami
     #   @api public
     # @!scope class
     setting :default_format, default: :html
+
+    setting :part_class, default: Part
 
     # @overload config.scope_namespace=(namespace)
     #   Set a namespace that will be searched when building scope classes.
