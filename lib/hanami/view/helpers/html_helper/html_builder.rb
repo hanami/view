@@ -2,6 +2,7 @@
 
 require "dry/core/basic_object"
 require "escape_utils"
+require_relative "../escape_helper"
 
 # Ported from Hanami 1.x & adapted from `papercraft` gem implementation:
 #
@@ -448,13 +449,13 @@ module Hanami
           # @since 2.0.0
           # @api private
           def escape_content(content)
-            ::Hanami::View::HTML.escape_html(content)
+            ::Hanami::View::Helpers::EscapeHelper.escape_html(content)
           end
 
           # @since 2.0.0
           # @api private
           def escape_uri(uri)
-            ::EscapeUtils.escape_uri(string)
+            ::EscapeUtils.escape_uri(uri)
           end
 
           # @since 2.0.0
