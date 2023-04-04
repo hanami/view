@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-RSpec.describe Hanami::View::HTML, ".escape_url" do
+require "hanami/view/helpers/escape_helper"
+
+RSpec.describe Hanami::View::Helpers::EscapeHelper, ".escape_url" do
   def escape_url(...)
     described_class.escape_url(...)
   end

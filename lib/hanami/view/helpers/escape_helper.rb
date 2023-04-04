@@ -4,11 +4,19 @@ require "temple"
 
 module Hanami
   class View
-    module HTML
-      class << self
+    module Helpers
+      module EscapeHelper
+        module_function
+
+        def raw(string)
+          string.to_s.html_safe
+        end
+
         def escape_html(string)
           Temple::Utils.escape_html_safe(string)
         end
+
+        alias_method :h, :escape_html
 
         PERMITTED_URL_SCHEMES = %w[http https mailto].freeze
         private_constant :PERMITTED_URL_SCHEMES
@@ -20,22 +28,6 @@ module Hanami
             URI.decode_www_form_component(url.to_s),
             permitted_schemes
           ).first.to_s.html_safe
-        end
-      end
-
-      module Helpers
-        def escape_html(...)
-          HTML.escape_html(...)
-        end
-
-        alias_method :h, :escape_html
-
-        def escape_url(...)
-          HTML.escape_url(...)
-        end
-
-        def raw(string)
-          string.to_s.html_safe
         end
       end
     end
