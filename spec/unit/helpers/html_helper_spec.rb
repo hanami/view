@@ -5,7 +5,6 @@ require "hanami/view/helpers/html_helper"
 RSpec.describe Hanami::View::Helpers::HTMLHelper do
   subject(:obj) {
     Class.new {
-      include Hanami::View::HTML::Helpers
       include Hanami::View::Helpers::HTMLHelper
     }.new
   }
