@@ -10,23 +10,133 @@ RSpec.describe "Scopes" do
     end
   }
 
-  specify "Custom scope for a view" do
-    module Test
-      class ControllerScope < Hanami::View::Scope
+  describe "Custom scope for a view" do
+    it "renders the template using the scope" do
+      custom_scope = Class.new(Hanami::View::Scope) do
         def hello
-          "Hello #{_locals[:text]}!"
+          "Hello #{locals[:text]}!"
         end
+      end
+
+      view = Class.new(base_view) do
+        config.template = "custom_view_scope"
+        config.scope = custom_scope
+
+        expose :text
+      end.new
+
+      expect(view.(text: "world").to_s).to eq "Hello world!"
+    end
+  end
+
+  describe "inline scope class" do
+    context "scope_class not configured" do
+      it "renders the template using the scope" do
+        view = Class.new(base_view) do
+          config.template = "custom_view_scope"
+
+          expose :text
+
+          scope do
+            def hello
+              "Hello #{locals[:text]}!"
+            end
+          end
+        end.new
+
+        expect(view.(text: "world").to_s).to eq "Hello world!"
       end
     end
 
-    view = Class.new(base_view) do
-      config.template = "custom_view_scope"
-      config.scope = Test::ControllerScope
+    context "scope_class configured" do
+      it "creates a scope subclass inheriting from the scope_class and renders the template using the scope subclass" do
+        scope_class = Class.new(Hanami::View::Scope) {
+          private
 
-      expose :text
-    end.new
+          def exclaim(str)
+            "#{str}!"
+          end
+        }
 
-    expect(view.(text: "world").to_s).to eq "Hello world!"
+        view = Class.new(base_view) do
+          config.template = "custom_view_scope"
+          config.scope_class = scope_class
+
+          expose :text
+
+          scope do
+            def hello
+              exclaim("Hello #{locals[:text]}")
+            end
+          end
+        end.new
+
+        expect(view.(text: "world").to_s).to eq "Hello world!"
+      end
+    end
+
+    context "scope configured" do
+      it "creates a scope subclass inheriting from the configured scope and renders the template using the scope subclass" do
+        scope_class = Class.new(Hanami::View::Scope) {
+          private
+
+          def exclaim(str)
+            "#{str}!"
+          end
+        }
+
+        view = Class.new(base_view) do
+          config.template = "custom_view_scope"
+          config.scope = scope_class
+
+          expose :text
+
+          scope do
+            def hello
+              exclaim("Hello #{locals[:text]}")
+            end
+          end
+        end.new
+
+        expect(view.(text: "world").to_s).to eq "Hello world!"
+      end
+    end
+
+    context "both scope_class and scope configured" do
+      it "creates a scope subclass from the configured scope (ignoring scope_class) and renders the template using the scope subclass" do
+        base_scope_class = Class.new(Hanami::View::Scope) {
+          private
+
+          def exclaim(str)
+            "NOT USED"
+          end
+        }
+
+        view_scope_class = Class.new(Hanami::View::Scope) {
+          private
+
+          def exclaim(str)
+            "#{str}!"
+          end
+        }
+
+        view = Class.new(base_view) do
+          config.template = "custom_view_scope"
+          config.scope_class = base_scope_class
+          config.scope = view_scope_class
+
+          expose :text
+
+          scope do
+            def hello
+              exclaim("Hello #{locals[:text]}")
+            end
+          end
+        end.new
+
+        expect(view.(text: "world").to_s).to eq "Hello world!"
+      end
+    end
   end
 
   specify "Rendering a partial via an anonymous scope" do

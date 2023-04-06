@@ -10,11 +10,13 @@ require_relative "view/context"
 require_relative "view/exposures"
 require_relative "view/errors"
 require_relative "view/html"
+require_relative "view/part"
 require_relative "view/part_builder"
 require_relative "view/path"
 require_relative "view/rendered"
 require_relative "view/renderer"
 require_relative "view/rendering"
+require_relative "view/scope"
 require_relative "view/scope_builder"
 
 module Hanami
@@ -141,6 +143,8 @@ module Hanami
     # @!scope class
     setting :default_format, default: :html
 
+    setting :part_class, default: Part
+
     # @overload config.scope_namespace=(namespace)
     #   Set a namespace that will be searched when building scope classes.
     #
@@ -161,6 +165,8 @@ module Hanami
     #   @api public
     # @!scope class
     setting :part_builder, default: PartBuilder
+
+    setting :scope_class, default: Scope
 
     # @overload config.scope_namespace=(namespace)
     #   Set a namespace that will be searched when building scope classes.
@@ -450,8 +456,10 @@ module Hanami
     #   # <%= copyright(Time.now.utc) %>
     #
     #   MyView.new.(message: "Hello") # => "HELLO!"
-    def self.scope(base: config.scope || Hanami::View::Scope, &block)
-      config.scope = Class.new(base, &block)
+    def self.scope(scope_class = nil, &block)
+      scope_class ||= config.scope || config.scope_class
+
+      config.scope = Class.new(scope_class, &block)
     end
 
     # @!endgroup
