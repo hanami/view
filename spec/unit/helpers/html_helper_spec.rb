@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "hanami/view/erb/template"
 require "hanami/view/helpers/html_helper"
 
 RSpec.describe Hanami::View::Helpers::HTMLHelper do
@@ -156,15 +157,23 @@ RSpec.describe Hanami::View::Helpers::HTMLHelper do
     }).to eq %(<div><p>&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;</p></div>)
   end
 
-  # # describe "with link_to helper" do
-  # #   let(:view) { HtmlAndLinkTo.new }
+  describe "in templates" do
+    let(:scope) {
+      Class.new { include Hanami::View::Helpers::HTMLHelper }.new
+    }
 
-  # #   it "returns two links in div" do
-  # #     expect(view.two_links_to_in_div.to_s).to eq(%(<div><a href=\"/comments\">Comments</a><a href=\"/posts\">Posts</a></div>))
-  # #   end
+    def erb(str)
+      Hanami::View::ERB::Template.new { str }.render(scope)
+    end
 
-  # #   it "returns span and link in div" do
-  # #     expect(view.span_and_link_to_in_div.to_s).to eq(%(<div><span>hello</span><a href=\"/comments\">Comments</a></div>))
-  # #   end
-  # # end
+    it "requires the text helper to include template-provided tag content" do
+      src = erb(<<~ERB).strip
+        <%= html.div do %>
+          <%= text("Hello world!") %>
+        <% end %>
+      ERB
+
+      expect(src).to eq %(<div>Hello world!</div>)
+    end
+  end
 end
