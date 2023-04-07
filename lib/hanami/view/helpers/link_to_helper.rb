@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "hanami/helpers/html_helper"
+require_relative "html_helper"
 
 module Hanami
   class View
@@ -14,7 +14,7 @@ module Hanami
       #
       # @since 0.2.0
       module LinkToHelper
-        include Hanami::Helpers::HtmlHelper
+        include HTMLHelper
 
         # Generates an anchor tag for the given arguments.
         #
@@ -26,11 +26,11 @@ module Hanami
         #   @param url [String] url used in href attribute
         #   @param attributes [Hash] HTML attributes to pass to the a tag
         #
-        # @overload link_to(url, **attributes, &blk)
+        # @overload link_to(url, **attributes, &block)
         #   Use block as content
         #   @param url [String] url used in href attribute
         #   @param attributes [Hash] HTML attributes to pass to the a tag
-        #   @param blk [Proc] A block that describes the contents of the a tag
+        #   @param block [Proc] A block that describes the contents of the a tag
         #
         # @return [String] HTML markup for the link
         #
@@ -118,17 +118,17 @@ module Hanami
         # @example With only content
         #   <%= link_to "Home" %>
         #     # => ArgumentError
-        def link_to(content, url = nil, **attributes, &blk)
-          if blk
+        def link_to(content, url = nil, **attributes, &block)
+          if block
             raise ArgumentError if url && content
 
-            url     = content
+            url = content
             content = nil
           end
 
           attributes[:href] = url or raise ArgumentError
 
-          html.a(content, **attributes, &blk)
+          html.a(content, **attributes, &block)
         end
       end
     end
