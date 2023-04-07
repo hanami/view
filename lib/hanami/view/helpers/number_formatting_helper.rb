@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/helpers/types"
-
 module Hanami
   class View
     module Helpers
@@ -15,6 +13,8 @@ module Hanami
       #
       # @since 0.2.0
       module NumberFormattingHelper
+        module_function
+
         # Default delimiter
         #
         # @return [String] default delimiter
@@ -105,6 +105,8 @@ module Hanami
           Formatter.call(number, delimiter: delimiter, separator: separator, precision: precision)
         end
 
+        private
+
         # Formatter
         #
         # @since 0.2.0
@@ -174,14 +176,14 @@ module Hanami
           def self.coerce(number)
             case number
             when NilClass
-              raise Hanami::Helpers::CoercionError.new("failed to convert #{number.inspect} to number")
+              raise ArgumentError, "failed to convert #{number.inspect} to number"
             when ->(n) { n.to_s.match(INTEGER_REGEXP) }
-              Types::Coercible::Integer[number]
+              Integer(number)
             else
               begin
-                Types::Coercible::Float[number]
-              rescue Dry::Types::CoercionError
-                raise Hanami::Helpers::CoercionError.new("failed to convert #{number.inspect} to float")
+                Float(number)
+              rescue ArgumentError, TypeError => e
+                raise e.class, "failed to convert #{number.inspect} to float"
               end
             end
           end

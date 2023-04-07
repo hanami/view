@@ -1,29 +1,52 @@
 # frozen_string_literal: true
 
-RSpec.describe "Number formatting helper" do
-  subject(:view) {
-    Class.new(Hanami::View) do
-      config.paths = TEMPLATES_PATH
-      config.template = "cart/show"
+require "hanami/view/helpers/number_formatting_helper"
 
-      expose :total do |total:|
-        # format_number(total) # NoMethodError for View class
-        total
-      end
+RSpec.describe Hanami::View::Helpers::NumberFormattingHelper do
+  before :all do
+    @dir = make_tmp_directory
+
+    with_directory(@dir) do
+      write "number_formatting_helper.html.erb", <<~ERB
+        <%= format_number(number) %>
+      ERB
+    end
+  end
+
+  subject(:view) {
+    dir = self.dir
+    part_class = self.part_class
+    scope_class = self.scope_class
+
+    Class.new(Hanami::View) do
+      config.paths = dir
+      config.template = "number_formatting_helper"
+      config.part_class = part_class
+      config.scope_class = scope_class
+
+      expose :number
     end.new
   }
 
-  let(:ctx) do
-    Class.new(Hanami::View::Context) {
-      include Hanami::Helpers
-    }.new
-  end
+  let(:dir) { @dir }
 
-  describe "#call" do
-    it "renders template within the layout" do
-      actual = view.(context: ctx, total: 1234.56).to_s
+  let(:part_class) {
+    helper = self.described_class
 
-      expect(actual).to match("1,234.56")
-    end
+    Class.new(Hanami::View::Part) {
+      include helper
+    }
+  }
+
+  let(:scope_class) {
+    helper = self.described_class
+
+    Class.new(Hanami::View::Scope) {
+      include helper
+    }
+  }
+
+  it "works" do
+    expect(view.(number: 12_300).to_s.strip).to eq "12,300"
   end
 end
