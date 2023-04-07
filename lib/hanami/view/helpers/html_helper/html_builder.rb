@@ -1,20 +1,22 @@
 # frozen_string_literal: true
 
 require "dry/core/basic_object"
-require "hanami/helpers/escape"
+require "escape_utils"
+require_relative "../escape_helper"
 
 # Ported from Hanami 1.x & adapted from `papercraft` gem implementation:
 #
 # Papercraft is Copyright (c) digital-fabric
 # Released under the MIT License
+
 module Hanami
   class View
     module Helpers
-      module HtmlHelper
+      module HTMLHelper
         # HTML Builder
         #
         # @since 0.1.0
-        class HtmlBuilder < Dry::Core::BasicObject
+        class HTMLBuilder < Dry::Core::BasicObject
           # HTML5 empty tags
           #
           # @since 0.1.0
@@ -48,43 +50,43 @@ module Hanami
 
           # @since 2.0.0
           # @api private
-          S_LT              = "<"
+          S_LT = "<"
 
           # @since 2.0.0
           # @api private
-          S_GT              = ">"
+          S_GT = ">"
 
           # @since 2.0.0
           # @api private
-          S_LT_SLASH        = "</"
+          S_LT_SLASH = "</"
 
           # @since 2.0.0
           # @api private
-          S_SPACE_LT_SLASH  = " </"
+          S_SPACE_LT_SLASH = " </"
 
           # @since 2.0.0
           # @api private
-          S_SLASH_GT        = "/>"
+          S_SLASH_GT = "/>"
 
           # @since 2.0.0
           # @api private
-          S_SPACE           = " "
+          S_SPACE = " "
 
           # @since 2.0.0
           # @api private
-          S_EQUAL_QUOTE     = '="'
+          S_EQUAL_QUOTE = '="'
 
           # @since 2.0.0
           # @api private
-          S_QUOTE           = '"'
+          S_QUOTE = '"'
 
           # @since 2.0.0
           # @api private
-          S_UNDERSCORE      = "_"
+          S_UNDERSCORE = "_"
 
           # @since 2.0.0
           # @api private
-          S_DASH            = "-"
+          S_DASH = "-"
 
           # @since 2.0.0
           # @api private
@@ -106,7 +108,7 @@ module Hanami
             # @params type [Symbol,String,#to_s] HTML tag type
             # @params content [String,NilClass] optional content
             # @params attributes [Hash] HTML attributes
-            # @params blk [Proc] optional nested contents
+            # @params block [Proc] optional nested contents
             #
             # @return void
             #
@@ -144,22 +146,25 @@ module Hanami
             #     span "World"
             #   end
             #     # => <%<tag>s>Hello <span>World<span></%<tag>s>
-            def %<tag>s(content = nil, **attributes, &blk)
+            def %<tag>s(content = nil, **attributes, &block)
               if content.is_a?(::Hash) && attributes.empty?
                 attributes = content
                 content = nil
               end
+
               @buffer << S_TAG_%<TAG>s_PRE
               emit_attributes(attributes)
-              if blk
+              if block
                 @buffer << S_GT
-                instance_eval(&blk)
+                instance_eval(&block)
                 @buffer << S_TAG_%<TAG>s_CLOSE
               elsif content
                 @buffer << S_GT << escape_content(content.to_s) << S_TAG_%<TAG>s_CLOSE
               else
                 @buffer << S_GT << S_TAG_%<TAG>s_CLOSE
               end
+
+              @buffer.html_safe
             end
           RUBY
 
@@ -203,13 +208,16 @@ module Hanami
               @buffer << S_TAG_%<TAG>s_PRE
               emit_attributes(attributes)
               @buffer << S_GT
+
+              @buffer.html_safe
             end
           RUBY
 
-          def initialize(&blk)
+          # @api private
+          def initialize(&block)
             super()
-            @buffer = Escape.safe_string("")
-            instance_eval(&blk) if blk
+            @buffer = +""
+            instance_eval(&block) if block
           end
 
           # Generate HTML content tag
@@ -217,7 +225,7 @@ module Hanami
           # @params type [Symbol,String,#to_s] HTML tag type
           # @params content [String,NilClass] optional content
           # @params attributes [Hash] HTML attributes
-          # @params blk [Proc] optional nested contents
+          # @params block [Proc] optional nested contents
           #
           # @return void
           #
@@ -253,7 +261,7 @@ module Hanami
           #     span "World"
           #   end
           #     # => <my-tag>Hello <span>World<span></my-tag>
-          def tag(type, content = nil, **attributes, &blk)
+          def tag(type, content = nil, **attributes, &block)
             type = tag_name(type.to_s)
 
             if content.is_a?(::Hash) && attributes.empty?
@@ -262,9 +270,9 @@ module Hanami
             end
             @buffer << S_LT << type
             emit_attributes(attributes)
-            if blk
+            if block
               @buffer << S_GT
-              instance_eval(&blk)
+              instance_eval(&block)
               @buffer << S_LT_SLASH << type << S_GT
             elsif content
               @buffer << S_GT << escape_content(content.to_s) <<
@@ -311,7 +319,7 @@ module Hanami
 
           # Define a HTML fragment
           #
-          # @param blk [Proc] the optional nested content espressed as a block
+          # @param block [Proc] the optional nested content espressed as a block
           #
           # @return void
           #
@@ -328,8 +336,8 @@ module Hanami
           #   # =>
           #     <p>hello</p>
           #     <p>hanami</p>
-          def fragment(&blk)
-            instance_eval(&blk)
+          def fragment(&block)
+            instance_eval(&block)
           end
 
           # Defines a plain string of text. This particularly useful when you
@@ -392,7 +400,7 @@ module Hanami
           # @since 0.1.0
           # @api public
           def to_s
-            @buffer
+            @buffer.html_safe
           end
 
           # Clear internal buffer
@@ -409,7 +417,7 @@ module Hanami
           #
           # @since 0.1.0
           # @api private
-          def method_missing(method_name, *args, **kwargs, &blk)
+          def method_missing(method_name, *args, **kwargs, &block)
             tag = method_name.to_s
             type = tag_name(tag)
             code = (EMPTY_TAGS.key?(method_name) ? S_EMPTY_TAG_METHOD : S_CONTENT_TAG_METHOD) % {
@@ -421,7 +429,7 @@ module Hanami
 
             self.class.class_eval(code, __FILE__, S_TAG_METHOD_LINE)
 
-            __send__(method_name, *args, **kwargs, &blk)
+            __send__(method_name, *args, **kwargs, &block)
           end
 
           # @since 1.2.2
@@ -445,7 +453,13 @@ module Hanami
           # @since 2.0.0
           # @api private
           def escape_content(content)
-            Escape.(content)
+            EscapeHelper.escape_html(content)
+          end
+
+          # @since 2.0.0
+          # @api private
+          def escape_uri(uri)
+            EscapeHelper.escape_url(uri)
           end
 
           # @since 2.0.0
@@ -457,7 +471,7 @@ module Hanami
               case name
               when :src, :href
                 @buffer << S_SPACE << name.to_s << S_EQUAL_QUOTE <<
-                  Escape.uri(value) << S_QUOTE
+                  escape_uri(value) << S_QUOTE
               else
                 case value
                 when true

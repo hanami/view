@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-RSpec.describe Hanami::Helpers::HtmlHelper::HtmlBuilder do
+require "hanami/view/helpers/html_helper/html_builder"
+
+RSpec.describe Hanami::View::Helpers::HTMLHelper::HTMLBuilder do
   ##############################################################################
   # TAGS                                                                       #
   ##############################################################################
@@ -95,15 +97,13 @@ RSpec.describe Hanami::Helpers::HtmlHelper::HtmlBuilder do
 
   describe "<addr>" do
     it "generates an address" do
-      content = Hanami::Helpers::Escape.safe_string(
-        <<~CONTENT
-          Mozilla Foundation<br>
-          1981 Landings Drive<br>
-          Building K<br>
-          Mountain View, CA 94043-0801<br>
-          USA
-        CONTENT
-      )
+      content = <<~CONTENT.html_safe
+        Mozilla Foundation<br>
+        1981 Landings Drive<br>
+        Building K<br>
+        Mountain View, CA 94043-0801<br>
+        USA
+      CONTENT
 
       result = subject.address(content).to_s
       expect(result).to eq(%(<address>#{content}</address>))
@@ -117,7 +117,7 @@ RSpec.describe Hanami::Helpers::HtmlHelper::HtmlBuilder do
     end
 
     it "generates a script tag with javascript code" do
-      result = subject.script { text Hanami::Helpers::Escape.safe_string(%(alert("hello"))) }.to_s
+      result = subject.script { text %(alert("hello")).html_safe }.to_s
       expect(result).to eq(%(<script>alert("hello")</script>))
     end
   end
@@ -132,7 +132,7 @@ RSpec.describe Hanami::Helpers::HtmlHelper::HtmlBuilder do
     end
 
     it "generates a script tag with javascript code" do
-      result = subject.script { text Hanami::Helpers::Escape.safe_string(%(alert("hello"))) }.to_s
+      result = subject.script { text (%(alert("hello"))).html_safe }.to_s
       expect(result).to eq(%(<script>alert("hello")</script>))
     end
   end

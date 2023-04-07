@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/helpers/html_helper/html_builder"
-
 module Hanami
   class View
     module Helpers
@@ -186,12 +184,14 @@ module Hanami
       #     # => <div>
       #     #      <h1>The Work of Art in the Age of Mechanical Reproduction</h1>
       #     #    </div>
-      module HtmlHelper
-        private
+      module HTMLHelper
+        require_relative "html_helper/html_builder"
 
-        # Instantiate an HTML builder
+        module_function
+
+        # Returns an HTML builder
         #
-        # @param blk [Proc,Hanami::Helpers::HtmlHelper::HtmlBuilder,NilClass] the optional content block
+        # @param block [Proc,Hanami::Helpers::HtmlHelper::HtmlBuilder,NilClass] the optional content block
         #
         # @return [Hanami::Helpers::HtmlHelper::HtmlBuilder] the HTML builder
         #
@@ -199,8 +199,8 @@ module Hanami
         #
         # @see Hanami::Helpers::HtmlHelper
         # @see Hanami::Helpers::HtmlHelper::HtmlBuilder
-        def html(&blk)
-          Hanami::Helpers::HtmlHelper::HtmlBuilder.new(&blk)
+        def html(&block)
+          HTMLBuilder.new(&block)
         end
       end
     end
