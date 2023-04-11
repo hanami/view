@@ -3,6 +3,7 @@
 require "slim"
 require "hanami/view"
 require "hanami/view/context"
+require "hanami/view/slim/template"
 
 RSpec.describe "Template engines / slim" do
   let(:base_view) {
@@ -43,5 +44,23 @@ RSpec.describe "Template engines / slim" do
     end.new
 
     expect(view.().to_s).to eq "<wrapper>Yielded</wrapper>"
+  end
+
+  it "marks captured block content as HTML safe" do
+    scope = Class.new {
+      def html_safe_capture
+        yield.html_safe?
+      end
+    }.new
+
+    src = <<~SLIM
+      = html_safe_capture do
+        div Some content
+        div goes here.
+    SLIM
+
+    output = Hanami::View::SlimAdapter::Template.new { src }.render(scope)
+
+    expect(output.strip).to eq "true"
   end
 end

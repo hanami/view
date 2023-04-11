@@ -2,6 +2,7 @@
 
 require "hanami/view"
 require "hanami/view/context"
+require "hanami/view/haml/template"
 
 RSpec.describe "Template engines / haml" do
   let(:base_view) {
@@ -42,5 +43,23 @@ RSpec.describe "Template engines / haml" do
     end.new
 
     expect(view.().to_s.gsub(/\n\s*/m, "")).to eq "<wrapper>Yielded</wrapper>"
+  end
+
+  it "marks captured block content as HTML safe" do
+    scope = Class.new {
+      def html_safe_capture
+        yield.html_safe?
+      end
+    }.new
+
+    src = <<~HAML
+      = html_safe_capture do
+        %div Some content
+        %div goes here.
+    HAML
+
+    output = Hanami::View::HamlAdapter::Template.new { src }.render(scope)
+
+    expect(output.strip).to eq "true"
   end
 end

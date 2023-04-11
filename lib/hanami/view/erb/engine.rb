@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "temple"
+require_relative "../html_safe_string_buffer"
 
 module Hanami
   class View
@@ -14,6 +15,8 @@ module Hanami
       # @api private
       # @since 2.0.0
       class Engine < Temple::Engine
+        define_options capture_generator: Hanami::View::HTMLSafeStringBuffer
+
         use Parser
         use Filters::Block
         use Filters::Trimming
