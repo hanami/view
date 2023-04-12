@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "html_helper"
+require_relative "tag_helper"
 
 module Hanami
   class View
@@ -14,7 +14,7 @@ module Hanami
       #
       # @since 0.2.0
       module LinkToHelper
-        include HTMLHelper
+        include TagHelper
 
         # Generates an anchor tag for the given arguments.
         #
@@ -128,7 +128,7 @@ module Hanami
 
           attributes[:href] = url or raise ArgumentError
 
-          html.a(content, **attributes, &block)
+          tag.a(content, **attributes, &block)
         end
       end
     end

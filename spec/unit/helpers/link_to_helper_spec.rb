@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "hanami/view/erb/template"
 require "hanami/view/helpers/link_to_helper"
 
 RSpec.describe Hanami::View::Helpers::LinkToHelper, "#link_to" do
@@ -14,7 +15,7 @@ RSpec.describe Hanami::View::Helpers::LinkToHelper, "#link_to" do
   end
 
   it "escapes href" do
-    expect(h { link_to("content", "fo<o>bar") }).to eq %(<a href="fo%3Co%3Ebar">content</a>)
+    expect(h { link_to("content", "fo<o>bar") }).to eq %(<a href="fo&lt;o&gt;bar">content</a>)
   end
 
   it "returns a link" do
@@ -38,7 +39,7 @@ RSpec.describe Hanami::View::Helpers::LinkToHelper, "#link_to" do
   it "returns a link with html content" do
     expect(h {
       link_to("/posts") do
-        strong "Post"
+        tag.strong "Post"
       end
     }).to eq %(<a href="/posts"><strong>Post</strong></a>)
   end
@@ -46,7 +47,7 @@ RSpec.describe Hanami::View::Helpers::LinkToHelper, "#link_to" do
   it "returns a link with html content, id and class" do
     expect(h {
       link_to("/posts", id: "posts__link", class: "first") do
-        strong "Post"
+        tag.strong "Post"
       end
     }).to eq %(<a id="posts__link" class="first" href="/posts"><strong>Post</strong></a>)
   end
@@ -81,5 +82,30 @@ RSpec.describe Hanami::View::Helpers::LinkToHelper, "#link_to" do
 
   it "raises an exception when have only content" do
     expect { h { link_to "Post" } }.to raise_error(ArgumentError)
+  end
+
+  describe "in templates" do
+    let(:scope) {
+      Class.new { include Hanami::View::Helpers::LinkToHelper }.new
+    }
+
+    def erb(str)
+      Hanami::View::ERB::Template.new { str }.render(scope)
+    end
+
+    it "includes ordinary template content inside links" do
+      src = <<~ERB
+        <%= link_to "/posts" do %>
+          Hello <strong>posts</strong>
+          <% if false %>more<% end %>
+        <% end %>
+      ERB
+
+      expect(erb(src)).to eq <<~HTML
+        <a href="/posts">
+          Hello <strong>posts</strong>
+        </a>
+      HTML
+    end
   end
 end
