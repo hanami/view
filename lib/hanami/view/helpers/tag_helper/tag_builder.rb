@@ -1,0 +1,185 @@
+# frozen_string_literal: true
+
+require_relative "../escape_helper"
+require "json"
+require "set"
+
+module Hanami
+  class View
+    module Helpers
+      module TagHelper
+        class TagBuilder
+          BOOLEAN_ATTRIBUTES = %w(
+            allowfullscreen allowpaymentrequest async autofocus
+            autoplay checked compact controls declare default
+            defaultchecked defaultmuted defaultselected defer
+            disabled enabled formnovalidate hidden indeterminate
+            inert ismap itemscope loop multiple muted nohref
+            nomodule noresize noshade novalidate nowrap open
+            pauseonexit playsinline readonly required reversed
+            scoped seamless selected sortable truespeed
+            typemustmatch visible
+          ).to_set
+
+          BOOLEAN_ATTRIBUTES.merge(BOOLEAN_ATTRIBUTES.map(&:to_sym))
+          BOOLEAN_ATTRIBUTES.freeze
+
+          ARIA_PREFIXES = ["aria", :aria].to_set.freeze
+          DATA_PREFIXES = ["data", :data].to_set.freeze
+
+          TAG_TYPES = {}.tap do |hsh|
+            BOOLEAN_ATTRIBUTES.each { |attr| hsh[attr] = :boolean }
+            DATA_PREFIXES.each { |attr| hsh[attr] = :data }
+            ARIA_PREFIXES.each { |attr| hsh[attr] = :aria }
+            hsh.freeze
+          end
+
+          PRE_CONTENT_STRINGS = Hash.new { "" }
+          PRE_CONTENT_STRINGS[:textarea]  = "\n"
+          PRE_CONTENT_STRINGS["textarea"] = "\n"
+
+          # Above constants are from Rails' TagHelper
+
+          # Below constants are from Rails' nested TagBuilder
+
+          HTML_VOID_ELEMENTS = %i(
+            area base br col embed hr img input keygen link meta param source track wbr
+          ).to_set
+
+          SVG_SELF_CLOSING_ELEMENTS = %i(
+            animate animateMotion animateTransform circle ellipse line path polygon polyline rect set stop use view
+          ).to_set
+
+          attr_reader :inflector
+
+          def initialize(inflector:)
+            @inflector = inflector
+          end
+
+          # Transforms a Hash into HTML Attributes, ready to be interpolated into
+          # ERB.
+          #
+          #   <input <%= tag.attributes(type: :text, aria: { label: "Search" }) %> >
+          #   # => <input type="text" aria-label="Search">
+          def attributes(**attributes)
+            tag_options(**attributes).to_s.strip.html_safe
+          end
+
+          def p(*args, **options, &block)
+            tag_string(:p, *args, **options, &block)
+          end
+
+          def tag_string(name, content = nil, **options)
+            content = yield if block_given?
+            self_closing = SVG_SELF_CLOSING_ELEMENTS.include?(name)
+
+            if (HTML_VOID_ELEMENTS.include?(name) || self_closing) && content.nil?
+              "<#{inflector.dasherize(name.to_s)}#{tag_options(**options)}#{self_closing ? " />" : ">"}".html_safe
+            else
+              content_tag_string(inflector.dasherize(name.to_s), content || "", **options)
+            end
+          end
+
+          def content_tag_string(name, content, **options)
+            tag_options = tag_options(**options) unless options.empty?
+
+            # byebug if name == "div"
+            name = EscapeHelper.escape_xml_name(name)
+            content = EscapeHelper.escape_html(content)
+
+
+            "<#{name}#{tag_options}>#{PRE_CONTENT_STRINGS[name]}#{content}</#{name}>".html_safe
+          end
+
+          def tag_options(**options)
+            return if options.none?
+
+            output = +""
+            sep    = " "
+
+            options.each_pair do |key, value|
+              type = TAG_TYPES[key]
+
+              if type == :data && value.is_a?(Hash)
+                value.each_pair do |k, v|
+                  next if v.nil?
+
+                  output << sep
+                  output << prefix_tag_option(key, k, v)
+                end
+              elsif type == :aria && value.is_a?(Hash)
+                value.each_pair do |k, v|
+                  next if v.nil?
+
+                  case v
+                  when Array, Hash
+                    tokens = TagHelper.build_tag_values(v)
+                    next if tokens.none?
+
+                    v = EscapeHelper.escape_join(tokens, " ")
+                  else
+                    v = v.to_s
+                  end
+
+                  output << sep
+                  output << prefix_tag_option(key, k, v)
+                end
+              elsif type == :boolean
+                if value
+                  output << sep
+                  output << boolean_tag_option(key)
+                end
+              elsif !value.nil?
+                output << sep
+                output << tag_option(key, value)
+              end
+            end
+
+            output unless output.empty?
+          end
+
+          def boolean_tag_option(key)
+            %(#{key}="#{key}")
+          end
+
+          def tag_option(key, value)
+            key = EscapeHelper.escape_xml_name(key)
+
+            case value
+            when Array, Hash
+              value = TagHelper.build_tag_values(value) if key.to_s == "class"
+              value = EscapeHelper.escape_join(value, " ")
+            when Regexp
+              value = EscapeHelper.escape_html(value.source)
+            else
+              value = EscapeHelper.escape_html(value)
+            end
+            value = value.gsub('"', "&quot;") if value.include?('"')
+
+            %(#{key}="#{value}")
+          end
+
+          private
+
+          def method_missing(called, *args, **options, &block)
+            tag_string(called, *args, **options, &block)
+          end
+
+          def respond_to_missing?(*args)
+            true
+          end
+
+          def prefix_tag_option(prefix, key, value)
+            key = "#{prefix}-#{inflector.dasherize(key.to_s)}"
+
+            unless value.is_a?(String) || value.is_a?(Symbol)
+              value = value.to_json
+            end
+
+            tag_option(key, value)
+          end
+        end
+      end
+    end
+  end
+end

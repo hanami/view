@@ -83,6 +83,27 @@ module Hanami
         # @since 0.1.0
         alias_method :h, :escape_html
 
+        # Returns an escaped, HTML safe string from a given array.
+        #
+        # Behaves similarly to `Array#join`. In addition, given array is flattened, and all items,
+        # including the supplied separator, are HTML escaped unless they are already HTML safe. The
+        # returned string is also marked as HTML safe.
+        #
+        # @example
+        #   safe_join([raw("<p>foo</p>"), "<p>bar</p>"], "<br />")
+        #   # => "<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;"
+        #
+        #   safe_join([raw("<p>foo</p>"), raw("<p>bar</p>")], raw("<br />"))
+        #   # => "<p>foo</p><br /><p>bar</p>"
+        #
+        # @api public
+        # @since 2.0.0
+        def escape_join(array, sep = $,)
+          sep = escape_html(sep)
+
+          array.flatten.map { |i| escape_html(i) }.join(sep).html_safe
+        end
+
         # @api public
         # @since 2.0.0
         def escape_url(input)
@@ -171,6 +192,69 @@ module Hanami
 
         PERMITTED_URL_SCHEMES = %w[http https mailto].freeze
         private_constant :PERMITTED_URL_SCHEMES
+
+        # Returns an escaped name from the given string, intended for use as an XML tag or attribute
+        # name.
+        #
+        # Replaces non-safe characters with an underscore.
+        #
+        # Follows the requirements of the [XML specification](https://www.w3.org/TR/REC-xml/#NT-Name).
+        #
+        # @example
+        #   escape_xml_name("1 < 2 & 3")
+        #   # => "1___2___3"
+        #
+        # @api public
+        # @since 2.0.0
+        def escape_xml_name(name)
+          name = name.to_s
+          return "" if name.empty?
+          return name if name.match?(SAFE_XML_TAG_NAME_REGEXP)
+
+          starting_char = name[0]
+          starting_char.gsub!(INVALID_TAG_NAME_START_REGEXP, TAG_NAME_REPLACEMENT_CHAR)
+
+          return starting_char if name.size == 1
+
+          following_chars = name[1..-1]
+          following_chars.gsub!(INVALID_TAG_NAME_FOLLOWING_REGEXP, TAG_NAME_REPLACEMENT_CHAR)
+
+          starting_char << following_chars
+        end
+
+        # Following XML requirements: https://www.w3.org/TR/REC-xml/#NT-Name
+        # @api private
+        # @since 2.0.0
+        TAG_NAME_START_CODEPOINTS = \
+          "@:A-Z_a-z\u{C0}-\u{D6}\u{D8}-\u{F6}\u{F8}-\u{2FF}\u{370}-\u{37D}\u{37F}-\u{1FFF}" \
+          "\u{200C}-\u{200D}\u{2070}-\u{218F}\u{2C00}-\u{2FEF}\u{3001}-\u{D7FF}\u{F900}-\u{FDCF}" \
+          "\u{FDF0}-\u{FFFD}\u{10000}-\u{EFFFF}"
+        private_constant :TAG_NAME_START_CODEPOINTS
+
+        # @api private
+        # @since 2.0.0
+        INVALID_TAG_NAME_START_REGEXP = /[^#{TAG_NAME_START_CODEPOINTS}]/
+        private_constant :INVALID_TAG_NAME_START_REGEXP
+
+        # @api private
+        # @since 2.0.0
+        TAG_NAME_FOLLOWING_CODEPOINTS = "#{TAG_NAME_START_CODEPOINTS}\\-.0-9\u{B7}\u{0300}-\u{036F}\u{203F}-\u{2040}"
+        private_constant :TAG_NAME_FOLLOWING_CODEPOINTS
+
+        # @api private
+        # @since 2.0.0
+        INVALID_TAG_NAME_FOLLOWING_REGEXP = /[^#{TAG_NAME_FOLLOWING_CODEPOINTS}]/
+        private_constant :INVALID_TAG_NAME_FOLLOWING_REGEXP
+
+        # @api private
+        # @since 2.0.0
+        SAFE_XML_TAG_NAME_REGEXP = /\A[#{TAG_NAME_START_CODEPOINTS}][#{TAG_NAME_FOLLOWING_CODEPOINTS}]*\z/
+        private_constant :INVALID_TAG_NAME_FOLLOWING_REGEXP
+
+        # @api private
+        # @since 2.0.0
+        TAG_NAME_REPLACEMENT_CHAR = "_"
+        private_constant :TAG_NAME_REPLACEMENT_CHAR
 
         # Bypass escape.
         #
