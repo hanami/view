@@ -38,6 +38,17 @@ module Hanami
     # @api private
     # @since 2.0.0
     class HTMLSafeStringBuffer < Temple::Generators::StringBuffer
+      # Replace `Temple::Generator::ArrayBuffer#call` (which is used via the superclass of
+      # `StringBuffer`) with the standard implementation from the base `Temple::Generator`.
+      #
+      # This avoids certain specialisations in `ArrayBuffer#call` that prevent `#return_buffer` from
+      # being called. For our needs, `#return_buffer` must be called at all times in order to ensure
+      # the captured string is consistently marked as `.html_safe`.
+      def call(exp)
+        [preamble, compile(exp), postamble].flatten.compact.join('; ')
+      end
+
+      # Marks the string returned from the captured buffer as HTML safe.
       def return_buffer
         "#{buffer}.html_safe"
       end
