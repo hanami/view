@@ -2,6 +2,17 @@
 
 require "temple"
 
+# Add temple patch from https://github.com/judofyr/temple/pull/113 (which was since rolled back) to
+# demonstrate the need for the `:capture_generator` setting value to be propogated in order to
+# consistently handle nested captures.
+module Temple
+  class Generator
+    def on_capture(name, exp)
+      capture_generator.new(**options, buffer: name).call(exp)
+    end
+  end
+end
+
 module Hanami
   class View
     # Speicalized Temple buffer class that marks block-captured strings as HTML safe.
