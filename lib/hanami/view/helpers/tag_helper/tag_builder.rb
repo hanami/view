@@ -83,10 +83,8 @@ module Hanami
           def content_tag_string(name, content, **options)
             tag_options = tag_options(**options) unless options.empty?
 
-            # byebug if name == "div"
             name = EscapeHelper.escape_xml_name(name)
             content = EscapeHelper.escape_html(content)
-
 
             "<#{name}#{tag_options}>#{PRE_CONTENT_STRINGS[name]}#{content}</#{name}>".html_safe
           end
