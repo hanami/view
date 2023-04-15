@@ -17,6 +17,8 @@ module Hanami
             animate animateMotion animateTransform circle ellipse line path polygon polyline rect set stop use view
           ).to_set
 
+          ATTRIBUTE_SEPARATOR = " "
+
           BOOLEAN_ATTRIBUTES = %w(
             allowfullscreen allowpaymentrequest async autofocus
             autoplay checked compact controls declare default
@@ -89,7 +91,6 @@ module Hanami
             return if options.none?
 
             output = +""
-            sep    = " "
 
             options.each_pair do |key, value|
               type = TAG_TYPES[key]
@@ -98,7 +99,7 @@ module Hanami
                 value.each_pair do |k, v|
                   next if v.nil?
 
-                  output << sep
+                  output << ATTRIBUTE_SEPARATOR
                   output << prefix_tag_option(key, k, v)
                 end
               elsif type == :aria && value.is_a?(Hash)
@@ -115,16 +116,16 @@ module Hanami
                     v = v.to_s
                   end
 
-                  output << sep
+                  output << ATTRIBUTE_SEPARATOR
                   output << prefix_tag_option(key, k, v)
                 end
               elsif type == :boolean
                 if value
-                  output << sep
+                  output << ATTRIBUTE_SEPARATOR
                   output << boolean_tag_option(key)
                 end
               elsif !value.nil?
-                output << sep
+                output << ATTRIBUTE_SEPARATOR
                 output << tag_option(key, value)
               end
             end
