@@ -9,6 +9,14 @@ module Hanami
     module Helpers
       module TagHelper
         class TagBuilder
+          HTML_VOID_ELEMENTS = %i(
+            area base br col embed hr img input keygen link meta param source track wbr
+          ).to_set
+
+          SVG_SELF_CLOSING_ELEMENTS = %i(
+            animate animateMotion animateTransform circle ellipse line path polygon polyline rect set stop use view
+          ).to_set
+
           BOOLEAN_ATTRIBUTES = %w(
             allowfullscreen allowpaymentrequest async autofocus
             autoplay checked compact controls declare default
@@ -37,18 +45,6 @@ module Hanami
           PRE_CONTENT_STRINGS = Hash.new { "" }
           PRE_CONTENT_STRINGS[:textarea]  = "\n"
           PRE_CONTENT_STRINGS["textarea"] = "\n"
-
-          # Above constants are from Rails' TagHelper
-
-          # Below constants are from Rails' nested TagBuilder
-
-          HTML_VOID_ELEMENTS = %i(
-            area base br col embed hr img input keygen link meta param source track wbr
-          ).to_set
-
-          SVG_SELF_CLOSING_ELEMENTS = %i(
-            animate animateMotion animateTransform circle ellipse line path polygon polyline rect set stop use view
-          ).to_set
 
           attr_reader :inflector
 
