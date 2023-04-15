@@ -260,8 +260,8 @@ RSpec.describe Hanami::View::Helpers::TagHelper do
     end
 
     describe "escaping" do
-      DANGEROUS_CHARS = "&<>\"' %*+,/;=^|"
-      ESCAPED_DANGEROUS_CHARS = ("_" * DANGEROUS_CHARS.length).freeze
+      let(:dangerous_chars) { "&<>\"' %*+,/;=^|" }
+      let(:escaped_dangerous_chars) { ("_" * dangerous_chars.length).freeze }
 
       it "escapes content" do
         expect(tag.p("hello>")).to eq %(<p>hello&gt;</p>)
@@ -311,19 +311,19 @@ RSpec.describe Hanami::View::Helpers::TagHelper do
       end
 
       it "escapes tag names" do
-        expect(tag.public_send(DANGEROUS_CHARS.to_sym)).to eq %(<#{ESCAPED_DANGEROUS_CHARS}></#{ESCAPED_DANGEROUS_CHARS}>)
+        expect(tag.public_send(dangerous_chars.to_sym)).to eq %(<#{escaped_dangerous_chars}></#{escaped_dangerous_chars}>)
       end
 
       it "escapes attribute names" do
-        expect(tag.some_tag(DANGEROUS_CHARS => "value")).to eq %(<some-tag #{ESCAPED_DANGEROUS_CHARS}="value"></some-tag>)
+        expect(tag.some_tag(dangerous_chars => "value")).to eq %(<some-tag #{escaped_dangerous_chars}="value"></some-tag>)
       end
 
       it "escapes data attribute names" do
-        expect(tag.some_tag(data: {DANGEROUS_CHARS => "value"})).to eq %(<some-tag data-#{ESCAPED_DANGEROUS_CHARS}="value"></some-tag>)
+        expect(tag.some_tag(data: {dangerous_chars => "value"})).to eq %(<some-tag data-#{escaped_dangerous_chars}="value"></some-tag>)
       end
 
       it "escapes aria attribute names" do
-        expect(tag.some_tag(aria: {DANGEROUS_CHARS => "value"})).to eq %(<some-tag aria-#{ESCAPED_DANGEROUS_CHARS}="value"></some-tag>)
+        expect(tag.some_tag(aria: {dangerous_chars => "value"})).to eq %(<some-tag aria-#{escaped_dangerous_chars}="value"></some-tag>)
       end
     end
 
