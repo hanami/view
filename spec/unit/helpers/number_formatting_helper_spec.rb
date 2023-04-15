@@ -59,7 +59,7 @@ RSpec.describe Hanami::View::Helpers::NumberFormattingHelper, "#format_number" d
   end
 
   it "raises a TypeError when a class name is passed" do
-    expect { h { format_number(Object) } }.to raise_error(TypeError)
+    expect { h { format_number(Object) } }.to raise_error(ArgumentError)
   end
 
   it "raises a TypeError when a string cannot be coerced into a float" do
