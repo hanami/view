@@ -390,6 +390,111 @@ RSpec.describe Hanami::View::Helpers::TagHelper do
     end
   end
 
+  describe "#link_to" do
+    def link_to(...)
+      described_class.link_to(...)
+    end
+
+    def tag(...)
+      described_class.tag(...)
+    end
+
+    it "escapes href" do
+      expect(link_to("content", "fo<o>bar")).to eq %(<a href="fo&lt;o&gt;bar">content</a>)
+    end
+
+    it "returns a link" do
+      expect(link_to("Posts", "/posts")).to eq %(<a href="/posts">Posts</a>)
+    end
+
+    it "returns a link with a class" do
+      expect(link_to("Post", "/posts", class: "first"))
+        .to eq %(<a class="first" href="/posts">Post</a>)
+    end
+
+    it "returns a link with id" do
+      expect(link_to("Post", "/posts", id: "posts__link"))
+        .to eq %(<a id="posts__link" href="/posts">Post</a>)
+    end
+
+    it "returns a link relative link" do
+      expect(link_to("Posts", "posts")).to eq %(<a href="posts">Posts</a>)
+    end
+
+    it "returns a link with html content" do
+      expect(
+        link_to("/posts") do
+          tag.strong "Post"
+        end
+      ).to eq %(<a href="/posts"><strong>Post</strong></a>)
+    end
+
+    it "returns a link with html content, id and class" do
+      expect(
+        link_to("/posts", id: "posts__link", class: "first") do
+          tag.strong "Post"
+        end
+      ).to eq %(<a id="posts__link" class="first" href="/posts"><strong>Post</strong></a>)
+    end
+
+    it "raises an exception link with content and html content" do
+      expect {
+        link_to("Posts", "/posts") do
+          tag.strong "Posts"
+        end
+      }.to raise_error(ArgumentError)
+    end
+
+    it "raises an exception when link with content, html content, id and class" do
+      expect {
+        link_to("Post", "/posts", id: "posts__link", class: "first") do
+          tag.strong "Post"
+        end
+      }.to raise_error(ArgumentError)
+    end
+
+    it "raises an exception when have not arguments" do
+      expect { link_to }.to raise_error(ArgumentError)
+    end
+
+    it "raises an exception when have not arguments and empty block" do
+      expect {
+        link_to do
+          # Block left intentionally blank
+        end
+      }.to raise_error(ArgumentError)
+    end
+
+    it "raises an exception when have only content" do
+      expect { link_to("Post") }.to raise_error(ArgumentError)
+    end
+
+    describe "in templates" do
+      let(:scope) {
+        Class.new { include Hanami::View::Helpers::TagHelper }.new
+      }
+
+      def erb(str)
+        Hanami::View::ERB::Template.new { str }.render(scope)
+      end
+
+      it "includes ordinary template content inside links" do
+        src = <<~ERB
+          <%= link_to "/posts" do %>
+            Hello <strong>posts</strong>
+            <% if false %>more<% end %>
+          <% end %>
+        ERB
+
+        expect(erb(src)).to eq <<~HTML
+          <a href="/posts">
+            Hello <strong>posts</strong>
+          </a>
+        HTML
+      end
+    end
+  end
+
   describe "#token_list" do
     def token_list(...)
       described_class.token_list(...)
