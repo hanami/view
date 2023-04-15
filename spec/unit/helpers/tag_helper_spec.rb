@@ -399,10 +399,6 @@ RSpec.describe Hanami::View::Helpers::TagHelper do
       described_class.tag(...)
     end
 
-    it "escapes href" do
-      expect(link_to("content", "fo<o>bar")).to eq %(<a href="fo&lt;o&gt;bar">content</a>)
-    end
-
     it "returns a link" do
       expect(link_to("Posts", "/posts")).to eq %(<a href="/posts">Posts</a>)
     end
@@ -437,36 +433,54 @@ RSpec.describe Hanami::View::Helpers::TagHelper do
       ).to eq %(<a id="posts__link" class="first" href="/posts"><strong>Post</strong></a>)
     end
 
-    it "raises an exception link with content and html content" do
-      expect {
-        link_to("Posts", "/posts") do
-          tag.strong "Posts"
-        end
-      }.to raise_error(ArgumentError)
+    describe "escaping" do
+      it "escapes content given as a string" do
+        expect(link_to("<script>alert('xss')</script>", "/"))
+          .to eq %(<a href="/">&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;</a>)
+      end
+
+      it "escapes content returned from a block" do
+        expect(link_to("/") { "<script>alert('xss')</script>" })
+          .to eq %(<a href="/">&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;</a>)
+      end
+
+      it "escapes the link" do
+        expect(link_to("content", "fo<o>bar")).to eq %(<a href="fo&lt;o&gt;bar">content</a>)
+      end
     end
 
-    it "raises an exception when link with content, html content, id and class" do
-      expect {
-        link_to("Post", "/posts", id: "posts__link", class: "first") do
-          tag.strong "Post"
-        end
-      }.to raise_error(ArgumentError)
-    end
+    describe "argument handling" do
+      it "raises an exception link with content and html content" do
+        expect {
+          link_to("Posts", "/posts") do
+            tag.strong "Posts"
+          end
+        }.to raise_error(ArgumentError)
+      end
 
-    it "raises an exception when have not arguments" do
-      expect { link_to }.to raise_error(ArgumentError)
-    end
+      it "raises an exception when link with content, html content, id and class" do
+        expect {
+          link_to("Post", "/posts", id: "posts__link", class: "first") do
+            tag.strong "Post"
+          end
+        }.to raise_error(ArgumentError)
+      end
 
-    it "raises an exception when have not arguments and empty block" do
-      expect {
-        link_to do
-          # Block left intentionally blank
-        end
-      }.to raise_error(ArgumentError)
-    end
+      it "raises an exception when have not arguments" do
+        expect { link_to }.to raise_error(ArgumentError)
+      end
 
-    it "raises an exception when have only content" do
-      expect { link_to("Post") }.to raise_error(ArgumentError)
+      it "raises an exception when have not arguments and empty block" do
+        expect {
+          link_to do
+            # Block left intentionally blank
+          end
+        }.to raise_error(ArgumentError)
+      end
+
+      it "raises an exception when have only content" do
+        expect { link_to("Post") }.to raise_error(ArgumentError)
+      end
     end
 
     describe "in templates" do
