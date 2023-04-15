@@ -12,7 +12,7 @@ module Hanami
       #
       # This helper can be used both in views and templates.
       #
-      # @since 0.2.0
+      # @since 2.0.0
       module LinkToHelper
         include TagHelper
 
@@ -36,7 +36,7 @@ module Hanami
         #
         # @raise [ArgumentError] if the signature isn"t respected
         #
-        # @since 0.2.0
+        # @since 2.0.0
         #
         # @see Hanami::Helpers::HtmlHelper#html
         #

@@ -11,7 +11,7 @@ module Hanami
       # By including <tt>Hanami::Helpers::NumberFormattingHelper</tt> it will
       # inject private method: <tt>format_number</tt>.
       #
-      # @since 0.2.0
+      # @since 2.0.0
       module NumberFormattingHelper
         module_function
 
@@ -63,7 +63,7 @@ module Hanami
         #
         # @raise [Hanami::Helpers::CoercionError] if number can't be formatted
         #
-        # @since 0.2.0
+        # @since 2.0.0
         #
         # @example
         #   require "hanami/helpers/number_formatting_helper"
@@ -109,7 +109,7 @@ module Hanami
 
         # Formatter
         #
-        # @since 0.2.0
+        # @since 2.0.0
         # @api private
         class Formatter
           # Regex to delimitate integer part of a number

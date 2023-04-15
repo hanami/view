@@ -15,7 +15,7 @@ module Hanami
       # By including <tt>Hanami::Helpers::EscapeHelper</tt> it will inject private
       # methods as markup escape utilities.
       #
-      # @since 0.1.0
+      # @since 2.0.0
       module EscapeHelper
         module_function
 
@@ -30,7 +30,7 @@ module Hanami
         #
         # @return [String] the escaped string
         #
-        # @since 0.1.0
+        # @since 2.0.0
         #
         # @see Hanami::Helpers::EscapeHelper#escape_html_attribute
         #
@@ -80,7 +80,7 @@ module Hanami
           Temple::Utils.escape_html_safe(input)
         end
 
-        # @since 0.1.0
+        # @since 2.0.0
         alias_method :h, :escape_html
 
         # Returns an escaped, HTML safe string from a given array.
@@ -131,7 +131,7 @@ module Hanami
         #
         # @return [String] the escaped string
         #
-        # @since 0.1.0
+        # @since 2.0.0
         #
         # @see Hanami::Utils::Escape.url
         # @see Hanami::Utils::Escape::DEFAULT_URL_SCHEMES
@@ -265,7 +265,7 @@ module Hanami
         #
         # @return [Hanami::Utils::Escape::SafeString] the string marked as safe string
         #
-        # @since 0.1.0
+        # @since 2.0.0
         #
         # @example
         #   require 'hanami/helpers/escape_helper'
