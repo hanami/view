@@ -101,7 +101,7 @@ module Hanami
         def escape_join(array, sep = $,)
           sep = escape_html(sep)
 
-          array.flatten.map { |i| escape_html(i) }.join(sep).html_safe
+          array.flatten.map! { |i| escape_html(i) }.join(sep).html_safe
         end
 
         # @api public
