@@ -7,101 +7,91 @@ require "uri"
 module Hanami
   class View
     module Helpers
-      # Escape helpers
+      # Helper methods for escaping content for safely including in HTML.
       #
-      # You can include this module inside your view and
-      # the view will have access all methods.
+      # When using full Hanami apps, these helpers will be automatically available in your view
+      # templates, part classes and scope classes.
       #
-      # By including <tt>Hanami::Helpers::EscapeHelper</tt> it will inject private
-      # methods as markup escape utilities.
+      # When using hanami-view standalone, include this module directly in your base part and scope
+      # classes, or in specific classes as required.
       #
+      # @example Standalone usage
+      #   class BasePart < Hanami::View::Part
+      #     include Hanami::View::Helpers::EscapeHelper
+      #   end
+      #
+      #   class BaseScope < Hanami::View::Scope
+      #     include Hanami::View::Helpers::EscapeHelper
+      #   end
+      #
+      #   class BaseView < Hanami::View
+      #     config.part_class = BasePart
+      #     config.scope_class = BaseScope
+      #   end
+      #
+      # @api public
       # @since 2.0.0
       module EscapeHelper
         module_function
 
-        # Escape the given HTML tag content.
+        # Returns an escaped string that is safe to include in HTML.
         #
-        # This should be used only for untrusted contents: user input.
+        # Use this helper when including any untrusted user input in your view content.
         #
-        # This should be used only for tag contents.
-        # To escape tag attributes please use <tt>Hanami::Helpers::EscapeHelper#escape_html_attribute</tt>.
+        # If the given string is already marked as HTML safe, then it will be returned without
+        # escaping.
         #
-        # @param input [String] the input
+        # Marks the escaped string marked as HTML safe, ensuring it will not be escaped again.
         #
-        # @return [String] the escaped string
+        # @param input [String] the input string
+        # @return [Hanami::View::HTML::SafeString] the escaped string
         #
+        # @example
+        #   escape_html("Safe content")
+        #   # => "Safe content"
+        #
+        #   escape_html("<script>alert('xss')</script>")
+        #   # => "&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;"
+        #
+        #   escape_html(raw("<p>Not escaped</p>"))
+        #   # => "<p>Not escaped</p>"
+        #
+        # @api public
         # @since 2.0.0
-        #
-        # @see Hanami::Helpers::EscapeHelper#escape_html_attribute
-        #
-        # @example Basic usage
-        #   require 'hanami/helpers/escape_helper'
-        #
-        #   class MyView
-        #     include Hanami::Helpers::EscapeHelper
-        #
-        #     def good_content
-        #       h "hello"
-        #     end
-        #
-        #     def evil_content
-        #       h "<script>alert('xss')</script>"
-        #     end
-        #   end
-        #
-        #   view = MyView.new
-        #
-        #   view.good_content
-        #     # => "hello"
-        #
-        #   view.evil_content
-        #     # => "&lt;script&gt;alert(&apos;xss&apos;)&lt;&#x2F;script&gt;"
-        #
-        # @example With HTML builder
-        #   #
-        #   # CONTENTS ARE AUTOMATICALLY ESCAPED
-        #   #
-        #   require 'hanami/helpers'
-        #
-        #   class MyView
-        #     include Hanami::Helpers
-        #
-        #     def evil_content
-        #       html.div do
-        #         "<script>alert('xss')</script>"
-        #       end
-        #     end
-        #   end
-        #
-        #   view = MyView.new
-        #   view.evil_content
-        #     # => "<div>\n&lt;script&gt;alert(&apos;xss&apos;)&lt;&#x2F;script&gt;</div>"
         def escape_html(input)
           Temple::Utils.escape_html_safe(input)
         end
 
+        # @api public
         # @since 2.0.0
         alias_method :h, :escape_html
 
-        # Returns an escaped, HTML safe string from a given array.
+        # Returns an escaped string from joining the elements in a given array.
         #
-        # Behaves similarly to `Array#join`. In addition, given array is flattened, and all items,
-        # including the supplied separator, are HTML escaped unless they are already HTML safe. The
-        # returned string is also marked as HTML safe.
+        # Behaves similarly to `Array#join`. The given array is flattened, and all items, including
+        # the supplied separator, are HTML escaped unless they are already HTML safe.
+        #
+        # Marks the returned string as HTML safe, ensuring it will not be escaped again.
+        #
+        # @param array [Array<#to_s>] the array
+        # @param separator[String] the separator for the joined string
+        # @return [Hanami::View::HTML::SafeString] the escaped string
         #
         # @example
-        #   safe_join([raw("<p>foo</p>"), "<p>bar</p>"], "<br />")
-        #   # => "<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;"
+        #   safe_join([raw("<p>foo</p>"), "<p>bar</p>"], "<br>")
+        #   # => "<p>foo</p>&lt;br&gt;&lt;p&gt;bar&lt;/p&gt;"
         #
-        #   safe_join([raw("<p>foo</p>"), raw("<p>bar</p>")], raw("<br />"))
-        #   # => "<p>foo</p><br /><p>bar</p>"
+        #   safe_join([raw("<p>foo</p>"), raw("<p>bar</p>")], raw("<br>"))
+        #   # => "<p>foo</p><br><p>bar</p>"
+        #
+        # @see #escape_html
         #
         # @api public
         # @since 2.0.0
-        def escape_join(array, sep = $,)
-          sep = escape_html(sep)
+        def escape_join(array, separator = $,)
+          separator = escape_html(separator)
 
-          array.flatten.map! { |i| escape_html(i) }.join(sep).html_safe
+          array.flatten.map! { |i| escape_html(i) }.join(separator).html_safe
         end
 
         # @api public
@@ -110,77 +100,30 @@ module Hanami
           EscapeUtils.escape_uri(input)
         end
 
-        # Escape an URL to be used in HTML attributes
+        # Returns a the given URL string if it has one of the permitted URL schemes. For URLs with
+        # non-permitted schemes, returns an empty string.
         #
-        # This allows only URLs with whitelisted schemes to pass the filter.
-        # Everything else is stripped.
+        # Use this method when including URLs from untrusted user input in your view content.
         #
-        # Default schemes are:
+        # The default permitted schemes are:
+        # - `http`
+        # - `https`
+        # - `mailto`
         #
-        #   * http
-        #   * https
-        #   * mailto
+        # @param input [String] the URL string
+        # @param permitted_schemes [Array<string>] an optional array of permitted schemes
         #
-        # If you want to allow a different set of schemes, you should pass it as
-        # second argument.
+        # @return [String] the permitted URL, or empty string
         #
-        # This should be used only for untrusted contents: user input.
+        # @example
+        #   sanitize_url("https://hanamirb.org")    # => "http://hanamirb.org"
+        #   sanitize_url("javascript:alert('xss')") # => ""
         #
-        # @param input [String] the input
-        # @param schemes [Array<String>] an optional array of whitelisted schemes
+        #   sanitize_url("gemini://gemini.circumlunar.space/", %w[http https gemini])
+        #   # => "gemini://gemini.circumlunar.space/"
         #
-        # @return [String] the escaped string
-        #
+        # @api public
         # @since 2.0.0
-        #
-        # @see Hanami::Utils::Escape.url
-        # @see Hanami::Utils::Escape::DEFAULT_URL_SCHEMES
-        #
-        # @example Basic usage
-        #   require 'hanami/helpers/escape_helper'
-        #
-        #   class MyView
-        #     include Hanami::Helpers::EscapeHelper
-        #
-        #     def good_url
-        #       url = "http://hanamirb.org"
-        #
-        #       %(<a href="#{ hu(url) }">Hanami</a>
-        #     end
-        #
-        #     def evil_url
-        #       url = "javascript:alert('xss')"
-        #
-        #       %(<a href="#{ hu(url) }">Evil</a>
-        #     end
-        #   end
-        #
-        #   view = MyView.new
-        #
-        #   view.good_url
-        #     # => %(<a href="http://hanamirb.org">Hanami</a>)
-        #
-        #   view.evil_url
-        #     # => %(<a href="">Evil</a>)
-        #
-        # @example Custom schemes
-        #   require 'hanami/helpers/escape_helper'
-        #
-        #   class MyView
-        #     include Hanami::Helpers::EscapeHelper
-        #
-        #     def ftp_link
-        #       schemes = ['ftp', 'ftps']
-        #       url     = 'ftps://ftp.example.org'
-        #
-        #       %(<a href="#{ hu(url, schemes) }">FTP</a>
-        #     end
-        #   end
-        #
-        #   view = MyView.new
-        #
-        #   view.ftp_link
-        #     # => %(<a href="ftps://ftp.example.org">FTP</a>)
         def sanitize_url(input, permitted_schemes = PERMITTED_URL_SCHEMES)
           return input if input.html_safe?
 
@@ -190,6 +133,8 @@ module Hanami
           ).first.to_s.html_safe
         end
 
+        # @api private
+        # @since 2.0.0
         PERMITTED_URL_SCHEMES = %w[http https mailto].freeze
         private_constant :PERMITTED_URL_SCHEMES
 
@@ -201,8 +146,7 @@ module Hanami
         # Follows the requirements of the [XML specification](https://www.w3.org/TR/REC-xml/#NT-Name).
         #
         # @example
-        #   escape_xml_name("1 < 2 & 3")
-        #   # => "1___2___3"
+        #   escape_xml_name("1 < 2 & 3") # => "1___2___3"
         #
         # @api public
         # @since 2.0.0
@@ -256,42 +200,22 @@ module Hanami
         TAG_NAME_REPLACEMENT_CHAR = "_"
         private_constant :TAG_NAME_REPLACEMENT_CHAR
 
-        # Bypass escape.
+
+        # Returns the given string marked as HTML safe, meaning it will not be escaped when included
+        # in your view's HTML.
         #
-        # Please notice that this can be really dangerous.
-        # Use at your own peril.
+        # This is NOT recommended if the string is coming from untrusted user input. Use at your own
+        # peril.
         #
         # @param input [String] the input
-        #
-        # @return [Hanami::Utils::Escape::SafeString] the string marked as safe string
-        #
-        # @since 2.0.0
+        # @return [Hanami::View::HTML::SafeString] the string marked as HTML safe
         #
         # @example
-        #   require 'hanami/helpers/escape_helper'
+        #   raw(user.name) # => "Little Bobby <alert>Tables</alert>"
+        #   raw(user.name).html_safe? # => true
         #
-        #   class MyView
-        #     include Hanami::Helpers::EscapeHelper
-        #
-        #     def good_content
-        #       raw "<p>hello</p>"
-        #     end
-        #
-        #     def evil_content
-        #       raw "<script>alert('xss')</script>"
-        #     end
-        #   end
-        #
-        #   view = MyView.new
-        #
-        #   view.good_content
-        #     # => "<p>hello</p>"
-        #
-        #   #
-        #   # !!! WE HAVE OPENED OUR APPLICATION TO AN XSS ATTACK !!!
-        #   #
-        #   view.evil_content
-        #     # => "<script>alert('xss')</script>"
+        # @api public
+        # @since 2.0.0
         def raw(input)
           input.to_s.html_safe
         end
