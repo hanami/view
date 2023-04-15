@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "escape_utils"
 require "temple"
 require "uri"
 
@@ -92,12 +91,6 @@ module Hanami
           separator = escape_html(separator)
 
           array.flatten.map! { |i| escape_html(i) }.join(separator).html_safe
-        end
-
-        # @api public
-        # @since 2.0.0
-        def escape_url(input)
-          EscapeUtils.escape_uri(input)
         end
 
         # Returns a the given URL string if it has one of the permitted URL schemes. For URLs with

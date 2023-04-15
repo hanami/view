@@ -31,7 +31,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "dry-configurable", "~> 1.0"
   spec.add_runtime_dependency "dry-core", "~> 1.0"
   spec.add_runtime_dependency "dry-inflector", "~> 1.0", "< 2"
-  spec.add_runtime_dependency "escape_utils", "~> 1.3"
   spec.add_runtime_dependency "temple", "~> 0.10.0"
   spec.add_runtime_dependency "tilt", "~> 2.0", ">= 2.0.6"
 

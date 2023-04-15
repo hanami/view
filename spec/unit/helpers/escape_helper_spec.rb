@@ -54,12 +54,6 @@ RSpec.describe Hanami::View::Helpers::EscapeHelper do
     end
   end
 
-  describe "#escape_url" do
-    it "escapes the given URL" do
-      expect(h { escape_url("http://fo<o>bar") }).to eq "http://fo%3Co%3Ebar"
-    end
-  end
-
   # See escape_hepler/sanitize_url_spec.rb for complete tests
   describe "#sanitize_url" do
     it "sanitizes the given URL" do
