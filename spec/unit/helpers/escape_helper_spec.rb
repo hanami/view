@@ -66,10 +66,14 @@ RSpec.describe Hanami::View::Helpers::EscapeHelper do
       described_class.escape_xml_name(...)
     end
 
-    DANGEROUS_CHARS = "&<>\"' %*+,/;=^|"
+    let(:dangerous_chars) { "&<>\"' %*+,/;=^|" }
 
-    it "replaces unsafe XML name characters with undersscores" do
-      expect(escape_xml_name("safe#{DANGEROUS_CHARS}safe")).to eq "safe_______________safe"
+    it "replaces unsafe XML name characters with underscores" do
+      expect(escape_xml_name("safe#{dangerous_chars}safe")).to eq "safe_______________safe"
+    end
+
+    it "replaces blank strings with an empty string" do
+      expect(escape_xml_name("  ")).to eq ""
     end
 
     it "does not mark the string as HTML safe" do

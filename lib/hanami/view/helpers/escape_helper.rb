@@ -145,7 +145,7 @@ module Hanami
         # @since 2.0.0
         def escape_xml_name(name)
           name = name.to_s
-          return "" if name.empty?
+          return "" if name.match?(BLANK_STRING_REGEXP)
           return name if name.match?(SAFE_XML_TAG_NAME_REGEXP)
 
           starting_char = name[0]
@@ -158,6 +158,10 @@ module Hanami
 
           starting_char << following_chars
         end
+
+        # @api private
+        # @since 2.0.0
+        BLANK_STRING_REGEXP = /\A\s*\z/
 
         # Following XML requirements: https://www.w3.org/TR/REC-xml/#NT-Name
         # @api private
