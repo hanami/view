@@ -192,9 +192,21 @@ module Hanami
         # @since 2.0.0
         def tag_builder
           @tag_builder ||= begin
-            inflector = respond_to?(:_context) ? _context.inflector : Dry::Inflector.new
-            TagBuilder.new(inflector: inflector)
+            TagBuilder.new(inflector: tag_builder_inflector)
           end
+        end
+
+        # @api private
+        # @since 2.0.0
+        def tag_builder_inflector
+          if respond_to?(:_context)
+            return _context.inflector
+          end
+
+          # TODO: When hanami-view moves to Zeitwerk (and the only external require is for
+          # "dry/view"), remove this.
+          require "dry/inflector"
+          Dry::Inflector.new
         end
       end
     end
