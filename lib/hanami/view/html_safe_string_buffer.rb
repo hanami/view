@@ -21,7 +21,7 @@ end
 
 module Hanami
   class View
-    # Speicalized Temple buffer class that marks block-captured strings as HTML safe.
+    # Specialized Temple buffer class that marks block-captured strings as HTML safe.
     #
     # This is important for any scope or part methods that receive a string from a yielded block
     # and then determine whether to escape that string based on its `.html_safe?` value.

@@ -11,6 +11,8 @@ FIXTURES_PATH = SPEC_ROOT.join("fixtures")
 require "slim"
 require "hanami/view"
 
+require_relative "support/tmp_directory"
+
 module TestNamespace
   def remove_constants
     constants.each(&method(:remove_const))
