@@ -199,6 +199,52 @@ RSpec.describe Hanami::View::ERB::Template do
     HTML
   end
 
+  it "marks captured block content as HTML safe" do
+    scope = Class.new {
+      def html_safe_capture
+        yield.html_safe?
+      end
+    }.new
+
+    src = <<~ERB
+      <%= html_safe_capture do %>
+        <div>Some content</div>
+        <div>goes here.</div>
+      <% end %>
+    ERB
+
+    output = render(src, scope)
+
+    expect(output.strip).to eq "true"
+  end
+
+  it "marks nested captured blocks as HTML safe" do
+    scope = Class.new {
+      def html_safe_capture
+        captured = yield
+        safe = captured.html_safe?
+
+        "#{safe}: #{captured.strip}".then { |str| safe ? str.html_safe : str }
+      end
+    }.new
+
+    src = <<~ERB
+      <%= html_safe_capture do %>
+        <div>Some content here.</div>
+        <%= html_safe_capture do %>
+          <div>Nested content here.</div>
+        <% end %>
+      <% end %>
+    ERB
+
+    output = render(src, scope)
+
+    expect(output.strip).to eq <<~TEXT.strip
+      true: <div>Some content here.</div>
+        true: <div>Nested content here.</div>
+    TEXT
+  end
+
   it "supports case expressions" do
     # Case expressions need this unconventional opening tag to work in ERB; see this 2009 gist for
     # more: https://gist.github.com/davidphasson/91613
