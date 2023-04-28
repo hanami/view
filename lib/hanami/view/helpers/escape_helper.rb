@@ -197,7 +197,6 @@ module Hanami
         TAG_NAME_REPLACEMENT_CHAR = "_"
         private_constant :TAG_NAME_REPLACEMENT_CHAR
 
-
         # Returns the given string marked as HTML safe, meaning it will not be escaped when included
         # in your view's HTML.
         #
