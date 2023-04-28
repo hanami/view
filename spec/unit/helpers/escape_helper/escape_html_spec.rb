@@ -52,20 +52,6 @@ RSpec.describe Hanami::View::Helpers::EscapeHelper, ".escape_html" do
   end
 
   it "escapes '<script>alert('xss')</script>'" do
-    # TODO:
-    #
-    # Copied this test for what was previously `#escape_html_attribute`.
-    #
-    # When using that method, the result was:
-    #
-    # &lt;script&gt;alert&#x28;&#x27;xss&#x27;&#x29;&lt;&#x2f;script&gt;
-    #
-    # When using escape_html instead, the result is:
-    #
-    # &lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;
-    #
-    # This seems just as safe? But we should double check before committing to the removal of
-    # #escape_html_attribute.
     expect(escape_html("<script>alert('xss')</script>")).to eq "&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;"
   end
 
