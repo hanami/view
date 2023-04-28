@@ -2,13 +2,19 @@
 
 require "temple"
 
-# Add temple patch from https://github.com/judofyr/temple/pull/113 (which was since rolled back) to
-# demonstrate the need for the `:capture_generator` setting value to be propogated in order to
-# consistently handle nested captures.
-module Temple
-  class Generator
-    def on_capture(name, exp)
-      capture_generator.new(**options, buffer: name).call(exp)
+if Temple::VERSION <= "0.10.0"
+  # Include the (already merged) change from https://github.com/judofyr/temple/pull/144 so
+  # hanami-view can be tested with already released versions of Temple.
+  #
+  # TODO: Remove this patch after the next release of Temple (>0.10.0) and before the hanami-view
+  # 2.0 release.
+  module Temple
+    class Generator
+      undef_method :on_capture # Avoid method redefinition warnings
+
+      def on_capture(name, exp)
+        capture_generator.new(**options, buffer: name).call(exp)
+      end
     end
   end
 end
