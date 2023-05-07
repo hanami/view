@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require "dry/core/equalizer"
-require_relative "decorated_attributes"
-require_relative "rendering_missing"
 
 module Hanami
   class View

@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view"
-require "hanami/view/context"
-
 RSpec.describe "View / errors" do
   specify "Raising an error when paths are not configured" do
     view_class = Class.new(Hanami::View) do

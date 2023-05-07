@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require "slim"
-require "hanami/view"
-require "hanami/view/context"
-require "hanami/view/slim/template"
-
 RSpec.describe "Template engines / slim" do
   let(:base_view) {
     Class.new(Hanami::View) do
@@ -59,7 +54,7 @@ RSpec.describe "Template engines / slim" do
         div goes here.
     SLIM
 
-    output = Hanami::View::SlimAdapter::Template.new { src }.render(scope)
+    output = Hanami::View::Tilt::SlimAdapter::Template.new { src }.render(scope)
 
     expect(output.strip).to eq "true"
   end
@@ -81,7 +76,7 @@ RSpec.describe "Template engines / slim" do
           div Nested content here.
     SLIM
 
-    output = Hanami::View::SlimAdapter::Template.new { src }.render(scope)
+    output = Hanami::View::Tilt::SlimAdapter::Template.new { src }.render(scope)
 
     expect(output.strip).to eq "true: <div>Some content here.</div>true: <div>Nested content here.</div>"
   end

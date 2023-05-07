@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view/decorated_attributes"
-
 RSpec.describe Hanami::View::DecoratedAttributes do
   subject(:decoratable) {
     Test::Decoratable = Struct.new(:attr_1, :attr_2, :_rendering) do

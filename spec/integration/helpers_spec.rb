@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view/helpers/number_formatting_helper"
-
 RSpec.describe "helpers" do
   let(:dir) { make_tmp_directory }
 

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view/scope_builder"
-
 RSpec.describe Hanami::View::Scope do
   let(:locals) { {} }
 

@@ -1,15 +1,10 @@
 # frozen_string_literal: true
 
 require "temple"
-require_relative "../html_safe_string_buffer"
 
 module Hanami
   class View
     module ERB
-      require_relative "parser"
-      require_relative "filters/block"
-      require_relative "filters/trimming"
-
       # Hanami::View ERB engine.
       #
       # @api private

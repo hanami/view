@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view"
-require "hanami/view/context"
-
 RSpec.describe "View / exposures" do
   specify "exposures have access to context" do
     view = Class.new(Hanami::View) do

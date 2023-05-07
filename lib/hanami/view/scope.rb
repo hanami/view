@@ -2,7 +2,6 @@
 
 require "dry/core/equalizer"
 require "dry/core/constants"
-require_relative "rendering_missing"
 
 module Hanami
   class View

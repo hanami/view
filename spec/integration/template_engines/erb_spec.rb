@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view"
-require "hanami/view/context"
-
 RSpec.describe "Template engines / erb (Hanami::View::ERB)" do
   let(:base_view) {
     Class.new(Hanami::View) do

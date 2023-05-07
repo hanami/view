@@ -4,8 +4,6 @@
 #
 # Copyright (c) David Heinemeier Hansson
 
-require_relative "escape_helper"
-
 module Hanami
   class View
     module Helpers
@@ -34,8 +32,6 @@ module Hanami
       # @api public
       # @since 2.0.0
       module TagHelper
-        require_relative "tag_helper/tag_builder"
-
         module_function
 
         # Returns a tag builder for building HTML tag strings.

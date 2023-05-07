@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view/helpers/escape_helper"
-
 RSpec.describe Hanami::View::Helpers::EscapeHelper, ".sanitize_url" do
   def sanitize_url(...)
     described_class.sanitize_url(...)

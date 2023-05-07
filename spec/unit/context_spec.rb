@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view/context"
-require "hanami/view/part"
-require "hanami/view/part_builder"
-require "hanami/view/scope_builder"
-
 RSpec.describe Hanami::View::Context do
   let(:rendering) {
     Class.new(Hanami::View) {

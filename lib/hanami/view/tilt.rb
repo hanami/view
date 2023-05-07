@@ -20,8 +20,8 @@ module Hanami
         # `Mapping#const_defined?`, which (if slim was already required) would receive
         # "Hanami::View::Slim::Template" and return `Slim::Template`, which is the opposite of what
         # we want.
-        mapping.register_lazy "Hanami::View::HamlAdapter::Template", "hanami/view/haml/template", "haml"
-        mapping.register_lazy "Hanami::View::SlimAdapter::Template", "hanami/view/slim/template", "slim"
+        mapping.register_lazy "Hanami::View::Tilt::HamlAdapter::Template", "hanami/view/tilt/haml_adapter", "haml"
+        mapping.register_lazy "Hanami::View::Tilt::SlimAdapter::Template", "hanami/view/tilt/slim_adapter", "slim"
       }
 
       class << self
