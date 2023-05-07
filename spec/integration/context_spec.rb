@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view"
-require "hanami/view/context"
-require "hanami/view/part"
-
 RSpec.describe "Context" do
   it "Provides decorated attributes for use in templates and parts" do
     module Test

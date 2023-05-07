@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view/path"
-require "hanami/view/renderer"
-
 RSpec.describe Hanami::View::Renderer do
   subject(:renderer) { Hanami::View::Renderer.new(view_class.config) }
 

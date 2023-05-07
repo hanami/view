@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view/erb/template"
 require "tilt/erubi"
 
 RSpec.describe Hanami::View::ERB::Template do

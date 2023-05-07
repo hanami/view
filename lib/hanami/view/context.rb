@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "decorated_attributes"
-
 module Hanami
   class View
     # Provides a baseline environment across all the templates, parts and scopes

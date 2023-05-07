@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view/scope_builder"
-
 RSpec::Matchers.define :scope_including do |locals|
   match do |actual|
     locals == actual._locals

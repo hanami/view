@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "bigdecimal"
-require "hanami/view/helpers/number_formatting_helper"
 
 RSpec.describe Hanami::View::Helpers::NumberFormattingHelper, "#format_number" do
   subject(:obj) {

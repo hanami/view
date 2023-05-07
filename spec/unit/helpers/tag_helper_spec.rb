@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view/helpers/tag_helper"
-require "hanami/view/erb/template"
-require "hanami/view/slim/template"
-
 RSpec.describe Hanami::View::Helpers::TagHelper do
   describe "inclusion" do
     subject(:obj) {

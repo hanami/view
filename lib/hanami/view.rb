@@ -3,21 +3,10 @@
 require "dry/configurable"
 require "dry/core/equalizer"
 require "dry/inflector"
+require "zeitwerk"
 
-require_relative "view/application_view"
-require_relative "view/cache"
-require_relative "view/context"
-require_relative "view/exposures"
 require_relative "view/errors"
 require_relative "view/html"
-require_relative "view/part"
-require_relative "view/part_builder"
-require_relative "view/path"
-require_relative "view/rendered"
-require_relative "view/renderer"
-require_relative "view/rendering"
-require_relative "view/scope"
-require_relative "view/scope_builder"
 
 module Hanami
   # A standalone, template-based view rendering system that offers everything
@@ -34,6 +23,29 @@ module Hanami
   #
   # @api public
   class View
+    # @since 2.1.0
+    # @api private
+    def self.gem_loader
+      @gem_loader ||= Zeitwerk::Loader.new.tap do |loader|
+        root = File.expand_path("..", __dir__)
+        loader.tag = "hanami-view"
+        loader.push_dir(root)
+        loader.ignore(
+          "#{root}/hanami-view.rb",
+          "#{root}/hanami/view/version.rb",
+          "#{root}/hanami/view/errors.rb",
+        )
+        loader.inflector = Zeitwerk::GemInflector.new("#{root}/hanami-view.rb")
+        loader.inflector.inflect(
+          "erb" => "ERB",
+          "html" => "HTML",
+          "html_safe_string_buffer" => "HTMLSafeStringBuffer",
+        )
+      end
+    end
+
+    gem_loader.setup
+
     # @api private
     DEFAULT_RENDERER_OPTIONS = {default_encoding: "utf-8"}.freeze
 

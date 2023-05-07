@@ -1,5 +1,4 @@
-require "hanami/view/context"
-require "hanami/view/context_helpers/content_helpers"
+# frozen_string_literal: true
 
 RSpec.describe Hanami::View::Context, "ContentHelpers" do
   let(:context) {

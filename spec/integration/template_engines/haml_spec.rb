@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view"
-require "hanami/view/context"
-require "hanami/view/haml/template"
-
 RSpec.describe "Template engines / haml" do
   let(:base_view) {
     Class.new(Hanami::View) do
@@ -58,7 +54,7 @@ RSpec.describe "Template engines / haml" do
         %div goes here.
     HAML
 
-    output = Hanami::View::HamlAdapter::Template.new { src }.render(scope)
+    output = Hanami::View::Tilt::HamlAdapter::Template.new { src }.render(scope)
 
     expect(output.strip).to eq "true"
   end
@@ -80,7 +76,7 @@ RSpec.describe "Template engines / haml" do
           %div Nested content here.
     HAML
 
-    output = Hanami::View::HamlAdapter::Template.new { src }.render(scope)
+    output = Hanami::View::Tilt::HamlAdapter::Template.new { src }.render(scope)
 
     expect(output.strip).to eq "true: <div>Some content here.</div>\ntrue: <div>Nested content here.</div>"
   end

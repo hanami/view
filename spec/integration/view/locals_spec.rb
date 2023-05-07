@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view"
-require "hanami/view/part"
-
 RSpec.describe "View / locals" do
   specify "locals are decorated with parts by default" do
     view = Class.new(Hanami::View) do

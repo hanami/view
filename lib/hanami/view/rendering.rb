@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "renderer"
-
 module Hanami
   class View
     # @api private

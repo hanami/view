@@ -2,7 +2,6 @@
 
 require "tsort"
 require "dry/core/equalizer"
-require_relative "exposure"
 
 module Hanami
   class View

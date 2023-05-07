@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "hanami/view/rendered"
-
 RSpec.describe Hanami::View::Rendered do
   subject(:rendered) {
     described_class.new(
