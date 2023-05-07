@@ -87,7 +87,7 @@ module Hanami
             klass = namespace.const_get(name)
           end
 
-          if klass && klass < rendering.config.part_class
+          if klass && klass < Part
             klass
           else
             rendering.config.part_class
