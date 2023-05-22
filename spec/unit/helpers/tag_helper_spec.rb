@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe Hanami::View::Helpers::TagHelper do
   describe "inclusion" do
     subject(:obj) {

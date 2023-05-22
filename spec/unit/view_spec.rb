@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "tilt/erubi"
 
 RSpec.describe Hanami::View do

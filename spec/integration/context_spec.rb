@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe "Context" do
   it "Provides decorated attributes for use in templates and parts" do
     module Test

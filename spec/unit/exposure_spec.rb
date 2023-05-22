@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe Hanami::View::Exposure do
   subject(:exposure) { described_class.new(:hello, proc, object, **options) }
 

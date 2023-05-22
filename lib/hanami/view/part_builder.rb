@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Hanami
   class View
     # Decorates exposure values with matching parts

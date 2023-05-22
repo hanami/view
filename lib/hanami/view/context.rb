@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Hanami
   class View
     # Provides a baseline environment across all the templates, parts and scopes

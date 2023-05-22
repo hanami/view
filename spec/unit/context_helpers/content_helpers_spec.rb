@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe Hanami::View::Context, "ContentHelpers" do
   let(:context) {
     Class.new(described_class) do

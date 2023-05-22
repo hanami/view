@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "temple"
 
 if Temple::VERSION <= "0.10.0"

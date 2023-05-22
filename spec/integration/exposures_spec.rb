@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe "exposures" do
   let(:context) {
     Class.new(Hanami::View::Context) do

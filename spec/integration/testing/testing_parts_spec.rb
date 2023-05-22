@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe "Testing / parts" do
   specify "Parts can be unit tested without name or rendering (for testing methods that don't require them)" do
     part_class = Class.new(Hanami::View::Part) do

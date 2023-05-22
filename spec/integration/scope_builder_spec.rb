@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe "scope builder" do
   describe "default scope builder" do
     it "defaults to creating instances of Hanami::View::Scope" do

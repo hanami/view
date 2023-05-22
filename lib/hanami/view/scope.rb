@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "dry/core/equalizer"
 require "dry/core/constants"
 

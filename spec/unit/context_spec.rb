@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe Hanami::View::Context do
   let(:rendering) {
     Class.new(Hanami::View) {

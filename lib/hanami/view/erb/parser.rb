@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Hanami::View::ERB is based on Temple::ERB::Parser, also released under the MIT licence.
 #
 # Copyright (c) 2010-2023 Magnus Holm.

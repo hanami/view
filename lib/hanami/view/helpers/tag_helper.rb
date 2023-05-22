@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Based on ActionView::Helpers::TagHelper, also released under the MIT licence.
 #
 # Copyright (c) David Heinemeier Hansson

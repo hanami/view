@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Hanami
   class View
     # @since 2.0.0

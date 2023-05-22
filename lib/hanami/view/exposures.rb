@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "tsort"
 require "dry/core/equalizer"
 

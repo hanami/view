@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe Hanami::View::PartBuilder do
   subject(:part_builder) { rendering.part_builder }
 

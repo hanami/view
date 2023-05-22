@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "benchmark/ips"
 require_relative "comparative/hanami"
 require_relative "comparative/rails"

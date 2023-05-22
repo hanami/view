@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "hotch"
 require_relative "comparative/hanami"
 

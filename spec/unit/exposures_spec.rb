@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe Hanami::View::Exposures do
   subject(:exposures) { described_class.new }
 

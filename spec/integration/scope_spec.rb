@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe "Scopes" do
   let(:base_view) {
     Class.new(Hanami::View) do

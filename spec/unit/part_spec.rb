@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec::Matchers.define :scope_including do |locals|
   match do |actual|
     locals == actual._locals

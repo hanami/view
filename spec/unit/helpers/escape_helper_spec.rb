@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe Hanami::View::Helpers::EscapeHelper do
   subject(:obj) {
     Class.new {

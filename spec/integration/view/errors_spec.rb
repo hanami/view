@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe "View / errors" do
   specify "Raising an error when paths are not configured" do
     view_class = Class.new(Hanami::View) do

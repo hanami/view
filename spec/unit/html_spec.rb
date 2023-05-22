@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.describe Hanami::View::HTML::SafeString do
   subject(:safe_string) { described_class.new(string) }
   let(:string) { "hello" }
