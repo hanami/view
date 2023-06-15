@@ -2,23 +2,6 @@
 
 require "temple"
 
-if Temple::VERSION <= "0.10.0"
-  # Include the (already merged) change from https://github.com/judofyr/temple/pull/144 so
-  # hanami-view can be tested with already released versions of Temple.
-  #
-  # TODO: Remove this patch after the next release of Temple (>0.10.0) and before the hanami-view
-  # 2.0 release.
-  module Temple
-    class Generator
-      undef_method :on_capture # Avoid method redefinition warnings
-
-      def on_capture(name, exp)
-        capture_generator.new(**options, buffer: name).call(exp)
-      end
-    end
-  end
-end
-
 module Hanami
   class View
     # Specialized Temple buffer class that marks block-captured strings as HTML safe.
