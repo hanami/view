@@ -1,6 +1,35 @@
 # Hanami::View
 View layer for Hanami
 
+## v2.1.0.beta1
+
+### Added
+- [Tim Riley] Introduce new ERB engine, `Hanami::View::ERB`, now used by default for ERB templates;
+  the erbse gem is no longer a requirement (#226)
+- [Tim Riley] Introduce `Hanami::View::HTML::SafeString`, returned when calling `String#html_safe`,
+  also introduced via a `Hanami::View::HTML::StringExtensions` module prepended onto `String`. (#226)
+- [Tim Riley] Auto-escape HTML based on whether it is `#html_safe?` in ERB, Haml and Slim templates (#226)
+- [Tim Riley] Add `part_class` and `scope_class` settings, used by the standard `part_builder` and
+  `scope_builder` as the default class to use when no value-specific part or scope classes can be
+  found. These settings default to `Hanami::View::Part` and `Hanami::View::Scope` respectively (#227)
+- [Tim Riley] Introduce `Hanami::View::Helpers::EscapeHelper`, `Hanami::View::Helpers::TagHelper`,
+  `Hanami::View::Helpers::LinkToHelper`, `Hanami::View::Helpers::NumberFormattingHelper`. These
+  helper modules may optionally be mixed into your Part and Scope classes to provide additional
+  conveniences when authoring your views. To do this by default, create your own
+  `Hanaim::View::Part` and `Hanami::View::Scope` subclasses that include these modules, and then
+  configure these as the `part_class` and `scope_class` for your views. (#229)
+
+### Changed
+- [Tim Riley] Use Zeitwerk for code loading; you should now require `require "hanami/view"` just
+  once (#233)
+- [Tim Riley] Change `Context` interface: custom context subclasses now have complete control over
+  their `#initialize` (no longer need to receive `**options` or call `super`); though any mutable
+  ivars should be duped in a custom `#initialize_copy` as required. (#223)
+- [Tim Riley] Change `PartBuilder` and `ScopeBuilder` interfaces to consist of static methods only (#223)
+- [Tim Riley] Finalize the view class config when calling `.new` for the first time (#223)
+- [Tim Riley] Consolidate all internal caches to a single `View.cache` (#223)
+- [Tim Riley] [Internal] Various refactorings to improve rendering performance (#223)
+
 ## v2.0.0.alpha8 - 2022-05-19
 
 ### Added
