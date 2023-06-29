@@ -48,6 +48,18 @@ Or install it yourself as:
 $ gem install hanami-view
 ```
 
-## License
+## Versioning
 
-See `LICENSE` file.
+__Hanami::View__ uses [Semantic Versioning 2.0.0](http://semver.org)
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+## Copyright
+
+Copyright © 2014 Hanami Team – Released under MIT License

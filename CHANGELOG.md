@@ -1,7 +1,8 @@
 # Hanami::View
+
 View layer for Hanami
 
-## v2.1.0.beta1
+## v2.1.0.beta1 - 2023-06-29
 
 ### Added
 - [Tim Riley] Introduce new ERB engine, `Hanami::View::ERB`, now used by default for ERB templates;
