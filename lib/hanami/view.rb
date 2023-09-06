@@ -477,8 +477,8 @@ module Hanami
     # @!endgroup
 
     # @api private
-    def self.layout_path
-      File.join(*[config.layouts_dir, config.layout].compact)
+    def self.layout_path(layout)
+      File.join(*[config.layouts_dir, layout].compact)
     end
 
     # @api private
@@ -524,20 +524,20 @@ module Hanami
     #
     # @return [Rendered] rendered view object
     # @api public
-    def call(format: config.default_format, context: config.default_context, **input)
+    def call(format: config.default_format, context: config.default_context, layout: config.layout, **input)
       rendering = self.rendering(format: format, context: context)
 
       locals = locals(rendering, input)
       output = rendering.template(config.template, rendering.scope(config.scope, locals))
 
-      if layout?
+      if !!layout
         begin
           output = rendering.template(
-            self.class.layout_path,
+            self.class.layout_path(layout),
             rendering.scope(config.scope, layout_locals(locals))
           ) { output }
         rescue TemplateNotFoundError
-          raise LayoutNotFoundError.new(config.layout, config.paths)
+          raise LayoutNotFoundError.new(layout, config.paths)
         end
       end
 
@@ -569,10 +569,6 @@ module Hanami
       locals.each_with_object({}) do |(key, value), layout_locals|
         layout_locals[key] = value if exposures[key].for_layout?
       end
-    end
-
-    def layout?
-      !!config.layout # rubocop:disable Style/DoubleNegation
     end
   end
 end
