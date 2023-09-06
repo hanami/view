@@ -35,13 +35,13 @@ RSpec.describe Hanami::View do
     end
 
     it "allows a different layout to be passed to call" do
-      expect(view.(context:, layout: "alternate").to_s).to eql(
+      expect(view.(context: context, layout: "alternate").to_s).to eql(
         "<!DOCTYPE html><html><head><title>Alternate layout Test</title></head><body><h1>User</h1><p>Jane</p></body></html>"
       )
     end
 
     it "allows a nil layout to be passed to call" do
-      expect(view.(context:, layout: nil).to_s).to eql(
+      expect(view.(context: context, layout: nil).to_s).to eql(
         "<h1>User</h1><p>Jane</p>"
       )
     end
