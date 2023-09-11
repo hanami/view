@@ -520,6 +520,7 @@ module Hanami
     #
     # @param format [Symbol] template format to use
     # @param context [Context] context object to use
+    # @param layout [String, FalseClass, nil] layout name, or false to indicate no layout
     # @param input input data for preparing exposure values
     #
     # @return [Rendered] rendered view object
