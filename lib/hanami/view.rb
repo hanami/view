@@ -530,7 +530,7 @@ module Hanami
       locals = locals(rendering, input)
       output = rendering.template(config.template, rendering.scope(config.scope, locals))
 
-      if !!layout
+      if layout
         begin
           output = rendering.template(
             self.class.layout_path(layout),
