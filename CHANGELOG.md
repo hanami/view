@@ -2,6 +2,11 @@
 
 View layer for Hanami
 
+## v2.1.0.beta2 (unreleased)
+
+### Added
+- [Luca Guidi] Add `Hanami::View::Rendered#match?`, `#match`, and `#include?` to make it more specs friendly
+
 ## v2.1.0.beta1 - 2023-06-29
 
 ### Added

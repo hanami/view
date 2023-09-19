@@ -22,6 +22,23 @@ RSpec.describe Hanami::View::Rendered do
     end
   end
 
+  describe "#match?" do
+    it "matches rendered output" do
+      expect(rendered).to match("rendered template output")
+    end
+
+    it "is aliased as #match" do
+      expect(rendered.match?("rendered template output")).to be(true)
+      expect(rendered.match("rendered template output")).to be(true)
+    end
+  end
+
+  describe "#include?" do
+    it "matches rendered output" do
+      expect(rendered).to include("rendered template output")
+    end
+  end
+
   describe "#locals" do
     it "returns the locals hash" do
       expect(rendered.locals).to eql(user: {name: "Jane"})
