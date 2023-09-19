@@ -50,6 +50,31 @@ module Hanami
         output
       end
       alias_method :to_str, :to_s
+
+      # Matches given input with the rendered view
+      #
+      # @param matcher [String, Regexp] matcher
+      #
+      # @return [TrueClass,FalseClass]
+      #
+      # @api public
+      # @since 2.1.0
+      def match?(matcher)
+        output.match?(matcher)
+      end
+      alias_method :match, :match?
+
+      # Checks if given string is included in the rendered view
+      #
+      # @param string [String] string
+      #
+      # @return [TrueClass,FalseClass]
+      #
+      # @api public
+      # @since 2.1.0
+      def include?(string)
+        output.include?(string)
+      end
     end
   end
 end
