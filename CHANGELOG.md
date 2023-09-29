@@ -2,10 +2,11 @@
 
 View layer for Hanami
 
-## v2.1.0.beta2 (unreleased)
+## v2.1.0.beta2 - 2023-10-04
 
 ### Added
-- [Luca Guidi] Add `Hanami::View::Rendered#match?`, `#match`, and `#include?` to make it more specs friendly
+- [Luca Guidi] Add `Hanami::View::Rendered#match?`, `#match`, and `#include?` to make it more specs friendly.
+- [Philip Arndt] Make `Hanami::View#call` to accept `layout:` keyword argument to specify the layout to use during the rendering.
 
 ## v2.1.0.beta1 - 2023-06-29
 

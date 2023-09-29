@@ -7,6 +7,7 @@ module Hanami
     # Output of a View rendering
     #
     # @api public
+    # @since 2.1.0
     class Rendered
       include Dry::Equalizer(:output, :locals)
 
@@ -15,6 +16,7 @@ module Hanami
       # @return [String]
       #
       # @api public
+      # @since 2.1.0
       attr_reader :output
 
       # Returns the hash of locals used to render the view
@@ -22,9 +24,11 @@ module Hanami
       # @return [Hash[<Symbol, Hanami::View::Part>] locals hash
       #
       # @api public
+      # @since 2.1.0
       attr_reader :locals
 
       # @api private
+      # @since 2.1.0
       def initialize(output:, locals:)
         @output = output
         @locals = locals
@@ -37,6 +41,7 @@ module Hanami
       # @return [Hanami::View::Part]
       #
       # @api public
+      # @since 2.1.0
       def [](name)
         locals[name]
       end
@@ -46,6 +51,7 @@ module Hanami
       # @return [String]
       #
       # @api public
+      # @since 2.1.0
       def to_s
         output
       end
