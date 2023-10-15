@@ -32,7 +32,7 @@ module Hanami
       # @api public
       # @since 2.0.0
       module TagHelper
-        module_function
+        extend self
 
         # Returns a tag builder for building HTML tag strings.
         #

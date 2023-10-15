@@ -1,18 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.describe Hanami::View::Helpers::TagHelper do
-  describe "inclusion" do
-    subject(:obj) {
-      Class.new {
-        include Hanami::View::Helpers::TagHelper
-      }.new
-    }
-
-    it "includes private helpers only" do
-      expect { obj.tag }.to raise_error(NoMethodError)
-    end
-  end
-
   describe "#tag" do
     def tag(...)
       described_class.tag(...)
