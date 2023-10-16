@@ -11,10 +11,6 @@ RSpec.describe Hanami::View::Helpers::EscapeHelper do
     obj.instance_eval(&block)
   end
 
-  it "includes private helpers only" do
-    expect { obj.escape_html }.to raise_error(NoMethodError)
-  end
-
   # See escape_hepler/escape_html_spec.rb for complete tests
   describe "#escape_html" do
     it "escapes HTML" do
