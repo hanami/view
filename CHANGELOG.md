@@ -2,6 +2,13 @@
 
 View layer for Hanami
 
+## v2.1.0.rc1 - 2023-11-01
+
+### Fixed
+- [Tim Riley] Include methods from helper modules as public (#242)
+Replace `module_function` with `extend self` to allow helper methods to remain directly usable on their modules, but to also let those methods remain public when the module is included in a class.
+This will allow an intermediary `helpers` object to be created for view parts (inside full Hanami apps) to access the standard helpers.
+
 ## v2.1.0.beta2 - 2023-10-04
 
 ### Added
