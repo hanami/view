@@ -19,6 +19,14 @@ module Hanami
       # @since 2.1.0
       attr_reader :output
 
+      # Returns the format of the rendered view
+      #
+      # @return [Symbol]
+      #
+      # @api public
+      # @since 2.1.0
+      attr_reader :format
+
       # Returns the hash of locals used to render the view
       #
       # @return [Hash[<Symbol, Hanami::View::Part>] locals hash
@@ -29,8 +37,9 @@ module Hanami
 
       # @api private
       # @since 2.1.0
-      def initialize(output:, locals:)
+      def initialize(output:, format:, locals:)
         @output = output
+        @format = format
         @locals = locals
       end
 

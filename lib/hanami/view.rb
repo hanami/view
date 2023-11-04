@@ -542,7 +542,7 @@ module Hanami
         end
       end
 
-      Rendered.new(output: output, locals: locals)
+      Rendered.new(output: output, format: format, locals: locals)
     end
 
     def rendering(format: config.default_format, context: config.default_context)

@@ -4,6 +4,7 @@ RSpec.describe Hanami::View::Rendered do
   subject(:rendered) {
     described_class.new(
       output: "rendered template output",
+      format: :html,
       locals: {
         user: {name: "Jane"}
       }
@@ -36,6 +37,12 @@ RSpec.describe Hanami::View::Rendered do
   describe "#include?" do
     it "matches rendered output" do
       expect(rendered).to include("rendered template output")
+    end
+  end
+
+  describe "#format" do
+    it "returns the foramt" do
+      expect(rendered.format).to eq :html
     end
   end
 
