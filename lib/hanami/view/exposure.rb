@@ -7,17 +7,31 @@ module Hanami
     # An exposure defined on a view
     #
     # @api private
+    # @since 2.1.0
     class Exposure
       include Dry::Equalizer(:name, :proc, :object, :options)
 
       EXPOSURE_DEPENDENCY_PARAMETER_TYPES = %i[req opt].freeze
       INPUT_PARAMETER_TYPES = %i[key keyreq keyrest].freeze
 
+      # @api private
+      # @since 2.1.0
       attr_reader :name
+
+      # @api private
+      # @since 2.1.0
       attr_reader :proc
+
+      # @api private
+      # @since 2.1.0
       attr_reader :object
+
+      # @api private
+      # @since 2.1.0
       attr_reader :options
 
+      # @api private
+      # @since 2.1.0
       def initialize(name, proc = nil, object = nil, **options)
         @name = name
         @proc = prepare_proc(proc, object)
@@ -25,10 +39,14 @@ module Hanami
         @options = options
       end
 
+      # @api private
+      # @since 2.1.0
       def bind(obj)
         self.class.new(name, proc, obj, **options)
       end
 
+      # @api private
+      # @since 2.1.0
       def dependency_names
         @dependency_names ||=
           if proc
@@ -40,10 +58,14 @@ module Hanami
           end
       end
 
+      # @api private
+      # @since 2.1.0
       def dependencies?
         !dependency_names.empty?
       end
 
+      # @api private
+      # @since 2.1.0
       def input_keys
         @input_keys ||=
           if proc
@@ -55,22 +77,32 @@ module Hanami
           end
       end
 
+      # @api private
+      # @since 2.1.0
       def for_layout?
         options.fetch(:layout, false)
       end
 
+      # @api private
+      # @since 2.1.0
       def decorate?
         options.fetch(:decorate, true)
       end
 
+      # @api private
+      # @since 2.1.0
       def private?
         options.fetch(:private, false)
       end
 
+      # @api private
+      # @since 2.1.0
       def default_value
         options[:default]
       end
 
+      # @api private
+      # @since 2.1.0
       def call(input, locals = {})
         if proc
           call_proc(input, locals)

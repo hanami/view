@@ -9,22 +9,20 @@ require_relative "view/errors"
 require_relative "view/html"
 
 module Hanami
-  # A standalone, template-based view rendering system that offers everything
-  # you need to write well-factored view code.
+  # A standalone, template-based view rendering system that offers everything you need to write
+  # well-factored view code.
   #
-  # This represents a single view, holding the configuration and exposures
-  # necessary for rendering its template.
+  # This represents a single view, holding the configuration and exposures necessary for rendering
+  # its template.
   #
-  # @abstract Subclass this and provide your own configuration and exposures to
-  #   define your own view (along with a custom `#initialize` if you wish to
-  #   inject dependencies into your subclass)
-  #
-  # @see https://dry-rb.org/gems/dry-view/
+  # @abstract Subclass this and provide your own configuration and exposures to define your own view
+  #   (along with a custom `#initialize` if you wish to inject dependencies into your subclass)
   #
   # @api public
+  # @since 2.1.0
   class View
-    # @since 2.1.0
     # @api private
+    # @since 2.1.0
     def self.gem_loader
       @gem_loader ||= Zeitwerk::Loader.new.tap do |loader|
         root = File.expand_path("..", __dir__)
@@ -47,6 +45,7 @@ module Hanami
     gem_loader.setup
 
     # @api private
+    # @since 2.1.0
     DEFAULT_RENDERER_OPTIONS = {default_encoding: "utf-8"}.freeze
 
     include Dry::Equalizer(:config, :exposures)
@@ -67,6 +66,7 @@ module Hanami
     #   @param paths [String, Path, Array<String, Path>] the paths
     #
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :paths, constructor: -> paths {
       Array(paths).map { |path| Path[path] }
@@ -80,6 +80,7 @@ module Hanami
     #
     #   @param name [String] template name
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :template
 
@@ -95,6 +96,7 @@ module Hanami
     #
     #   @param base_path [String, nil] base templates path
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :template_inference_base
 
@@ -107,6 +109,7 @@ module Hanami
     #
     #   @param name [String, FalseClass, nil] layout name, or false to indicate no layout
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :layout, default: false
 
@@ -116,6 +119,7 @@ module Hanami
     #
     #   @param dir [String] directory name
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :layouts_dir, default: "layouts"
 
@@ -129,6 +133,7 @@ module Hanami
     #
     #   @param scope_class [Class] scope class (inheriting from `Hanami::View::Scope`)
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :scope
 
@@ -142,6 +147,7 @@ module Hanami
     #
     #   @param context [Hanami::View::Context] context object
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :default_context, default: Context.new.freeze
 
@@ -152,9 +158,17 @@ module Hanami
     #
     #   @param format [Symbol]
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :default_format, default: :html
 
+    # @overload config.part_class=(part_class)
+    #   Set a custom default part class.
+    #
+    #   @param part_class [Class]
+    #   @api public
+    #   @since 2.1.0
+    # @!scope class
     setting :part_class, default: Part
 
     # @overload config.scope_namespace=(namespace)
@@ -165,19 +179,26 @@ module Hanami
     #   @see Scope
     #
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :part_namespace
 
     # @overload config.part_builder=(part_builder)
     #   Set a custom part builder class
     #
-    #   @see https://dry-rb.org/gems/dry-view/parts/
-    #
     #   @param part_builder [Class]
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :part_builder, default: PartBuilder
 
+    # @overload config.scope_class=(scope_class)
+    #   Set a custom default scope class.
+    #
+    #   @param scope_class [Class]
+    #   @api public
+    #   @since 2.1.0
+    # @!scope class
     setting :scope_class, default: Scope
 
     # @overload config.scope_namespace=(namespace)
@@ -188,6 +209,7 @@ module Hanami
     #   @see Scope
     #
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :scope_namespace
 
@@ -198,6 +220,7 @@ module Hanami
     #
     #   @param scope_builder [Class]
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :scope_builder, default: ScopeBuilder
 
@@ -208,6 +231,7 @@ module Hanami
     #
     #   @param inflector
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :inflector, default: Dry::Inflector.new
 
@@ -223,6 +247,7 @@ module Hanami
     #
     #   @param options [Hash] renderer options
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :renderer_options, default: DEFAULT_RENDERER_OPTIONS, constructor: -> options {
       DEFAULT_RENDERER_OPTIONS.merge(options.to_h).freeze
@@ -241,12 +266,14 @@ module Hanami
     #
     #   @param mapping [Hash<Symbol, Class>] engine mapping
     #   @api public
+    #   @since 2.1.0
     # @!scope class
     setting :renderer_engine_mapping, default: {}
 
     # @!endgroup
 
     # @api private
+    # @since 2.1.0
     def self.inherited(klass)
       super
 
@@ -365,6 +392,7 @@ module Hanami
     # @see https://dry-rb.org/gems/dry-view/exposures/
     #
     # @api public
+    # @since 2.1.0
     def self.expose(*names, **options, &block)
       if names.length == 1
         exposures.add(names.first, block, **options)
@@ -375,7 +403,10 @@ module Hanami
       end
     end
 
+    # @see expose
+    #
     # @api public
+    # @since 2.1.0
     def self.private_expose(*names, **options, &block)
       expose(*names, **options, private: true, &block)
     end
@@ -385,6 +416,7 @@ module Hanami
     #
     # @return [Exposures]
     # @api private
+    # @since 2.1.0
     def self.exposures
       @exposures ||= Exposures.new
     end
@@ -467,7 +499,10 @@ module Hanami
     #   # <%= greeting %>
     #   # <%= copyright(Time.now.utc) %>
     #
-    #   MyView.new.(message: "Hello") # => "HELLO!"
+    #   MyView.new.call(message: "Hello") # => "HELLO!"
+    #
+    # @api public
+    # @since 2.1.0
     def self.scope(scope_class = nil, &block)
       scope_class ||= config.scope || config.scope_class
 
@@ -477,23 +512,24 @@ module Hanami
     # @!endgroup
 
     # @api private
+    # @since 2.1.0
     def self.layout_path(layout)
       File.join(*[config.layouts_dir, layout].compact)
     end
 
     # @api private
+    # @since 2.1.0
     def self.cache
       Cache
     end
 
-    # Returns an instance of the view. This binds the defined exposures to the
-    # view instance.
+    # Returns an instance of the view. This binds the defined exposures to the view instance.
     #
-    # Subclasses can define their own `#initialize` to accept injected
-    # dependencies, but must call `super()` to ensure the standard view
-    # initialization can proceed.
+    # Subclasses can define their own `#initialize` to accept injected dependencies, but must call
+    # `super()` to ensure the standard view initialization can proceed.
     #
     # @api public
+    # @since 2.1.0
     def initialize
       self.class.config.finalize!
       ensure_config
@@ -501,22 +537,25 @@ module Hanami
       @exposures = self.class.exposures.bind(self)
     end
 
-    # The view's configuration
+    # Returns the view's configuration.
     #
-    # @api private
+    # @api public
+    # @since 2.1.0
     def config
       self.class.config
     end
 
-    # The view's bound exposures
+    # Returns the view's bound exposures.
     #
     # @return [Exposures]
+    #
     # @api private
+    # @since 2.1.0
     def exposures
       @exposures
     end
 
-    # Render the view
+    # Renders the view.
     #
     # @param format [Symbol] template format to use
     # @param context [Context] context object to use
@@ -524,7 +563,9 @@ module Hanami
     # @param input input data for preparing exposure values
     #
     # @return [Rendered] rendered view object
+    #
     # @api public
+    # @since 2.1.0
     def call(format: config.default_format, context: config.default_context, layout: config.layout, **input)
       rendering = self.rendering(format: format, context: context)
 
@@ -545,6 +586,8 @@ module Hanami
       Rendered.new(output: output, locals: locals)
     end
 
+    # @api private
+    # @since 2.1.0
     def rendering(format: config.default_format, context: config.default_context)
       Rendering.new(config: config, format: format, context: context)
     end

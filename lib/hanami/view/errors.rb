@@ -2,24 +2,27 @@
 
 module Hanami
   class View
-    # @since 2.0.0
+    # Base error for views.
+    #
+    # @since 2.1.0
     # @api public
     class Error < StandardError
     end
 
-    # Error raised when critical settings are not configured
+    # Error raised when critical settings are not configured.
     #
-    # @api private
+    # @api public
+    # @since 2.1.0
     class UndefinedConfigError < StandardError
       def initialize(key)
         super("no +#{key}+ configured")
       end
     end
 
-    # Error raised when template could not be found within a view's configured
-    # paths
+    # Error raised when template could not be found within a view's configured paths.
     #
-    # @api private
+    # @api public
+    # @since 2.1.0
     class TemplateNotFoundError < StandardError
       def initialize(template_name, format, lookup_paths)
         msg = [
@@ -31,8 +34,7 @@ module Hanami
       end
     end
 
-    # Error raised when layout could not be found within a view's configured
-    # paths
+    # Error raised when layout could not be found within a view's configured paths.
     #
     # @api private
     class LayoutNotFoundError < StandardError
@@ -46,6 +48,10 @@ module Hanami
       end
     end
 
+    # Error raised when a rendering is required but not given.
+    #
+    # @api public
+    # @since 2.1.0
     class RenderingMissingError < Error
       def message
         "a +rendering+ must be provided"

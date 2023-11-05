@@ -5,7 +5,10 @@ require "tilt"
 module Hanami
   class View
     # @api private
+    # @since 2.1.0
     module Tilt
+      # @api private
+      # @since 2.1.0
       Mapping = ::Tilt.default_mapping.dup.tap { |mapping|
         # If "slim" has been required before "hanami/view", unregister Slim's non-lazy registered
         # template, so our own template adapter (using register_lazy below) can take precedence.
@@ -25,6 +28,8 @@ module Hanami
       }
 
       class << self
+        # @api private
+        # @since 2.1.0
         def [](path, mapping, options)
           with_mapping(mapping).new(path, options)
         end

@@ -29,7 +29,7 @@ module Hanami
       #   end
       #
       # @api public
-      # @since 2.0.0
+      # @since 2.1.0
       module EscapeHelper
         extend self
 
@@ -56,13 +56,13 @@ module Hanami
         #   # => "<p>Not escaped</p>"
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def escape_html(input)
           Temple::Utils.escape_html_safe(input)
         end
 
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         alias_method :h, :escape_html
 
         # Returns an escaped string from joining the elements in a given array.
@@ -86,7 +86,7 @@ module Hanami
         # @see #escape_html
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def escape_join(array, separator = $,)
           separator = escape_html(separator)
 
@@ -116,7 +116,7 @@ module Hanami
         #   # => "gemini://gemini.circumlunar.space/"
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def sanitize_url(input, permitted_schemes = PERMITTED_URL_SCHEMES)
           return input if input.html_safe?
 
@@ -127,7 +127,7 @@ module Hanami
         end
 
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         PERMITTED_URL_SCHEMES = %w[http https mailto].freeze
         private_constant :PERMITTED_URL_SCHEMES
 
@@ -142,7 +142,7 @@ module Hanami
         #   escape_xml_name("1 < 2 & 3") # => "1___2___3"
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def escape_xml_name(name)
           name = name.to_s
           return "" if name.match?(BLANK_STRING_REGEXP)
@@ -160,12 +160,12 @@ module Hanami
         end
 
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         BLANK_STRING_REGEXP = /\A\s*\z/
 
         # Following XML requirements: https://www.w3.org/TR/REC-xml/#NT-Name
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         TAG_NAME_START_CODEPOINTS = \
           "@:A-Z_a-z\u{C0}-\u{D6}\u{D8}-\u{F6}\u{F8}-\u{2FF}\u{370}-\u{37D}\u{37F}-\u{1FFF}" \
           "\u{200C}-\u{200D}\u{2070}-\u{218F}\u{2C00}-\u{2FEF}\u{3001}-\u{D7FF}\u{F900}-\u{FDCF}" \
@@ -173,27 +173,27 @@ module Hanami
         private_constant :TAG_NAME_START_CODEPOINTS
 
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         INVALID_TAG_NAME_START_REGEXP = /[^#{TAG_NAME_START_CODEPOINTS}]/
         private_constant :INVALID_TAG_NAME_START_REGEXP
 
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         TAG_NAME_FOLLOWING_CODEPOINTS = "#{TAG_NAME_START_CODEPOINTS}\\-.0-9\u{B7}\u{0300}-\u{036F}\u{203F}-\u{2040}"
         private_constant :TAG_NAME_FOLLOWING_CODEPOINTS
 
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         INVALID_TAG_NAME_FOLLOWING_REGEXP = /[^#{TAG_NAME_FOLLOWING_CODEPOINTS}]/
         private_constant :INVALID_TAG_NAME_FOLLOWING_REGEXP
 
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         SAFE_XML_TAG_NAME_REGEXP = /\A[#{TAG_NAME_START_CODEPOINTS}][#{TAG_NAME_FOLLOWING_CODEPOINTS}]*\z/
         private_constant :INVALID_TAG_NAME_FOLLOWING_REGEXP
 
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         TAG_NAME_REPLACEMENT_CHAR = "_"
         private_constant :TAG_NAME_REPLACEMENT_CHAR
 
@@ -211,7 +211,7 @@ module Hanami
         #   raw(user.name).html_safe? # => true
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def raw(input)
           input.to_s.html_safe
         end
