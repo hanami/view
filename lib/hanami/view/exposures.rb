@@ -6,36 +6,53 @@ require "dry/core/equalizer"
 module Hanami
   class View
     # @api private
+    # @since 2.1.0
     class Exposures
       include Dry::Equalizer(:exposures)
       include TSort
 
+      # @api private
+      # @since 2.1.0
       attr_reader :exposures
 
+      # @api private
+      # @since 2.1.0
       def initialize(exposures = {})
         @exposures = exposures
       end
 
+      # @api private
+      # @since 2.1.0
       def key?(name)
         exposures.key?(name)
       end
 
+      # @api private
+      # @since 2.1.0
       def [](name)
         exposures[name]
       end
 
+      # @api private
+      # @since 2.1.0
       def each(&block)
         exposures.each(&block)
       end
 
+      # @api private
+      # @since 2.1.0
       def add(name, proc = nil, **options)
         exposures[name] = Exposure.new(name, proc, **options)
       end
 
+      # @api private
+      # @since 2.1.0
       def import(name, exposure)
         exposures[name] = exposure.dup
       end
 
+      # @api private
+      # @since 2.1.0
       def bind(obj)
         bound_exposures = exposures.each_with_object({}) { |(name, exposure), memo|
           memo[name] = exposure.bind(obj)
@@ -44,6 +61,8 @@ module Hanami
         self.class.new(bound_exposures)
       end
 
+      # @api private
+      # @since 2.1.0
       def call(input)
         # Avoid performance cost of tsorting when we don't need it
         names =

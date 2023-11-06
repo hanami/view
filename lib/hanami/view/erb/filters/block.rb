@@ -9,7 +9,7 @@ module Hanami
         #
         # Inspired by Slim's Slim::Controls::Filter#on_slim_output.
         #
-        # @since 2.0.0
+        # @since 2.1.0
         # @api private
         class Block < Temple::Filter
           END_LINE_RE = /\bend\b/

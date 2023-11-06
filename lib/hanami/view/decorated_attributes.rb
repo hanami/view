@@ -5,13 +5,20 @@ require "set"
 module Hanami
   class View
     # Decorates attributes in Parts.
+    #
+    # @api public
+    # @since 2.1.0
     module DecoratedAttributes
       # @api private
+      # @since 2.1.0
       def self.included(klass)
         klass.extend ClassInterface
       end
 
       # Decorated attributes class-level interface.
+      #
+      # @api public
+      # @since 2.1.0
       module ClassInterface
         # @api private
         MODULE_NAME = :DecoratedAttributes
@@ -31,6 +38,7 @@ module Hanami
         #   matching Part
         #
         # @api public
+        # @since 2.1.0
         def decorate(*names, **options)
           decorated_attributes.decorate(*names, **options)
         end

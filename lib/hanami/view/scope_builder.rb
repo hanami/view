@@ -4,17 +4,19 @@ module Hanami
   class View
     # Builds scope objects via matching classes
     #
-    # @api private
+    # @api public
+    # @since 2.1.0
     class ScopeBuilder
       class << self
-        # Returns a new scope using a class matching the name
+        # Returns a new scope using a class matching the name.
         #
         # @param name [Symbol, Class] scope name
         # @param locals [Hash<Symbol, Object>] locals hash
         #
         # @return [Hanami::View::Scope]
         #
-        # @api private
+        # @api public
+        # @since 2.1.0
         def call(name = nil, locals:, rendering:) # rubocop:disable Style/OptionalArguments
           klass = scope_class(name, rendering: rendering)
 

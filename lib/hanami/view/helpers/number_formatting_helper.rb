@@ -26,7 +26,7 @@ module Hanami
       #   end
       #
       # @api public
-      # @since 2.0.0
+      # @since 2.1.0
       module NumberFormattingHelper
         extend self
 
@@ -34,7 +34,7 @@ module Hanami
         #
         # @return [String] default delimiter
         #
-        # @since 2.0.0
+        # @since 2.1.0
         # @api private
         DEFAULT_DELIMITER = ","
         private_constant :DEFAULT_DELIMITER
@@ -43,7 +43,7 @@ module Hanami
         #
         # @return [String] default separator
         #
-        # @since 2.0.0
+        # @since 2.1.0
         # @api private
         DEFAULT_SEPARATOR = "."
         private_constant :DEFAULT_SEPARATOR
@@ -52,7 +52,7 @@ module Hanami
         #
         # @return [Integer] default rounding precision
         #
-        # @since 2.0.0
+        # @since 2.1.0
         # @api private
         DEFAULT_PRECISION = 2
         private_constant :DEFAULT_PRECISION
@@ -82,7 +82,7 @@ module Hanami
         #   format_number(1256.95, delimiter: ".", separator: ",") # => "1.256,95"
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def format_number(number, delimiter: DEFAULT_DELIMITER, separator: DEFAULT_SEPARATOR, precision: DEFAULT_PRECISION) # rubocop:disable Layout/LineLength
           Formatter.call(number, delimiter: delimiter, separator: separator, precision: precision)
         end
@@ -91,26 +91,26 @@ module Hanami
 
         # Formatter
         #
-        # @since 2.0.0
+        # @since 2.1.0
         # @api private
         class Formatter
           # Regex to delimit the integer part of a number into groups of three digits.
           #
-          # @since 2.0.0
+          # @since 2.1.0
           # @api private
           DELIMITING_REGEX = /(\d)(?=(\d{3})+$)/
           private_constant :DELIMITING_REGEX
 
           # Regex to guess if the number is a integer.
           #
-          # @since 2.0.0
+          # @since 2.1.0
           # @api private
           INTEGER_REGEXP = /\A\d+\z/
           private_constant :INTEGER_REGEXP
 
           # @see NumberFormattingHelper#format_number
           #
-          # @since 2.0.0
+          # @since 2.1.0
           # @api private
           def self.call(number, delimiter:, separator:, precision:)
             number = coerce(number)
@@ -122,7 +122,7 @@ module Hanami
 
           # Coerces the given number or string into a number.
           #
-          # @since 2.0.0
+          # @since 2.1.0
           # @api private
           def self.coerce(number)
             case number
@@ -143,7 +143,7 @@ module Hanami
 
           # Formats the given number as a string.
           #
-          # @since 2.0.0
+          # @since 2.1.0
           # @api private
           def self.to_str(number, precision)
             case number
@@ -156,7 +156,7 @@ module Hanami
 
           # Returns the integer and fractional parts of the given number string.
           #
-          # @since 2.0.0
+          # @since 2.1.0
           # @api private
           def self.parts(string, delimiter)
             integer_part, fractional_part = string.split(DEFAULT_SEPARATOR)
@@ -170,7 +170,7 @@ module Hanami
           #
           # @return [String] delimited integer string
           #
-          # @since 2.0.0
+          # @since 2.1.0
           # @api private
           def self.delimit_integer(integer_part, delimiter)
             integer_part.gsub(DELIMITING_REGEX) { |digit| "#{digit}#{delimiter}" }

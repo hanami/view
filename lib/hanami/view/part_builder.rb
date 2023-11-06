@@ -2,12 +2,13 @@
 
 module Hanami
   class View
-    # Decorates exposure values with matching parts
+    # Decorates exposure values with matching parts.
     #
-    # @api private
+    # @api public
+    # @since 2.1.0
     class PartBuilder
       class << self
-        # Decorates an exposure value
+        # Decorates an exposure value.
         #
         # @param name [Symbol] exposure name
         # @param value [Object] exposure value
@@ -15,7 +16,8 @@ module Hanami
         #
         # @return [Hanami::View::Part] decorated value
         #
-        # @api private
+        # @api public
+        # @since 2.1.0
         def call(name, value, as: nil, rendering:)
           builder = value.respond_to?(:to_ary) ? :build_collection_part : :build_part
 

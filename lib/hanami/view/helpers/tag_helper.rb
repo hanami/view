@@ -30,7 +30,7 @@ module Hanami
       #   end
       #
       # @api public
-      # @since 2.0.0
+      # @since 2.1.0
       module TagHelper
         extend self
 
@@ -64,7 +64,7 @@ module Hanami
         #   <% end %>
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def tag
           tag_builder
         end
@@ -111,7 +111,7 @@ module Hanami
         # @see #tag
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def link_to(content, url = nil, **attributes, &block)
           if block
             raise ArgumentError if url && content
@@ -145,7 +145,7 @@ module Hanami
         #   # => "123 foo bar"
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def token_list(*args)
           tokens = build_tag_values(*args).flat_map { |value|
             safe = value.html_safe?
@@ -158,13 +158,13 @@ module Hanami
         # @see #token_list
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def class_names(...)
           token_list(...)
         end
 
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         def build_tag_values(*args)
           tag_values = []
 
@@ -185,7 +185,7 @@ module Hanami
         end
 
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         def tag_builder
           @tag_builder ||= begin
             TagBuilder.new(inflector: tag_builder_inflector)
@@ -193,7 +193,7 @@ module Hanami
         end
 
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         def tag_builder_inflector
           if respond_to?(:_context)
             return _context.inflector

@@ -16,40 +16,43 @@ module Hanami
     # @see https://dry-rb.org/gems/dry-view/scopes/
     #
     # @api public
+    # @since 2.1.0
     class Scope
       # @api private
       CONVENIENCE_METHODS = %i[format context locals].freeze
 
       include Dry::Equalizer(:_name, :_locals, :_rendering)
 
-      # The scope's name
+      # Returns the scope's name.
       #
       # @return [Symbol]
       #
       # @api public
+      # @since 2.1.0
       attr_reader :_name
 
-      # The scope's locals
+      # Returns the scope's locals
       #
       # @overload _locals
-      #   Returns the locals
+      #   Returns the locals.
       # @overload locals
-      #   A convenience alias for `#_locals.` Is available unless there is a
-      #   local named `locals`
+      #   A convenience alias for `#_locals.` Is available unless there is a local named `locals`
       #
       # @return [Hash[<Symbol, Object>]
       #
       # @api public
+      # @since 2.1.0
       attr_reader :_locals
 
-      # The current rendering
+      # Returns the current rendering.
       #
       # @return [Rendering]
       #
       # @api private
+      # @since 2.1.0
       attr_reader :_rendering
 
-      # Returns a new Scope instance
+      # Returns a new Scope instance.
       #
       # @param name [Symbol, nil] scope name
       # @param locals [Hash<Symbol, Object>] template locals
@@ -58,6 +61,7 @@ module Hanami
       # @return [Scope]
       #
       # @api public
+      # @since 2.1.0
       def initialize(
         name: nil,
         locals: Dry::Core::Constants::EMPTY_HASH,
@@ -69,14 +73,14 @@ module Hanami
       end
 
       # @overload render(partial_name, **locals, &block)
-      #   Renders a partial using the scope
+      #   Renders a partial using the scope.
       #
       #   @param partial_name [Symbol, String] partial name
       #   @param locals [Hash<Symbol, Object>] partial locals
       #   @yieldreturn [String] string content to include where the partial calls `yield`
       #
       # @overload render(**locals, &block)
-      #   Renders a partial (named after the scope's own name) using the scope
+      #   Renders a partial (named after the scope's own name) using the scope.
       #
       #   @param locals[Hash<Symbol, Object>] partial locals
       #   @yieldreturn [String] string content to include where the partial calls `yield`
@@ -84,6 +88,7 @@ module Hanami
       # @return [String] the rendered partial output
       #
       # @api public
+      # @since 2.1.0
       def render(partial_name = nil, **locals, &block)
         partial_name ||= _name
 
@@ -98,7 +103,7 @@ module Hanami
         _rendering.partial(partial_name, _render_scope(**locals), &block)
       end
 
-      # Build a new scope using a scope class matching the provided name
+      # Builds a new scope using a scope class matching the provided name.
       #
       # @param name [Symbol, Class] scope name (or class)
       # @param locals [Hash<Symbol, Object>] scope locals
@@ -106,11 +111,12 @@ module Hanami
       # @return [Scope]
       #
       # @api public
+      # @since 2.1.0
       def scope(name = nil, **locals)
         _rendering.scope(name, locals)
       end
 
-      # The template format for the current render environment.
+      # Returns the template format for the current render environment.
       #
       # @overload _format
       #   Returns the format.
@@ -121,11 +127,12 @@ module Hanami
       # @return [Symbol] format
       #
       # @api public
+      # @since 2.1.0
       def _format
         _rendering.format
       end
 
-      # The context object for the current render environment
+      # Returns the context object for the current render environment.
       #
       # @overload _context
       #   Returns the context.
@@ -136,6 +143,7 @@ module Hanami
       # @return [Context] context
       #
       # @api public
+      # @since 2.1.0
       def _context
         _rendering.context
       end
@@ -144,10 +152,9 @@ module Hanami
 
       # Handles missing methods, according to the following rules:
       #
-      # 1. If there is a local with a name matching the method, it returns the
-      #    local.
-      # 2. If the `context` responds to the method, then it will be sent the
-      #    method and all its arguments.
+      # 1. If there is a local with a name matching the method, it returns the local.
+      # 2. If the `context` responds to the method, then it will be sent the method and all its
+      #    arguments.
       def method_missing(name, *args, &block)
         if _locals.key?(name)
           _locals[name]

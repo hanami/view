@@ -21,7 +21,7 @@ module Hanami
     #   Hanami::View::ERB::Template.new { "<%= 'Hello, world!' %>" }.render
     #
     # @api private
-    # @since 2.0.0
+    # @since 2.1.0
     module ERB
       # ERB Template class
       Template = Temple::Templates::Tilt(Engine)
