@@ -4,22 +4,25 @@ require "dry/core/equalizer"
 
 module Hanami
   class View
-    # Output of a View rendering
+    # The output of a view rendering.
     #
     # @api public
     # @since 2.1.0
     class Rendered
       include Dry::Equalizer(:output, :locals)
 
-      # Returns the rendered view
+      # Returns the rendered view output.
       #
       # @return [String]
+      #
+      # @see to_s
+      # @see to_str
       #
       # @api public
       # @since 2.1.0
       attr_reader :output
 
-      # Returns the hash of locals used to render the view
+      # Returns the hash of locals used to render the view output.
       #
       # @return [Hash[<Symbol, Hanami::View::Part>] locals hash
       #
@@ -34,7 +37,7 @@ module Hanami
         @locals = locals
       end
 
-      # Returns the local corresponding to the key
+      # Returns the local corresponding to the key.
       #
       # @param name [Symbol] local key
       #
@@ -46,7 +49,7 @@ module Hanami
         locals[name]
       end
 
-      # Returns the rendered view
+      # Returns the rendered view output.
       #
       # @return [String]
       #
@@ -55,9 +58,12 @@ module Hanami
       def to_s
         output
       end
+
+      # @api public
+      # @since 2.1.0
       alias_method :to_str, :to_s
 
-      # Matches given input with the rendered view
+      # Returns true if the given input matches the rendered view output.
       #
       # @param matcher [String, Regexp] matcher
       #
@@ -70,7 +76,7 @@ module Hanami
       end
       alias_method :match, :match?
 
-      # Checks if given string is included in the rendered view
+      # Returns true if given string is included in the rendered view output.
       #
       # @param string [String] string
       #

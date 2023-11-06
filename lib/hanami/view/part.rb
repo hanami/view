@@ -13,8 +13,10 @@ module Hanami
     # @see https://dry-rb.org/gems/dry-view/parts/
     #
     # @api public
+    # @since 2.1.0
     class Part
       # @api private
+      # @since 2.1.0
       CONVENIENCE_METHODS = %i[
         format
         context
@@ -31,6 +33,7 @@ module Hanami
       # @return [Symbol] name
       #
       # @api public
+      # @since 2.1.0
       attr_reader :_name
 
       # The decorated value. This is the value returned from the exposure.
@@ -44,6 +47,7 @@ module Hanami
       # @return [Object] value
       #
       # @api public
+      # @since 2.1.0
       attr_reader :_value
 
       # The current rendering
@@ -51,12 +55,16 @@ module Hanami
       # @return [Rendering]
       #
       # @api private
+      # @since 2.1.0
       attr_reader :_rendering
 
-      # Determins a part name (when initialized without one). Intended for use
-      # only while unit testing Parts.
+      # Determines a part name (when initialized without one). Intended for internal use only while
+      # unit testing Parts.
+      #
+      # @return [String]
       #
       # @api private
+      # @since 2.1.0
       def self.part_name(inflector)
         name ? inflector.underscore(inflector.demodulize(name)) : "part"
       end
@@ -68,6 +76,7 @@ module Hanami
       # @param rendering [Rendering] the current rendering
       #
       # @api public
+      # @since 2.1.0
       def initialize(
         rendering: RenderingMissing.new,
         name: self.class.part_name(rendering.inflector),
@@ -78,7 +87,7 @@ module Hanami
         @_rendering = rendering
       end
 
-      # The template format for the current render environment.
+      # Returns the template format for the current rendering.
       #
       # @overload _format
       #   Returns the format.
@@ -89,11 +98,12 @@ module Hanami
       # @return [Symbol] format
       #
       # @api public
+      # @since 2.1.0
       def _format
         _rendering.format
       end
 
-      # The context object for the current render environment
+      # Returns the context object for the current rendering.
       #
       # @overload _context
       #   Returns the context.
@@ -104,9 +114,12 @@ module Hanami
       # @return [Context] context
       #
       # @api public
+      # @since 2.1.0
       def _context
         _rendering.context
       end
+
+      # rubocop:disable Naming/UncommunicativeMethodParamName
 
       # Renders a new partial with the part included in its locals.
       #
@@ -124,7 +137,7 @@ module Hanami
       # @return [String] rendered partial
       #
       # @api public
-      # rubocop:disable Naming/UncommunicativeMethodParamName
+      # @since 2.1.0
       def _render(partial_name, as: _name, **locals, &block)
         _rendering.partial(partial_name, _rendering.scope({as => self}.merge(locals)), &block)
       end
@@ -145,26 +158,28 @@ module Hanami
       # @return [Hanami::View::Scope] scope
       #
       # @api public
+      # @since 2.1.0
       def _scope(scope_name = nil, **locals)
         _rendering.scope(scope_name, {_name => self}.merge(locals))
       end
 
-      # Returns a string representation of the value
+      # Returns a string representation of the value.
       #
       # @return [String]
       #
       # @api public
+      # @since 2.1.0
       def to_s
         _value.to_s
       end
 
-      # Builds a new a part with the given parameters
+      # Builds a new a part with the given parameters.
       #
-      # This is helpful for manually constructing a new part object that
-      # maintains the current render environment.
+      # This is helpful for manually constructing a new part object that maintains the current
+      # rendering.
       #
-      # However, using `.decorate` is preferred for declaring attributes that
-      # should also be decorated as parts.
+      # However, using `.decorate` is preferred for declaring attributes that should also be
+      # decorated as parts.
       #
       # @see DecoratedAttributes::ClassInterface#decorate
       #
@@ -174,6 +189,7 @@ module Hanami
       # @param options[Hash<Symbol, Object>] other options to provide when initializing the new part
       #
       # @api public
+      # @since 2.1.0
       def new(klass = self.class, name: _name, value: _value, **options)
         klass.new(
           name: name,
@@ -183,11 +199,12 @@ module Hanami
         )
       end
 
-      # Returns a string representation of the part
+      # Returns a string representation of the part.
       #
       # @return [String]
       #
       # @api public
+      # @since 2.1.0
       def inspect
         %(#<#{self.class.name} name=#{_name.inspect} value=#{_value.inspect}>)
       end

@@ -25,7 +25,7 @@ module Hanami
     # @see Hanami::View::SlimAdapter::Template
     #
     # @api private
-    # @since 2.0.0
+    # @since 2.1.0
     class HTMLSafeStringBuffer < Temple::Generators::StringBuffer
       # Replace `Temple::Generator::ArrayBuffer#call` (which is used via the superclass of
       # `StringBuffer`) with the standard implementation from the base `Temple::Generator`.

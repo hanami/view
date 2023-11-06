@@ -18,7 +18,7 @@ module Hanami
         # `:multi` sexps with their own nested content.
         #
         # @api private
-        # @since 2.0.0
+        # @since 2.1.0
         class Trimming < Temple::Filter
           define_options trim: true
 

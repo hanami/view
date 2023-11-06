@@ -78,7 +78,7 @@ module Hanami
       # remain, which is the value returned.
       #
       # @api private
-      # @since 2.0.0
+      # @since 2.1.0
       class Parser < Temple::Parser
         ERB_PATTERN = /(\n|<%%|%%>)|<%(==?|\#)?(.*?)?-?%>/m
 
