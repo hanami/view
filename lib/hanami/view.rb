@@ -573,14 +573,10 @@ module Hanami
       output = rendering.template(config.template, rendering.scope(config.scope, locals))
 
       if layout
-        begin
-          output = rendering.template(
-            self.class.layout_path(layout),
-            rendering.scope(config.scope, layout_locals(locals))
-          ) { output }
-        rescue TemplateNotFoundError
-          raise LayoutNotFoundError.new(layout, config.paths)
-        end
+        output = rendering.template(
+          self.class.layout_path(layout),
+          rendering.scope(config.scope, layout_locals(locals))
+        ) { output }
       end
 
       Rendered.new(output: output, locals: locals)

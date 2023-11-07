@@ -2,6 +2,9 @@
 
 View layer for Hanami
 
+### Changed
+- [Tim Riley] Remove `LayoutNotFoundError` and raise `TemplateNotFoundError` for all kinds of missing templates, including layouts.
+
 ## v2.1.0.rc1 - 2023-11-01
 
 ### Fixed
