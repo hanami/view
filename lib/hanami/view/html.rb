@@ -2,6 +2,10 @@
 
 module Hanami
   class View
+    # HTML-focused behavior for strings intended to be output in templates.
+    #
+    # @api public
+    # @since 2.1.0
     module HTML
       # A string that has been marked as "HTML safe", ensuring that it is not automatically escaped
       # when used in HTML view templates.
@@ -12,16 +16,17 @@ module Hanami
       # @see String#html_safe
       #
       # @api public
-      # @since 2.0.0
+      # @since 2.1.0
       class SafeString < String
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def initialize(string)
           super(string)
           freeze
         end
 
         # @api private
+        # @since 2.1.0
         private def initialize_copy(other)
           super
           freeze
@@ -30,7 +35,7 @@ module Hanami
         # @return [true]
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def html_safe?
           true
         end
@@ -38,7 +43,7 @@ module Hanami
         # @return [self]
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def html_safe
           self
         end
@@ -46,14 +51,14 @@ module Hanami
         # @return [self]
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def to_s
           self
         end
       end
 
       # @api private
-      # @since 2.0.0
+      # @since 2.1.0
       module StringExtensions
         # Returns the string as a {Hanami::View::HTML::SafeString}, ensuring the string is not
         # automatically escaped when used in HTML view templates.
@@ -61,7 +66,7 @@ module Hanami
         # @return [Hanami::View::HTML::SafeString]
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         def html_safe
           Hanami::View::HTML::SafeString.new(self)
         end
@@ -85,7 +90,7 @@ class Object
   # @return [false]
   #
   # @api public
-  # @since 2.0.0
+  # @since 2.1.0
   def html_safe?
     false
   end
@@ -95,7 +100,7 @@ class Numeric
   # @return [true]
   #
   # @api public
-  # @since 2.0.0
+  # @since 2.1.0
   def html_safe?
     true
   end

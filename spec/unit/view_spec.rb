@@ -64,8 +64,30 @@ RSpec.describe Hanami::View do
       }.new
     }
 
-    it "raises error when layout cannot be found" do
-      expect { view.() }.to raise_error Hanami::View::LayoutNotFoundError, /Layout \+missing_layout\+/
+    it "raises a LayoutNotFoundError error when layout cannot be found" do
+      expect { view.() }.to raise_error Hanami::View::TemplateNotFoundError, %r{Template `layouts/missing_layout' for format `html' could not be found}
+    end
+  end
+
+  describe "template rendering" do
+    it "raises a TemplateNotFoundError when the template cannot be found" do
+      view = Class.new(Hanami::View) {
+        config.paths = SPEC_ROOT.join("fixtures/templates")
+        config.layout = nil
+        config.template = "missing_template"
+      }.new
+
+      expect { view.() }.to raise_error Hanami::View::TemplateNotFoundError, /Template `missing_template' for format `html' could not be found/
+    end
+
+    it "raises a TemplateNotFoundError when a partial cannot be found from inside the layout" do
+      view = Class.new(Hanami::View) {
+        config.paths = SPEC_ROOT.join("fixtures/templates")
+        config.layout = "missing_partial"
+        config.template = "empty"
+      }.new
+
+      expect { view.() }.to raise_error Hanami::View::TemplateNotFoundError, /Template `_missing_partial' for format `html' could not be found/
     end
   end
 

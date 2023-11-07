@@ -12,26 +12,26 @@ module Hanami
         # @see TagHelper#tag
         #
         # @api public
-        # @since 2.0.0
+        # @since 2.1.0
         class TagBuilder
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           HTML_VOID_ELEMENTS = %i(
             area base br col embed hr img input keygen link meta param source track wbr
           ).to_set
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           SVG_SELF_CLOSING_ELEMENTS = %i(
             animate animateMotion animateTransform circle ellipse line path polygon polyline rect set stop use view
           ).to_set
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           ATTRIBUTE_SEPARATOR = " "
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           BOOLEAN_ATTRIBUTES = %w(
             allowfullscreen allowpaymentrequest async autofocus
             autoplay checked compact controls declare default
@@ -47,15 +47,15 @@ module Hanami
           BOOLEAN_ATTRIBUTES.freeze
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           ARIA_PREFIXES = ["aria", :aria].to_set.freeze
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           DATA_PREFIXES = ["data", :data].to_set.freeze
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           TAG_TYPES = {}.tap do |hsh|
             BOOLEAN_ATTRIBUTES.each { |attr| hsh[attr] = :boolean }
             DATA_PREFIXES.each { |attr| hsh[attr] = :data }
@@ -64,18 +64,18 @@ module Hanami
           end
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           PRE_CONTENT_STRINGS = Hash.new { "" }
           PRE_CONTENT_STRINGS[:textarea]  = "\n"
           PRE_CONTENT_STRINGS["textarea"] = "\n"
           PRE_CONTENT_STRINGS.freeze
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           attr_reader :inflector
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           def initialize(inflector:)
             @inflector = inflector
           end
@@ -88,7 +88,7 @@ module Hanami
           #   # => <input type="text" aria-label="Search">
           #
           # @api public
-          # @since 2.0.0
+          # @since 2.1.0
           def attributes(**attributes)
             tag_options(**attributes).to_s.strip.html_safe
           end
@@ -96,13 +96,13 @@ module Hanami
           # Returns a `<p>` HTML tag.
           #
           # @api public
-          # @since 2.0.0
+          # @since 2.1.0
           def p(*args, **options, &block)
             tag_string(:p, *args, **options, &block)
           end
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           def tag_string(name, content = nil, **options)
             content = yield if block_given?
             self_closing = SVG_SELF_CLOSING_ELEMENTS.include?(name)
@@ -115,7 +115,7 @@ module Hanami
           end
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           def content_tag_string(name, content, **options)
             tag_options = tag_options(**options) unless options.empty?
 
@@ -126,7 +126,7 @@ module Hanami
           end
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           def tag_options(**options)
             return if options.none?
 
@@ -174,13 +174,13 @@ module Hanami
           end
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           def boolean_tag_option(key)
             %(#{key}="#{key}")
           end
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           def tag_option(key, value)
             key = EscapeHelper.escape_xml_name(key)
 
@@ -201,19 +201,19 @@ module Hanami
           private
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           def method_missing(called, *args, **options, &block)
             tag_string(called, *args, **options, &block)
           end
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           def respond_to_missing?(*args)
             true
           end
 
           # @api private
-          # @since 2.0.0
+          # @since 2.1.0
           def prefix_tag_option(prefix, key, value)
             key = "#{prefix}-#{inflector.dasherize(key.to_s)}"
 

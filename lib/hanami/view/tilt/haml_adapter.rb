@@ -6,6 +6,7 @@ module Hanami
   class View
     module Tilt
       # @api private
+      # @since 2.1.0
       module HamlAdapter
         # Add options to Haml::Engine to match the options from its default generator.
         #
@@ -29,6 +30,7 @@ module Hanami
         #
         # @see Hanami::View::Tilt
         # @api private
+        # @since 2.1.0
         Template = Temple::Templates::Tilt(
           ::Haml::Engine,
           use_html_safe: true,

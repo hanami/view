@@ -5,18 +5,33 @@ require_relative "errors"
 module Hanami
   class View
     # @api private
+    # @since 2.1.0
     class Renderer
+      # @api private
+      # @since 2.1.0
       PARTIAL_PREFIX = "_"
+
+      # @api private
+      # @since 2.1.0
       PATH_DELIMITER = "/"
+
+      # @api private
+      # @since 2.1.0
       CURRENT_PATH_PREFIX = "."
 
+      # @api private
+      # @since 2.1.0
       attr_reader :config, :prefixes
 
+      # @api private
+      # @since 2.1.0
       def initialize(config)
         @config = config
         @prefixes = [CURRENT_PATH_PREFIX]
       end
 
+      # @api private
+      # @since 2.1.0
       def template(name, format, scope, &block)
         old_prefixes = @prefixes.dup
 
@@ -32,6 +47,8 @@ module Hanami
         @prefixes = old_prefixes
       end
 
+      # @api private
+      # @since 2.1.0
       def partial(name, format, scope, &block)
         template(name_for_partial(name), format, scope, &block)
       end

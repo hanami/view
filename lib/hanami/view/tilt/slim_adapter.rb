@@ -6,6 +6,7 @@ module Hanami
   class View
     module Tilt
       # @api private
+      # @since 2.1.0
       module SlimAdapter
         # Add options to Slim::Engine to match the options from its default generator.
         #
@@ -29,6 +30,7 @@ module Hanami
         #
         # @see Hanami::View::Tilt
         # @api private
+        # @since 2.1.0
         Template = Temple::Templates::Tilt(
           ::Slim::Engine,
           use_html_safe: true,

@@ -9,13 +9,16 @@ module Hanami
     #   `#initialize` if you wish to inject dependencies)
     #
     # @api public
+    # @since 2.1.0
     class Context
       include DecoratedAttributes
 
       # @api private
+      # @since 2.1.0
       attr_reader :_rendering
 
       # @api private
+      # @since 2.1.0
       def self.new(rendering: RenderingMissing.new, **args)
         allocate.tap do |obj|
           obj.instance_variable_set(:@_rendering, rendering)
@@ -26,10 +29,12 @@ module Hanami
       # Returns a new instance of Context
       #
       # @api public
+      # @since 2.1.0
       def initialize(**)
       end
 
       # @api private
+      # @since 2.1.0
       def dup_for_rendering(rendering)
         dup.tap do |obj|
           obj.instance_variable_set(:@_rendering, rendering)
