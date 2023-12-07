@@ -31,7 +31,7 @@ module Hanami
           elsif name.is_a?(Class)
             name
           else
-            View.cache.fetch_or_store(:scope_class, rendering.config) do
+            View.cache.fetch_or_store("scope_class: #{name}", rendering.config) do
               resolve_scope_class(name: name, rendering: rendering)
             end
           end
@@ -40,7 +40,7 @@ module Hanami
         def resolve_scope_class(name:, rendering:)
           name = rendering.inflector.camelize(name.to_s)
 
-          namespace = rendering.config.scope_namespace
+          namespace = rendering.config.scope_namespace || Object
 
           # Give autoloaders a chance to act
           begin
