@@ -2,6 +2,8 @@
 
 View layer for Hanami
 
+## v2.1.0 - 2024-02-27
+
 ## v2.1.0.rc3 - 2024-02-16
 
 ### Changed
