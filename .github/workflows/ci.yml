@@ -38,50 +38,15 @@ jobs:
     env:
       CLASSPATH: "" # tmp jruby build workaround
       COVERAGE: ${{matrix.coverage}}
-      CODACY_RUN_LOCAL: true
-      CODACY_PROJECT_TOKEN: ${{secrets.CODACY_PROJECT_TOKEN}}
     steps:
-      - uses: ravsamhq/notify-slack-action@v1
-        if: always()
-        with:
-          status: ${{ job.status }}
-          notify_when: "failure"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - uses: actions/checkout@v3
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{matrix.ruby}}
-      - name: Install latest bundler
-        run: |
-          gem install bundler --no-document
-          bundle config set without 'tools benchmarks docs'
-      - name: Bundle install
-        run: bundle install --jobs 4 --retry 3
+          bundler-cache: true
       - name: Run all tests
         run: bundle exec rake
-  release:
-    runs-on: ubuntu-latest
-    if: contains(github.ref, 'tags') && github.event_name == 'create'
-    needs: tests
-    env:
-      GITHUB_LOGIN: dry-bot
-      GITHUB_TOKEN: ${{secrets.GH_PAT}}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install package dependencies
-        run: "[ -e $APT_DEPS ] || sudo apt-get install -y --no-install-recommends $APT_DEPS"
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6
-      - name: Install dependencies
-        run: gem install ossy --no-document
-      - name: Trigger release workflow
-        run: |
-          tag=$(echo $GITHUB_REF | cut -d / -f 3)
-          ossy gh w dry-rb/devtools release --payload "{\"tag\":\"$tag\",\"tag_creator\":\"$GITHUB_ACTOR\",\"repo\":\"$GITHUB_REPOSITORY\"}"
 
   workflow-keepalive:
     if: github.event_name == 'schedule'
