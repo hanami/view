@@ -147,7 +147,7 @@ view.call(slug: "cheeseburger-backpack").to_s
 
 
 ### Configuration
-###### ⬆️ Back to [Table of contents](#table-of-contents)
+###### ⬆️ Go to [Table of contents](#table-of-contents)
 
 You can configure your views via class-level `config`. Basic configuration looks like this:
 
@@ -213,7 +213,7 @@ Some configuration-related options can also be passed at render-time, to `Hanami
 
 
 ### Injecting dependencies
-###### ⬆️ Back to [Table of contents](#table-of-contents)
+###### ⬆️ Go to [Table of contents](#table-of-contents)
 
 Most views will need access to other parts of your application to prepare values for the view. Since views follow the "functional object" pattern (local state for config and collaborators only, with any variable data passed to `#call`), it’s easy to use dependency injection to make your application’s objects available to your views.
 
@@ -251,7 +251,7 @@ end
 
 
 ### Exposures
-###### ⬆️ Back to [Table of contents](#table-of-contents)
+###### ⬆️ Go to [Table of contents](#table-of-contents)
 
 Define _exposures_ within your view to declare and prepare the values to be passed to the template, decorated as [parts](#parts).
 
@@ -415,7 +415,7 @@ expose :page_number, decorate: false
 
 
 ### Templates
-###### ⬆️ Back to [Table of contents](#table-of-contents)
+###### ⬆️ Go to [Table of contents](#table-of-contents)
 
 Every view has a template, which is passed the values from the view’s [exposures](#exposures) and then used to render the view output.
 
@@ -510,7 +510,7 @@ The view’s context object remains part of the scope for every partial renderin
 
 
 ### Parts
-###### ⬆️ Back to [Table of contents](#table-of-contents)
+###### ⬆️ Go to [Table of contents](#table-of-contents)
 
 All values [exposed](#exposures) by your view are decorated and passed to your templates as _parts_, which allow encapsulation of view-specific behavior alongside your application's domain objects.
 
@@ -717,7 +717,7 @@ You can also inherit from `Hanami::View::PartBuilder` and override any of its me
 
 
 ### Scopes
-###### ⬆️ Back to [Table of contents](#table-of-contents)
+###### ⬆️ Go to [Table of contents](#table-of-contents)
 
 All values [exposed](#exposures) by your view are decorated and passed to your templates as _parts_, which allow encapsulation of view-specific behavior alongside your application's domain objects.
 
@@ -924,7 +924,7 @@ You can also inherit from `Hanami::View::PartBuilder` and override any of its me
 
 
 ### Context
-###### ⬆️ Back to [Table of contents](#table-of-contents)
+###### ⬆️ Go to [Table of contents](#table-of-contents)
 
 Use a context object to provide shared facilities to every template, partial, scope, and part in a given view rendering.
 
@@ -1027,7 +1027,7 @@ end
 
 
 ### Context
-###### ⬆️ Back to [Table of contents](#table-of-contents)
+###### ⬆️ Go to [Table of contents](#table-of-contents)
 
 Use a context object to provide shared facilities to every template, partial, scope, and part in a given view rendering.
 
@@ -1129,7 +1129,7 @@ end
 ```
 
 ### Testing
-###### ⬆️ Back to [Table of contents](#table-of-contents)
+###### ⬆️ Go to [Table of contents](#table-of-contents)
 
 Use a context object to provide shared facilities to every template, partial, scope, and part in a given view rendering.
 
