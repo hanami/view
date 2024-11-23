@@ -2,7 +2,9 @@
 
 Hanami::View is a complete view rendering system that gives you everything you need to write well-factored view code.
 
-It can be used as a standalone library and also as part of the complete Hanami web framework.
+It can be used as a standalone library or as part of the complete Hanami framework.
+
+This README has documentation for use as a standalone library, please see the [Hanami guides Views](https://guides.hanamirb.org/views/overview/) section for assistance using it with the full Hanami framework.
 
 ## Status
 
