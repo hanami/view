@@ -143,7 +143,7 @@ view.call(slug: "cheeseburger-backpack").to_s
 # => "<html><body><h1>Cheeseburger Backpack</h1><p>Rebecca Sugar, Ian Jones-Quartey</p></body></html>
 ```
 
-`Hanami::View::#call` expects keyword arguments for input data. These arguments are handled by your [exposures](#exposures), which prepare [view parts](#parts) that are passed to your [template](#templates-1) for rendering.
+`Hanami::View#call` expects keyword arguments for input data. These arguments are handled by your [exposures](#exposures), which prepare [view parts](#parts) that are passed to your [template](#templates-1) for rendering.
 
 
 ### Configuration
