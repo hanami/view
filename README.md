@@ -289,7 +289,7 @@ class MyView < Hanami::View
 end
 ```
 
-## Accessing input data
+#### Accessing input data
 
 If your exposure needs to work with input data (i.e. the arguments passed to the view’s `#call`), specify these as keyword arguments for your exposure block. Make this a _required_ keyword argument if you require the data passed to the view’s `#call`:
 
