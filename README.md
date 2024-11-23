@@ -52,7 +52,7 @@ $ gem install hanami-view
 - [Configuration](#configuration)
 - [Injecting dependencies](#injecting-dependencies)
 - [Exposures](#exposures)
-- [Templates](#templates)
+- [Templates](#templates-1)
 - [Parts](#parts)
 - [Scopes](#scopes)
 - [Context](#context)
@@ -75,7 +75,7 @@ hanami-view divides the responsibility of view rendering across several differen
 
 - The **View**, representing a view in its entirety, holding its configuration as well as any application-provided dependencies
 - [**Exposures**](#exposures), defined as part of the view, declare the values that should be exposed to the template, and how they should be prepared
-- [**Templates** and **partials**](#templates), which contain the markup, code, and logic that determine the view's output. Templates may have different **formats**, which act as differing representations of a given view
+- [**Templates** and **partials**](#templates-1), which contain the markup, code, and logic that determine the view's output. Templates may have different **formats**, which act as differing representations of a given view
 - [**Parts**](#parts), which wrap the values exposed to the template and provide a place to encapsulate view-specific behavior along with particular values
 - [**Scopes**](#scopes), which offer a place to encapsulate view-specific behaviour intended for a particular _template_ and its complete set of values
 - [**Context**](#context), a single object providing the baseline environment for a given rendering, with its methods made available to all templates, partials, parts, and scopes
@@ -115,7 +115,7 @@ Write a layout (`templates/layouts/application.html.erb`):
 </html>
 ```
 
-And a [template](#templates) (`templates/articles/show.html.erb`):
+And a [template](#templates-1) (`templates/articles/show.html.erb`):
 
 ```erb
 <h1><%= article.title %></h1>
@@ -142,7 +142,7 @@ view.call(slug: "cheeseburger-backpack").to_s
 # => "<html><body><h1>Cheeseburger Backpack</h1><p>Rebecca Sugar, Ian Jones-Quartey</p></body></html>
 ```
 
-`Hanami::View::#call` expects keyword arguments for input data. These arguments are handled by your [exposures](#exposures), which prepare [view parts](#parts) that are passed to your [template](#templates) for rendering.
+`Hanami::View::#call` expects keyword arguments for input data. These arguments are handled by your [exposures](#exposures), which prepare [view parts](#parts) that are passed to your [template](#templates-1) for rendering.
 
 
 ### Configuration
@@ -207,7 +207,7 @@ end
 Some configuration-related options can also be passed at render-time, to `Hanami::View#call`.
 
 - **format**: Specify another format for rendering the view. This overrides the `default_format` setting.
-- **context**: Provide an alternative [context object](#context) for the [template scope](#templates). This is helpful for providing a context object that has, for example, data specific to the current HTTP request.
+- **context**: Provide an alternative [context object](#context) for the [template scope](#templates-1). This is helpful for providing a context object that has, for example, data specific to the current HTTP request.
 
 
 ### Injecting dependencies
@@ -593,7 +593,7 @@ class User < Hanami::View::Part
 end
 ```
 
-This will render an `_info_box` partial template (via the standard [partial lookup rules](#templates)) with the part still available as `user`.
+This will render an `_info_box` partial template (via the standard [partial lookup rules](#templates-1)) with the part still available as `user`.
 
 You can also render such partials directly within templates:
 
@@ -798,7 +798,7 @@ class User < Hanami::View::Part
 end
 ```
 
-This will render an `_info_box` partial template (via the standard [partial lookup rules](#templates)) with the part still available as `user`.
+This will render an `_info_box` partial template (via the standard [partial lookup rules](#templates-1)) with the part still available as `user`.
 
 You can also render such partials directly within templates:
 
