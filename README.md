@@ -435,11 +435,6 @@ hanami-view uses [Tilt](https://github.com/rtomayko/tilt) to render its template
 
 Some Tilt-supplied template engines may not fully support hanami-view's features (like implicit block capturing). Your view will raise an exception, along with instructions for resolving the issue, if Tilt provides a non-compatible engine.
 
-The currently known problematic engines are:
-
-- Erb, which requires the [Erbse](https://github.com/apotonick/erbse) engine
-- Haml, which requires the [Hamlit::Block](https://github.com/hamlit/hamlit-block) engine
-
 #### Template scope
 
 Each template is rendered with its own _scope_, which determines the methods available within the template. The scope behavior is established by 3 things:
