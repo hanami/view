@@ -146,6 +146,7 @@ view.call(slug: "cheeseburger-backpack").to_s
 
 
 ### Configuration
+[Table of contents](#table-of-contents)
 
 You can configure your views via class-level `config`. Basic configuration looks like this:
 
