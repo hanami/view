@@ -7,7 +7,9 @@ eval_gemfile "Gemfile.devtools"
 gemspec
 
 group :tools do
-  gem "hotch"
+  # Remove hotch until https://github.com/ko1/allocation_tracer/issues/19 is fixed and it can be
+  # installed on macOS again.
+  # gem "hotch"
   gem "pry-byebug", platform: :mri
 end
 
