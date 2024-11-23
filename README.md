@@ -86,7 +86,7 @@ hanami-view divides the responsibility of view rendering across several differen
 [Configure](#configuration) your view, accept some [dependencies](#injecting-dependencies), and define an [exposure](#exposures):
 
 ```ruby
-require "dry/view"
+require "hanami/view"
 
 class ArticleView < Hanami::View
   config.paths = [File.join(__dir__, "templates")]
