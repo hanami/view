@@ -600,7 +600,7 @@ class User < Hanami::View::Part
 end
 ```
 
-This will render an `_info_box` partial template (via the standard [partial lookup rules](#templates-1)) with the part still available as `user`.
+This will render an `_info_box` partial template (via the standard [partial lookup rules](#partial-lookup) with the part still available as `user`.
 
 You can also render such partials directly within templates:
 
