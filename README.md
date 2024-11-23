@@ -68,7 +68,7 @@ Use hanami-view if:
 - You want to maintain a sensible separation of concerns between the layers of functionality within your app
 - You want to build and render views in any kind of context, not just when serving HTTP requests
 - You're using a lightweight routing DSL like Hanami::Router, Roda, or Sinatra and you want to keep your routes clean and easy to understand (hanami-view handles the integration with your application, so all you need to provide from routes is the user-provided input params)
-- Your application structure supports dependency injection as the preferred way to share behaviour between components (e.g. hanami-view fits perfectly with [dry-system](/gems/dry-system), [dry-container](/gems/dry-container), and [dry-auto_inject](/gems/dry-auto_inject))
+- Your application structure supports dependency injection as the preferred way to share behaviour between components (e.g. hanami-view fits perfectly with [dry-system](https://dry-rb.org/gems/dry-system), [dry-container](https://dry-rb.org/gems/dry-container), and [dry-auto_inject](https://dry-rb.org/gems/dry-auto_inject))
 
 #### Concepts
 
@@ -234,7 +234,7 @@ class MyView < Hanami::View
 end
 ```
 
-Or if your app uses [dry-system](/gems/dry-system) or [dry-auto_inject](/gems/dry-auto_inject), this is even less work:
+Or if your app uses [dry-system](https://dry-rb.org/gems/dry-system) or [dry-auto_inject](https://dry-rb.org/gems/dry-auto_inject), this is even less work:
 
 ```ruby
 # Require the auto-injector module for your app's container
@@ -968,7 +968,7 @@ class MyContext < Hanami::View::Context
 end
 ```
 
-If your app uses [dry-system](/gems/dry-system) or [dry-auto_inject](/gems/dry-auto_inject), this is even less work. dry-auto_inject works out of the box with `Hanami::View::Context`’s initializer:
+If your app uses [dry-system](https://dry-rb.org/gems/dry-system) or [dry-auto_inject](https://dry-rb.org/gems/dry-auto_inject), this is even less work. dry-auto_inject works out of the box with `Hanami::View::Context`’s initializer:
 
 ```ruby
 # Require the auto-injector module for your app's container
@@ -1071,7 +1071,7 @@ class MyContext < Hanami::View::Context
 end
 ```
 
-If your app uses [dry-system](/gems/dry-system) or [dry-auto_inject](/gems/dry-auto_inject), this is even less work. dry-auto_inject works out of the box with `Hanami::View::Context`’s initializer:
+If your app uses [dry-system](https://dry-rb.org/gems/dry-system) or [dry-auto_inject](https://dry-rb.org/gems/dry-auto_inject), this is even less work. dry-auto_inject works out of the box with `Hanami::View::Context`’s initializer:
 
 ```ruby
 # Require the auto-injector module for your app's container
@@ -1173,7 +1173,7 @@ class MyContext < Hanami::View::Context
 end
 ```
 
-If your app uses [dry-system](/gems/dry-system) or [dry-auto_inject](/gems/dry-auto_inject), this is even less work. dry-auto_inject works out of the box with `Hanami::View::Context`’s initializer:
+If your app uses [dry-system](https://dry-rb.org/gems/dry-system) or [dry-auto_inject](https://dry-rb.org/gems/dry-auto_inject), this is even less work. dry-auto_inject works out of the box with `Hanami::View::Context`’s initializer:
 
 ```ruby
 # Require the auto-injector module for your app's container
