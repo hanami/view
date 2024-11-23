@@ -66,7 +66,7 @@ Use hanami-view if:
 - You want to be able to [unit test](#testing) all aspects of your views, in complete isolation
 - You want to maintain a sensible separation of concerns between the layers of functionality within your app
 - You want to build and render views in any kind of context, not just when serving HTTP requests
-- You're using a lightweight routing DSL like Roda or Sinatra and you want to keep your routes clean and easy to understand (hanami-view handles the integration with your application, so all you need to provide from routes is the user-provided input params)
+- You're using a lightweight routing DSL like Hanami::Router, Roda, or Sinatra and you want to keep your routes clean and easy to understand (hanami-view handles the integration with your application, so all you need to provide from routes is the user-provided input params)
 - Your application structure supports dependency injection as the preferred way to share behaviour between components (e.g. hanami-view fits perfectly with [dry-system](/gems/dry-system), [dry-container](/gems/dry-container), and [dry-auto_inject](/gems/dry-auto_inject))
 
 #### Concepts
