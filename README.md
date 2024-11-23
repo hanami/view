@@ -1,6 +1,8 @@
 # Hanami::View
 
-A view layer for [Hanami](http://hanamirb.org)
+Hanami::View is a complete view rendering system that gives you everything you need to write well-factored view code.
+
+It can be used as a standalone library and also as part of the complete Hanami web framework.
 
 ## Status
 
@@ -57,8 +59,6 @@ $ gem install hanami-view
 - [Testing](#testing)
 
 ### Introduction
-
-hanami-view is a complete, standalone view rendering system that gives you everything you need to write well-factored view code.
 
 Use hanami-view if:
 
