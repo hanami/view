@@ -12,6 +12,10 @@ RSpec.describe "Tempalte rendering / locals" do
       expose :text, decorate: false
     end.new
 
-    expect(view.(text: "Hello").to_s).to eq %{Locals: {:text=>"Hello"}}
+    if RUBY_VERSION < "3.4"
+      expect(view.call(text: "Hello").to_s).to eq %{Locals: {:text=>"Hello"}}
+    else
+      expect(view.call(text: "Hello").to_s).to eq %{Locals: {text: "Hello"}}
+    end
   end
 end
