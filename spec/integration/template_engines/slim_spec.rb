@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "hanami/view/tilt"
 require "hanami/view/tilt/slim_adapter"
 
 RSpec.describe "Template engines / slim" do
