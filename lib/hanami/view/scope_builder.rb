@@ -31,7 +31,7 @@ module Hanami
           elsif name.is_a?(Class)
             name
           else
-            View.cache.fetch_or_store(:scope_class, rendering.config) do
+            View.cache.fetch_or_store(name, rendering.config) do
               resolve_scope_class(name: name, rendering: rendering)
             end
           end

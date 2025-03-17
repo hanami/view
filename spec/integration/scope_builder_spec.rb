@@ -27,5 +27,32 @@ RSpec.describe "scope builder" do
 
       expect(scope).to be_an_instance_of scope_class
     end
+
+    describe "named scopes" do
+      let(:namespace) { Module.new }
+      let(:scope_one) { Class.new(Hanami::View::Scope) }
+      let(:scope_two) { Class.new(Hanami::View::Scope) }
+
+      before do
+        stub_const "TestScopes", namespace
+        stub_const "TestScopes::ScopeOne", scope_one
+        stub_const "TestScopes::ScopeTwo", scope_two
+      end
+
+      it "creates instances of the scopes by name" do
+        view = Class.new(Hanami::View) {
+          config.scope_namespace = TestScopes
+
+          config.paths = SPEC_ROOT.join("__ignore__")
+          config.template = "__ignore__"
+        }.new
+
+        scope = view.rendering.scope("scope_one", {})
+        expect(scope).to be_an_instance_of TestScopes::ScopeOne
+
+        scope = view.rendering.scope("scope_two", {})
+        expect(scope).to be_an_instance_of TestScopes::ScopeTwo
+      end
+    end
   end
 end
