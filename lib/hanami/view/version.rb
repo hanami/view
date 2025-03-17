@@ -4,6 +4,6 @@ module Hanami
   class View
     # @api public
     # @since 0.1.0
-    VERSION = "2.2.0"
+    VERSION = "2.2.1"
   end
 end

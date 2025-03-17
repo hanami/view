@@ -2,6 +2,12 @@
 
 View layer for Hanami
 
+## v2.2.1 - 2025-03-17
+
+### Fixed
+
+- Allow multiple named scopes to be built in a single rendering (via a fix to internal scope class cache keys) (@swilgosz in #253)
+
 ## v2.2.0 - 2024-11-05
 
 ## v2.2.0.rc1 - 2024-10-29
