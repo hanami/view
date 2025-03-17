@@ -28,29 +28,26 @@ RSpec.describe "scope builder" do
       expect(scope).to be_an_instance_of scope_class
     end
 
-    context 'when multiple scopes are rendered in the same view' do
+    describe "multiple user-defined scopes" do
+      let(:scope_one) { Class.new(Hanami::View::Scope) }
+      let(:scope_two) { Class.new(Hanami::View::Scope) }
 
-      let(:builder) { described_class.new }
+      before do
+        stub_const "ScopeOne", scope_one
+        stub_const "ScopeTwo", scope_two
+      end
 
-      it 'allows to build scopes with different classes' do
-        FirstScopeClass =  Class.new(Hanami::View::Scope)
-        SecondScopeClass =  Class.new(Hanami::View::Scope)
-
+      it "creates instances of the scopes by name" do
         view = Class.new(Hanami::View) do
           config.paths = SPEC_ROOT.join("__ignore__")
           config.template = "__ignore__"
-
-          config.scope_class = FirstScopeClass
         end.new
 
-        scope = view.rendering.scope({})
-        expect(scope).to be_an_instance_of FirstScopeClass
+        scope = view.rendering.scope("scope_one", {})
+        expect(scope).to be_an_instance_of ScopeOne
 
-        scope = view.rendering.scope('SecondScopeClass', {})
-        expect(scope).to be_an_instance_of SecondScopeClass
-
-        scope = view.rendering.scope('FirstScopeClass', {})
-        expect(scope).to be_an_instance_of FirstScopeClass
+        scope = view.rendering.scope("scope_two", {})
+        expect(scope).to be_an_instance_of ScopeTwo
       end
     end
   end
