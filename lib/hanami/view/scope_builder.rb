@@ -40,7 +40,7 @@ module Hanami
         def resolve_scope_class(name:, rendering:)
           name = rendering.inflector.camelize(name.to_s)
 
-          namespace = rendering.config.scope_namespace || Object
+          namespace = rendering.config.scope_namespace
 
           # Give autoloaders a chance to act
           begin

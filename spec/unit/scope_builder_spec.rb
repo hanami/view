@@ -15,21 +15,23 @@ RSpec.describe Hanami::View::ScopeBuilder, "#call" do
   let(:namespace) { nil }
 
   describe "caching" do
+    let(:namespace) { TestScopes }
     let(:scope_one) { Class.new(Hanami::View::Scope) }
     let(:scope_two) { Class.new(Hanami::View::Scope) }
 
     before do
       Hanami::View::Cache.clear
 
-      stub_const "ScopeOne", scope_one
-      stub_const "ScopeTwo", scope_two
+      stub_const "TestScopes", Module.new
+      stub_const "TestScopes::ScopeOne", scope_one
+      stub_const "TestScopes::ScopeTwo", scope_two
     end
 
     it "caches each resolved scope" do
       scope_builder.call("scope_one", locals: {}, rendering: rendering)
       scope_builder.call("scope_two", locals: {}, rendering: rendering)
 
-      expect(Hanami::View::Cache.cache.values).to eq [ScopeOne, ScopeTwo]
+      expect(Hanami::View::Cache.cache.values).to eq [TestScopes::ScopeOne, TestScopes::ScopeTwo]
     end
   end
 end
