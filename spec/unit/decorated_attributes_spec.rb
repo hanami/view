@@ -23,11 +23,7 @@ RSpec.describe Hanami::View::DecoratedAttributes do
       expect(rendering).to have_received(:part).with(:attr_1, attr_1, as: :my_value)
 
       decoratable.attr_2
-      if RUBY_VERSION >= "2.7"
-        expect(rendering).to have_received(:part).with(:attr_2, attr_2)
-      else
-        expect(rendering).to have_received(:part).with(:attr_2, attr_2, {})
-      end
+      expect(rendering).to have_received(:part).with(:attr_2, attr_2)
     end
 
     it "raises NoMethodError when an invalid attribute is accessed" do
